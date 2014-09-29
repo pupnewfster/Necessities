@@ -1,0 +1,1544 @@
+name: Necessities
+main: com.crossge.necessities.Necessities
+version: 2.0.0
+description: Adds the necessities a server needs
+authors: [Cross Gaming Development Team]
+
+commands:
+   craft:
+      description: Crafts <item> from the items in your inventory.
+      usage: /<command> <item>
+      permission: Necessities.craft
+      aliases: [ncraft]
+   machinegun:
+      description: Turns your bow into a machine gun.
+      usage: /<command>
+      permission: Necessities.machinegun
+      aliases: [nmachinegun, machine, nmachine, gun, ngun]
+   bazooka:
+      description: Turns your bow into a bazooka.
+      usage: /<command>
+      permission: Necessities.bazooka
+      aliases: [nbazooka, baz, nbaz]
+   wrench:
+      description: Gives you a multipurpose wrench.
+      usage: /<command>
+      permission: Necessities.wrench
+      aliases: [nwrench]
+   ragequit:
+      description: Ragequits the server!
+      usage: /<command>
+      permission: Necessities.ragequit
+      aliases: [rage, nrage, nragequit]
+   loginmessage:
+      description: Changes your login message to <message>.
+      usage: /<command> <message>
+      permission: Necessities.loginmessage
+      aliases: [loginmsg, setloginmessage, setloginmsg, nloginmsg, nsetloginmsg, nsetloginmessage, nloginmessage]
+   logoutmessage:
+      description: Changes your logout message to <message>.
+      usage: /<command> <message>
+      permission: Necessities.logoutmessage
+      aliases: [setlogoutmessage, logoutmsg, setlogoutmsg, nsetlogoutmessage, nlogoutmsg, nlogoutmessage, nsetlogoutmsg]
+   devs:
+      description: Shows the developers of Necessities.
+      usage: /<command>
+      permission: Necessities.devs
+      aliases: [ndevs]
+   highfive:
+      description: Highfives <player>!
+      usage: /<command> <player>
+      permission: Necessities.highfive
+      aliases: [high5, highpaw, nhighfive, nhigh5, nhighpaw]
+   enchant:
+      description: Enchants the item in your hand.
+      usage: /<command> <enchantmentname|all> <level|max>
+      permission: Necessities.enchant
+      aliases: [nenchant, sparkle, nsparkle, nench, ench]
+   warn:
+      description: Warns <player> for <reason>.
+      usage: /<command> <player> <reason>
+      permission: Necessities.warn
+      aliases: [nwarn, nreport, report]
+   slap:
+      description: Slaps <name> sky high.
+      usage: /<command> <name>
+      permission: Necessities.slap
+      aliases: [nslap]
+   opbroadcast:
+      description: Toggles opchat.
+      usage: /<command>
+      permission: Necessities.opBroadcast
+      aliases: [nopbroadcast, opchat, nopchat, adminchat, nadminchat, oc, noc]
+   pants:
+      description: Put some pants on.
+      usage: /<command>
+      permission: Necessities.pants
+      aliases: [legs, leggings, npants, nlegs, nleggings]
+   boots:
+      description: Put boots on.
+      usage: /<command>
+      permission: Necessities.boots
+      aliases: [nboots]
+   chest:
+      description: Put chestplate on.
+      usage: /<command>
+      permission: Necessities.chest
+      aliases: [chestplate, nchest, nchestplate]
+   hat:
+      description: Put a hat on.
+      usage: /<command>
+      permission: Necessities.hat
+      aliases: [nhat, nhelmet, nhelmet]
+   imp:
+      description: Impersonates <name>.
+      usage: /<command> <name|message> <message>
+      permission: Necessities.imp
+      aliases: [impersonate, nimp, nimpersonate]
+   hide:
+      description: Hides yourself from the server with fake leave message.
+      usage: /<command>
+      permission: Necessities.hide
+      aliases: [vanish, reapear, disapear, nvanish, nhide, ndisapear, nreapear]
+   workbench:
+      description: Opens up a workbench.
+      usage: /<command>
+      permission: Necessities.workbench
+      aliases: [craft, wb, wbench, craftingtable, crafttable, ncraft, nwb, nworkbench, nwbench, ncraftingtable, ncrafttable]
+   rename:
+      description: Renames an item to <name>.
+      usage: /<command> <name>
+      permission: Necessities.rename
+      aliases: [nrename]
+   title:
+      description: Gives <player> a <title>.
+      usage: /<command> <player> <title>
+      permission: Necessities.title
+      aliases: [ntitle]
+   bracketcolor:
+      description: Gives <player> the specified bracket color for title.
+      usage: /<command> <player> <color code>
+      permission: Necessities.bracket
+      aliases: [brackets, bracket, tcolor, titlecolor, nbrackets, nbracketcolor, nbracket, ntcolor, ntitlecolor]
+   table:
+      description: Lets you open an enchantment table.
+      usage: /<command>
+      permission: Necessities.table
+      aliases: [ntable, enchantmenttable, nechantmenttable, enchtable, nenchtable]
+   tpdim:
+      description: Tp between dim and coords.
+      usage: /<command> <player> <dimension> <x> <y> <z> <yaw> <pitch>
+      permission: Necessities.tpdim
+      aliases: [ntpdim]
+   commandspy:
+      description: Spy on commands.
+      usage: /<command>
+      permission: Necessities.spy
+      aliases: [c, cspy, spy, nc, ncspy, nspy]
+   setspawn:
+      description: Sets the spawn for the server.
+      usage: /<command>
+      permission: Necessities.setspawn
+      aliases: [nsetspawn]
+   spawn:
+      description: Teleports to the spawn.
+      usage: /<command>
+      permission: Necessities.spawn
+      aliases: [nspawn, main, nmain]
+   time:
+      description: Changes the time to <time>.
+      usage: /<command> <world> <set|add> <time>
+      permission: Necessities.time
+      aliases: [ntime]
+   weather:
+      description: Changes the weather to <storm|bad|stormy|clear|sun|nice>.
+      usage: /<command> <world> <storm|bad|stormy|clear|sun|nice>
+      permission: Necessities.weather
+      aliases: [nweather]
+   gamemode:
+      description: Sets <name>'s gamemode to <gamemode>.
+      usage: /<command> <name> <gamemode>
+      permission: Necessities.gamemode
+      aliases: [gm, ngamemode, ngm]
+   god:
+      description: Toggles godmode for <name>.
+      usage: /<command> <name>
+      permission: Necessities.god
+      aliases: [godmode, invincible, invulnerable, ngod, ngodmode, ninvinicible, ninvulnerable]
+   feed:
+      description: Feeds <name>.
+      usage: /<command> <name>
+      permission: Necessities.feed
+      aliases: [food, nfood, nfeed]
+   heal:
+      description: Heals <name>.
+      usage: /<command> <name>
+      permission: Necessities.heal
+      aliases: [health, nheal, nhealth]
+   repair:
+      description: Repairs the item in your hand or all your items.
+      usage: /<command> <hand|all>
+      permission: Necessities.repair
+      aliases: [fix, nrepair, nfix, nrep, rep]
+   afk:
+      description: Toggles wether or not you are afk.
+      usage: /<command>
+      permission: Necessities.afk
+      aliases: [away, naway, nafk]
+   help:
+      description: Displays the help menu.
+      usage: /<command> <search|page>
+      permission: Necessities.help
+      aliases: [nhelp]
+   who:
+      description: Shows online players.
+      usage: /<command>
+      permission: Necessities.who
+      aliases: [list, players, nwho, nlist, nplayers, nonline, online]
+   me:
+      description: Acts out the <message>.
+      usage: /<command> <message>
+      permission: Necessities.me
+      aliases: [action, nme, naction]
+   nick:
+      description: Sets <player>'s display name to <nickname>.
+      usage: /<command> <player> <nickname>
+      permission: Necessities.nick
+      aliases: [nickname, displayname, nnick, nnickname, ndisplayname]
+   ext:
+      description: Extinguishes <player>.
+      usage: /<command> <player>
+      permission: Necessities.ext
+      aliases: [extinguish, next, nextinguish]
+   invsee:
+      description: Views inventory of <player>.
+      usage: /<command> <player>
+      permission: Necessities.invsee
+      aliases: [inventorysee, ninvsee, ninventorysee]
+   back:
+      description: Teleports back to previous location.
+      usage: /<command>
+      permission: Necessities.back
+      aliases: [return, nback, nreturn]
+   jail:
+      description: Jails <name>.
+      usage: /<command> <name>
+      permission: Necessities.jail
+      aliases: [unjail, njail, nunjail]
+   setjail:
+      description: Sets the location for the jail.
+      usage: /<command>
+      permission: Necessities.setjail
+      aliases: [nsetjail]
+   kill:
+      description: Kills <name>.
+      usage: /<command> <name>
+      permission: Necessities.kill
+      aliases: [murder, nkill, nmurder]
+   jump:
+      description: Jumps to your cursors location.
+      usage: /<command>
+      permission: Necessities.jump
+      aliases: [njump, j, nj, jumpto, njumpto]
+   tpa:
+      description: Requests <player> to let you teleport to them.
+      usage: /<command> <player>
+      permission: Necessities.tpa
+      aliases: [ntpa]
+   tpaccept:
+      description: Accepts the teleport request from <player>.
+      usage: /<command> <player>
+      permission: Necessities.tpaccept
+      aliases: [ntpaccept, tpyes, ntpyes]
+   tpdeny:
+      description: Denies the teleport request from <player>.
+      usage: /<command> <player>
+      permission: Necessities.tpdeny
+      aliases: [ntpdeny, tpno, ntpno]
+   tpahere:
+      description: Requests <player> to teleport to you.
+      usage: /<command> <player>
+      permission: Necessities.tpahere
+      aliases: [ntpahere]
+   tp:
+      description: Teleports <player> to the <otherplayer>.
+      usage: /<command> <player> <otherplayer>
+      permission: Necessities.tp
+      aliases: [ntp, teleport, nteleport]
+   tphere:
+      description: Teleports <player> to you.
+      usage: /<command> <player>
+      permission: Necessities.tphere
+      aliases: [ntphere, teleporthere, nteleporthere, s, ns]
+   tpall:
+      description: Teleports everyone to you.
+      usage: /<command>
+      permission: Necessities.tpall
+      aliases: [ntpall, teleportall, nteleportall, tpallhere, ntpallhere, tphereall, ntphereall, nteleporthereall, teleporthereall, teleportallhere, nteleportallhere, nsummonall, nsall]
+   tppos:
+      description: Teleports to <x> <y> <z>.
+      usage: /<command> <x> <y> <z> <yaw> <pitch>
+      permission: Necessities.tppos
+      aliases: [ntppos, teleportpos, nteleportpos]
+   mute:
+      description: Mutes <name>.
+      usage: /<command> <name>
+      permission: Necessities.mute
+      aliases: [silence, unmute, nmute, nsilence, nunmute]
+   exp:
+      description: Sets, gives or shows the amount of xp <name> has.
+      usage: /<command> <show|give|set> <name> <amount>
+      permission: Necessities.exp
+      aliases: [xp, experience, nexp, nxp, nexperience]
+   kick:
+      description: Kicks <player> for <reason>.
+      usage: /<command> <player> <reason>
+      permission: Necessities.kick
+      aliases: [nkick, k, nk]
+   ban:
+      description: Bans <player> for an optional <reason>.
+      usage: /<command> <player> <reason>
+      permission: Necessities.ban
+      aliases: [nban, banplayer, nbanplayer]
+   unban:
+      description: Unbans <player>.
+      usage: /<command> <player>
+      permission: Necessities.unban
+      aliases: [nunban, unbanplayer, nunbanplayer]
+   banip:
+      description: Bans <ip> for an optional <reason>.
+      usage: /<command> <ip|name> <reason>
+      permission: Necessities.banip
+      aliases: [nbanip]
+   unbanip:
+      description: Unbans <ip>.
+      usage: /<command> <ip>
+      permission: Necessities.unbanip
+      aliases: [nunbanip]
+   spawnmob:
+      description: Spawns <amount> of <mob type> at cursor location.
+      usage: /<command> <mob type> <amount>
+      permission: Necessities.spawnmob
+      aliases: [nspawnmob, mob, nmob, spawnentity, nspawnentity]
+   top:
+      description: Goes to highest block.
+      usage: /<command>
+      permission: Necessities.top
+      aliases: [ntop]
+   enderchest:
+      description: Opens <player>'s enderchest.
+      usage: /<command> <player>
+      permission: Necessities.enderchest
+      aliases: [nenderchest, ender, nender]
+   fly:
+      description: Toggles flymode for <name>.
+      usage: /<command> <name>
+      permission: Necessities.fly
+      aliases: [nfly, bird, nbird]
+   suicide:
+      description: Commits suicide.
+      usage: /<command>
+      permission: Necessities.suicide
+      aliases: [nsuicide, enditall, nenditall]
+   speed:
+      description: Changes your speed.
+      usage: /<command> <type> <speed>
+      permission: Necessities.speed
+      aliases: [nspeed]
+   more:
+      description: Max your item stack out.
+      usage: /<command>
+      permission: Necessities.more
+      aliases: [nmore]
+   rules:
+      description: Displays the server rules.
+      usage: /<command>
+      permission: Necessities.rules
+      aliases: [nrules]
+   motd:
+      description: Display the message of the day.
+      usage: /<command>
+      permission: Necessities.motd
+      aliases: [nmotd]
+   faq:
+      description: Display the server's frequently asked questions.
+      usage: /<command>
+      permission: Necessities.faq
+      aliases: [nfaq]
+   ignore:
+      description: Ignores <name>.
+      usage: /<command> <name>
+      permission: Necessities.ignore
+      aliases: [nignore, unignore, nunignore]
+   lightning:
+      description: Brings lightning down on <name>.
+      usage: /<command> <name>
+      permission: Necessities.lightning
+      aliases: [smite, thor, nlightning, nsmite, nthor]
+   spawner:
+      description: Changes the spawner you are looking at to spawn <mob>.
+      usage: /<command> <mob>
+      permission: Necessities.spawner
+      aliases: [nspawner, nmobspawner, mobspawner, nmonsterspawner, monsterspawner, creaturespawner, ncreaturespawner]
+   skull:
+      description: Gets <name>'s head.
+      usage: /<command> <name>
+      permission: Necessities.skull
+      aliases: [head, nskull, nhead]
+   msg:
+      description: Messages <name> with your <message>.
+      usage: /<command> <name> <message>
+      permission: Necessities.msg
+      aliases: [message, whisper, w, nmsg, nmessage, nwhisper, nw, pm, npm, nt, ntell, tell, t]
+   reply:
+      description: Replies to the last person to send you a message.
+      usage: /<command> <message>
+      permission: Necessities.reply
+      aliases: [nr, r, nreply]
+   item:
+      description: Gives yourself <item>.
+      usage: /<command> <name|id> <amount> <data>
+      permission: Necessities.item
+      aliases: [nitem, i, ni]
+   give:
+      description: Gives <player> the specified <item>.
+      usage: /<command> <player> <name|id> <amount> <data>
+      permission: Necessities.give
+      aliases: [ngive]
+   togglechat:
+      description: Toggles having to type say in the console.
+      usage: /<command>
+      permission: Necessities.togglechat
+      aliases: [ntogglechat, tchat, ntchat, tc, ntc]
+   say:
+      description: Broadcasts <message> to the entire server.
+      usage: /<command> <message>
+      permission: Necessities.say
+      aliases: [nsay, broadcast, nbroadcast]
+   clear:
+      description: Clears your inventory.
+      usage: /<command> <item> <amount> <data>
+      permission: Necessities.clear
+      aliases: [nclear, clearinventory, nclearinventory, ci, nci, clearinvent, nclearinvent]
+   killall:
+      description: Kill all of a type of entity.
+      usage: /<command> <all|drops|arrows|boats|xp|endercrystals|monsters|animals|mobs|[mobType]>
+      permission: Necessities.killall
+      aliases: [nkillall, remove, nremove, mobkill, nmobkill, butcher, nbutcher]
+   home:
+      description: Goes to home <name>.
+      usage: /<command> <player:name>
+      permission: Necessities.home
+      aliases: [h, nhome, nh]
+   sethome:
+      description: Sets a home with <name>.
+      usage: /<command> <name>
+      permission: Necessities.sethome
+      aliases: [seth, nseth, nsethome]
+   delhome:
+      description: Deletes the home with <name>.
+      usage: /<command> <name>
+      permission: Necessities.delhome
+      aliases: [delh, ndelh, ndelhome]
+   guild:
+      description: Opens the guild menu.
+      usage: /<command> <subcommand> <arguements>
+      permission: Necessities.guilds.guild
+      aliases: [nguild, g, ng, f, nf, faction, nfaction, clan, nclan, pack, npack]
+   worlds:
+      description: Displays the world names of loaded worlds.
+      usage: /<command>
+      permission: Necessities.worldmanager.worlds
+      aliases: [levels, lvls, nworlds, nlevels, nlvls, mvlist, nmvlist]
+   world:
+      description: Sends <player> to <worldname>.
+      usage: /<command> <player> <worldname>
+      permission: Necessities.worldmanager.world
+      aliases: [goto, dimension, dim, level, lvl, nlvl, nlevel, ndim, ndimension, ngoto, nworld, mvtp, nmvtp]
+   createworld:
+      description: Creates the world <name>.
+      usage: /<command> <name> <environment> <generator> <type>
+      permission: Necessities.worldmanager.createworld
+      aliases: [newlevel, newlvl, nnewlvl, nnewlevel, ncreateworld, mvcreate, nmvcreate, mvimport, nmvimport]
+   worldspawn:
+      description: Takes you to the spawn of the world you are in.
+      usage: /<command>
+      permission: Necessities.worldmanager.worldspawn
+      aliases: [nworldspawn, nmapspawn, mapspawn, mvs, nmvs]
+   removeworld:
+      description: Removes from files the world called <name>.
+      usage: /<command> <name>
+      permission: Necessities.worldmanager.removeworld
+      aliases: [nremoveworld]
+   createportal:
+      description: Creates a portal called <name> that teleports to given <world>.
+      usage: /<command> <name> <world teleporting to>
+      permission: Necessities.worldmanager.createportal
+      aliases: [ncreateportal, cportal, ncportal]
+   removeportal:
+      description: Removes the portal called <name>.
+      usage: /<command> <name>
+      permission: Necessities.worldmanager.removeportal
+      aliases: [nremoveportal, rportal, nrportal]
+   setworldspawn:
+      description: Sets the spawn for the world you are in.
+      usage: /<command>
+      permission: Necessities.worldmanager.setworldspawn
+      aliases: [nsetworldspawn, mvsetspawn, nmvsetspawn]
+   modifyworld:
+      description: Changes the specified setting for world <name>.
+      usage: /<command> <name> <difficulty|gamemode|structures|pvp|animals|monsters> <value>
+      permission: Necessities.worldmanager.modifyworld
+      aliases: [nmodifyworld, mvm, nmvm, modify, nmodify]
+   loadworld:
+      description: Loads the world called <name>.
+      usage: /<command> <name>
+      permission: Necessities.worldmanager.loadworld
+      aliases: [nloadworld, load, nload, mvload, nmvload]
+   unloadworld:
+      description: Unloads the world called <name>.
+      usage: /<command> <name>
+      permission: Necessities.worldmanager.unloadworld
+      aliases: [nunloadworld, unload, nunload, nmvunload, mvunload]
+   warps:
+      description: Displays the list of warps.
+      usage: /<command>
+      permission: Necessities.worldmanager.warps
+      aliases: [nwarps, locations, nlocations]
+   warp:
+      description: Teleports you to given warp.
+      usage: /<command> <name>
+      permission: Necessities.worldmanager.warp
+      aliases: [nwarp, location, nlocation]
+   createwarp:
+      description: Creates a warp called <name> at your current location.
+      usage: /<command> <name>
+      permission: Necessities.worldmanager.createwarp
+      aliases: [ncreatewarp, cwarp, ncwarp, ncreatelocation, createlocation, clocation, nclocation, setwarp, nsetwarp]
+   removewarp:
+      description: Removes the warp called <name>.
+      usage: /<command> <name>
+      permission: Necessities.worldmanager.removewarp
+      aliases: [nremovewarp, rwarp, nrwarp, nremovelocation, removelocation, rlocation, nrlocation, deletewarp, ndeletewarp, dwarp, ndwarp, deletelocation, ndeletelocation, ndlocation, dlocation]
+   bal:
+      description: Shows your balance.
+      usage: /<command> <name>
+      permission: Necessities.economy.bal
+      aliases: [balance, money, nbal, nbalance, nmoney]
+   baltop:
+      description: Shows the balance of the top players.
+      usage: /<command> <page>
+      permission: Necessities.economy.baltop
+      aliases: [balancetop, moneytop, nbaltop, nbalancetop, nmoneytop]
+   pay:
+      description: Pays <name> $<amount>.
+      usage: /<command> <name> <amount>
+      permission: Necessities.economy.pay
+      aliases: [sendmoney, npay, nsendmoney]
+   eco:
+      description: A variety of commands to edit someones balance.
+      usage: /<command> <give|set|reset|take> <name> <amount>
+      permission: Necessities.economy.editbal
+      aliases: [economy, neconomy, neco]
+   setprice:
+      description: Sets the sell price of <item>.
+      usage: /<command> <itemname|id|hand> <price> <sell|buy>
+      permission: Necessities.economy.setprice
+      aliases: [setcost, setworth, nsetcost, nsetworth, nsetprice]
+   price:
+      description: Shows how much money <itemname> is worth.
+      usage: /<command> <itemname|id|hand> <sell|buy>
+      permission: Necessities.economy.price
+      aliases: [cost, worth, ncost, nworth, nprice]
+   buy:
+      description: Buys <amount> of <item>.
+      usage: /<command> <itemname|id|hand> <amount>
+      permission: Necessities.economy.buy
+      aliases: [nbuy]
+   sell:
+      description: Sells <amount> of <item>. Default is all in inventory.
+      usage: /<command> <itemname|id|hand|all> <amount|all>
+      permission: Necessities.economy.sell
+      aliases: [nsell]
+   pricelist:
+      description: Shows the prices of the sellable items on the server.
+      usage: /<command> <page>
+      permission: Necessities.economy.pricelist
+      aliases: [listprices, prices, catalog, pricecatalog, npricelist, nlistprices, nprices, ncatalog, npricecatalog]   
+   taccept:
+      description: Accepts a trade from <player>.
+      usage: /<command> <player who offered trade>
+      permission: Necessities.economy.taccept
+      aliases: [tradeaccept, ntaccept, ntradeaccept]
+   tdeny:
+      description: Denys a trade from <player>.
+      usage: /<command> <player who offered trade>
+      permission: Necessities.economy.tdeny
+      aliases: [tdecline, tradedeny, tradedecline, ntdeny, ntdecline, ntradedeny, ntradedecline]
+   trade:
+      description: Buys or sells an item to <player> for <price>.
+      usage: /<command> <name> <itemname|id> <amount> <price> <theypay|ipay>
+      permission: Necessities.economy.trade
+      aliases: [ntrade]
+   tradeitems:
+      description: Trades <item> to someone for <item>.
+      usage: /<command> <name> <itemname|id> <amount> <itemname|id> <amount>
+      permission: Necessities.economy.tradeitems      
+      aliases: [tradei, ntradeitems, ntradei]
+   players:
+      description: Shows how many unique players have visited the server.
+      usage: /<command>
+      permission: Necessities.economy.players
+      aliases: [pcount, nplayers, npcount]
+   setrankprice:
+      description: Sets the price of a rank.
+      usage: /<command> <rankname> <price>
+      permission: Necessities.economy.srp
+      aliases: [setrankcost, setrankworth, srp, src, srw, nsetrankprice, nsetrankcost, nsetrankworth, nsrp, nsrc, nsrw]
+   buyrank:
+      description: Buys <rankname>.
+      usage: /<command> <rankname>
+      permission: Necessities.economy.buy
+      aliases: [buyr, brank, nbuyrank, nbuyr, nbrank]
+   rankprices:
+      description: Shows the prices of the ranks.
+      usage: /<command> <page>
+      permission: Necessities.economy.prices
+      aliases: [rprices, nrankprices, nrprices]
+   setcommandprice:
+      description: Sets the price of a command and sets minimum rank to <rank>.
+      usage: /<command> <commandname> <price> <rank>
+      permission: Necessities.economy.scp
+      aliases: [setcommandcost, setcommandworth, setcmdprice, setcmdcost, setcmdworth, nsetcommandprice, nsetcommandcost, nsetcommandworth, nsetcmdprice, nsetcmdcost, nsetcmdworth]
+   commandprices:
+      description: Shows the prices of the commands; only shows those that you are able to buy.
+      usage: /<command> <page>
+      permission: Necessities.economy.cmdprices
+      aliases: [cmdprices, ncommandprices, ncmdprices]
+   whois:
+      description: Displays information about <player>.
+      usage: /<command> <player>
+      permission: Necessities.rankmanager.whois
+      aliases: [whoisp, whoisplayer, whoisuser, nwhois, nwhoisp, nwhoisplayer, nwhoisuser]
+   promote:
+      description: Promotes the <player> to next rank.
+      usage: /<command> <player>
+      permission: Necessities.rankmanager.promote
+      aliases: [pr, npromote, npr]
+   demote:
+      description: Demotes the <player> to previous rank.
+      usage: /<command> <player>
+      permission: Necessities.rankmanager.demote
+      aliases: [de, ndemote, nde]
+   setrank:
+      description: Sets <player> to <rank>.
+      usage: /<command> <player> <rank>
+      permission: Necessities.rankmanager.setrank
+      aliases: [rank, nsetrank, nrank]
+   addpermission:
+      description: Adds <permission node> to <rank>'s permission nodes.
+      usage: /<command> <rank> <permission node>
+      permission: Necessities.rankmanager.addpermission
+      aliases: [addperm, addpermissionrank, addpermrank, addpermr, addpermissionr, naddpermission, naddperm, naddpermissionrank, naddpermrank, naddpermr, naddpermissionr]
+   delpermission:
+      description: Deletes <permission node> from <rank>'s permission nodes.
+      usage: /<command> <rank> <permission node>
+      permission: Necessities.rankmanager.delpermission
+      aliases: [delperm, delpermissionrank, delpermrank, delpermr, delpermissionr, ndelpermission, ndelperm, ndelpermissionrank, ndelpermrank, ndelpermr, ndelpermissionr]
+   addpermissionuser:
+      description: Adds <permission node> to <player>'s permission nodes.
+      usage: /<command> <player> <permission node>
+      permission: Necessities.rankmanager.addpermissionuser
+      aliases: [addpermuser, addpermissionplayer, addpermissionp, addpermp, naddpermissionuser, naddpermuser, naddpermissionplayer, naddpermissionp, naddpermp]
+   delpermissionuser:
+      description: Deletes <permission node> from <player>'s permission nodes.
+      usage: /<command> <player> <permission node>
+      permission: Necessities.rankmanager.delpermissionuser
+      aliases: [delpermuser, delpermissionplayer, delpermissionp, delpermp, ndelpermissionuser, ndelpermuser, ndelpermissionplayer, ndelpermissionp, ndelpermp]
+   addpermsubrank:
+      description: Adds <permission node> to <subrank>'s permission nodes.
+      usage: /<command> <subrank> <permission node>
+      permission: Necessities.rankmanager.addpermsubrank
+      aliases: [naddpermsubrank, addpermissionsubrank, addpermissionsub, naddpermissionsubrank, naddpermissionsub]
+   delpermsubrank:
+      description: Deletes <permission node> from <subrank>'s permission nodes.
+      usage: /<command> <subrank> <permission node>
+      permission: Necessities.rankmanager.delpermsubrank
+      aliases: [ndelpermsubrank, deletepermsubrank, ndeletepermsubrank, ndeletepermissionsubrank, deletepermissionsubrank]
+   addsubrank:
+      description: Adds <subrank> to <rank>'s subranks.
+      usage: /<command> <rank> <subrank>
+      permission: Necessities.rankmanager.addsubrank
+      aliases: [addsubrankrank, addsub, addsubr, addsubrankr, naddsubrank, naddsubrankrank, naddsub, naddsubr, naddsubrankr]
+   delsubrank:
+      description: Deletes <subrank> from <rank>'s subranks.
+      usage: /<command> <rank> <subrank>
+      permission: Necessities.rankmanager.delsubrank
+      aliases: [delsubrankrank, delsub, delsubrankr, delsubr, ndelsubrank, ndelsubrankrank, ndelsub, ndelsubrankr, ndelsubr]
+   createsubrank:
+      description: Creates the subrank with the name <subrank>.
+      usage: /<command> <subrank>
+      permission: Necessities.rankmanager.createsubrank
+      aliases: [ncreatesubrank]
+   removesubrank:
+      description: Deletes the subrank with the name <subrank>.
+      usage: /<command> <subrank>
+      permission: Necessities.rankmanager.removesubrank
+      aliases: [nremovesubrank, deletesubrank, ndeletesubrank]
+   createrank:
+      description: Creates the rank with the name <rank> inbetween <previous> and <next>.
+      usage: /<command> <rank> <previous> <next>
+      permission: Necessities.rankmanager.createrank
+      aliases: [ncreaterank, naddrank, addrank]
+   ranks:
+      description: Lists all ranks.
+      usage: /<command>
+      permission: Necessities.rankmanager.ranks
+      aliases: [nranks]
+   rankcmds:
+      description: Lists the new commands for <rank>.
+      usage: /<command> <rank>
+      permission: Necessities.rankmanager.rankcmds
+      aliases: [nrankcmds, rankcommands, nrankcommands, rankinfo, nrankinfo]
+   subranks:
+      description: Lists the available subranks.
+      usage: /<command>
+      permission: Necessities.rankmanager.subranks
+      aliases: [nsubranks]
+   removerank:
+      description: Deletes <rank>.
+      usage: /<command> <rank>
+      permission: Necessities.rankmanager.removerank
+      aliases: [nremoverank, deleterank, ndeleterank, ndelrank, delrank]
+   addsubrankuser:
+      description: Adds <subrank> to <player>'s subranks.
+      usage: /<command> <player> <subrank>
+      permission: Necessities.rankmanager.addsubrankuser
+      aliases: [addsubuser, addsubplayer, addsubp, addsubrankplayer, addsubrankp, naddsubrankuser, naddsubuser, naddsubplayer, naddsubp, naddsubrankplayer, naddsubrankp]
+   delsubrankuser:
+      description: Deletes <subrank> from <player>'s subranks.
+      usage: /<command> <player> <subrank>
+      permission: Necessities.rankmanager.delsubrankuser
+      aliases: [delsubuser, delsubplayer, delsubp, delsubrankplayer, delsubrankp, ndelsubrankuser, ndelsubuser, ndelsubplayer, ndelsubp, ndelsubrankplayer, ndelsubrankp]
+permissions:
+    Necessities.*:
+        description: The Mainframe of Necessities' command structure
+        children:
+            Necessities.infiniteDurability: true
+            Necessities.enderchestOthers: true
+            Necessities.ignoreGameMode: true
+            Necessities.bracketOthers: true
+            Necessities.unsafeEnchant: true
+            Necessities.unignoreable: true
+            Necessities.spamcommands: true
+            Necessities.canCombatLog: true
+            Necessities.titleOthers: true
+            Necessities.opBroadcast: true
+            Necessities.freeCommand: true
+            Necessities.enderchest: true
+            Necessities.invseeonly: true
+            Necessities.unjailable: true
+            Necessities.homeothers: true
+            Necessities.togglechat: true
+            Necessities.nickOthers: true
+            Necessities.feedOthers: true
+            Necessities.healOthers: true
+            Necessities.machinegun: true
+            Necessities.keepitems: true
+            Necessities.nopvpLoss: true
+            Necessities.colorchat: true
+            Necessities.lightning: true
+            Necessities.workbench: true
+            Necessities.advertise: true
+            Necessities.antiPWarn: true
+            Necessities.seehidden: true
+            Necessities.extOthers: true
+            Necessities.godOthers: true
+            Necessities.flyOthers: true
+            Necessities.gamemode: true
+            Necessities.setspawn: true
+            Necessities.ragequit: true
+            Necessities.language: true
+            Necessities.spamchat: true
+            Necessities.highfive: true
+            Necessities.antikick: true
+            Necessities.spawnmob: true
+            Necessities.tpahaere: true
+            Necessities.tpaccept: true
+            Necessities.bazooka: true
+            Necessities.killall: true
+            Necessities.antiBan: true
+            Necessities.unbanip: true
+            Necessities.sethome: true
+            Necessities.delhome: true
+            Necessities.spawner: true
+            Necessities.kickany: true
+            Necessities.suicide: true
+            Necessities.setjail: true
+            Necessities.enchant: true
+            Necessities.weather: true
+            Necessities.bracket: true
+            Necessities.janetai: true
+            Necessities.repair: true
+            Necessities.keepxp: true
+            Necessities.rename: true
+            Necessities.invsee: true
+            Necessities.ignore: true
+            Necessities.tphere: true
+            Necessities.tpdeny: true
+            Necessities.wrench: true
+            Necessities.tppos: true
+            Necessities.tpall: true
+            Necessities.unban: true
+            Necessities.banip: true
+            Necessities.rules: true
+            Necessities.reply: true
+            Necessities.speed: true
+            Necessities.title: true
+            Necessities.table: true
+            Necessities.tpdim: true
+            Necessities.chest: true
+            Necessities.boots: true
+            Necessities.pants: true
+            Necessities.spawn: true
+            Necessities.skull: true
+            Necessities.clear: true
+            Necessities.craft: true
+            Necessities.jump: true
+            Necessities.give: true
+            Necessities.back: true
+            Necessities.jail: true
+            Necessities.time: true
+            Necessities.feed: true
+            Necessities.heal: true
+            Necessities.more: true
+            Necessities.nick: true
+            Necessities.kill: true
+            Necessities.kick: true
+            Necessities.caps: true
+            Necessities.devs: true
+            Necessities.warn: true
+            Necessities.slap: true
+            Necessities.hide: true
+            Necessities.mute: true
+            Necessities.motd: true
+            Necessities.home: true
+            Necessities.help: true
+            Necessities.item: true
+            Necessities.exp: true
+            Necessities.msg: true
+            Necessities.top: true
+            Necessities.imp: true
+            Necessities.hat: true
+            Necessities.spy: true
+            Necessities.god: true
+            Necessities.fly: true
+            Necessities.afk: true
+            Necessities.who: true
+            Necessities.ext: true
+            Necessities.say: true
+            Necessities.faq: true
+            Necessities.ban: true
+            Necessities.tpa: true
+            Necessities.me: true
+            Necessities.tp: true
+            Necessities.economy.*:
+              children:
+                Necessities.economy.pricelist: true
+                Necessities.economy.cmdprices: true
+                Necessities.economy.setprice: true
+                Necessities.economy.editbal: true
+                Necessities.economy.taccept: true
+                Necessities.economy.players: true
+                Necessities.economy.setSign: true
+                Necessities.economy.prices: true
+                Necessities.economy.baltop: true
+                Necessities.economy.price: true
+                Necessities.economy.tdeny: true
+                Necessities.economy.trade: true
+                Necessities.economy.sell: true
+                Necessities.economy.pay: true
+                Necessities.economy.bal: true
+                Necessities.economy.buy: true
+                Necessities.economy.buy: true
+                Necessities.economy.srp: true
+                Necessities.economy.scp: true
+            Necessities.rankmanager.*:
+              children:
+                Necessities.rankmanager.addpermissionuser: true
+                Necessities.rankmanager.delpermissionuser: true
+                Necessities.rankmanager.addpermsubrank: true
+                Necessities.rankmanager.delpermsubrank: true
+                Necessities.rankmanager.addsubrankuser: true
+                Necessities.rankmanager.delsubrankuser: true
+                Necessities.rankmanager.removesubrank: true
+                Necessities.rankmanager.createsubrank: true
+                Necessities.rankmanager.addpermission: true
+                Necessities.rankmanager.delpermission: true
+                Necessities.rankmanager.setranksame: true
+                Necessities.rankmanager.addsubrank: true
+                Necessities.rankmanager.delsubrank: true
+                Necessities.rankmanager.removerank: true
+                Necessities.rankmanager.createrank: true
+                Necessities.rankmanager.subranks: true
+                Necessities.rankmanager.rankcmds: true
+                Necessities.rankmanager.promote: true
+                Necessities.rankmanager.setrank: true
+                Necessities.rankmanager.demote: true
+                Necessities.rankmanager.whois: true
+                Necessities.rankmanager.ranks: true
+            Necessities.worldmanager.*:
+              children:
+                Necessities.worldmanager.setworldspawn: true
+                Necessities.worldmanager.createportal: true
+                Necessities.worldmanager.removeportal: true
+                Necessities.worldmanager.createworld: true
+                Necessities.worldmanager.unloadworld: true
+                Necessities.worldmanager.removeworld: true
+                Necessities.worldmanager.modifyworld: true
+                Necessities.worldmanager.worldspawn: true
+                Necessities.worldmanager.removewarp: true
+                Necessities.worldmanager.createwarp: true
+                Necessities.worldmanager.loadworld: true
+                Necessities.worldmanager.worlds: true
+                Necessities.worldmanager.world: true
+                Necessities.worldmanager.warps: true
+                Necessities.worldmanager.warp: true
+            Necessities.guilds.*:
+              children:
+                Necessities.guilds.description: true
+                Necessities.guilds.unclaimall: true
+                Necessities.guilds.autoclaim: true
+                Necessities.guilds.uninvite: true
+                Necessities.guilds.disband: true
+                Necessities.guilds.unclaim: true
+                Necessities.guilds.sethome: true
+                Necessities.guilds.neutral: true
+                Necessities.guilds.leader: true
+                Necessities.guilds.create: true
+                Necessities.guilds.invite: true
+                Necessities.guilds.power: true
+                Necessities.guilds.guild: true
+                Necessities.guilds.leave: true
+                Necessities.guilds.claim: true
+                Necessities.guilds.admin: true
+                Necessities.guilds.enemy: true
+                Necessities.guilds.list: true
+                Necessities.guilds.info: true
+                Necessities.guilds.home: true
+                Necessities.guilds.kick: true
+                Necessities.guilds.flag: true
+                Necessities.guilds.join: true
+                Necessities.guilds.ally: true
+                Necessities.guilds.help: true
+                Necessities.guilds.mod: true
+                Necessities.guilds.map: true
+    Necessities.guilds.guild:
+        description: Allows you to use /guild.
+        default: true
+    Necessities.guilds.list:
+        description: Allows you to use /guild list.
+        default: true
+    Necessities.guilds.info:
+        description: Allows you to use /guild info.
+        default: true
+    Necessities.guilds.power:
+        description: Allows you to use /guild power.
+        default: true
+    Necessities.guilds.home:
+        description: Allows you to use /guild home.
+        default: true
+    Necessities.guilds.description:
+        description: Allows you to use /guild description.
+        default: true
+    Necessities.guilds.sethome:
+        description: Allows you to use /guild sethome.
+        default: true
+    Necessities.guilds.mod:
+        description: Allows you to use /guild mod.
+        default: true
+    Necessities.guilds.kick:
+        description: Allows you to use /guild kick.
+        default: true
+    Necessities.guilds.leader:
+        description: Allows you to use /guild leader.
+        default: true
+    Necessities.guilds.leave:
+        description: Allows you to use /guild leave.
+        default: true
+    Necessities.guilds.disband:
+        description: Allows you to use /guild disband.
+        default: true
+    Necessities.guilds.create:
+        description: Allows you to use /guild create.
+        default: true
+    Necessities.guilds.claim:
+        description: Allows you to use /guild claim.
+        default: true
+    Necessities.guilds.unclaim:
+        description: Allows you to use /guild unclaim.
+        default: true
+    Necessities.guilds.unclaimall:
+        description: Allows you to use /guild unclaimall.
+        default: true
+    Necessities.guilds.join:
+        description: Allows you to use /guild join.
+        default: true
+    Necessities.guilds.invite:
+        description: Allows you to use /guild invite.
+        default: true
+    Necessities.guilds.uninvite:
+        description: Allows you to use /guild uninvite.
+        default: true
+    Necessities.guilds.ally:
+        description: Allows you to use /guild ally.
+        default: true
+    Necessities.guilds.neutral:
+        description: Allows you to use /guild neutral.
+        default: true
+    Necessities.guilds.enemy:
+        description: Allows you to use /guild enemy.
+        default: true
+    Necessities.guilds.map:
+        description: Allows you to use /guild map.
+        default: true
+    Necessities.guilds.autoclaim:
+        description: Allows you to use /guild autoclaim.
+        default: true
+    Necessities.guilds.help:
+        description: Allows you to use /guild help.
+        default: true
+    Necessities.faq:
+        description: Allows you to view server faq.
+        default: true
+    Necessities.ragequit:
+        description: Allows you to ragequit the server.
+        default: true
+    Necessities.tpa:
+        description: Allows you to send teleport requests to players.
+        default: true
+    Necessities.tpahere:
+        description: Allows you to send teleport requests to players.
+        default: true
+    Necessities.tpaccept:
+        description: Allows you to accept teleport requests.
+        default: true
+    Necessities.tpdeny:
+        description: Allows you to deny teleport requests.
+        default: true
+    Necessities.msg:
+        description: Allows you to message people.
+        default: true
+    Necessities.reply:
+        description: Allows you to reply to people.
+        default: true
+    Necessities.help:
+        description: Allows you to view the help.
+        default: true
+    Necessities.home:
+        description: Allows you to go to your home.
+        default: true
+    Necessities.sethome:
+        description: Allows you to set your home.
+        default: true
+    Necessities.delhome:
+        description: Allows you to delete your home.
+        default: true
+    Necessities.rules:
+        description: Allows you to view the rules.
+        default: true
+    Necessities.motd:
+        description: Allows you to view the message of the day.
+        default: true
+    Necessities.suicide:
+        description: Allows you to commit suicide.
+        default: true
+    Necessities.back:
+        description: Allows you to go back to your previous location.
+        default: true
+    Necessities.worldmanager.worlds:
+        description: Allows you to view loaded worlds.
+        default: true
+    Necessities.worldmanager.warps:
+        description: Allows you to view the list of warps.
+        default: true
+    Necessities.worldmanager.warp:
+        description: Allows you to teleport to a specified warp.
+        default: true
+    Necessities.who:
+        description: Allows you to view player list.
+        default: true
+    Necessities.highfive:
+        description: Allows you to highfive someone.
+        default: true
+    Necessities.devs:
+        description: Allows you to view the devs of Necessities.
+        default: true
+    Necessities.afk:
+        description: Allows you to go afk.
+        default: true
+    Necessities.spawn:
+        description: Allows you to go to server spawn.
+        default: true
+    Necessities.economy.bal:
+        description: Lets you see your own balance.
+        default: true
+    Necessities.economy.baltop:
+        description: Allows you to look at the players with the most money.
+        default: true
+    Necessities.economy.players:
+        description: Lets you see amount of players who have joined the server.
+        default: true
+    Necessities.economy.pay:
+        description: Pays someone some money.
+        default: true
+    Necessities.economy.price:
+        description: Allows you to see the price of an item.
+        default: true
+    Necessities.economy.buy:
+        description: Allows you to buy items.
+        default: true
+    Necessities.ignore:
+        description: Allows you to ignore other players.
+        default: true
+    Necessities.economy.sell:
+        description: Allows you to sell items.
+        default: true
+    Necessities.rankmanager.ranks:
+        description: Allows you to view available ranks.
+        default: true
+    Necessities.rankmanager.rankcmds:
+        description: Allows you to view the rank commands for a rank.
+        default: true
+    Necessities.economy.taccept:
+        description: Allows you to accept trades.
+        default: true
+    Necessities.economy.tdeny:
+        description: Allows you to deny trades.
+        default: true
+    Necessities.economy.trade:
+        description: Allows you to trade with players.
+        default: true
+    Necessities.economy.pricelist:
+        description: Allows you to see the pricelist.
+        default: true
+    Necessities.economy.prices:
+        description: Prices of a rank.
+        default: true
+    Necessities.economy.buy:
+        description: Buys a rank.
+        default: true
+    Necessities.economy.cmdprices:
+        description: Prices of commands.
+        default: true
+    Necessities.economy.srp:
+        description: Sets a price for a rank.
+        default: op
+    Necessities.economy.scp:
+        description: Sets a price for a command and rank minimum rank needed.
+        default: op
+    Necessities.economy.setprice:
+        description: Allows you to set cost of an item.
+        default: op
+    Necessities.economy.editbal:
+        description: Allows you to edit other players balances.
+        default: op
+    Necessities.economy.setSign:
+        description: Allows you to place shop signs
+        default: op
+    Necessities.rankmanager.promote:
+        description: Allows you to promtoe a player.
+        default: op
+    Necessities.rankmanager.demote:
+        description: Allows you to demote a player.
+        default: op
+    Necessities.rankmanager.setrank:
+        description: Allows you to set the rank of a player.
+        default: op
+    Necessities.rankmanager.addpermission:
+        description: Allows you to add a permission to a ranks permissions.
+        default: op
+    Necessities.rankmanager.delpermission:
+        description: Allows you to remove a permission from a ranks permissions.
+        default: op
+    Necessities.rankmanager.addpermsubrank:
+        description: Allows you to add a permission to a subranks permissions.
+        default: op
+    Necessities.rankmanager.delpermsubrank:
+        description: Allows you to remove a permission from a subranks permissions.
+        default: op
+    Necessities.rankmanager.addpermissionuser:
+        description: Allows you to add a permission to a players permissions.
+        default: op
+    Necessities.rankmanager.delpermissionuser:
+        description: Allows you to remove a permission from a players permissions.
+        default: op
+    Necessities.rankmanager.addsubrank:
+        description: Allows you to add a subrank to a rank.
+        default: op
+    Necessities.rankmanager.delsubrank:
+        description: Allows you to remove a subrank to a rank.
+        default: op
+    Necessities.rankmanager.addsubrankuser:
+        description: Allows you to add a subrank from a player.
+        default: op
+    Necessities.rankmanager.delsubrankuser:
+        description: Allows you to remove a subrank from a player.
+        default: op
+    Necessities.rankmanager.whois:
+        description: Allows you to view who someone is.
+        default: op
+    Necessities.rankmanager.createsubrank:
+        description: Allows you to create a subrank.
+        default: op
+    Necessities.rankmanager.removesubrank:
+        description: Allows you to delete a subrank.
+        default: op
+    Necessities.rankmanager.createrank:
+        description: Allows you to create a rank.
+        default: op
+    Necessities.rankmanager.removerank:
+        description: Allows you to delete a rank.
+        default: op
+    Necessities.rankmanager.setranksame:
+        description: Allows you to promote people to any rank.
+        default: false
+    Necessities.rankmanager.subranks:
+        description: Allows you to view available subranks.
+        default: op
+    Necessities.enchant:
+        description: Allows you to enchant items.
+        default: op
+    Necessities.warn:
+        description: Allows you to warn players.
+        default: op
+    Necessities.slap:
+        description: Allows you to slap a player.
+        default: op
+    Necessities.imp:
+        description: Allows you to do imp people.
+        default: op
+    Necessities.pants:
+        description: Allows you to put pants on.
+        default: op
+    Necessities.boots:
+        description: Allows you to put boots on.
+        default: op
+    Necessities.chest:
+        description: Allows you to do put chestplates on.
+        default: op
+    Necessities.hat:
+        description: Allows you to do put hats on.
+        default: op
+    Necessities.workbench:
+        description: Allows you to open a workbench.
+        default: op
+    Necessities.caps:
+        description: Allows you to use caps.
+        default: op
+    Necessities.language:
+        description: Allows you to use bad language.
+        default: op
+    Necessities.title:
+        description: Allows you to give players titles.
+        default: op
+    Necessities.nopvpLoss:
+        description: Do not loose money on death from pvp in BattleGrounds.
+        default: op
+    Necessities.bracket:
+        description: Allows you to give players bracket colors.
+        default: op
+    Necessities.spamchat:
+        description: Allows you to spam chat.
+        default: op
+    Necessities.spamcommands:
+        description: Allows you to spam commands.
+        default: op
+    Necessities.advertise:
+        description: Allows you to advertise.
+        default: op
+    Necessities.hide:
+        description: Allows you to vanish with disconect message.
+        default: op
+    Necessities.opBroadcast:
+        description: Lets you see op messages.
+        default: op
+    Necessities.seehidden:
+        description: Lets you see hidden players.
+        default: op
+    Necessities.unsafeEnchant:
+        description: Allows you to do unsafe enchantments.
+        default: op
+    Necessities.antiPWarn:
+        description: Allows you to not be able to be /warned.
+        default: op
+    Necessities.rename:
+        description: Allows you to rename items.
+        default: op
+    Necessities.table:
+        description: Allows you to open an enchantment table.
+        default: op
+    Necessities.tpdim:
+        description: TP between dims and coords.
+        default: op
+    Necessities.janetai:
+        description: Janet loves you.
+        default: op
+    Necessities.spy:
+        description: Can spy on commands.
+        default: op
+    Necessities.canCombatLog:
+        description: Is allowed to log out during combat.
+        default: op
+    Necessities.setspawn:
+        description: Allows you to set the server spawn.
+        default: op
+    Necessities.loginmessage:
+        description: Allows you to set your login message.
+        default: op
+    Necessities.logoutmessage:
+        description: Allows you to set your logout message.
+        default: op
+    Necessities.worldmanager.world:
+        description: Allows you to teleport between worlds.
+        default: op
+    Necessities.time:
+        description: Allows you to change the time of a world.
+        default: op
+    Necessities.weather:
+        description: Allows you to change the weather of a world.
+        default: op
+    Necessities.gamemode:
+        description: Allows you to change your gamemode.
+        default: op
+    Necessities.god:
+        description: Allows you to toggle godmode.
+        default: op
+    Necessities.keepxp:
+        description: Keep xp on death.
+        default: op
+    Necessities.keepitems:
+        description: Keep items on death.
+        default: op
+    Necessities.heal:
+        description: Allows you to heal.
+        default: op
+    Necessities.feed:
+        description: Allows you to feed.
+        default: op
+    Necessities.fly:
+        description: Allows you to fly like a bird.
+        default: op
+    Necessities.more:
+        description: Allows you to increase itemstack.
+        default: op
+    Necessities.repair:
+        description: Allows you to repair your items.
+        default: op
+    Necessities.me:
+        description: Allows you to act out an event.
+        default: op
+    Necessities.nick:
+        description: Allows you to change your display name.
+        default: op
+    Necessities.kick:
+        description: Allows you to kick players.
+        default: op
+    Necessities.antikick:
+        description: Stops you getting kicked.
+        default: op
+    Necessities.kickany:
+        description: Allows you to kick unkickable players.
+        default: op
+    Necessities.ext:
+        description: Allows you to extinguish players.
+        default: op
+    Necessities.enderchest:
+        description: Allows you to open enderchests.
+        default: op
+    Necessities.invsee:
+        description: Allows you to see other players inventories.
+        default: op
+    Necessities.invseeonly:
+        description: Allows you to not be stolen from.
+        default: op
+    Necessities.top:
+        description: Allows you to go to highest block.
+        default: op
+    Necessities.speed:
+        description: Allows you to change your speed.
+        default: op
+    Necessities.jail:
+        description: Allows you to jail a player.
+        default: op
+    Necessities.setjail:
+        description: Allows you to set the jail.
+        default: op
+    Necessities.unjailable:
+        description: Allows you to set the jail.
+        default: op
+    Necessities.kill:
+        description: Allows you to kill a player.
+        default: op
+    Necessities.mute:
+        description: Allows you to mute a player.
+        default: op
+    Necessities.exp:
+        description: Allows you to modify another players exp.
+        default: op
+    Necessities.lightning:
+        description: Allows you to bring lightning down from the sky.
+        default: op
+    Necessities.skull:
+        description: Allows you to spawn player skulls.
+        default: op
+    Necessities.homeothers:
+        description: Allows you to go to other players homes.
+        default: op
+    Necessities.spawner:
+        description: Allows you to change spawner type.
+        default: op
+    Necessities.spawnmob:
+        description: Allows you to spawn mobs.
+        default: op
+    Necessities.unignoreable:
+        description: You are unabled to be ignored.
+        default: op
+    Necessities.colorchat:
+        description: You are can speak with colors.
+        default: op
+    Necessities.say:
+        description: You can speak to the server.
+        default: op
+    Necessities.item:
+        description: You can give yourself items.
+        default: op
+    Necessities.give:
+        description: You can give a player items.
+        default: op
+    Necessities.clear:
+        description: Clear out your inventory.
+        default: op
+    Necessities.killall:
+        description: Killall of a type of mob.
+        default: op
+    Necessities.togglechat:
+        description: Toggles chat if you are the conosle.
+        default: op
+    Necessities.ban:
+        description: Bans a player.
+        default: op
+    Necessities.unban:
+        description: Unbans a player.
+        default: op
+    Necessities.banip:
+        description: Bans an ip.
+        default: op
+    Necessities.unbanip:
+        description: Unbans an ip.
+        default: op
+    Necessities.antiBan:
+        description: Stops you from being bannable.
+        default: op
+    Necessities.jump:
+        description: Jumps to your cursors location.
+        default: op
+    Necessities.tp:
+        description: Teleport to another player.
+        default: op
+    Necessities.tphere:
+        description: Teleport a player to you.
+        default: op
+    Necessities.tppos:
+        description: Teleport to a location.
+        default: op
+    Necessities.tpall:
+        description: Teleport all players to your location.
+        default: op
+    Necessities.ignoreGameMode:
+        description: Ignores the change of gamemode when you go to a new world.
+        default: op
+    Necessities.worldmanager.createworld:
+        description: Allows you to create new worlds.
+        default: op
+    Necessities.worldmanager.worldspawn:
+        description: Allows you to send a player to spawn of world.
+        default: op
+    Necessities.worldmanager.loadworld:
+        description: Allows you to load an unloaded world.
+        default: op
+    Necessities.worldmanager.unloadworld:
+        description: Allows you to unload an loaded world.
+        default: op
+    Necessities.worldmanager.removeworld:
+        description: Allows you to remove a world from worlds file.
+        default: op
+    Necessities.worldmanager.modifyworld:
+        description: Allows you to modify the settings for a world.
+        default: op
+    Necessities.worldmanager.setworldspawn:
+        description: Allows you to set the spawn for the world you are in.
+        default: op
+    Necessities.worldmanager.createportal:
+        description: Allows you to create portals to other worlds.
+        default: op
+    Necessities.worldmanager.removeportal:
+        description: Allows you to remove portals that take you to other worlds.
+        default: op
+    Necessities.guilds.flag:
+        description: Allows you to use /guild flag.
+        default: op
+    Necessities.guilds.admin:
+        description: Generic admin permissions for other guilds.
+        default: op
+    Necessities.infiniteDurability:
+        description: Infinite item durability.
+        default: op
+    Necessities.titleOthers:
+        description: Change the title of others.
+        default: op
+    Necessities.bracketOthers:
+        description: Change the bracket color of others.
+        default: op
+    Necessities.nickOthers:
+        description: Set other peoples nick names.
+        default: op
+    Necessities.enderchestOthers:
+        description: Set other peoples nick names.
+        default: op
+    Necessities.extOthers:
+        description: Allows you to extinguish others.
+        default: op
+    Necessities.feedOthers:
+        description: Allows you to feed others.
+        default: op
+    Necessities.godOthers:
+        description: Allows you to toggle god for others.
+        default: op
+    Necessities.flyOthers:
+        description: Allows you toggle fly for others.
+        default: op
+    Necessities.healOthers:
+        description: Allows you to heal others.
+        default: op
+    Necessities.craft:
+        description: Craft items from the ones in your inventory.
+        default: op
+    Necessities.machinegun:
+        description: Turns your bow into a machine gun.
+        default: op
+    Necessities.bazooka:
+        description: Turns your bow into a bazooka.
+        default: op
+    Necessities.freeCommand:
+        description: You do not have to pay for use of commands.
+        default: op
+    Necessities.worldmanager.createwarp:
+        description: Allows you to create warps.
+        default: op
+    Necessities.worldmanager.removewarp:
+        description: Allows you to remove warps.
+        default: op
+    Necessities.wrench:
+        description: Wrench to toggle states of blocks.
+        default: op

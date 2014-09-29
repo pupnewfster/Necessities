@@ -1,0 +1,69 @@
+package com.crossge.necessities.Commands.Guilds;
+
+import org.bukkit.command.CommandSender;
+import com.crossge.necessities.Commands.Cmd;
+
+public class CmdGuild extends Cmd {
+	public boolean commandUse(CommandSender sender, String[] args) {
+		String subCmd = "help";
+		String[] subArgs = new String[0];
+		if(args.length >= 1) {
+			subCmd = args[0];
+			subArgs = new String[args.length - 1];
+			for(int i = 1; i < args.length; i++)
+				subArgs[i - 1] = args[i]; 
+		}
+		GuildCmd cmd = new GuildCmd();
+		if(subCmd.equalsIgnoreCase("list"))
+			cmd = new CmdList();
+		else if(subCmd.equalsIgnoreCase("info") || subCmd.equalsIgnoreCase("who"))
+			cmd = new CmdInfo();
+		else if(subCmd.equalsIgnoreCase("power") || subCmd.equalsIgnoreCase("pow"))
+			cmd = new CmdPower();
+		else if(subCmd.equalsIgnoreCase("join") || subCmd.equalsIgnoreCase("j"))
+			cmd = new CmdJoin();
+		else if(subCmd.equalsIgnoreCase("leave") || subCmd.equalsIgnoreCase("l"))
+			cmd = new CmdLeave();
+		else if(subCmd.equalsIgnoreCase("home") || subCmd.equalsIgnoreCase("h"))
+			cmd = new CmdHome();
+		else if(subCmd.equalsIgnoreCase("map") || subCmd.equalsIgnoreCase("m"))
+			cmd = new CmdMap();
+		else if(subCmd.equalsIgnoreCase("create"))
+			cmd = new CmdCreate();
+		else if(subCmd.equalsIgnoreCase("description") || subCmd.equalsIgnoreCase("desc"))
+			cmd = new CmdDescription();
+		else if(subCmd.equalsIgnoreCase("sethome"))
+			cmd = new CmdSetHome();
+		else if(subCmd.equalsIgnoreCase("invite") || subCmd.equalsIgnoreCase("inv"))
+			cmd = new CmdInvite();
+		else if(subCmd.equalsIgnoreCase("uninvite") || subCmd.equalsIgnoreCase("uninv"))
+			cmd = new CmdUninvite();
+		else if(subCmd.equalsIgnoreCase("kick") || subCmd.equalsIgnoreCase("k"))
+			cmd = new CmdKick();
+		else if(subCmd.equalsIgnoreCase("mod") || subCmd.equalsIgnoreCase("officer") || subCmd.equalsIgnoreCase("moderator") || subCmd.equalsIgnoreCase("demod"))
+			cmd = new CmdMod();
+		else if(subCmd.equalsIgnoreCase("leader") || subCmd.equalsIgnoreCase("owner"))
+			cmd = new CmdLeader();
+		else if(subCmd.equalsIgnoreCase("claim") || subCmd.equalsIgnoreCase("c"))
+			cmd = new CmdClaim();
+		else if(subCmd.equalsIgnoreCase("autoclaim"))
+			cmd = new CmdAutoclaim();
+		else if(subCmd.equalsIgnoreCase("unclaim"))
+			cmd = new CmdUnclaim();
+		else if(subCmd.equalsIgnoreCase("unclaimall"))
+			cmd = new CmdUnclaimAll();
+		else if(subCmd.equalsIgnoreCase("ally"))
+			cmd = new CmdAlly();
+		else if(subCmd.equalsIgnoreCase("neutral") || subCmd.equalsIgnoreCase("unally") || subCmd.equalsIgnoreCase("unenemy"))
+			cmd = new CmdNeutral();
+		else if(subCmd.equalsIgnoreCase("enemy"))
+			cmd = new CmdEnemy();
+		else if(subCmd.equalsIgnoreCase("flag"))
+			cmd = new CmdFlag();
+		else if(subCmd.equalsIgnoreCase("disband"))
+			cmd = new CmdDisband();
+		else
+			cmd = new CmdHelp();
+		return cmd.commandUse(sender, subArgs);
+	}
+}
