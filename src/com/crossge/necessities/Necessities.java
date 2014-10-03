@@ -2,17 +2,15 @@ package com.crossge.necessities;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.*;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import com.crossge.necessities.Commands.*;
 import com.crossge.necessities.Commands.Economy.*;
 import com.crossge.necessities.Commands.Guilds.CmdGuild;
 import com.crossge.necessities.Commands.RankManager.*;
 import com.crossge.necessities.Commands.WorldManager.*;
+import com.crossge.necessities.Janet.Janet;
 import com.crossge.necessities.RankManager.UserManager;
 
 public class Necessities extends JavaPlugin {
@@ -29,13 +27,6 @@ public class Necessities extends JavaPlugin {
 		Initialization init = new Initialization();
 		init.initiateFiles();
 		getServer().getPluginManager().registerEvents(new Listeners(), this);
-		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-	    scheduler.scheduleSyncDelayedTask(this, new Runnable() {
-	        @Override
-	        public void run() {
-	        	Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&a + &4[&bManager&4]&6 Janet&e joined the game."));
-	        }
-	    });
 		getLogger().info("Necessities enabled.");
     }
 	
@@ -357,9 +348,10 @@ public class Necessities extends JavaPlugin {
     public void onDisable() {
     	CmdCommandSpy cs = new CmdCommandSpy();
     	UserManager um = new UserManager();
+    	Janet bot = new Janet();
     	um.unload();
     	cs.unload();
-    	Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c - &4[&bManager&4]&6 Janet&e Disconnected."));
+    	bot.unload();
     	getLogger().info("Necessities disabled.");
     }
 }

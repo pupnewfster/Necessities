@@ -46,7 +46,18 @@ public class Janet {
 		for(String ip : customConfigCensors.getStringList("ips"))
 			if(!ip.equals(""))
 				ips.add(ip);
+		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+	    scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+	        @Override
+	        public void run() {
+	        	Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&a + &4[&bManager&4]&6 Janet&e joined the game."));
+	        }
+	    });
 		Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Janet initiated.");
+	}
+	
+	public void unload() {//possibly empty the lists not sure if needed though
+		Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c - &4[&bManager&4]&6 Janet&e Disconnected."));
 	}
 	
 	private void removePlayer(UUID uuid) {//called when player disconnects
@@ -134,40 +145,25 @@ public class Janet {
 	
 	public String internalLang(String message) {
 		String[] orig = message.replaceAll("[^a-zA-Z ]", "").toUpperCase().split(" ");
-		String temp = message.replaceAll("[^a-zA-Z]", "").toUpperCase();
-		String tempShort = removeConsec(temp);
-		if(temp.equals(""))
-			return message;
 		HashMap<String, Boolean> bad = new HashMap<String, Boolean>();
 		for(int i = 0; i < badwords.size(); i++) {
-			if(temp.contains(badwords.get(i))) {
-				boolean isGood = false;
-				for(int z = 0; z < goodwords.size(); z++)
-					if(temp.startsWith(goodwords.get(z), temp.indexOf(badwords.get(i)))) {
-						isGood = true;
-						break;
-					}
-				if(!isGood)
-					temp = temp.replaceAll(badwords.get(i), "");
-				if(goodwords.isEmpty())
-					temp = temp.replaceAll(badwords.get(i), "");
-			} else if(tempShort.contains(badwords.get(i))) {
-				boolean isGood = false;
-				for(int z = 0; z < goodwords.size(); z++)
-					if(tempShort.startsWith(goodwords.get(z), tempShort.indexOf(badwords.get(i)))) {
-						isGood = true;
-						break;
-					}
-				if(!isGood)
-					tempShort = tempShort.replaceAll(badwords.get(i), "");
-				if(goodwords.isEmpty())
-					tempShort = tempShort.replaceAll(badwords.get(i), "");
-			}
-			for(int j = 0; j < orig.length; j++)//TODO: Finish experimental filter
+			ArrayList<String> s = removeSpaces(orig, badwords.get(i));
+			for(int j = 0; j < s.size(); j++)
+				if(s.get(j).contains(badwords.get(i)) && check(s.get(j), badwords.get(i))) {
+					boolean isGood = false;
+					for(int z = 0; z < goodwords.size(); z++)
+						if(s.get(j).startsWith(goodwords.get(z))) {
+							isGood = true;
+							break;
+						}
+					if(!isGood)
+						bad.put(s.get(j), true);
+					if(goodwords.isEmpty())
+						bad.put(s.get(j), true);
+				}
+			for(int j = 0; j < orig.length; j++)
 				if(orig[j].contains(badwords.get(i))) {
-					if(orig[j].length() * badwords.get(i).length()/(badwords.get(i).length() + 1.0) - badwords.get(i).length() > 0.75 ||
-							orig[j].length() * 4.0/5 <= badwords.get(i).length() || orig[j].replaceAll(badwords.get(i), "").length() == 0 ||
-							orig[j].replaceAll(badwords.get(i), "").length() >= orig[j].length() * 3.0/5) {
+					if(check(orig[j], badwords.get(i))) {
 						boolean isGood = false;
 						for(int z = 0; z < goodwords.size(); z++)
 							if(orig[j].startsWith(goodwords.get(z))) {
@@ -182,9 +178,7 @@ public class Janet {
 				} else {
 					String t = removeConsec(orig[j]);
 					if(t.contains(badwords.get(i))) {
-						if(t.length() * badwords.get(i).length()/(badwords.get(i).length() + 1.0) - badwords.get(i).length() > 0.75 ||
-								t.length() * 4.0/5 <= badwords.get(i).length() || t.replaceAll(badwords.get(i), "").length() == 0 ||
-								t.replaceAll(badwords.get(i), "").length() >= t.length() * 3.0/5) {
+						if(check(t, badwords.get(i))) {
 							boolean isGood = false;
 							for(int z = 0; z < goodwords.size(); z++)
 								if(t.startsWith(goodwords.get(z))) {
@@ -199,8 +193,6 @@ public class Janet {
 					}
 				}
 		}
-		if(temp.equals("") || tempShort.equals(""))
-			return stars(message);
 		if(bad.isEmpty())
 			return message;
 		String[] nonCapitalized = message.split(" ");
@@ -211,7 +203,40 @@ public class Janet {
 					nonCapitalized[i] = stars(nonCapitalized[i]);
 			censored += nonCapitalized[i] + " ";
 		}
+		if(censored.trim().equals(message))//TODO: Censor new finder not whole message
+			return stars(message);
 		return censored.trim();
+	}
+	
+	private boolean check(String msg, String bad) {
+		return msg.length() * bad.length()/(bad.length() + 1.0) - bad.length() > 0.75 || msg.length() * 4.0/5 <= bad.length() ||
+			msg.replaceAll(bad, "").length() == 0 || msg.replaceAll(bad, "").length() >= msg.length() * 3.0/5;
+	}
+	
+	private ArrayList<String> removeSpaces(String[] msgs, String word) {
+		ArrayList<String> messages = new ArrayList<String>();
+		String temp = "";
+		String t2 = "";
+		for(int i = 0; i < msgs.length; i++) {
+			for(int j = i; j < msgs.length; j++) {
+				if(temp.length() < word.length()) {
+					temp += msgs[j];
+					if(word.length() > 3)
+						messages.add(temp);
+					else if(temp.length() <= word.length())
+						messages.add(temp);
+				}
+				if(t2.length() < word.length()) {
+					t2 = removeConsec(t2 + msgs[j]);
+					messages.add(t2);
+				}
+				if(t2.length() >= word.length() && temp.length() >= word.length())
+					break;
+			}
+			temp = "";
+			t2 = "";
+		}
+		return messages;
 	}
 	
 	private String removeConsec(String message) {
