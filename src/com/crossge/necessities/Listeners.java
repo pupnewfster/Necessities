@@ -706,8 +706,7 @@ public class Listeners implements Listener {
 		if(configTitles.contains(player.getUniqueId() + ".title")) {
 			ChatColor brackets = ChatColor.getByChar(configTitles.getString(player.getUniqueId() + ".color"));
 			String title = configTitles.getString(player.getUniqueId() + ".title");
-			if(player.hasPermission("Necessities.colorchat"))
-				title = ChatColor.translateAlternateColorCodes('&', title);
+			title = ChatColor.translateAlternateColorCodes('&', title);
 			fullTitle = ChatColor.RESET + "" + brackets + "[" + ChatColor.RESET + title + ChatColor.RESET + "" + brackets + "] " + ChatColor.RESET;
 		}
 		e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", fullTitle));
