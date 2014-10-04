@@ -145,67 +145,32 @@ public class Janet {
 	
 	public String internalLang(String message) {
 		String[] orig = message.replaceAll("[^a-zA-Z ]", "").toUpperCase().split(" ");
-		HashMap<String, Boolean> bad = new HashMap<String, Boolean>();
+		ArrayList<String> bad = new ArrayList<String>();
 		for(int i = 0; i < badwords.size(); i++) {
 			ArrayList<String> s = removeSpaces(orig, badwords.get(i));
 			for(int j = 0; j < s.size(); j++)
-				if(s.get(j).contains(badwords.get(i)) && check(s.get(j), badwords.get(i))) {
-					boolean isGood = false;
-					for(int z = 0; z < goodwords.size(); z++)
-						if(s.get(j).startsWith(goodwords.get(z))) {
-							isGood = true;
-							break;
-						}
-					if(!isGood)
-						bad.put(s.get(j), true);
-					if(goodwords.isEmpty())
-						bad.put(s.get(j), true);
-				}
-			for(int j = 0; j < orig.length; j++)
-				if(orig[j].contains(badwords.get(i))) {
-					if(check(orig[j], badwords.get(i))) {
-						boolean isGood = false;
-						for(int z = 0; z < goodwords.size(); z++)
-							if(orig[j].startsWith(goodwords.get(z))) {
-								isGood = true;
-								break;
-							}
-						if(!isGood)
-							bad.put(orig[j], true);
-						if(goodwords.isEmpty())
-							bad.put(orig[j], true);
-					}
-				} else {
-					String t = removeConsec(orig[j]);
-					if(t.contains(badwords.get(i))) {
-						if(check(t, badwords.get(i))) {
-							boolean isGood = false;
-							for(int z = 0; z < goodwords.size(); z++)
-								if(t.startsWith(goodwords.get(z))) {
-									isGood = true;
-									break;
-								}
-							if(!isGood)
-								bad.put(orig[j], true);
-							if(goodwords.isEmpty())
-								bad.put(orig[j], true);
-						}
-					}
-				}
+				if(s.get(j).contains(badwords.get(i)) && check(s.get(j), badwords.get(i)) && !isGood(s.get(j)))
+					bad.add(s.get(j));
+			for(int j = 0; j < orig.length; j++) {
+				String t = removeConsec(orig[j]);
+				if((orig[j].contains(badwords.get(i)) && check(orig[j], badwords.get(i)) && !isGood(orig[j])) ||
+						(t.contains(badwords.get(i)) && check(t, badwords.get(i)) && !isGood(t)))
+					bad.add(orig[j]);
+			}
 		}
 		if(bad.isEmpty())
 			return message;
 		String[] nonCapitalized = message.split(" ");
 		String censored = "";
 		for(int i = 0; i < nonCapitalized.length; i++) {
-			for(String key : bad.keySet())
-				if(nonCapitalized[i].replaceAll("[^a-zA-Z]", "").equalsIgnoreCase(key))
+			for(String word : bad)
+				if(nonCapitalized[i].replaceAll("[^a-zA-Z]", "").equalsIgnoreCase(word))
 					nonCapitalized[i] = stars(nonCapitalized[i]);
 			censored += nonCapitalized[i] + " ";
 		}
-		if(censored.trim().equals(message))//TODO: Censor new finder not whole message
-			return stars(message);
-		return censored.trim();
+		if(censored.equals(""))
+			censored = message;
+		return addSpaces(bad, censored);
 	}
 	
 	private boolean check(String msg, String bad) {
@@ -213,28 +178,78 @@ public class Janet {
 			msg.replaceAll(bad, "").length() == 0 || msg.replaceAll(bad, "").length() >= msg.length() * 3.0/5;
 	}
 	
+	private boolean isGood(String msg) {
+		for(int z = 0; z < goodwords.size(); z++)
+			if(msg.startsWith(goodwords.get(z)))
+				return true;
+		return false;
+	}
+	
+	private String addSpaces(ArrayList<String> bad, String orig) {
+		String censored = "";
+		String temp = orig.toUpperCase().replaceAll("[^a-zA-Z]", "");
+		String t = removeConsec(temp);
+		HashMap<Integer, Character> stars = new HashMap<Integer, Character>();
+		String s = t;
+		for(String b : bad) {
+			temp = temp.replaceAll(b, stars(b));
+			s = s.replaceAll(b, stars(b));
+		}
+		for(int i = 0; i < s.length(); i++)
+			if(s.charAt(i) == '*')
+				stars.put(i, t.charAt(i));
+		String c = "";
+		int noSpace = 0;
+		for(int i = 0; i < temp.length(); i++) {
+			if(stars.containsKey(noSpace) && stars.get(noSpace) == temp.charAt(i))
+				c += "*";
+			else
+				c += temp.charAt(i);
+			if(i + 1 < temp.length() && stars.containsKey(noSpace) && stars.get(noSpace) != temp.charAt(i + 1))
+				noSpace++;
+		}
+		temp = c;
+		int loc = 0;
+		for(int i = 0; i < orig.length(); i++) {
+			if(loc < temp.length() && temp.charAt(loc) == '*') {
+				if(orig.charAt(i) == ' ')
+					censored += " ";
+				else
+					censored += "*";
+			} else
+				censored += orig.charAt(i);
+			if(Character.isLetter(orig.charAt(i)))
+				loc++;
+		}
+		if(censored.equals(""))
+			return orig;
+		return censored;
+	}
+	
 	private ArrayList<String> removeSpaces(String[] msgs, String word) {
 		ArrayList<String> messages = new ArrayList<String>();
 		String temp = "";
-		String t2 = "";
+		String t1 = "";
 		for(int i = 0; i < msgs.length; i++) {
 			for(int j = i; j < msgs.length; j++) {
 				if(temp.length() < word.length()) {
 					temp += msgs[j];
-					if(word.length() > 3)
-						messages.add(temp);
-					else if(temp.length() <= word.length())
-						messages.add(temp);
+					if(!messages.contains(temp))
+						if(word.length() > 3)
+							messages.add(temp);
+						else if(temp.length() <= word.length())
+							messages.add(temp);
 				}
-				if(t2.length() < word.length()) {
-					t2 = removeConsec(t2 + msgs[j]);
-					messages.add(t2);
+				if(t1.length() < word.length()) {
+					t1 = removeConsec(t1 + msgs[j]);
+					if(!messages.contains(t1))
+						messages.add(t1);
 				}
-				if(t2.length() >= word.length() && temp.length() >= word.length())
+				if(t1.length() >= word.length() && temp.length() >= word.length())
 					break;
 			}
 			temp = "";
-			t2 = "";
+			t1 = "";
 		}
 		return messages;
 	}
@@ -293,6 +308,8 @@ public class Janet {
 		String[] orig = message.split(" ");
 		String temp = "";
 		for(int i = 0; i < orig.length; i++) {
+			if(orig[i].split("\\:").length == 0)
+				continue;
 			temp = orig[i].split("\\:")[0];
 			if(!whitelistedIP(temp)) {
 				if(validateIPAddress(temp))
