@@ -30,12 +30,12 @@ public class GetUUID {
 	}
 	
 	public void addUUID(UUID uuid) {
-		uuids.put(Bukkit.getPlayer(uuid).getName(), uuid);
+		uuids.put(Bukkit.getPlayer(uuid).getName().toLowerCase(), uuid);
 	}
 	
 	public UUID getOfflineID(String name) {
-		if(uuids.containsKey(name))
-			return uuids.get(name);
+		if(uuids.containsKey(name.toLowerCase()))
+			return uuids.get(name.toLowerCase());
 		return null;
 	}
 	
@@ -43,7 +43,8 @@ public class GetUUID {
 		Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Retrieving all stored UUIDs.");
 		YamlConfiguration configUUIDs = YamlConfiguration.loadConfiguration(configFileUUIDs);
 		for(String key : configUUIDs.getKeys(false))
-			uuids.put(nameFromString(key), UUID.fromString(key));
+			if(nameFromString(key) != null)
+				uuids.put(nameFromString(key).toLowerCase(), UUID.fromString(key));
 		Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "All stored UUIDs retrieved.");
 	}
 	
