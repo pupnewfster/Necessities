@@ -2,7 +2,6 @@ package com.crossge.necessities.Janet;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -19,7 +18,7 @@ public class JanetAI {//TODO: Upgrade
 	private static String title = ChatColor.DARK_RED + "[" + ChatColor.AQUA + "Manager" + ChatColor.DARK_RED + "] ";
 	private static String name = ChatColor.GOLD + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
 	private static String JanetName = "";
-	Random r = new Random();
+	JanetRandom r = new JanetRandom();
 	
 	public void parseMessage(UUID uuid, String message) {
 		Player p = Bukkit.getPlayer(uuid);
@@ -46,10 +45,10 @@ public class JanetAI {//TODO: Upgrade
 			if(message.toLowerCase().contains("how are you") || message.toLowerCase().contains("what is up") || 
 					message.toLowerCase().contains("sup") || message.toLowerCase().contains("whats up") ||
 					message.toLowerCase().contains("how was your day"))
-				Bukkit.broadcastMessage(JanetName + feelingMessages[r.nextInt(feelingMessages.length)]);
+				Bukkit.broadcastMessage(JanetName + feelingMessages[r.rInt(feelingMessages.length)]);
 			else if(message.toLowerCase().startsWith("hello") || message.toLowerCase().startsWith("hey") ||
 					message.toLowerCase().startsWith("hi") || message.toLowerCase().startsWith("hai"))
-				Bukkit.broadcastMessage(JanetName + heyMessages.get(r.nextInt(heyMessages.size())));
+				Bukkit.broadcastMessage(JanetName + heyMessages.get(r.rInt(heyMessages.size())));
 			else if(message.toLowerCase().contains("i love you") || message.toLowerCase().contains("do you love me") ||
 					message.toLowerCase().contains("i wub you") || message.toLowerCase().contains("do you wub me") ||
 					message.toLowerCase().contains("love me")) {
@@ -78,12 +77,12 @@ public class JanetAI {//TODO: Upgrade
 					Bukkit.broadcastMessage(JanetName + "No, *slaps " + p.getName() + "*.");
 			}
 			else if(message.toLowerCase().contains("i see you") || message.toLowerCase().contains("i am following you"))
-				Bukkit.broadcastMessage(JanetName + stalkerMessages[r.nextInt(stalkerMessages.length)]);
+				Bukkit.broadcastMessage(JanetName + stalkerMessages[r.rInt(stalkerMessages.length)]);
 			else if(message.toLowerCase().contains("your drunk") || message.toLowerCase().contains("you are drunk") ||
 					message.toLowerCase().contains("you're drunk") || message.toLowerCase().contains("is drunk"))
-				Bukkit.broadcastMessage(JanetName + drunkMessages[r.nextInt(drunkMessages.length)]);
+				Bukkit.broadcastMessage(JanetName + drunkMessages[r.rInt(drunkMessages.length)]);
 			else
-				Bukkit.broadcastMessage(JanetName + janetNamed[r.nextInt(janetNamed.length)]);
+				Bukkit.broadcastMessage(JanetName + janetNamed[r.rInt(janetNamed.length)]);
 		}		
 	}
 	
