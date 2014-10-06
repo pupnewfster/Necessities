@@ -13,7 +13,7 @@ public class CmdBack extends Cmd {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			User u = um.getUser(player.getUniqueId());
-			if(u.getLastPos() == null) {
+			if(u.getLastPos() == null) {//This is now highly unlikely to appear
 				player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You have not teleported anywhere.");
 				return true;
 			}

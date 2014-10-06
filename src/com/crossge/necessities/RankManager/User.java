@@ -87,6 +87,12 @@ public class User {
 		}
 		if(configUsers.contains(getUUID().toString() + ".timePlayed"))
 			this.pastTotal = configUsers.getInt(getUUID().toString() + ".timePlayed");
+		if(configUsers.contains(getUUID().toString() + ".location"))	
+			this.lastPos = new Location(Bukkit.getWorld(configUsers.getString(getUUID().toString() + ".location.world")),
+				Double.parseDouble(configUsers.getString(getUUID().toString() + ".location.x")), Double.parseDouble(configUsers.getString(getUUID().toString() +
+				".location.y")), Double.parseDouble(configUsers.getString(getUUID().toString() + ".location.z")),
+				Float.parseFloat(configUsers.getString(getUUID().toString() + ".location.yaw")), Float.parseFloat(configUsers.getString(getUUID().toString() +
+				".location.pitch")));
 		this.login = System.currentTimeMillis();
 		readHomes();
 		readIgnored();
@@ -122,13 +128,17 @@ public class User {
 	
 	public void logOut() {
 		YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
-		configUsers.set(getUUID().toString() + ".timePlayed", (int) (this.pastTotal + (System.currentTimeMillis() - this.login)/1000));
-		try {
-			configUsers.save(configFileUsers);
-		} catch (Exception e){}
+		if(this.login != 0) {
+			configUsers.set(getUUID().toString() + ".timePlayed", (int) (this.pastTotal + (System.currentTimeMillis() - this.login)/1000));
+			try {
+				configUsers.save(configFileUsers);
+			} catch (Exception e) {}
+		}
 		ScoreBoards sb = new ScoreBoards();
 		sb.delPlayer(this);
 		this.bukkitPlayer = null;
+		this.pastTotal = 0;
+		this.login = 0;
 	}
 	
 	private void readIgnored() {
@@ -338,6 +348,16 @@ public class User {
 	
 	public void setLastPos(Location l) {
 		this.lastPos = l;
+		YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+		configUsers.set(getUUID().toString() + ".location.world", l.getWorld().getName());
+		configUsers.set(getUUID().toString() + ".location.x", l.getX());
+		configUsers.set(getUUID().toString() + ".location.y", l.getY());
+		configUsers.set(getUUID().toString() + ".location.z", l.getZ());
+		configUsers.set(getUUID().toString() + ".location.yaw", l.getYaw());
+		configUsers.set(getUUID().toString() + ".location.pitch", l.getPitch());
+		try {
+			configUsers.save(configFileUsers);
+		} catch (Exception e){}
 	}
 	
 	public boolean isJailed() {

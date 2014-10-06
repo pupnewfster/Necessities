@@ -222,7 +222,7 @@ public class Listeners implements Listener {
 				float pitch = Float.parseFloat(config.getString("Spawn.pitch"));
 				e.setRespawnLocation(new Location(world, x, y, z, yaw, pitch));
 			} else
-				e.setRespawnLocation(e.getPlayer().getBedSpawnLocation());
+				e.setRespawnLocation(safe.getSafe(e.getPlayer().getBedSpawnLocation()));
 		}
 		User u = um.getUser(e.getPlayer().getUniqueId());
 		if(u.isAfk())
