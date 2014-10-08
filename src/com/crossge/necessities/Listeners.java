@@ -35,9 +35,6 @@ import com.crossge.necessities.Economy.*;
 import com.crossge.necessities.Guilds.*;
 
 public class Listeners implements Listener {
-	private static String world = "";
-	private static String title = ChatColor.DARK_RED + "[" + ChatColor.AQUA + "Manager" + ChatColor.DARK_RED + "] ";
-	private static String name = ChatColor.GOLD + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
 	private static String JanetName = "";
 	private File configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml");
 	private File configFileLogIn = new File("plugins/Necessities", "loginmessages.yml");
@@ -71,11 +68,14 @@ public class Listeners implements Listener {
 	Janet bot = new Janet();
 	
 	public Listeners() {
+		RankManager rm = new RankManager();
 		String temp = Bukkit.getServerName();
+		String rank = "";
 		if(temp.contains(" "))
 			temp = "world";
-		world = ChatColor.WHITE + temp + " ";
-		JanetName = world + title + name;
+		if(!rm.getOrder().isEmpty())
+			rank = ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ");
+		JanetName = ChatColor.WHITE + temp + " " + rank + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
 	}
 	
 	@EventHandler
