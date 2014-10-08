@@ -6,7 +6,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.block.CreatureSpawner;
-
 import com.crossge.necessities.RankManager.User;
 
 public class CmdSpawner extends Cmd {
@@ -31,6 +30,11 @@ public class CmdSpawner extends Cmd {
 					p.sendMessage(var.getMessages() + "Valid mob types: " + ChatColor.WHITE + validTypes());
 					return true;
 				}
+				if(spawnertype.toString().equalsIgnoreCase("rabbit") || spawnertype.toString().equalsIgnoreCase("guardian") ||
+						spawnertype.toString().equalsIgnoreCase("endermite")) {
+					p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Mob not yet functional with this command.");
+					return true;
+				}
 				spawner.setSpawnedType(spawnertype);
 				p.sendMessage(var.getMessages() + "Spawner type set to " + var.getObj() + spawner.getSpawnedType().toString().replaceAll("_", " ").toLowerCase() +
 						var.getMessages() + ".");
@@ -44,11 +48,11 @@ public class CmdSpawner extends Cmd {
 	}
 	
 	private EntityType getType(String message) {
-		message = message.replaceAll("_", "").toUpperCase();
+		message = message.replaceAll("_", "");
 		for(EntityType type : EntityType.values())
 			if(type.isSpawnable()) {
 				String name = type.toString();
-				if(message.equals(name.replaceAll("_", "")))
+				if(message.equalsIgnoreCase(name.replaceAll("_", "")))
 					return type;
 			}
 		return null;
