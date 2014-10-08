@@ -8,15 +8,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import com.crossge.necessities.RankManager.RankManager;
+
 public class JanetAI {//TODO: Upgrade
 	private static ArrayList<String> heyMessages = new ArrayList<String>();
 	private static String[] janetNamed = new String[16];
 	private static String[] feelingMessages = new String[20];
 	private static String[] stalkerMessages = new String[4];
 	private static String[] drunkMessages = new String[10];
-	private static String world = "";
-	private static String title = ChatColor.DARK_RED + "[" + ChatColor.AQUA + "Manager" + ChatColor.DARK_RED + "] ";
-	private static String name = ChatColor.GOLD + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
 	private static String JanetName = "";
 	JanetRandom r = new JanetRandom();
 	
@@ -87,11 +86,14 @@ public class JanetAI {//TODO: Upgrade
 	}
 	
 	public void initiate() {
+		RankManager rm = new RankManager();
 		String temp = Bukkit.getServerName();
+		String rank = "";
 		if(temp.contains(" "))
 			temp = "world";
-		world = ChatColor.WHITE + temp + " ";
-		JanetName = world + title + name;
+		if(!rm.getOrder().isEmpty())
+			rank = ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ");
+		JanetName = ChatColor.WHITE + temp + " " + rank + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
 		
 		String[] foods = new String[6];
 		String[] drinks = new String[8];

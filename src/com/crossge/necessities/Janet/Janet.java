@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.crossge.necessities.*;
+import com.crossge.necessities.RankManager.RankManager;
 
 public class Janet {
 	private File configFile = new File("plugins/Necessities", "config.yml");
@@ -46,18 +47,27 @@ public class Janet {
 		for(String ip : customConfigCensors.getStringList("ips"))
 			if(!ip.equals(""))
 				ips.add(ip);
+		RankManager rm = new RankManager();
+		String rank = "";
+		if(!rm.getOrder().isEmpty())
+			rank = rm.getRank(rm.getOrder().size() - 1).getTitle() + " ";
+		final String login = ChatColor.translateAlternateColorCodes('&', "&a + " + rank + "Janet&e joined the game.");
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 	    scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
 	        @Override
 	        public void run() {
-	        	Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&a + &4[&bManager&4]&6 Janet&e joined the game."));
+	        	Bukkit.broadcastMessage(login);
 	        }
 	    });
 		Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Janet initiated.");
 	}
 	
 	public void unload() {//possibly empty the lists not sure if needed though
-		Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c - &4[&bManager&4]&6 Janet&e Disconnected."));
+		RankManager rm = new RankManager();
+		String rank = "";
+		if(!rm.getOrder().isEmpty())
+			rank = rm.getRank(rm.getOrder().size() - 1).getTitle() + " ";
+		Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c - " + rank + "Janet&e Disconnected."));
 	}
 	
 	private void removePlayer(UUID uuid) {//called when player disconnects

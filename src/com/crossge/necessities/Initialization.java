@@ -62,6 +62,12 @@ public class Initialization {
 		fileCreate("plugins/Necessities/rules.txt");
 		fileCreate("plugins/Necessities/faq.txt");
 		createYaml();
+		//RankManager
+		rm.setRanks();
+		rm.setSubranks();
+		rm.readRanks();
+		sb.createScoreboard();
+				
 		console.initiate();
 		get.initiate();
 		ids.setIds();
@@ -87,12 +93,6 @@ public class Initialization {
 			gm.initiate();
 			power.initiate();
 		}
-		
-		//RankManager
-		rm.setRanks();
-		rm.setSubranks();
-		rm.readRanks();
-		sb.createScoreboard();
 		
 		//Economy
 		if(config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy")) {

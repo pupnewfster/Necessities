@@ -9,24 +9,26 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import com.crossge.necessities.RankManager.RankManager;
+
 public class JanetWarn {
 	private File configFile = new File("plugins/Necessities", "config.yml");
 	private YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 	private static HashMap<UUID,Integer> warnCount = new HashMap<UUID,Integer>();
 	private int warns = config.getInt("Necessities.warns");
-	private static String world = "";
-	private static String title = ChatColor.DARK_RED + "[" + ChatColor.AQUA + "Manager" + ChatColor.DARK_RED + "] ";
-	private static String name = ChatColor.GOLD + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
 	private static String JanetName = "";
 	private String JanetLogName = "Janet: ";
 	JanetLog log = new JanetLog();
 
 	public void initiate() {
+		RankManager rm = new RankManager();
 		String temp = Bukkit.getServerName();
+		String rank = "";
 		if(temp.contains(" "))
 			temp = "world";
-		world = ChatColor.WHITE + temp + " ";
-		JanetName = world + title + name;
+		if(!rm.getOrder().isEmpty())
+			rank = ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ");
+		JanetName = ChatColor.WHITE + temp + " " + rank + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
 	}
 	
 	public void removePlayer(UUID uuid) {
