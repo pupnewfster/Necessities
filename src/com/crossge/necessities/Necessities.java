@@ -1,8 +1,10 @@
 package com.crossge.necessities;
 
+import java.io.File;
 import java.util.List;
 
 import org.bukkit.command.*;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.crossge.necessities.Commands.*;
@@ -14,6 +16,7 @@ import com.crossge.necessities.Janet.Janet;
 import com.crossge.necessities.RankManager.UserManager;
 
 public class Necessities extends JavaPlugin {
+	private File configFile = new File("plugins/Necessities", "config.yml");
 	private static Necessities instance;
 	
 	public static Necessities getInstance() {
@@ -341,6 +344,14 @@ public class Necessities extends JavaPlugin {
 		//Guilds
 		else if(isEqual(name, "guild"))
 			com = new CmdGuild();
+		
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+		if(com instanceof WorldCmd && config.contains("Necessities.WorldManager") && !config.getBoolean("Necessities.WorldManager"))
+			com = new Cmd();
+		else if(com instanceof CmdGuild && config.contains("Necessities.Guilds") && !config.getBoolean("Necessities.Guilds"))
+			com = new Cmd();
+		else if(com instanceof EconomyCmd && config.contains("Necessities.Economy") && !config.getBoolean("Necessities.Economy"))
+			com = new Cmd();
 		return com;
 	}
 	

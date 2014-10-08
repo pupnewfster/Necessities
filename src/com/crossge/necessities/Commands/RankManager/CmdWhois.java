@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands.RankManager;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -7,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.crossge.necessities.Commands.*;
@@ -14,6 +16,7 @@ import com.crossge.necessities.Economy.*;
 import com.crossge.necessities.RankManager.User;
 
 public class CmdWhois extends RankCmd {
+	private File configFile = new File("plugins/Necessities", "config.yml");
 	BalChecks bal = new BalChecks();
 	Formatter form = new Formatter();
 	CmdHide hide = new CmdHide();
@@ -32,6 +35,7 @@ public class CmdWhois extends RankCmd {
     		}
     	}
     	User u = um.getUser(uuid);
+    	YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
     	sender.sendMessage(var.getMessages() + "===== WhoIs: " + var.getObj() + u.getName() + var.getMessages() + " =====");
     	if(u.getPlayer() != null)
     		sender.sendMessage(var.getMessages() + " - Nick: " + ChatColor.RESET + u.getPlayer().getDisplayName());
@@ -73,7 +77,8 @@ public class CmdWhois extends RankCmd {
     		String location = "(" + p.getWorld().getName() + ", " + p.getLocation().getBlockX() + ", " + p.getLocation().getBlockY() + ", " + p.getLocation().getBlockZ() + ")";
     		sender.sendMessage(var.getMessages() + " - Location: " + ChatColor.RESET + location);
     	}
-    	sender.sendMessage(var.getMessages() + " - Money: " + ChatColor.RESET + "$" + form.addCommas(bal.bal(uuid)));
+		if(config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy"))
+			sender.sendMessage(var.getMessages() + " - Money: " + ChatColor.RESET + "$" + form.addCommas(bal.bal(uuid)));
     	if(u.getPlayer() != null) {
     		Player p = u.getPlayer();
     		sender.sendMessage(var.getMessages() + " - IP Adress: " + ChatColor.RESET + p.getAddress().toString().split("/")[1].split(":")[0]);

@@ -63,21 +63,7 @@ public class Initialization {
 		fileCreate("plugins/Necessities/faq.txt");
 		createYaml();
 		console.initiate();
-		wm.initiate();
-		warps.initiate();
-		pm.initiate();
-		gm.createFiles();
-		gm.initiate();
-		rm.setRanks();
-		rm.setSubranks();
-		rm.readRanks();
-		sb.createScoreboard();
-		power.initiate();
-		pr.parseList();
-		balc.updateB();
 		get.initiate();
-		rp.initiate();
-		cmdp.upList();
 		ids.setIds();
 		matNames.setIds();
 		mat.readIds();
@@ -86,6 +72,35 @@ public class Initialization {
 		cs.init();
 		warns.initiate();
 		ai.initiate();
+		
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+		//WorldManager
+		if(config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager")) {
+			wm.initiate();
+			warps.initiate();
+			pm.initiate();
+		}
+		
+		//Guilds
+		if(config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
+			gm.createFiles();
+			gm.initiate();
+			power.initiate();
+		}
+		
+		//RankManager
+		rm.setRanks();
+		rm.setSubranks();
+		rm.readRanks();
+		sb.createScoreboard();
+		
+		//Economy
+		if(config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy")) {
+			pr.parseList();
+			balc.updateB();
+			rp.initiate();
+			cmdp.upList();//Command prices are disabled anyways atm
+		}
 	}
 	
 	private void dirCreate(String directory) {
@@ -138,6 +153,9 @@ public class Initialization {
 			try {
 				configFile.createNewFile();
 				YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+				config.set("Necessities.WorldManager", true);
+				config.set("Necessities.Guilds", true);
+				config.set("Necessities.Economy", true);
 				config.set("Necessities.warns", 3);
 				config.set("Necessities.caps", true);
 				config.set("Necessities.language", true);
@@ -173,6 +191,12 @@ public class Initialization {
 					config.set("Necessities.firstItems", Arrays.asList(""));
 				if(!config.contains("Console.AliveStatus"))
 					config.set("Console.AliveStatus", "Alive");
+				if(!config.contains("Necessities.WorldManager"))
+					config.set("Necessities.WorldManager", true);
+				if(!config.contains("Necessities.Guilds"))
+					config.set("Necessities.Guilds", true);
+				if(!config.contains("Necessities.Economy"))
+					config.set("Necessities.Economy", true);
 				config.save(configFile);
 			} catch (Exception e){}
 		}

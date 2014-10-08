@@ -40,6 +40,10 @@ public class CmdSpawnmob extends Cmd {
 				p.sendMessage(var.getMessages() + "Valid mob types: " + ChatColor.WHITE + validTypes());
 				return true;
 			}
+			if(type.toString().equalsIgnoreCase("rabbit") || type.toString().equalsIgnoreCase("guardian") || type.toString().equalsIgnoreCase("endermite")) {
+				p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Mob not yet functional with this command.");
+				return true;
+			}
 			for(int i = 0; i < amount; i++)
 				l.getWorld().spawnEntity(l, type);
 			p.sendMessage(var.getMessages() + "Spawned " + var.getObj() + amount + var.getMessages() + " of " + var.getObj() +
@@ -50,11 +54,11 @@ public class CmdSpawnmob extends Cmd {
 	}
 	
 	private EntityType getType(String message) {
-		message = message.replaceAll("_", "").toUpperCase();
+		message = message.replaceAll("_", "");
 		for(EntityType type : EntityType.values())
 			if(type.isSpawnable()) {
 				String name = type.toString();
-				if(message.equals(name.replaceAll("_", "")))
+				if(message.equalsIgnoreCase(name.replaceAll("_", "")))
 					return type;
 			}
 		return null;

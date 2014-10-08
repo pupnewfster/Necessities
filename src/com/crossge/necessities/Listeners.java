@@ -241,6 +241,7 @@ public class Listeners implements Listener {
 	
 	@EventHandler
 	public void onPlayerMove(final PlayerMoveEvent e) {
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 		User u = um.getUser(e.getPlayer().getUniqueId());
 		boolean locationChanged = false;
 		Location from = e.getFrom();
@@ -250,13 +251,13 @@ public class Listeners implements Listener {
 			u.cancelTp();
 		if(u.isAfk() && locationChanged)
 			u.setAfk(false);
-		if(locationChanged) {
+		if(config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager") && locationChanged) {
 			u.setLastAction(System.currentTimeMillis());
 			Location destination = pm.portalDestination(to);
 			if(destination != null)
 				e.getPlayer().teleport(destination);
 		}
-		if(!from.getChunk().equals(to.getChunk())) {
+		if(config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !from.getChunk().equals(to.getChunk())) {
 			if(u.isClaiming()) {
 				BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 				scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
@@ -279,10 +280,13 @@ public class Listeners implements Listener {
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
 		User u = um.getUser(e.getPlayer().getUniqueId());
-		Guild owner = gm.chunkOwner(e.getBlock().getChunk());
-		if(!e.getPlayer().hasPermission("Necessities.guilds.admin") && owner != null && u.getGuild() != owner) {
-			e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
-			e.setCancelled(true);
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+		if(config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
+			Guild owner = gm.chunkOwner(e.getBlock().getChunk());
+			if(!e.getPlayer().hasPermission("Necessities.guilds.admin") && owner != null && u.getGuild() != owner) {
+				e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
+				e.setCancelled(true);
+			}
 		}
 		if(wrench.isWrenched(e.getBlock()))
 			wrench.wrench(e.getBlock());
@@ -384,7 +388,8 @@ public class Listeners implements Listener {
 		User u = um.getUser(e.getPlayer().getUniqueId());
 		if(u.isAfk())
 			u.setAfk(false);
-		if(!e.getPlayer().hasPermission("Necessities.guilds.admin"))
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+		if(config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin"))
 			if((e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && ((e.getItem() != null && !e.getItem().getType().isEdible()/*.isBlock()*/) ||
 					e.getClickedBlock().getState() instanceof InventoryHolder || e.getClickedBlock().getType().equals(Material.WOODEN_DOOR) ||
 					e.getClickedBlock().getType().equals(Material.STONE_BUTTON) || e.getClickedBlock().getType().equals(Material.WOOD_BUTTON) ||
@@ -611,12 +616,15 @@ public class Listeners implements Listener {
 			final Player damager = (Player) e.getDamager();
 			User u = um.getUser(p.getUniqueId());
 			User d = um.getUser(damager.getUniqueId());
-			if((gm.chunkOwner(p.getLocation().getChunk()) != null && !gm.chunkOwner(p.getLocation().getChunk()).canPVP()) ||
+			YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+			if(config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && (gm.chunkOwner(p.getLocation().getChunk()) != null &&
+					!gm.chunkOwner(p.getLocation().getChunk()).canPVP()) ||
 					(gm.chunkOwner(damager.getLocation().getChunk()) != null && !gm.chunkOwner(damager.getLocation().getChunk()).canPVP()))
 				e.setCancelled(true);
-			else if(p.getWorld().getPVP() && !u.godmode() && !d.godmode() && (u.getGuild() == null || d.getGuild() == null || u.getGuild().equals(d.getGuild()) ||
+			else if(p.getWorld().getPVP() && !u.godmode() && !d.godmode() && ((config.contains("Necessities.Guilds") && !config.getBoolean("Necessities.Guilds")) ||
+					(u.getGuild() == null || d.getGuild() == null || u.getGuild().equals(d.getGuild()) ||
 					u.getGuild().isAlly(d.getGuild())) && (gm.chunkOwner(p.getLocation().getChunk()) == null || gm.chunkOwner(p.getLocation().getChunk()).canPVP()) &&
-					(gm.chunkOwner(damager.getLocation().getChunk()) == null || gm.chunkOwner(damager.getLocation().getChunk()).canPVP())) {
+					(gm.chunkOwner(damager.getLocation().getChunk()) == null || gm.chunkOwner(damager.getLocation().getChunk()).canPVP()))) {
 				acb.addToCombat(p, damager);
 				try {
 					BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
@@ -696,7 +704,7 @@ public class Listeners implements Listener {
 			e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
 			e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
 		}
-		if(u.getGuild() != null && u.getGuild().getRank(uuid) != null) {
+		if(config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.getGuild() != null && u.getGuild().getRank(uuid) != null) {
 			String prefix = gm.getPrefix(u.getGuild().getRank(uuid));
 			String g = "{GCOLOR}" + prefix + u.getGuild().getName() + " ";
 			e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", g));
@@ -735,7 +743,8 @@ public class Listeners implements Listener {
 			if(!e.getRecipients().isEmpty())
 				for(Player recip : e.getRecipients()) {
 					User r = um.getUser(recip.getUniqueId());
-					if(u.getGuild() == null || u.getGuild().getRank(uuid) == null)
+					if(u.getGuild() == null || u.getGuild().getRank(uuid) == null || (config.contains("Necessities.Guilds") &&
+							!config.getBoolean("Necessities.Guilds")))
 						recip.sendMessage(e.getFormat().replaceFirst("\\{GCOLOR\\}", "").replaceAll("\\{MESSAGE\\}", "") + e.getMessage());
 					else
 						recip.sendMessage(e.getFormat().replaceFirst("\\{GCOLOR\\}", u.getGuild().relation(r.getGuild()) + "").replaceAll("\\{MESSAGE\\}",
@@ -761,6 +770,7 @@ public class Listeners implements Listener {
 	
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent e) {
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
     	Player player = e.getEntity().getPlayer();
     	if(player != null) {
     		bot.logDeath(player.getUniqueId(), e.getDeathMessage());
@@ -768,10 +778,11 @@ public class Listeners implements Listener {
     		e.setKeepInventory(player.hasPermission("Necessities.keepitems"));
     		User u = um.getUser(player.getUniqueId());
     		u.setLastPos(player.getLocation());
-    		if(!player.hasPermission("Necessities.guilds.admin"))
+    		if(config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !player.hasPermission("Necessities.guilds.admin"))
     			u.removePower();
     		Player killer = player.getKiller();//TODO: better reward amount
-    		if(killer != null && killer != player && !killer.hasPermission("Necessities.nopvpLoss") && !player.hasPermission("Necessities.nopvpLoss") &&
+    		if(config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && killer != null && killer != player &&
+    				!killer.hasPermission("Necessities.nopvpLoss") && !player.hasPermission("Necessities.nopvpLoss") &&
     				killer.getWorld().getName().equalsIgnoreCase("BattleGrounds")) {
     			Double amount = Double.parseDouble(bal.bal(player.getUniqueId())) * 0.1;
     			amount = Double.parseDouble(form.roundTwoDecimals(amount));
@@ -818,6 +829,7 @@ public class Listeners implements Listener {
 	
 	@EventHandler
 	public void onPlayerTeleport(PlayerTeleportEvent e) {
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 		User u = um.getUser(e.getPlayer().getUniqueId());
 		if(!e.getFrom().getWorld().equals(e.getTo().getWorld())) {
 			if(!e.getPlayer().hasPermission("Necessities.ignoreGameMode"))
@@ -834,7 +846,8 @@ public class Listeners implements Listener {
 		}
 		if(u.isJailed())
 			e.setCancelled(true);
-		if(!e.isCancelled() && !e.getFrom().getChunk().equals(e.getTo().getChunk())) {
+		if(!e.isCancelled() && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") &&
+				!e.getFrom().getChunk().equals(e.getTo().getChunk())) {
 			Guild owner = gm.chunkOwner(e.getTo().getChunk());
 			if(owner != gm.chunkOwner(e.getFrom().getChunk())) {
 				if(owner == null)
@@ -847,18 +860,22 @@ public class Listeners implements Listener {
 	
 	@EventHandler
 	public void onExplosion(EntityExplodeEvent e) {
-		ArrayList<Integer> indexes = new ArrayList<Integer>();
-		for(int i = 0; i < e.blockList().size(); i++) {
-			Guild g  = gm.chunkOwner(e.blockList().get(i).getChunk());
-			if(g != null && !g.canExplode())
-				indexes.add(0, i);
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+		if(config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
+			ArrayList<Integer> indexes = new ArrayList<Integer>();
+			for(int i = 0; i < e.blockList().size(); i++) {
+				Guild g  = gm.chunkOwner(e.blockList().get(i).getChunk());
+				if(g != null && !g.canExplode())
+					indexes.add(0, i);
+			}
+			for(int i : indexes)
+				e.blockList().remove(i);
 		}
-		for(int i : indexes)
-			e.blockList().remove(i);
 	}
 	
 	@EventHandler
 	public void onSignCreate(SignChangeEvent e) {
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 		String line0 = e.getLine(0);
 		String line1 = e.getLine(1);
 		String line2 = e.getLine(2);
@@ -872,7 +889,7 @@ public class Listeners implements Listener {
 			sign.setLine(3, line3);
 			sign.update();
 			signs.censorSign(sign, e.getPlayer());
-			if(economySigns.checkFormat(sign)) {
+			if(config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && economySigns.checkFormat(sign)) {
 				if(e.getPlayer().hasPermission("Necessities.economy.setSign"))
 					economySigns.setSign(sign);
 				else {

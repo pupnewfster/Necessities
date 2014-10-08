@@ -29,8 +29,9 @@ import com.crossge.necessities.Guilds.Guild;
 import com.crossge.necessities.Guilds.GuildManager;
 
 public class User {
-	private File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
 	private File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
+	private File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
+	private File configFile = new File("plugins/Necessities", "config.yml");
 	private HashMap<String, Location> homes = new HashMap<String, Location>();
 	private ArrayList<String> permissions = new ArrayList<String>();
 	private ArrayList<String> subranks = new ArrayList<String>();
@@ -60,6 +61,7 @@ public class User {
 	
 	public User(Player p) {
 		YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 		RankManager rm = new RankManager();
 		this.bukkitPlayer = p;
 		this.right = p.getLocation();
@@ -69,10 +71,8 @@ public class User {
 			this.rank = rm.getRank(configUsers.getString(getUUID().toString() + ".rank"));
 		if(configUsers.contains(getUUID().toString() + ".nick"))
 			this.nick = ChatColor.translateAlternateColorCodes('&', configUsers.getString(getUUID().toString() + ".nick"));
-		if(this.nick != null && !this.nick.startsWith("~")) {
+		if(this.nick != null && !this.nick.startsWith("~"))
 			this.nick = "~" + this.nick;
-			updateListName();
-		}
 		if(configUsers.contains(getUUID().toString() + ".jailed"))
 			this.jailed = configUsers.getBoolean(getUUID().toString() + ".jailed");
 		if(configUsers.contains(getUUID().toString() + ".afk"))
@@ -81,7 +81,7 @@ public class User {
 			this.muted = configUsers.getBoolean(getUUID().toString() + ".muted");
 		if(configUsers.contains(getUUID().toString() + ".power"))
 			this.power = configUsers.getDouble(getUUID().toString() + ".power");
-		if(configUsers.contains(getUUID().toString() + ".guild")) {
+		if(config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && configUsers.contains(getUUID().toString() + ".guild")) {
 			GuildManager gm = new GuildManager();
 			this.guild = gm.getGuild(configUsers.getString(getUUID().toString() + ".guild"));
 		}
@@ -101,6 +101,7 @@ public class User {
 	public User(UUID uuid) {
 		this.userUUID = uuid;
 		YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 		RankManager rm = new RankManager();
 		if(configUsers.contains(getUUID().toString() + ".rank"))
 			this.rank = rm.getRank(configUsers.getString(getUUID().toString() + ".rank"));
@@ -116,7 +117,7 @@ public class User {
 			this.nick = "~" + this.nick;
 		if(configUsers.contains(getUUID().toString() + ".power"))
 			this.power = configUsers.getDouble(getUUID().toString() + ".power");
-		if(configUsers.contains(getUUID().toString() + ".guild")) {
+		if(config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && configUsers.contains(getUUID().toString() + ".guild")) {
 			GuildManager gm = new GuildManager();
 			this.guild = gm.getGuild(configUsers.getString(getUUID().toString() + ".guild"));
 		}
@@ -246,11 +247,12 @@ public class User {
 	}
 	
 	public void teleport(final Location l) {
+		final YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 		final Variables var = new Variables();
 		final BalChecks bal = new BalChecks();
 		if(this.rank.getTpDelay() == 0) {
 			if(isBacking()) {
-    			if(!getPlayer().hasPermission("Necessities.freeCommand")) {
+    			if(config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand")) {
     				Formatter form = new Formatter();
     				double price = Double.parseDouble(bal.bal(this.userUUID)) * .15;
     				if(price > 1000.0)
@@ -273,7 +275,7 @@ public class User {
 	        public void run() {
 	        	if(getPlayer() != null && isTeleporting()) {
 	        		if(isBacking()) {
-	        			if(!getPlayer().hasPermission("Necessities.freeCommand")) {
+	        			if(config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand")) {
 	        				Formatter form = new Formatter();
 	        				double price = Double.parseDouble(bal.bal(getUUID())) * .15;
 	        				if(price > 1000.0)
