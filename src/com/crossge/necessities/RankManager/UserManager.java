@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.UUID;
 
 public class UserManager {
+    private File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
     private static HashMap<UUID, User> players = new HashMap<UUID, User>();
     RankManager rm = new RankManager();
-    private File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
 
     public void readUsers() {
         for (Player p : Bukkit.getOnlinePlayers())
@@ -42,9 +42,7 @@ public class UserManager {
     }
 
     public User getUser(UUID uuid) {
-        if (!players.containsKey(uuid))
-            return new User(uuid);
-        return players.get(uuid);
+        return !players.containsKey(uuid) ? new User(uuid) : players.get(uuid);
     }
 
     public void unload() {
@@ -55,28 +53,25 @@ public class UserManager {
     public void addRankPerm(Rank r, String node) {
         if (players == null)
             return;
-        for (UUID uuid : players.keySet()) {
+        for (UUID uuid : players.keySet())
             if (rm.hasRank(players.get(uuid).getRank(), r))
                 players.get(uuid).addPerm(node);
-        }
     }
 
     public void delRankPerm(Rank r, String node) {
         if (players == null)
             return;
-        for (UUID uuid : players.keySet()) {
+        for (UUID uuid : players.keySet())
             if (rm.hasRank(players.get(uuid).getRank(), r))
                 players.get(uuid).removePerm(node);
-        }
     }
 
     public void refreshRankPerm(Rank r) {
         if (players == null)
             return;
-        for (UUID uuid : players.keySet()) {
+        for (UUID uuid : players.keySet())
             if (rm.hasRank(players.get(uuid).getRank(), r))
                 players.get(uuid).refreshPerms();
-        }
     }
 
     public void addUser(Player player) {

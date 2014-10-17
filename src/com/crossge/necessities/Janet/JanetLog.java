@@ -34,9 +34,7 @@ public class JanetLog {
     }
 
     private String corTime(String time) {
-        if (time.length() == 1)
-            return "0" + time;
-        return time;
+        return time.length() == 1 ? "0" + time : time;
     }
 
     private void fileCreate(String file) {

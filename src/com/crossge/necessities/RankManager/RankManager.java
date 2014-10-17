@@ -5,18 +5,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.permissions.Permission;
-import org.bukkit.scheduler.BukkitScheduler;
-
 import java.io.File;
 import java.util.*;
 
 public class RankManager {
+    private File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml");
+    private File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
     private static HashMap<String, String> subranks = new HashMap<String, String>();
     private static HashMap<String, Rank> ranks = new HashMap<String, Rank>();
     private static ArrayList<Rank> order = new ArrayList<Rank>();
     private static ArrayList<String> names = new ArrayList<String>();
-    private File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml");
-    private File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
 
     public void readRanks() {
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
@@ -47,8 +45,7 @@ public class RankManager {
                 subranks.put(subrank.toLowerCase(), subrank);
         UserManager um = new UserManager();
         um.readUsers();
-        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
             @Override
             public void run() {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Retrieving all permissions.");
@@ -88,9 +85,7 @@ public class RankManager {
     }
 
     public Rank getRank(int index) {
-        if (order.size() - 1 < index)
-            return null;
-        return order.get(index);
+        return order.size() - 1 < index ? null : order.get(index);
     }
 
     public Rank getRank(String name) {

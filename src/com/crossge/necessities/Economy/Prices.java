@@ -8,11 +8,11 @@ import java.io.File;
 import java.util.HashMap;
 
 public class Prices {
+    private File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
     private static HashMap<String, Double> sellPrices = new HashMap<String, Double>();
     private static HashMap<String, Double> buyPrices = new HashMap<String, Double>();
     private static HashMap<String, String> price = new HashMap<String, String>();
     Materials mat = new Materials();//TODO: Ability to set price for damage values probs use a dash or something in storing datavalue
-    private File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
 
     public String cost(String direction, String itemName) {
         itemName = itemName.toUpperCase().replaceAll("_", "");
@@ -25,9 +25,7 @@ public class Prices {
 
     public double getCost(String direction, String itemName, int amount) {
         String costPerUnit = cost(direction, itemName);
-        if (costPerUnit == null)
-            return -1.00;
-        return Double.parseDouble(costPerUnit) * amount;
+        return costPerUnit == null ? -1.00 : Double.parseDouble(costPerUnit) * amount;
     }
 
     public void setCost(String direction, String itemName, String amount) {
@@ -53,7 +51,8 @@ public class Prices {
             price.put(itemName, Double.toString(buyPrices.get(itemName)) + " null");
         else if (sellPrices.containsKey(itemName))
             price.put(itemName, "null " + Double.toString(sellPrices.get(itemName)));
-        else price.remove(itemName);
+        else
+            price.remove(itemName);
     }
 
     public void parseList() {
@@ -79,16 +78,11 @@ public class Prices {
     }
 
     public int priceListPages() {
-        int rounder = 0;
-        if (price.size() % 10 != 0)
-            rounder = 1;
-        return (price.size() / 10) + rounder;
+        return price.size() % 10 != 0 ? (price.size() / 10) + 1 : (price.size() / 10);
     }
 
     public String priceLists(int page, int time) {//TODO: Make this more efficient
         page *= 10;
-        if (price.size() < time + page + 1 || time == 10)
-            return null;
-        return price.keySet().toArray()[page + time] + " " + price.get(price.keySet().toArray()[page + time]);
+        return (price.size() < time + page + 1 || time == 10) ? null : price.keySet().toArray()[page + time] + " " + price.get(price.keySet().toArray()[page + time]);
     }
 }

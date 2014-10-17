@@ -121,15 +121,11 @@ public class Rank {
                     commands += cmdName(node) + ", ";
         for (String node : configRanks.getStringList(getName() + ".permissions"))
             commands += cmdName(node) + ", ";
-        if (commands.equals(""))
-            return "";
-        return commands.trim().substring(0, commands.length() - 2);
+        return commands.equals("") ? "" : commands.trim().substring(0, commands.length() - 2);
     }
 
     private String cmdName(String node) {//TODO: finish
         Permission perm = Bukkit.getPluginManager().getPermission(node);
-        if (perm == null)
-            return node;
-        return perm.getName();
+        return perm == null ? node : perm.getName();
     }
 }

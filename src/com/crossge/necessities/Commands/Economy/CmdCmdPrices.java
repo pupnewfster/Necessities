@@ -83,17 +83,12 @@ public class CmdCmdPrices extends EconomyCmd {
         } else {
             cost = "$" + form.addCommas(form.roundTwoDecimals(Double.parseDouble(cost)));
             price = ChatColor.GOLD + numb + var.getCatalog() + cmd + " can be bought for " + var.getMoney() + cost;
-            if (hasCmd)
-                price += var.getCatalog() + "   Already Aquired.";
-            else
-                price += var.getCatalog() + " by " + plural(rank);
+            price +=  var.getCatalog() + (hasCmd ? "   Already Aquired." : " by " + plural(rank));
         }
         return price;
     }
 
     private String plural(String name) {
-        if (name.endsWith("s"))
-            return name + "'";
-        return name + "'s";
+        return name.endsWith("s") ? name + "'" : name + "'s";
     }
 }

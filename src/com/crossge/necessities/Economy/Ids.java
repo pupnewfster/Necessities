@@ -9,7 +9,6 @@ public class Ids {
 
     public void setIds() {
         YamlConfiguration configIds = YamlConfiguration.loadConfiguration(configFileIds);
-        //TODO: add 1.8 items and ids
         if (!configIds.contains("AIR"))
             configIds.set("AIR", 0);
         if (!configIds.contains("STONE"))
@@ -697,76 +696,75 @@ public class Ids {
         if (!configIds.contains("RECORD_12"))
             configIds.set("RECORD_12", 2267);
         if (!configIds.contains("SPONGE"))
-            configIds.set("SPONGE", 19);//TODO: Banner maybe and armor stand
-        //TODO: Fix any incorrect names names found out into materialnames.java
-        if (!configIds.contains("SLIME"))//buy       sell
-            configIds.set("SLIME", 165);//248.13     186.1
+            configIds.set("SPONGE", 19);//TODO: Armor stand
+        if (!configIds.contains("SLIME"))
+            configIds.set("SLIME", 165);
         if (!configIds.contains("BARRIER"))
             configIds.set("BARRIER", 166);
         if (!configIds.contains("IRON_TRAPDOOR"))
-            configIds.set("IRON_TRAPDOOR", 167);//642.08     481.56
+            configIds.set("IRON_TRAPDOOR", 167);
         if (!configIds.contains("PRISMARINE"))
-            configIds.set("PRISMARINE", 168);//106.96     80.22
+            configIds.set("PRISMARINE", 168);
         if (!configIds.contains("SEA_LANTERN"))
-            configIds.set("SEA_LANTERN", 169);//199.81     149.86
-        if (!configIds.contains("RED_SANDSTONE"))//12.0     9.0
+            configIds.set("SEA_LANTERN", 169);
+        if (!configIds.contains("RED_SANDSTONE"))
             configIds.set("RED_SANDSTONE", 179);
-        if (!configIds.contains("RED_SANDSTONE_STAIRS"))//18.0     13.5
+        if (!configIds.contains("RED_SANDSTONE_STAIRS"))
             configIds.set("RED_SANDSTONE_STAIRS", 180);
-        if (!configIds.contains("STONE_SLAB2"))//6.0     4.5
+        if (!configIds.contains("STONE_SLAB2"))
             configIds.set("STONE_SLAB2", 180);
-        if (!configIds.contains("SPRUCE_FENCE_GATE"))//30.56     22.92
+        if (!configIds.contains("SPRUCE_FENCE_GATE"))
             configIds.set("SPRUCE_FENCE_GATE", 183);
-        if (!configIds.contains("BIRCH_FENCE_GATE"))//30.56     22.92
+        if (!configIds.contains("BIRCH_FENCE_GATE"))
             configIds.set("BIRCH_FENCE_GATE", 184);
-        if (!configIds.contains("JUNGLE_FENCE_GATE"))//30.56     22.92
+        if (!configIds.contains("JUNGLE_FENCE_GATE"))
             configIds.set("JUNGLE_FENCE_GATE", 185);
-        if (!configIds.contains("DARK_OAK_FENCE_GATE"))//30.56     22.92
+        if (!configIds.contains("DARK_OAK_FENCE_GATE"))
             configIds.set("DARK_OAK_FENCE_GATE", 186);
-        if (!configIds.contains("ACACIA_FENCE_GATE"))//30.56     22.92
+        if (!configIds.contains("ACACIA_FENCE_GATE"))
             configIds.set("ACACIA_FENCE_GATE", 187);
-        if (!configIds.contains("SPRUCE_FENCE"))//11.46     8.6
+        if (!configIds.contains("SPRUCE_FENCE"))
             configIds.set("SPRUCE_FENCE", 188);
-        if (!configIds.contains("BIRCH_FENCE"))//11.46     8.6
+        if (!configIds.contains("BIRCH_FENCE"))
             configIds.set("BIRCH_FENCE", 189);
-        if (!configIds.contains("JUNGLE_FENCE"))//11.46     8.6
+        if (!configIds.contains("JUNGLE_FENCE"))
             configIds.set("JUNGLE_FENCE", 190);
-        if (!configIds.contains("DARK_OAK_FENCE"))//11.46     8.6
+        if (!configIds.contains("DARK_OAK_FENCE"))
             configIds.set("DARK_OAK_FENCE", 191);
-        if (!configIds.contains("ACACIA_FENCE"))//11.46     8.6
+        if (!configIds.contains("ACACIA_FENCE"))
             configIds.set("ACACIA_FENCE", 192);
         if (!configIds.contains("PRISMARINE_SHARD"))
-            configIds.set("PRISMARINE_SHARD", 409);//26.74     20.06
+            configIds.set("PRISMARINE_SHARD", 409);
         if (!configIds.contains("PRISMARINE_CRYSTAL"))
-            configIds.set("PRISMARINE_CRYSTAL", 410);//18.57     13.93
+            configIds.set("PRISMARINE_CRYSTAL", 410);
         if (!configIds.contains("RAW_RABBIT"))
-            configIds.set("RAW_RABBIT", 411);//62.34     46.76
+            configIds.set("RAW_RABBIT", 411);
         if (!configIds.contains("COOKED_RABBIT"))
-            configIds.set("COOKED_RABBIT", 412);//68.99     51.74
+            configIds.set("COOKED_RABBIT", 412);
         if (!configIds.contains("RABBIT_STEW"))
-            configIds.set("RABBIT_STEW", 413);//114.11     85.58
+            configIds.set("RABBIT_STEW", 413);
         if (!configIds.contains("RABBIT_FOOT"))
-            configIds.set("RABBIT_FOOT", 414);//59.98     44.99
+            configIds.set("RABBIT_FOOT", 414);
         if (!configIds.contains("RABBIT_HIDE"))
-            configIds.set("RABBIT_HIDE", 415);//5.34     4.01
+            configIds.set("RABBIT_HIDE", 415);
         if (!configIds.contains("ARMOR_STAND"))
-            configIds.set("ARMOR_STAND", 416);//22.92     17.19 CHECK
+            configIds.set("ARMOR_STAND", 416);
         if (!configIds.contains("RAW_MUTTON"))
-            configIds.set("RAW_MUTTON", 423);//62.34     46.76
+            configIds.set("RAW_MUTTON", 423);
         if (!configIds.contains("COOKED_MUTTON"))
-            configIds.set("COOKED_MUTTON", 424);//68.99     51.74
+            configIds.set("COOKED_MUTTON", 424);
         if (!configIds.contains("BANNER"))
-            configIds.set("BANNER", 425);//107.74     80.81
+            configIds.set("BANNER", 425);
         if (!configIds.contains("SPRUCE_DOOR"))
-            configIds.set("SPRUCE_DOOR", 427);//15.28     11.46
+            configIds.set("SPRUCE_DOOR", 427);
         if (!configIds.contains("BIRCH_DOOR"))
-            configIds.set("BIRCH_DOOR", 428);//15.28     11.46
+            configIds.set("BIRCH_DOOR", 428);
         if (!configIds.contains("JUNGLE_DOOR"))
-            configIds.set("JUNGLE_DOOR", 429);//15.28     11.46
+            configIds.set("JUNGLE_DOOR", 429);
         if (!configIds.contains("ACACIA_DOOR"))
-            configIds.set("ACACIA_DOOR", 430);//15.28     11.46
+            configIds.set("ACACIA_DOOR", 430);
         if (!configIds.contains("DARK_OAK_DOOR"))
-            configIds.set("DARK_OAK_DOOR", 431);//15.28     11.46
+            configIds.set("DARK_OAK_DOOR", 431);
         try {
             configIds.save(configFileIds);
         } catch (Exception e) {

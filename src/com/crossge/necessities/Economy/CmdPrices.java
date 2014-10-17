@@ -10,10 +10,10 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class CmdPrices {
+    private File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
     private static ArrayList<String> co = new ArrayList<String>();
     RankManager rm = new RankManager();
     Formatter form = new Formatter();
-    private File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
 
     public boolean canBuy(String cmd, String rank) {
         YamlConfiguration configPrices = YamlConfiguration.loadConfiguration(configFilePrices);
@@ -22,32 +22,23 @@ public class CmdPrices {
         if (!configPrices.contains("commands." + cmd))
             return false;
         String price = configPrices.getString("commands." + cmd);
-        Rank cmdRank = rm.getRank(form.capFirst(price.split(" ")[0]));
-        Rank r = rm.getRank(form.capFirst(rank));
-        return rm.hasRank(r, cmdRank);
+        return rm.hasRank(rm.getRank(form.capFirst(rank)), rm.getRank(form.capFirst(price.split(" ")[0])));
     }
 
     public boolean realCommand(String cmd) {
         YamlConfiguration configPrices = YamlConfiguration.loadConfiguration(configFilePrices);
-        cmd = cmd.toUpperCase();
-        return configPrices.contains("commands." + cmd);
+        return configPrices.contains("commands." + cmd.toUpperCase());
     }
 
     public String cost(String cmd) {
         YamlConfiguration configPrices = YamlConfiguration.loadConfiguration(configFilePrices);
         cmd = cmd.toUpperCase();
-        if (!configPrices.contains("commands." + cmd))
-            return null;
-        String price = configPrices.getString("commands." + cmd);
-        return price.split(" ")[1];
+        return !configPrices.contains("commands." + cmd) ? null : configPrices.getString("commands." + cmd).split(" ")[1];
     }
 
     public double getCost(String cmd) {
-        cmd = cmd.toUpperCase();
-        String costPerUnit = cost(cmd);
-        if (costPerUnit == null)
-            return -1.00;
-        return Double.parseDouble(costPerUnit);
+        String costPerUnit = cost(cmd.toUpperCase());
+        return costPerUnit == null ?  -1.00 : Double.parseDouble(costPerUnit);
     }
 
     public void upList() {
@@ -97,10 +88,7 @@ public class CmdPrices {
     }
 
     public int priceListPages() {
-        int rounder = 0;
-        if (co.size() % 10 != 0)
-            rounder = 1;
-        return (co.size() / 10) + rounder;
+        return co.size() % 10 != 0 ? (co.size() / 10) + 1 : (co.size() / 10);
     }
 
     public String priceLists(int page, int time) {

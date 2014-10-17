@@ -20,18 +20,13 @@ public class Signs {
             if (itemName == null)
                 return false;
             String amount = ChatColor.stripColor(sign.getLine(2).trim());
-            if (!form.isLegal(amount))
-                return false;
-            double price = pr.getCost(operation, itemName, Integer.parseInt(amount));
-            return price != -1 && Integer.parseInt(amount) > 0;
+            return !form.isLegal(amount) ? false : pr.getCost(operation, itemName, Integer.parseInt(amount)) != -1 && Integer.parseInt(amount) > 0;
         }
         return false;
     }
 
     public Sign sign(Location loc) {
-        if (loc.getBlock().getState() instanceof Sign)
-            return (Sign) loc.getBlock().getState();
-        return null;
+        return loc.getBlock().getState() instanceof Sign ? (Sign) loc.getBlock().getState() : null;
     }
 
     public void setSign(Sign sign) {

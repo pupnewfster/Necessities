@@ -10,9 +10,9 @@ import java.io.File;
 import java.util.HashMap;
 
 public class RankPrices {
+    private File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
     private static HashMap<String, Double> rankPrices = new HashMap<String, Double>();
     RankManager rm = new RankManager();
-    private File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
 
     public void initiate() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Retrieving all rank prices.");
@@ -30,17 +30,13 @@ public class RankPrices {
 
     public String cost(String rankName) {
         rankName = rankName.toUpperCase();
-        if (!rankPrices.containsKey(rankName))
-            return null;
-        return Double.toString(rankPrices.get(rankName));
+        return !rankPrices.containsKey(rankName) ? null : Double.toString(rankPrices.get(rankName));
     }
 
     public double getCost(String rankName) {
         rankName = rankName.toUpperCase();
         String costPerUnit = cost(rankName);
-        if (costPerUnit == null)
-            return -1.00;
-        return Double.parseDouble(costPerUnit);
+        return costPerUnit == null ? -1.00 : Double.parseDouble(costPerUnit);
     }
 
     public void rCost(String rankName) {
@@ -68,10 +64,7 @@ public class RankPrices {
     }
 
     public int priceListPages() {
-        int rounder = 0;
-        if (rankPrices.size() % 10 != 0)
-            rounder = 1;
-        return (rankPrices.size() / 10) + rounder;
+        return rankPrices.size() % 10 != 0 ? (rankPrices.size() / 10) + 1 : (rankPrices.size() / 10);
     }
 
     public String priceLists(int page, int time) {
@@ -79,8 +72,6 @@ public class RankPrices {
         if (rankPrices.size() < time + page + 1 || time == 10)
             return null;
         Rank r = rm.getRank(page + time + 1);
-        if (r == null)
-            return null;
-        return r.getName() + " " + rankPrices.get(r.getName().toUpperCase());
+        return r == null ? null : r.getName() + " " + rankPrices.get(r.getName().toUpperCase());
     }
 }

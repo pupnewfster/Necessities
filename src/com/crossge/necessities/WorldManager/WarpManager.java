@@ -30,9 +30,7 @@ public class WarpManager {
     }
 
     public Warp getWarp(String name) {
-        if (!isWarp(name))
-            return null;
-        return warps.get(lowerNames.get(name.toLowerCase()));
+        return !isWarp(name) ? null : warps.get(lowerNames.get(name.toLowerCase()));
     }
 
     public String getWarps() {
@@ -43,9 +41,7 @@ public class WarpManager {
         String wrps = "";
         for (String w : ws)
             wrps += w + ", ";
-        if (wrps.equals(""))
-            return "";
-        return wrps.trim().substring(0, wrps.length() - 2);
+        return wrps.equals("") ? "" : wrps.trim().substring(0, wrps.length() - 2);
     }
 
     public void remove(String name) {

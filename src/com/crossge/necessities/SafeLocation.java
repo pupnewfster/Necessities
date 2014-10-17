@@ -36,10 +36,10 @@ public class SafeLocation {
         return temp;
     }
 
-    public Location getSafe(Location l) {
+    public Location getSafe(Location l) {//TODO: Make it check for air pockets nearby instead of just up
         int maxHeight = l.getWorld().getMaxHeight();
         if (l.getWorld().getEnvironment().equals(World.Environment.NETHER))
-            maxHeight = 126;//TODO Make a better method to not send them above nether
+            maxHeight = 126;
         boolean overLava = false;
         for (int i = l.getBlockY(); i < maxHeight; i++) {
             Block b = (new Location(l.getWorld(), l.getX(), i, l.getZ())).getBlock();

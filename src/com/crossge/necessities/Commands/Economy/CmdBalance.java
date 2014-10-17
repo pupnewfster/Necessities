@@ -41,8 +41,6 @@ public class CmdBalance extends EconomyCmd {
     }
 
     private String ownerShip(String name) {
-        if (name.endsWith("s") || name.endsWith("S"))
-            return name + "'";
-        return name + "'s";
+        return (name.endsWith("s") || name.endsWith("S")) ? name + "'" : name + "'s";
     }
 }

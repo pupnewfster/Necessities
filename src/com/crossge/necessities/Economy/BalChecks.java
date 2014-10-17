@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class BalChecks {
+    private File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
     private static HashMap<UUID, Double> balances = new HashMap<UUID, Double>();
     Formatter form = new Formatter();
     GetUUID get = new GetUUID();
-    private File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
 
     public void updateB() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Retrieving all balances.");

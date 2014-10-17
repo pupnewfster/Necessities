@@ -15,9 +15,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.BlockIterator;
-
 import java.io.File;
 import java.util.*;
 
@@ -226,8 +224,7 @@ public class User {
         }
         this.bukkitPlayer.sendMessage(var.getMessages() + "Teleportation will begin in " + ChatColor.RED + this.rank.getTpDelay() + var.getMessages() +
                 " seconds, don't move.");
-        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
             @Override
             public void run() {
                 if (toTpTo.getPlayer() != null && getPlayer() != null && isTeleporting()) {
@@ -274,8 +271,7 @@ public class User {
         this.teleporting = true;
         this.bukkitPlayer.sendMessage(var.getMessages() + "Teleportation will begin in " + ChatColor.RED + this.rank.getTpDelay() + var.getMessages() +
                 " seconds, don't move.");
-        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
             @Override
             public void run() {
                 if (getPlayer() != null && isTeleporting()) {
@@ -314,8 +310,7 @@ public class User {
         this.lastAction = time;
         if (getPlayer() != null && getPlayer().hasPermission("Necessities.afk"))
             try {
-                BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-                scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         if (!isAfk() && getPlayer() != null && (System.currentTimeMillis() - getLastAction()) / 1000.0 >= 299.9)
@@ -332,15 +327,11 @@ public class User {
     }
 
     public UUID getUUID() {
-        if (this.bukkitPlayer == null)
-            return this.userUUID;
-        return this.bukkitPlayer.getUniqueId();
+        return this.bukkitPlayer == null ? this.userUUID : this.bukkitPlayer.getUniqueId();
     }
 
     public String getName() {
-        if (this.bukkitPlayer == null)
-            return Bukkit.getOfflinePlayer(this.userUUID).getName();
-        return this.bukkitPlayer.getName();
+        return this.bukkitPlayer == null ? Bukkit.getOfflinePlayer(this.userUUID).getName() : this.bukkitPlayer.getName();
     }
 
     public Rank getRank() {
@@ -364,10 +355,7 @@ public class User {
     }
 
     public void setNick(String message) {
-        if (message != null)
-            this.nick = ChatColor.translateAlternateColorCodes('&', message);
-        else
-            this.nick = null;
+        this.nick = message != null ? ChatColor.translateAlternateColorCodes('&', message) : null;
         updateListName();
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         configUsers.set(getUUID().toString() + ".nick", message);
@@ -458,10 +446,7 @@ public class User {
         if (getPlayer() != null) {
             this.bukkitPlayer.setSleepingIgnored(this.afk);
             Variables var = new Variables();
-            if (this.isAfk())
-                Bukkit.broadcastMessage(var.getMe() + "*" + getRank().getColor() + getPlayer().getDisplayName() + var.getMe() + " is now AFK");
-            else
-                Bukkit.broadcastMessage(var.getMe() + "*" + getRank().getColor() + getPlayer().getDisplayName() + var.getMe() + " is no longer AFK");
+            Bukkit.broadcastMessage(var.getMe() + "*" + getRank().getColor() + getPlayer().getDisplayName() + var.getMe() + " is " + (isAfk() ? "now" : "no longer") + " AFK");
         }
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         configUsers.set(getUUID().toString() + ".afk", isafk);
@@ -588,8 +573,7 @@ public class User {
     }
 
     public boolean hasHome(String name) {
-        name = name.toLowerCase().trim();
-        return this.homes.containsKey(name);
+        return this.homes.containsKey(name.toLowerCase().trim());
     }
 
     public Location getHome(String name) {

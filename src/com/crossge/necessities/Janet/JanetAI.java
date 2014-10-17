@@ -205,9 +205,7 @@ public class JanetAI {//TODO: Upgrade
     }
 
     private String corTime(String time) {
-        if (time.length() == 1)
-            return "0" + time;
-        return time;
+        return time.length() == 1 ? "0" + time : time;
     }
 
     private String dayOfWeek(int day) {

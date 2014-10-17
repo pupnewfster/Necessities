@@ -287,12 +287,9 @@ public class Listeners implements Listener {
                 });
             }
             Guild owner = gm.chunkOwner(to.getChunk());
-            if (owner != gm.chunkOwner(from.getChunk())) {
-                if (owner == null)
-                    e.getPlayer().sendMessage(var.getGuildMsgs() + " ~ " + var.getWild() + "Wilderness");
-                else
-                    e.getPlayer().sendMessage(var.getGuildMsgs() + " ~ " + owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription());
-            }
+            if (owner != gm.chunkOwner(from.getChunk()))
+                e.getPlayer().sendMessage(var.getGuildMsgs() + " ~ " + (owner == null ? var.getWild() + "Wilderness" :
+                        owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription()));
         }
     }
 
@@ -393,10 +390,7 @@ public class Listeners implements Listener {
                 in++;
             else if (sub.charAt(i) == ']')
                 in--;
-            if (in == 0 && sub.charAt(i) == '@')
-                temp += ",";
-            else
-                temp += sub.charAt(i);
+            temp += (in == 0 && sub.charAt(i) == '@') ? "," : sub.charAt(i);
         }
         return temp;
     }
@@ -591,10 +585,7 @@ public class Listeners implements Listener {
                     meta = "n";
                 String info = inv.getItem(i).getAmount() + " " + mat.nameToId(inv.getItem(i).getType().toString()) + " " + inv.getItem(i).getDurability() + " "
                         + enchants + " " + meta + disp;
-                if (condensedLore.containsKey(info))
-                    condensedLore.put(info, condensedLore.get(info) + "," + i);
-                else
-                    condensedLore.put(info, Integer.toString(i));
+                condensedLore.put(info, condensedLore.containsKey(info) ? condensedLore.get(info) + "," + i : Integer.toString(i));
             }
         }
         for (String key : condensedLore.keySet())
@@ -603,9 +594,7 @@ public class Listeners implements Listener {
     }
 
     private byte getDir(BlockFace f) {
-        if (f.equals(BlockFace.DOWN))
-            return 0;
-        else if (f.equals(BlockFace.UP))
+        if (f.equals(BlockFace.UP))
             return 1;
         else if (f.equals(BlockFace.NORTH))
             return 2;
@@ -620,12 +609,8 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onRedstone(BlockRedstoneEvent e) {
-        if (wrench.isWrenched(e.getBlock())) {
-            if (e.getBlock().getType().equals(Material.IRON_DOOR_BLOCK) && e.getOldCurrent() == 0)
-                e.setNewCurrent(0);
-            else
-                e.setNewCurrent(1);
-        }
+        if (wrench.isWrenched(e.getBlock()))
+            e.setNewCurrent((e.getBlock().getType().equals(Material.IRON_DOOR_BLOCK) && e.getOldCurrent() == 0) ? 0 : 1);
     }
 
     @EventHandler
@@ -872,12 +857,9 @@ public class Listeners implements Listener {
         if (!e.isCancelled() && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") &&
                 !e.getFrom().getChunk().equals(e.getTo().getChunk())) {
             Guild owner = gm.chunkOwner(e.getTo().getChunk());
-            if (owner != gm.chunkOwner(e.getFrom().getChunk())) {
-                if (owner == null)
-                    e.getPlayer().sendMessage(var.getGuildMsgs() + " ~ " + var.getWild() + "Wilderness");
-                else
-                    e.getPlayer().sendMessage(var.getGuildMsgs() + " ~ " + owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription());
-            }
+            if (owner != gm.chunkOwner(e.getFrom().getChunk()))
+                e.getPlayer().sendMessage(var.getGuildMsgs() + " ~ " + (owner == null ? var.getWild() + "Wilderness" :
+                    owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription()));
         }
     }
 

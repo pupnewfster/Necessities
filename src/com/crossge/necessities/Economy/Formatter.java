@@ -7,25 +7,20 @@ public class Formatter {
         try {
             Double.parseDouble(input);
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored) { }
         return false;
     }
 
     public String roundTwoDecimals(double d) {
-        DecimalFormat df = new DecimalFormat("0.00");
-        return df.format(d);
+        return new DecimalFormat("0.00").format(d);
     }
 
     public String addCommas(String s) {
-        DecimalFormat df = new DecimalFormat("#,##0.00");
-        return df.format(Double.parseDouble(s));
+        return new DecimalFormat("#,##0.00").format(Double.parseDouble(s));
     }
 
     public String addCommas(int i) {
-        DecimalFormat df = new DecimalFormat("#,###");
-        return df.format(i);
+        return new DecimalFormat("#,###").format(i);
     }
 
     public String capFirst(String matName) {

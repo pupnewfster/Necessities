@@ -7,10 +7,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
-
 import java.io.File;
 import java.io.InputStream;
-import java.net.InetSocketAddress;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -206,29 +204,21 @@ public class Janet {
         String c = "";
         int noSpace = 0;
         for (int i = 0; i < temp.length(); i++) {
-            if (stars.containsKey(noSpace) && stars.get(noSpace) == temp.charAt(i))
-                c += "*";
-            else
-                c += temp.charAt(i);
+            c += (stars.containsKey(noSpace) && stars.get(noSpace) == temp.charAt(i)) ? "*" : temp.charAt(i);
             if (i + 1 < temp.length() && stars.containsKey(noSpace) && stars.get(noSpace) != temp.charAt(i + 1))
                 noSpace++;
         }
         temp = c;
         int loc = 0;
         for (int i = 0; i < orig.length(); i++) {
-            if (loc < temp.length() && temp.charAt(loc) == '*') {
-                if (orig.charAt(i) == ' ')
-                    censored += " ";
-                else
-                    censored += "*";
-            } else
+            if (loc < temp.length() && temp.charAt(loc) == '*')
+                censored += orig.charAt(i) == ' ' ? " " : "*";
+            else
                 censored += orig.charAt(i);
             if (Character.isLetter(orig.charAt(i)))
                 loc++;
         }
-        if (censored.equals(""))
-            return orig;
-        return censored;
+        return censored.equals("") ? orig : censored;
     }
 
     private ArrayList<String> removeSpaces(String[] msgs, String word) {
@@ -295,9 +285,7 @@ public class Janet {
         for (String i : ipPieces)
             star += stars(i) + ".";
         star = star.substring(0, star.length() - 1);
-        if (!port.equals(""))
-            star += ":" + port;
-        return star;
+        return !port.equals("") ? star + ":" + port : star;
     }
 
     private String adds(UUID uuid, String message, boolean warn) {
@@ -418,18 +406,12 @@ public class Janet {
     }
 
     private String playerInfo(Player p) {
-        InetSocketAddress IPAdressPlayer = p.getAddress();
-        String sfullip = IPAdressPlayer.toString();
-        String[] fullip = sfullip.split("/");
-        String sIpandPort = fullip[1];
-        String[] ipandport = sIpandPort.split(":");
-        return p.getName() + " (" + ipandport[0] + " [" + p.getWorld().getName() + " " + p.getLocation().getBlockX() + "," +
-                p.getLocation().getBlockY() + "," + p.getLocation().getBlockZ() + "])";
+        return p.getName() + " (" + p.getAddress().toString().split("/")[1].split(":")[0] + " [" + p.getWorld().getName() +
+                " " + p.getLocation().getBlockX() + "," + p.getLocation().getBlockY() + "," + p.getLocation().getBlockZ() + "])";
     }
 
     private void delayedWarn(final UUID uuid, final String reason) {
-        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
             @Override
             public void run() {
                 warns.warn(uuid, reason, "Janet");
