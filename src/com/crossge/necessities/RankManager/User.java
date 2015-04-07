@@ -28,6 +28,7 @@ public class User {
     private ArrayList<String> subranks = new ArrayList<String>();
     private ArrayList<UUID> ignored = new ArrayList<UUID>();
     private PermissionAttachment attachment;
+    private String appended = "";
     private boolean teleporting = false;
     private boolean jailed = false;
     private boolean opChat = false;
@@ -198,6 +199,14 @@ public class User {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    public String getAppended() {
+        return this.appended;
+    }
+
+    public void setAppended(String toAppend) {
+        this.appended = toAppend;
     }
 
     public void joinGuild(Guild g) {

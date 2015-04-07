@@ -39,10 +39,6 @@ public class CmdSpawnmob extends Cmd {
                 p.sendMessage(var.getMessages() + "Valid mob types: " + ChatColor.WHITE + validTypes());
                 return true;
             }
-            if (type.toString().equalsIgnoreCase("rabbit") || type.toString().equalsIgnoreCase("guardian") || type.toString().equalsIgnoreCase("endermite")) {
-                p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Mob not yet functional with this command.");
-                return true;
-            }
             for (int i = 0; i < amount; i++)
                 l.getWorld().spawnEntity(l, type);
             p.sendMessage(var.getMessages() + "Spawned " + var.getObj() + amount + var.getMessages() + " of " + var.getObj() +

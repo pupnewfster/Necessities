@@ -34,7 +34,7 @@ public class CmdGamemode extends Cmd {
     private GameMode getGM(String message) {
         if (message.equalsIgnoreCase("adventure") || message.equalsIgnoreCase("2") || message.equalsIgnoreCase("adv"))
             return GameMode.ADVENTURE;
-        if (message.equalsIgnoreCase("creative") || message.equalsIgnoreCase("1") || message.equalsIgnoreCase("classic"))
+        if (message.equalsIgnoreCase("creative") || message.equalsIgnoreCase("1") || message.equalsIgnoreCase("c"))
             return GameMode.CREATIVE;
         return GameMode.SURVIVAL;
     }

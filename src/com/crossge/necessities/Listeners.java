@@ -16,6 +16,7 @@ import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
 import com.crossge.necessities.WorldManager.PortalManager;
 import com.crossge.necessities.WorldManager.WorldManager;
+
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.command.PluginCommand;
@@ -38,6 +39,7 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Diode;
+import org.bukkit.material.MaterialData;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
 
@@ -155,7 +157,7 @@ public class Listeners implements Listener {
                 @Override
                 public void run() {
                     Bukkit.broadcastMessage(welcome);
-                    Bukkit.broadcastMessage(JanetName + "Welcome to Cross! Enjoy your stay.");
+                    Bukkit.broadcastMessage(JanetName + "Welcome to Survival Craft! Enjoy your stay.");
                 }
             });
         } else {
@@ -175,8 +177,7 @@ public class Listeners implements Listener {
         power.addPlayer(p);
         for (User m : um.getUsers().values())//TODO: Figure out if really needed 99% likely it is
             m.updateListName();
-        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
             @Override
             public void run() {
                 if (!p.hasPermission("Necessities.ignoreGameMode"))
@@ -459,27 +460,56 @@ public class Listeners implements Listener {
                 } else if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getItem() != null && e.getItem().hasItemMeta() && e.getItem().getItemMeta().hasLore() &&
                         e.getItem().getItemMeta().getLore().contains("Wrench")) {
                     Block b = e.getClickedBlock();
-                    if (b.getType().equals(Material.REDSTONE_LAMP_OFF))//TODO: Add more things wrench works on
-                        b.setType(Material.REDSTONE_LAMP_ON);
-                    else if (b.getType().equals(Material.REDSTONE_LAMP_ON)) {
+                    if (b.getType().equals(Material.REDSTONE_LAMP_OFF)){//TODO: Add more things wrench works on
+                    	final Block up = b.getRelative(BlockFace.UP);
+                    	final Material type = up.getType();
+                    	final byte metadata = up.getData();
+                    	final byte raw = up.getState().getRawData();
+                    	final MaterialData data = up.getState().getData();
+                    	final ItemStack[] contents;
+                    	if (up.getState() instanceof InventoryHolder) {
+                    		InventoryHolder i = (InventoryHolder) up.getState();
+                    		contents = i.getInventory().getContents();
+                    		i.getInventory().clear();
+                    	} else
+                    		contents = null;
+                    	up.setType(Material.REDSTONE_BLOCK);
+                    	wrench.wrench(b);
+                    	e.setCancelled(true);
+                    	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                            @Override
+                            public void run() {
+                                up.setType(type);
+                                up.setData(metadata);
+                                up.getState().setData(data);
+                                up.getState().setRawData(raw);
+                                if (up.getState() instanceof InventoryHolder)
+                            		((InventoryHolder) up.getState()).getInventory().setContents(contents);
+                            }
+                        });
+                    } else if (b.getType().equals(Material.REDSTONE_LAMP_ON)) {
                         wrench.wrench(b);
                         b.setType(Material.REDSTONE_LAMP_OFF);
                         e.setCancelled(true);
                     } else if (b.getType().equals(Material.DIODE_BLOCK_OFF)) {
                         Diode d = (Diode) b.getState().getData();
+                        BlockFace facing = d.getFacing();
                         d.getDelay();
                         b.setType(Material.DIODE_BLOCK_ON);
                         wrench.wrench(b);
                         Diode n = (Diode) b.getState().getData();
                         n.setDelay(d.getDelay());
+                        n.setFacingDirection(facing);
                         e.setCancelled(true);
                     } else if (b.getType().equals(Material.DIODE_BLOCK_ON)) {
                         Diode d = (Diode) b.getState().getData();
+                        BlockFace facing = d.getFacing();
                         d.getDelay();
                         b.setType(Material.DIODE_BLOCK_OFF);
                         wrench.wrench(b);
                         Diode n = (Diode) b.getState().getData();
                         n.setDelay(d.getDelay());
+                        n.setFacingDirection(facing);
                         e.setCancelled(true);
                     } else if (b.getType().equals(Material.REDSTONE_TORCH_OFF))
                         b.setType(Material.REDSTONE_TORCH_ON);
@@ -514,8 +544,7 @@ public class Listeners implements Listener {
                                 meta.setLore(getLore(inv));
                                 contents.setItemMeta(meta);
                                 for (HumanEntity ent : inv.getViewers())
-                                    if (ent instanceof Player)//is this needed
-                                        ent.closeInventory();
+                                    ent.closeInventory();
                                 inv.clear();
                             } else if (b.getType().equals(Material.MOB_SPAWNER)) {
                                 CreatureSpawner cs = (CreatureSpawner) b.getState();
@@ -538,12 +567,20 @@ public class Listeners implements Listener {
                         } else
                             b.setData(getDir(e.getBlockFace()));
                         e.setCancelled(true);
-                    } else if (b.getType().equals(Material.IRON_DOOR_BLOCK)) {//TODO: Iron trapdoor in 1.8
+                    } else if (b.getType().equals(Material.IRON_DOOR_BLOCK)) {
                         if (!b.getRelative(BlockFace.UP).getType().equals(Material.IRON_DOOR_BLOCK))
                             b = b.getRelative(BlockFace.DOWN);
                         wrench.wrench(b.getRelative(BlockFace.UP));
                         wrench.wrench(b);
                         if (b.getData() < 4)
+                            b.setData((byte) (b.getData() + 4));
+                        else
+                            b.setData((byte) (b.getData() - 4));
+                        b.getWorld().playEffect(b.getLocation(), Effect.DOOR_TOGGLE, 0);
+                        e.setCancelled(true);
+                    } else if (b.getType().equals(Material.IRON_TRAPDOOR)) {
+                        wrench.wrench(b);
+                        if (b.getData() < 4 || (b.getData() > 7 && b.getData() < 12))
                             b.setData((byte) (b.getData() + 4));
                         else
                             b.setData((byte) (b.getData() - 4));
@@ -609,8 +646,14 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onRedstone(BlockRedstoneEvent e) {
+    	if (e.getBlock().getState() instanceof CommandBlock) {
+    		CommandBlock b = (CommandBlock) e.getBlock().getState();
+    		b.setCommand(ChatColor.translateAlternateColorCodes('&', b.getCommand()));
+    		b.update(true);
+    	}
         if (wrench.isWrenched(e.getBlock()))
-            e.setNewCurrent((e.getBlock().getType().equals(Material.IRON_DOOR_BLOCK) && e.getOldCurrent() == 0) ? 0 : 1);
+            e.setNewCurrent(((e.getBlock().getType().equals(Material.IRON_DOOR_BLOCK) || e.getBlock().getType().equals(Material.IRON_TRAPDOOR))
+            		&& e.getOldCurrent() == 0) ? 0 : 1);
     }
 
     @EventHandler
@@ -703,6 +746,17 @@ public class Listeners implements Listener {
         User u = um.getUser(e.getPlayer().getUniqueId());
         Player player = e.getPlayer();
         final UUID uuid = player.getUniqueId();
+        String m = e.getMessage();
+        if(m.endsWith(">") && ! m.equals(">")) {
+            String appended = u.getAppended() + " " + m.substring(0, m.length() - 1);
+            u.setAppended(appended.trim());
+            player.sendMessage(ChatColor.GREEN + "Message appended.");
+            e.setCancelled(true);
+            return;
+        } else if (!u.getAppended().equals("")) {
+            e.setMessage(u.getAppended() + " " + m);
+            u.setAppended("");
+        }
         YamlConfiguration configTitles = YamlConfiguration.loadConfiguration(configFileTitles);
         e.setFormat(ChatColor.translateAlternateColorCodes('&', config.getString("Necessities.ChatFormat")));
         if (u.opChat()) {
@@ -786,7 +840,7 @@ public class Listeners implements Listener {
             e.setKeepInventory(player.hasPermission("Necessities.keepitems"));
             User u = um.getUser(player.getUniqueId());
             u.setLastPos(player.getLocation());
-            if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !player.hasPermission("Necessities.guilds.admin"))
+            if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !player.hasPermission("Necessities.guilds.admin") && !player.getWorld().getName().equalsIgnoreCase("BattleGrounds"))
                 u.removePower();
             Player killer = player.getKiller();//TODO: better reward amount
             if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && killer != null && killer != player &&
@@ -831,6 +885,7 @@ public class Listeners implements Listener {
     public void onCommand(ServerCommandEvent e) {
         if (console.chatToggled() && !e.getCommand().equalsIgnoreCase("togglechat") && !e.getCommand().equalsIgnoreCase("tc"))
             e.setCommand("say " + e.getCommand());
+        e.setCommand(ChatColor.translateAlternateColorCodes('&', e.getCommand()));
         spy.broadcast(console.getName().replaceAll(":", "") + ChatColor.AQUA, e.getCommand());
         bot.logConsole(e.getCommand());
     }

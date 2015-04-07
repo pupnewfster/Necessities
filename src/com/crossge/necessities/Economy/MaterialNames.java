@@ -180,7 +180,6 @@ public class MaterialNames {
         configNames.set("RECORD_10", Arrays.asList("WARD", "MUSICDISCWARD", "MUSICWARD", "C418WARD"));
         configNames.set("RECORD_11", Arrays.asList("11", "MUSICDISC11", "MUSIC11", "C41811"));
         configNames.set("RECORD_12", Arrays.asList("WAIT", "MUSICDISCWAIT", "MUSICWAIT", "C418WAIT"));
-        configNames.set("SLIME", Arrays.asList("SLIMEBLOCK"));
         configNames.set("STONE_SLAB2", Arrays.asList("REDSANDSTONESLAB"));
         try {
             configNames.save(configFileNames);
@@ -328,7 +327,6 @@ public class MaterialNames {
         configFriendlyNames.set("PUMPKIN_SEEDS", "PUMPKIN SEED");
         configFriendlyNames.set("SHEARS", "SHEAR");
         configFriendlyNames.set("SEEDS", "SEED");
-        configFriendlyNames.set("SLIME", "SLIME BLOCK");
         configFriendlyNames.set("STONE_SLAB2", "RED SANDSTONE SLAB");
         configFriendlyNames.set("RED_SANDSTONE_STAIRS", "RED SANDSTONE STAIR");
         try {

@@ -30,11 +30,6 @@ public class CmdSpawner extends Cmd {
                     p.sendMessage(var.getMessages() + "Valid mob types: " + ChatColor.WHITE + validTypes());
                     return true;
                 }
-                if (spawnertype.toString().equalsIgnoreCase("rabbit") || spawnertype.toString().equalsIgnoreCase("guardian") ||
-                        spawnertype.toString().equalsIgnoreCase("endermite")) {
-                    p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Mob not yet functional with this command.");
-                    return true;
-                }
                 spawner.setSpawnedType(spawnertype);
                 p.sendMessage(var.getMessages() + "Spawner type set to " + var.getObj() + spawner.getSpawnedType().toString().replaceAll("_", " ").toLowerCase() +
                         var.getMessages() + ".");

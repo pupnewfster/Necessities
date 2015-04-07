@@ -69,6 +69,14 @@ public class Initialization {
         rm.setSubranks();
         rm.readRanks();
         sb.createScoreboard();
+        
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        //WorldManager
+        if (config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager")) {
+            wm.initiate();
+            warps.initiate();
+            pm.initiate();
+        }
 
         console.initiate();
         get.initiate();
@@ -80,14 +88,6 @@ public class Initialization {
         cs.init();
         warns.initiate();
         ai.initiate();
-
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        //WorldManager
-        if (config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager")) {
-            wm.initiate();
-            warps.initiate();
-            pm.initiate();
-        }
 
         //Guilds
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
