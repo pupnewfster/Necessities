@@ -22,7 +22,7 @@ public class CmdImp extends Cmd {
             for (String a : args)
                 message = message + " " + a;
             message = ChatColor.translateAlternateColorCodes('&', message.replaceFirst(args[0], "").trim());
-            if (message.startsWith("/"))
+            while (message.startsWith("/"))
                 message = message.replaceFirst("/", "");
             p.chat(message);
             return true;

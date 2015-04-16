@@ -15,7 +15,9 @@ public class CmdWho extends Cmd {
     CmdHide hide = new CmdHide();
 
     public boolean commandUse(CommandSender sender, String[] args) {
-        if (sender instanceof Player && !sender.hasPermission("Necessities.seehidden")) {
+    	if (!(sender instanceof Player))
+    		return true;//So that console cant get spammed
+        if (/*sender instanceof Player && */!sender.hasPermission("Necessities.seehidden")) {
             HashMap<Rank, String> online = new HashMap<Rank, String>();
             int numbOnline = 1;
             if (!rm.getOrder().isEmpty())

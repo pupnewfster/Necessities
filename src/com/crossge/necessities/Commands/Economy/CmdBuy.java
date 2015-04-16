@@ -31,14 +31,12 @@ public class CmdBuy extends EconomyCmd {
                     return true;
                 }
                 amount = Integer.parseInt(args[1]);
-                if (form.isLegal(itemName)) {
+                try {
+                    data = Short.parseShort(temp.split(" ")[1]);
+                } catch (Exception e) { }
+                if (form.isLegal(itemName))
                     itemName = mat.idToName(Integer.parseInt(itemName));
-                    try {
-                        data = Short.parseShort(temp.split(" ")[1]);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else if (itemName.equalsIgnoreCase("hand")) {
+                else if (itemName.equalsIgnoreCase("hand")) {
                     itemName = player.getItemInHand().getType().name();
                     data = player.getItemInHand().getDurability();
                 }

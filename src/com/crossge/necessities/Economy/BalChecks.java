@@ -38,6 +38,8 @@ public class BalChecks {
         ArrayList<Double> balsort = new ArrayList<Double>();
         for (double doub : balances.values())
             balsort.add(doub);
+        if (balsort.size() <= page*10 + time)
+        	return null;
         Collections.sort(balsort);
         Collections.reverse(balsort);
         page *= 10;
@@ -63,10 +65,7 @@ public class BalChecks {
     }
 
     public int baltopPages() {
-        int rounder = 0;
-        if (balances.size() % 10 != 0)
-            rounder = 1;
-        return (balances.size() / 10) + rounder;
+        return balances.size() % 10 != 0 ? (balances.size() / 10) + 1 : (balances.size() / 10);
     }
 
     public String players() {

@@ -453,7 +453,7 @@ public class Listeners implements Listener {
                 Sign sign = economySigns.sign(e.getClickedBlock().getLocation());
                 if (sign != null && e.getAction() == Action.LEFT_CLICK_BLOCK && economySigns.checkFormat(sign)) {
                     String operation = economySigns.operation(sign);
-                    String itemName = economySigns.itemName(sign);
+                    String itemName = economySigns.itemLine(sign);
                     int amount = economySigns.amount(sign);
                     Player p = e.getPlayer();
                     p.performCommand(operation + " " + itemName + " " + Integer.toString(amount));
@@ -883,11 +883,13 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onCommand(ServerCommandEvent e) {
-        if (console.chatToggled() && !e.getCommand().equalsIgnoreCase("togglechat") && !e.getCommand().equalsIgnoreCase("tc"))
-            e.setCommand("say " + e.getCommand());
-        e.setCommand(ChatColor.translateAlternateColorCodes('&', e.getCommand()));
-        spy.broadcast(console.getName().replaceAll(":", "") + ChatColor.AQUA, e.getCommand());
-        bot.logConsole(e.getCommand());
+    	if (!e.getCommand().startsWith("list")) {
+	        if (console.chatToggled() && !e.getCommand().equalsIgnoreCase("togglechat") && !e.getCommand().equalsIgnoreCase("tc"))
+	            e.setCommand("say " + e.getCommand());
+	        e.setCommand(ChatColor.translateAlternateColorCodes('&', e.getCommand()));
+	        spy.broadcast(console.getName().replaceAll(":", "") + ChatColor.AQUA, e.getCommand());
+	        bot.logConsole(e.getCommand());
+        }
     }
 
     @EventHandler
@@ -895,7 +897,11 @@ public class Listeners implements Listener {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         User u = um.getUser(e.getPlayer().getUniqueId());
         if (!e.getFrom().getWorld().equals(e.getTo().getWorld())) {
-            if (!e.getPlayer().hasPermission("Necessities.ignoreGameMode"))
+        	String s = wm.getSysPath(e.getTo().getWorld().getName()), from = wm.getSysPath(e.getFrom().getWorld().getName());
+        	if (!from.equals(s)) {
+        		u.saveInventory(s, from);
+        		e.getPlayer().setGameMode(wm.getGameMode(e.getTo().getWorld().getName()));//sets gamemode of player to world they teleported to
+        	} else if (!e.getPlayer().hasPermission("Necessities.ignoreGameMode"))
                 e.getPlayer().setGameMode(wm.getGameMode(e.getTo().getWorld().getName()));//sets gamemode of player to world they teleported to
             for (User m : um.getUsers().values())
                 m.updateListName();

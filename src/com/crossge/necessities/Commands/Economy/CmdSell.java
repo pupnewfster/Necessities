@@ -24,14 +24,12 @@ public class CmdSell extends EconomyCmd {
             if (args.length == 2) {
                 temp = args[0].replaceAll(":", " ");
                 itemName = temp.split(" ")[0];
-                if (form.isLegal(itemName)) {
+                try {
+                    data = Short.parseShort(temp.split(" ")[1]);
+                } catch (Exception e) { }
+                if (form.isLegal(itemName))
                     itemName = mat.idToName(Integer.parseInt(itemName));
-                    try {
-                        data = Short.parseShort(temp.split(" ")[1]);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else if (itemName.equalsIgnoreCase("hand")) {
+                else if (itemName.equalsIgnoreCase("hand")) {
                     itemName = player.getItemInHand().getType().name();
                     data = player.getItemInHand().getDurability();
                 }

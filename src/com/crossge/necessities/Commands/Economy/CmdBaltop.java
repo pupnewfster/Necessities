@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 public class CmdBaltop extends EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         int page = 0;
-        if (args.length > 1) {
+        if (args.length >= 1) {
             if (!form.isLegal(args[0])) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid baltop page.");
                 return true;

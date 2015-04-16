@@ -5,9 +5,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class WorldManager {
     private File configFileWM = new File("plugins/Necessities/WorldManager", "worlds.yml");
+    private static HashMap<String,String> invSys = new HashMap<String,String>();
     private File configFile = new File("plugins/Necessities", "config.yml");
 
     public void initiate() {
@@ -24,6 +26,8 @@ public class WorldManager {
                     creator.generateStructures(configWM.getBoolean(world + ".structures"));
                 if (configWM.contains(world + ".generator"))
                     creator.generator(configWM.getString(world + ".generator"));
+                if (configWM.contains(world + ".inventorySystem"))
+                	invSys.put(world.toLowerCase(), configWM.getString(world + ".inventorySystem"));
                 Bukkit.createWorld(creator);
             }
             setWorldProps(world);
@@ -31,6 +35,14 @@ public class WorldManager {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "All worlds loaded.");
     }
 
+    public String getSysPath(String world) {
+    	if (!invSys.containsKey(world.toLowerCase())) {
+    		setSetting(world, "inventorySystem", "default");
+    		invSys.put(world.toLowerCase(), "default");
+    	}
+    	return invSys.get(world.toLowerCase());
+    }
+    
     public GameMode getGameMode(String world) {
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
         if (configWM.contains(world + ".gamemode")) {
@@ -116,6 +128,7 @@ public class WorldManager {
         }//TODO: fix error of if spawn not set not major though since we have a spawn set
         for (Player p : Bukkit.getWorld(name).getPlayers())
             p.teleport(spawn);
+        invSys.remove(name.toLowerCase());
         Bukkit.unloadWorld(name, true);
     }
 
@@ -129,6 +142,8 @@ public class WorldManager {
                 creator.type(getType(configWM.getString(name + ".type")));
             if (configWM.contains(name + ".structures"))
                 creator.generateStructures(configWM.getBoolean(name + ".structures"));
+            if (configWM.contains(name + ".inventorySystem"))
+            	invSys.put(name.toLowerCase(), configWM.getString(name + ".inventorySystem"));
             creator.generator(configWM.getString(name + ".generator"));
             Bukkit.createWorld(creator);
         }
@@ -177,6 +192,7 @@ public class WorldManager {
         if (generator != null)
             configWM.set(name + ".generator", generator);
         configWM.set(name + ".type", type.getName().toUpperCase());
+        configWM.set(name + ".inventorySystem", "default");
         configWM.set(name + ".structures", true);
         configWM.set(name + ".pvp", true);
         configWM.set(name + ".spawning.animals", true);

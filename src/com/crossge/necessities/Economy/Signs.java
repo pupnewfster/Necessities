@@ -1,6 +1,7 @@
 package com.crossge.necessities.Economy;
 
 import com.crossge.necessities.Variables;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -36,8 +37,18 @@ public class Signs {
     }
 
     public String itemName(Sign sign) {
-        String itemName = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", ""));
-        return mat.findItem(itemName);
+    	String itemName = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", "")).replaceAll(":", " ").split(" ")[0];
+    	if (form.isLegal(itemName))
+            itemName = mat.idToName(Integer.parseInt(itemName));
+        return mat.findItem(itemName.trim());
+    }
+    
+    public String itemLine(Sign sign) {
+    	String line = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", ""));
+    	String itemName = line.replaceAll(":", " ").split(" ")[0];
+    	if (form.isLegal(itemName))
+            itemName = mat.idToName(Integer.parseInt(itemName));
+        return mat.findItem(itemName.trim()) + (line.replaceAll(":", " ").split(" ").length > 1 ? ":" + line.replaceAll(":", " ").split(" ")[1] : "");
     }
 
     public Integer amount(Sign sign) {
@@ -50,7 +61,9 @@ public class Signs {
 
     private void setPrice(Sign sign) {
         String operation = getOperation(sign.getLine(0).trim());
-        String itemName = sign.getLine(1).trim().replaceAll(" ", "");
+        String itemName = sign.getLine(1).trim().replaceAll(" ", "").replaceAll(":", " ").split(" ")[0];
+        if (form.isLegal(itemName))
+            itemName = mat.idToName(Integer.parseInt(itemName));
         itemName = mat.findItem(itemName);
         int amount = Integer.parseInt(sign.getLine(2).trim());
         double price = pr.getCost(operation, itemName, amount);

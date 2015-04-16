@@ -8,15 +8,21 @@ import com.crossge.necessities.Guilds.GuildManager;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.ScoreBoards;
 import com.crossge.necessities.Variables;
+import com.google.common.io.Files;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.util.BlockIterator;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class User {
@@ -719,6 +725,44 @@ public class User {
                 return block.getLocation();
         }
         return null;
+    }
+    
+    public void saveInventory(String s, String from) {
+    	if (this.bukkitPlayer == null)
+            return;
+    	this.bukkitPlayer.saveData();
+    	int ticks = this.bukkitPlayer.getTicksLived();
+    	File dirFrom = new File("plugins/Necessities/WorldManager/" + from + "/");
+    	File dir = new File("plugins/Necessities/WorldManager/" + s + "/");
+		if (!dirFrom.exists())
+			dirFrom.mkdir();
+		if (!dir.exists())
+			dir.mkdir();
+    	File f = new File("world/playerdata/" + this.bukkitPlayer.getUniqueId() + ".dat");
+    	try {
+			Files.copy(f, new File(dirFrom, this.bukkitPlayer.getUniqueId() + ".dat"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	File saved = new File(dir, this.bukkitPlayer.getUniqueId() + ".dat");
+    	if (saved.exists()) {//if exists transfer and load otherwise just set to the defaults of world and inv and enderchest and xp
+        	try {
+    			Files.copy(saved, new File("world/playerdata/" + this.bukkitPlayer.getUniqueId() + ".dat"));
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		}
+    		this.bukkitPlayer.loadData();
+    		this.bukkitPlayer.setTicksLived(ticks);
+    	} else {
+    		this.bukkitPlayer.getInventory().clear();
+    		this.bukkitPlayer.getEnderChest().clear();
+    		this.bukkitPlayer.getInventory().setHelmet(new ItemStack(Material.AIR));
+    		this.bukkitPlayer.getInventory().setChestplate(new ItemStack(Material.AIR));
+    		this.bukkitPlayer.getInventory().setLeggings(new ItemStack(Material.AIR));
+    		this.bukkitPlayer.getInventory().setBoots(new ItemStack(Material.AIR));
+    		this.bukkitPlayer.setExp(0);//TODO DEBUG
+    	}
+    	this.bukkitPlayer.saveData();
     }
 
     public String getTimePlayed() {
