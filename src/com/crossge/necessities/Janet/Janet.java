@@ -344,10 +344,11 @@ public class Janet {
 
     public String logChat(UUID uuid, String message) {
         Player p = Bukkit.getPlayer(uuid);
-        log.log(p.getName() + ": " + message);
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (config.contains("Necessities.log") && config.getBoolean("Necessities.log"))
+            log.log(p.getName() + ": " + message);
         boolean warn = true;
         String censored = message;
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (config.getBoolean("Necessities.chatSpam") && !p.hasPermission("Necessities.spamchat"))
             warn = !checkChatSpam(uuid);
         if (config.getBoolean("Necessities.language") && !p.hasPermission("Necessities.language")) {
@@ -364,13 +365,14 @@ public class Janet {
     public String logCom(UUID uuid, String message) {
         Player p = Bukkit.getPlayer(uuid);
         String messageOrig = message;
-        log.log(p.getName() + " issued server command: " + message);
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (config.contains("Necessities.log") && config.getBoolean("Necessities.log"))
+            log.log(p.getName() + " issued server command: " + message);
         boolean warn = false;
         String censored = message.replaceFirst(message.split(" ")[0], "").trim();
         message = message.replaceFirst(message.split(" ")[0], "").trim();
         if (censored.equals(""))
             return messageOrig;
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (config.getBoolean("Necessities.cmdSpam") && !p.hasPermission("Necessities.spamcommands"))
             warn = !checkCmdSpam(uuid);
         if (config.getBoolean("Necessities.advertise") && !p.hasPermission("Necessities.advertise")) {

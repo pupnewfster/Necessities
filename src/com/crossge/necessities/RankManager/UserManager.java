@@ -23,8 +23,7 @@ public class UserManager {
     }
 
     public void parseUser(final Player p) {
-        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
             @Override
             public void run() {
                 players.put(p.getUniqueId(), new User(p));

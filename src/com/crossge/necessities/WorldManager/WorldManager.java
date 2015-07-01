@@ -42,6 +42,10 @@ public class WorldManager {
     	}
     	return invSys.get(world.toLowerCase());
     }
+
+    public boolean multiple() {
+        return this.invSys.values().size() > 1;
+    }
     
     public GameMode getGameMode(String world) {
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);

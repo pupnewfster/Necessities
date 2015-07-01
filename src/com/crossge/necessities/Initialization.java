@@ -168,6 +168,9 @@ public class Initialization {
                 config.set("Necessities.cmdSpam", true);
                 config.set("Necessities.chatSpam", true);
                 config.set("Necessities.advertise", true);
+                config.set("Necessities.AI", false);
+                config.set("Necessities.log", false);
+                config.set("Necessities.customDeny", false);
                 config.set("Necessities.ChatFormat", "{WORLD} {GUILD} {TITLE} {RANK} {NAME}: {MESSAGE}");
                 config.set("Necessities.firstTime", "Welcome {NAME}!");
                 config.set("Necessities.firstItems", Arrays.asList(""));
@@ -204,6 +207,12 @@ public class Initialization {
                 config.set("Necessities.Guilds", true);
             if (!config.contains("Necessities.Economy"))
                 config.set("Necessities.Economy", true);
+            if (!config.contains("Necessities.AI"))
+                config.set("Necessities.AI", false);
+            if (!config.contains("Necessities.log"))
+                config.set("Necessities.log", false);
+            if (!config.contains("Necessities.customDeny"))
+                config.set("Necessities.customDeny", false);
             try {
                 config.save(configFile);
             } catch (Exception e) {

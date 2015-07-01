@@ -760,7 +760,7 @@ public class User {
     		this.bukkitPlayer.getInventory().setChestplate(new ItemStack(Material.AIR));
     		this.bukkitPlayer.getInventory().setLeggings(new ItemStack(Material.AIR));
     		this.bukkitPlayer.getInventory().setBoots(new ItemStack(Material.AIR));
-    		this.bukkitPlayer.setExp(0);//TODO DEBUG
+    		this.bukkitPlayer.setExp(0);
     	}
     	this.bukkitPlayer.saveData();
     }

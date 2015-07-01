@@ -174,7 +174,9 @@ public class Listeners implements Listener {
         bot.logIn(uuid);
         hide.playerJoined(p);
         u.setLastAction(System.currentTimeMillis());
-        power.addPlayer(p);
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds"))
+            power.addPlayer(p);
         for (User m : um.getUsers().values())//TODO: Figure out if really needed 99% likely it is
             m.updateListName();
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
@@ -227,7 +229,9 @@ public class Listeners implements Listener {
         }
         hide.playerLeft(e.getPlayer());
         tps.removeRequests(uuid);
-        power.removePlayer(e.getPlayer());
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds"))
+            power.removePlayer(e.getPlayer());
     }
 
     @EventHandler
@@ -245,10 +249,19 @@ public class Listeners implements Listener {
             } else
                 e.setRespawnLocation(safe.getSafe(e.getPlayer().getBedSpawnLocation()));
         }
-        User u = um.getUser(e.getPlayer().getUniqueId());
+        final User u = um.getUser(e.getPlayer().getUniqueId());
+        final String s = wm.getSysPath(e.getRespawnLocation().getWorld().getName()), from = wm.getSysPath(e.getPlayer().getWorld().getName());
         if (u.isAfk())
             u.setAfk(false);
         u.setLastAction(System.currentTimeMillis());
+        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+        scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+            	if (!from.equals(s))
+            		u.saveInventory(s, from);
+            }
+        });
     }
 
     @EventHandler
@@ -817,17 +830,18 @@ public class Listeners implements Listener {
         e.setCancelled(true);
         if (u.isAfk())
             u.setAfk(false);
-        try {
-            u.setLastAction(System.currentTimeMillis());
-            BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-            scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    ai.parseMessage(uuid, message);
-                }
-            });
-        } catch (Exception er) {
-        }
+        u.setLastAction(System.currentTimeMillis());
+        if (config.contains("Necessities.AI") && config.getBoolean("Necessities.AI"))
+            try {
+                BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+                scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                    @Override
+                    public void run() {
+                        ai.parseMessage(uuid, message);
+                    }
+                });
+            } catch (Exception er) {
+            }
     }
 
     @EventHandler
@@ -864,19 +878,22 @@ public class Listeners implements Listener {
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent e) {
         Player player = e.getPlayer();
-        spy.broadcast(player.getName(), e.getMessage());
         User u = um.getUser(e.getPlayer().getUniqueId());
         if (u.isJailed())
             e.setCancelled(true);
         if (!e.isCancelled()) {
+            spy.broadcast(player.getName(), e.getMessage());
             String message = bot.logCom(player.getUniqueId(), e.getMessage());
             e.setMessage(message);
             if (u.isAfk() && !message.startsWith("/afk") && !message.startsWith("/away"))
                 u.setAfk(false);
-            PluginCommand pc = Bukkit.getPluginCommand(e.getMessage().split(" ")[0].replaceFirst("/", ""));
-            if (pc != null && !pc.testPermissionSilent(player)) {
-                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have permission to perform this command.");
-                e.setCancelled(true);
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+            if (config.contains("Necessities.customDeny") && config.getBoolean("Necessities.customDeny")) {
+                PluginCommand pc = Bukkit.getPluginCommand(e.getMessage().split(" ")[0].replaceFirst("/", ""));
+                if (pc != null && !pc.testPermissionSilent(player)) {
+                    player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have permission to perform this command.");
+                    e.setCancelled(true);
+                }
             }
         }
     }
@@ -897,11 +914,14 @@ public class Listeners implements Listener {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         User u = um.getUser(e.getPlayer().getUniqueId());
         if (!e.getFrom().getWorld().equals(e.getTo().getWorld())) {
-        	String s = wm.getSysPath(e.getTo().getWorld().getName()), from = wm.getSysPath(e.getFrom().getWorld().getName());
-        	if (!from.equals(s)) {
-        		u.saveInventory(s, from);
-        		e.getPlayer().setGameMode(wm.getGameMode(e.getTo().getWorld().getName()));//sets gamemode of player to world they teleported to
-        	} else if (!e.getPlayer().hasPermission("Necessities.ignoreGameMode"))
+            if (wm.multiple()) {
+                String s = wm.getSysPath(e.getTo().getWorld().getName()), from = wm.getSysPath(e.getFrom().getWorld().getName());
+                if (!from.equals(s)) {
+                    u.saveInventory(s, from);
+                    e.getPlayer().setGameMode(wm.getGameMode(e.getTo().getWorld().getName()));//sets gamemode of player to world they teleported to
+                }
+            }
+            if (!e.getPlayer().hasPermission("Necessities.ignoreGameMode"))
                 e.getPlayer().setGameMode(wm.getGameMode(e.getTo().getWorld().getName()));//sets gamemode of player to world they teleported to
             for (User m : um.getUsers().values())
                 m.updateListName();
@@ -909,7 +929,7 @@ public class Listeners implements Listener {
         if (!u.isJailed() && (e.getCause().equals(TeleportCause.COMMAND) || e.getCause().equals(TeleportCause.PLUGIN)) &&
                 !e.getFrom().getWorld().getName().equals("BattleGrounds"))
             u.setLastPos(e.getFrom());
-        if (u.isClaiming()) {
+        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.isClaiming()) {
             u.setClaiming(false);
             e.getPlayer().sendMessage(var.getMessages() + "No longer automatically claiming land.");
         }
