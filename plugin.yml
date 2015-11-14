@@ -10,6 +10,11 @@ commands:
       usage: /<command> <item>
       permission: Necessities.craft
       aliases: [ncraft]
+   l2m:
+      description: Convert levels to money!
+      usage: /<command> <level_amount>
+      permission: Necessities.l2m
+      aliases: [lm]
    machinegun:
       description: Turns your bow into a machine gun.
       usage: /<command>

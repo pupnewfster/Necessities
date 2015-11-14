@@ -239,7 +239,7 @@ public class Necessities extends JavaPlugin {
             com = new CmdPay();
         else if (isEqual(name, "eco"))
             com = new CmdEco();
-        else if (isEqual(name, "price"))
+       /* else if (isEqual(name, "price"))
             com = new CmdPrice();
         else if (isEqual(name, "setprice"))
             com = new CmdSetPrice();
@@ -254,7 +254,7 @@ public class Necessities extends JavaPlugin {
         else if (isEqual(name, "trade"))
             com = new CmdTrade();
         else if (isEqual(name, "tradeitems"))
-            com = new CmdTradeItems();
+            com = new CmdTradeItems();*/
         else if (isEqual(name, "players"))
             com = new CmdPlayers();
         else if (isEqual(name, "rankprices"))
@@ -263,10 +263,12 @@ public class Necessities extends JavaPlugin {
             com = new CmdSetRankPrice();
         else if (isEqual(name, "buyrank"))
             com = new CmdBuyRank();
-        else if (isEqual(name, "commandprices"))
+        else if (isEqual(name, "l2m"))
+            com = new Cmdl2m();
+       /* else if (isEqual(name, "commandprices"))
             com = new CmdCmdPrices();
         else if (isEqual(name, "setcommandprice"))
-            com = new CmdSetCmdPrice();
+            com = new CmdSetCmdPrice();*/
             //RankManager
         else if (isEqual(name, "promote"))
             com = new CmdPromote();
