@@ -32,6 +32,12 @@ public class BalChecks {
         return form.roundTwoDecimals(balances.get(uuid));
     }
 
+    public double balance(UUID uuid) {
+        if (!balances.containsKey(uuid))
+            return 0.0;
+        return balances.get(uuid);
+    }
+
     public String balTop(int page, int time) {//TODO: Make baltop more efficient
         if (balances.size() < time + page + 1 || time == 10)
             return null;//Check before hand because this means you dont have to sort if it not valid
