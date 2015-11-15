@@ -6,34 +6,25 @@ import com.crossge.necessities.Commands.Guilds.CmdGuild;
 import com.crossge.necessities.Commands.RankManager.*;
 import com.crossge.necessities.Commands.WorldManager.*;
 import com.crossge.necessities.Economy.BalChecks;
-import com.crossge.necessities.Economy.shops.ShopDatabase;
-import com.crossge.necessities.Economy.shops.inventory.InventoryListener;
 import com.crossge.necessities.Janet.Janet;
 import com.crossge.necessities.RankManager.UserManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class Necessities extends JavaPlugin {
     private static Necessities instance;
     private File configFile = new File("plugins/Necessities", "config.yml");
-    private ShopDatabase shopDatabase;
 
     public static Necessities getInstance() {
         return instance;
-    }
-
-    public ShopDatabase getShopDatabase() {
-        return shopDatabase;
     }
 
     @Override
@@ -43,14 +34,7 @@ public class Necessities extends JavaPlugin {
         Initialization init = new Initialization();
         init.initiateFiles();
 
-        try {
-            shopDatabase = ShopDatabase.load(this);
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
-
         getServer().getPluginManager().registerEvents(new Listeners(), this);
-        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
 
         Bukkit.getServicesManager().register(Economy.class, new BalChecks(), Bukkit.getPluginManager().getPlugin("Vault"), ServicePriority.Normal);
 
@@ -389,14 +373,6 @@ public class Necessities extends JavaPlugin {
         um.unload();
         cs.unload();
         bot.unload();
-
-        try {
-            shopDatabase.save(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        shopDatabase = null;
 
         getLogger().info("Necessities disabled.");
     }
