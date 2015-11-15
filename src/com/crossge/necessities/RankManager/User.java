@@ -103,8 +103,6 @@ public class User {
         RankManager rm = new RankManager();
         if (configUsers.contains(getUUID().toString() + ".rank"))
             this.rank = rm.getRank(configUsers.getString(getUUID().toString() + ".rank"));
-        else
-            this.rank = rm.getRank("Guest");
         for (String subrank : configUsers.getStringList(uuid + ".subranks"))
             if (!subrank.equals(""))
                 this.subranks.add(subrank);
@@ -146,6 +144,8 @@ public class User {
 
     private void readIgnored() {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         if (configUsers.contains(getUUID().toString() + ".ignored")) {
             for (String name : configUsers.getStringList(getUUID().toString() + ".ignored"))
                 if (!name.equals(""))
@@ -168,6 +168,8 @@ public class User {
         if (!this.ignored.contains(uuid)) {//this should already be checked but whatevs
             this.ignored.add(uuid);
             YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+            if (!configUsers.contains(getUUID().toString()))
+                return;
             List<String> ign = configUsers.getStringList(uuid.toString() + ".ignored");
             if (ign.contains(""))
                 ign.remove("");
@@ -185,6 +187,8 @@ public class User {
         if (this.ignored.contains(uuid)) {//this should already be checked but whatevs
             this.ignored.remove(uuid);
             YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+            if (!configUsers.contains(getUUID().toString()))
+                return;
             List<String> ign = configUsers.getStringList(uuid.toString() + ".ignored");
             ign.remove(uuid.toString());
             if (ign.isEmpty())
@@ -201,6 +205,8 @@ public class User {
     public void leaveGuild() {
         this.guild = null;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".guild", null);
         try {
             configUsers.save(configFileUsers);
@@ -220,6 +226,8 @@ public class User {
     public void joinGuild(Guild g) {
         this.guild = g;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".guild", g.getName());
         try {
             configUsers.save(configFileUsers);
@@ -358,6 +366,8 @@ public class User {
     public void setRank(Rank r) {
         this.rank = r;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".rank", r.getName());
         try {
             configUsers.save(configFileUsers);
@@ -375,6 +385,8 @@ public class User {
         this.nick = message != null ? ChatColor.translateAlternateColorCodes('&', message) : null;
         updateListName();
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".nick", message);
         try {
             configUsers.save(configFileUsers);
@@ -390,6 +402,8 @@ public class User {
     public void setLastPos(Location l) {
         this.lastPos = l;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".location.world", l.getWorld().getName());
         configUsers.set(getUUID().toString() + ".location.x", l.getX());
         configUsers.set(getUUID().toString() + ".location.y", l.getY());
@@ -410,6 +424,8 @@ public class User {
     public void setJailed(boolean jail) {
         this.jailed = jail;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".jailed", jail);
         try {
             configUsers.save(configFileUsers);
@@ -438,6 +454,8 @@ public class User {
     public void setMuted(boolean tomute) {
         this.muted = tomute;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".muted", this.muted);
         try {
             configUsers.save(configFileUsers);
@@ -466,6 +484,8 @@ public class User {
             Bukkit.broadcastMessage(var.getMe() + "*" + getRank().getColor() + getPlayer().getDisplayName() + var.getMe() + " is " + (isAfk() ? "now" : "no longer") + " AFK");
         }
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".afk", isafk);
         try {
             configUsers.save(configFileUsers);
@@ -521,6 +541,8 @@ public class User {
 
     private void readHomes() {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         if (configUsers.contains(getUUID().toString() + ".homeslist"))
             for (String home : configUsers.getStringList(getUUID().toString() + ".homeslist"))
                 if (!home.equals(""))
@@ -535,6 +557,8 @@ public class User {
     public void addHome(Location l, String name) {
         name = name.toLowerCase().trim();
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         List<String> homelist = configUsers.getStringList(getUUID().toString() + ".homeslist");
         if (homelist.isEmpty()) {
             configUsers.set(getUUID().toString() + ".homeslist", Arrays.asList(name));
@@ -562,6 +586,8 @@ public class User {
     public void delHome(String name) {
         name = name.toLowerCase().trim();
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         List<String> homelist = configUsers.getStringList(getUUID().toString() + ".homeslist");
         homelist.remove(name);
         if (homelist.isEmpty())
@@ -688,6 +714,8 @@ public class User {
         else
             this.power -= 2;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".power", this.power);
         try {
             configUsers.save(configFileUsers);
@@ -706,6 +734,8 @@ public class User {
         else
             this.power += 0.03333;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".power", this.power);
         try {
             configUsers.save(configFileUsers);
