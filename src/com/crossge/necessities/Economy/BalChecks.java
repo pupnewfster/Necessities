@@ -33,10 +33,7 @@ public class BalChecks implements Economy {
     }
 
     public double balance(UUID uuid) {
-        if (uuid == null)
-            return 0.0;
-        String bal = bal(uuid);
-        return bal == null ? 0.0 : Double.parseDouble(bal);
+        return uuid == null ? 0.0 : balances.get(uuid);
     }
 
     public String balTop(int page, int time) {//TODO: Make baltop more efficient
