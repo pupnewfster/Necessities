@@ -33,9 +33,8 @@ public class BalChecks {
     }
 
     public double balance(UUID uuid) {
-        if (!balances.containsKey(uuid))
-            return 0.0;
-        return balances.get(uuid);
+        String bal = bal(uuid);
+        return bal == null ? 0.0 : Double.parseDouble(bal);
     }
 
     public String balTop(int page, int time) {//TODO: Make baltop more efficient

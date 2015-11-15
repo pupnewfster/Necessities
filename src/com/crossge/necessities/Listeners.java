@@ -854,12 +854,12 @@ public class Listeners implements Listener {
             e.setKeepInventory(player.hasPermission("Necessities.keepitems"));
             User u = um.getUser(player.getUniqueId());
             u.setLastPos(player.getLocation());
-            if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !player.hasPermission("Necessities.guilds.admin") && !player.getWorld().getName().equalsIgnoreCase("BattleGrounds"))
+            if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !player.hasPermission("Necessities.guilds.admin")/* && !player.getWorld().getName().equalsIgnoreCase("BattleGrounds")*/)
                 u.removePower();
             Player killer = player.getKiller();//TODO: better reward amount
             if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && killer != null && killer != player &&
-                    !killer.hasPermission("Necessities.nopvpLoss") && !player.hasPermission("Necessities.nopvpLoss") &&
-                    killer.getWorld().getName().equalsIgnoreCase("BattleGrounds")) {
+                    !killer.hasPermission("Necessities.nopvpLoss") && !player.hasPermission("Necessities.nopvpLoss")/* &&
+                    killer.getWorld().getName().equalsIgnoreCase("BattleGrounds")*/) {
                 Double amount = Double.parseDouble(bal.bal(player.getUniqueId())) * 0.1;
                 amount = Double.parseDouble(form.roundTwoDecimals(amount));
                 player.sendMessage(var.getMessages() + "Your lost " + var.getMoney() + " $" + form.addCommas(form.roundTwoDecimals(amount)) + var.getMessages() +
@@ -926,8 +926,8 @@ public class Listeners implements Listener {
             for (User m : um.getUsers().values())
                 m.updateListName();
         }
-        if (!u.isJailed() && (e.getCause().equals(TeleportCause.COMMAND) || e.getCause().equals(TeleportCause.PLUGIN)) &&
-                !e.getFrom().getWorld().getName().equals("BattleGrounds"))
+        if (!u.isJailed() && (e.getCause().equals(TeleportCause.COMMAND) || e.getCause().equals(TeleportCause.PLUGIN))/* &&
+                !e.getFrom().getWorld().getName().equals("BattleGrounds")*/)
             u.setLastPos(e.getFrom());
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.isClaiming()) {
             u.setClaiming(false);

@@ -19,7 +19,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class InventoryListener implements Listener {
-    private BalChecks uwotpup = new BalChecks();
+    private BalChecks balc = new BalChecks();
 
     @EventHandler(priority = EventPriority.LOW)
     public void inventoryClicked(InventoryClickEvent e) {
@@ -118,7 +118,7 @@ public class InventoryListener implements Listener {
                 }
 
                 OfflinePlayer o = Bukkit.getOfflinePlayer(p.getUniqueId());
-                double balance = uwotpup.balance(p.getUniqueId());
+                double balance = balc.balance(p.getUniqueId());
                 if (balance >= item.getPrice()) {
                     ItemStack itemStack = item.obtain();
                     if (itemStack == null) {
@@ -128,10 +128,10 @@ public class InventoryListener implements Listener {
                         return;
                     }
                     OfflinePlayer owner = inventory.getShop().getOfflineOwner();
-                    uwotpup.addMoney(owner.getUniqueId(), item.getPrice());
+                    balc.addMoney(owner.getUniqueId(), item.getPrice());
 
                     p.getInventory().addItem(itemStack);
-                    uwotpup.removeMoney(p.getUniqueId(), item.getPrice());
+                    balc.removeMoney(p.getUniqueId(), item.getPrice());
 
                     inventory.update(); //Send update
 

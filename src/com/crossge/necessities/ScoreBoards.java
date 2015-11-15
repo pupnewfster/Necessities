@@ -30,9 +30,12 @@ public class ScoreBoards {
         if (t == null)
             return;
         for (Team team : b.getTeams())
-            if (team.hasPlayer(u.getPlayer()))
-                team.removePlayer(u.getPlayer());
-        t.addPlayer(u.getPlayer());
+            if (team.hasEntry(u.getPlayer().getName()))
+                team.removeEntry(u.getPlayer().getName());
+            //if (team.hasPlayer(u.getPlayer()))
+                //team.removePlayer(u.getPlayer());
+        //t.addPlayer(u.getPlayer());
+        t.addEntry(u.getPlayer().getName());
         u.getPlayer().setScoreboard(b);
     }
 
@@ -44,7 +47,8 @@ public class ScoreBoards {
             t = b.getTeam(u.getRank().getName());
         if (t == null)
             return;
-        t.removePlayer(u.getPlayer());
+        //t.removePlayer(u.getPlayer());
+        t.removeEntry(u.getPlayer().getName());
         u.getPlayer().setScoreboard(man.getNewScoreboard());
     }
 }

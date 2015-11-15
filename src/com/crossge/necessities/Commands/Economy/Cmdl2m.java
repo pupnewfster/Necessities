@@ -10,7 +10,7 @@ public class Cmdl2m extends EconomyCmd {
             Player p = (Player) sender;
 
             if (args.length == 0) {
-                p.sendMessage(ChatColor.AQUA + "/l2m <level_amount> - Convert levels to $$");
+                p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must input a valid number of levels to convert.");
                 return true;
             }
 
@@ -18,12 +18,12 @@ public class Cmdl2m extends EconomyCmd {
             try {
                 level = Integer.parseInt(args[0]);
             } catch (Throwable t) {
-                p.sendMessage(ChatColor.AQUA + "/l2m <level_amount> - Convert levels to $$");
+                p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must input a valid number of levels to convert.");
                 return true;
             }
 
             if (p.getLevel() < level) {
-                p.sendMessage("" + ChatColor.RED + ChatColor.BOLD + "You don't have that many levels!");
+                p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have that many levels.");
                 return true;
             }
 
@@ -31,12 +31,12 @@ public class Cmdl2m extends EconomyCmd {
             double money = 2 * exp;
 
             p.setLevel(p.getLevel() - level);
-            balc.removeMoney(p.getUniqueId(), money);
+            balc.addMoney(p.getUniqueId(), money);
             //PShop.econ.depositPlayer(Bukkit.getOfflinePlayer(p.getUniqueId()), money);
 
-            p.sendMessage("" + ChatColor.BOLD + ChatColor.GREEN + "+" + ChatColor.RESET + " Converted " + ChatColor.BOLD + level + ChatColor.RESET + " levels to " + ChatColor.BOLD + "$" + money + ChatColor.RESET + "!");
-        }
-
+            p.sendMessage("" + ChatColor.GREEN + ChatColor.BOLD + "+" + ChatColor.RESET + " Converted " + ChatColor.BOLD + level + ChatColor.RESET + " levels to " + var.getMoney() + "$" + money + ChatColor.RESET + "!");
+        } else
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command");
         return true;
     }
 
