@@ -13,8 +13,8 @@ commands:
    l2m:
       description: Convert levels to money!
       usage: /<command> <level_amount>
-      permission: Necessities.l2m
-      aliases: [lm]
+      permission: Necessities.economy.l2m
+      aliases: [lm, nlm, nl2m]
    machinegun:
       description: Turns your bow into a machine gun.
       usage: /<command>
@@ -868,6 +868,7 @@ permissions:
                 Necessities.economy.buy: true
                 Necessities.economy.srp: true
                 Necessities.economy.scp: true
+                Necessities.economy.l2m: true
             Necessities.rankmanager.*:
               children:
                 Necessities.rankmanager.addpermissionuser: true
@@ -1096,6 +1097,9 @@ permissions:
         default: true
     Necessities.economy.pay:
         description: Pays someone some money.
+        default: true
+    Necessities.economy.l2m:
+        description: Converts levels to money.
         default: true
     Necessities.economy.price:
         description: Allows you to see the price of an item.
