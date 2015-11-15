@@ -1,17 +1,17 @@
 package com.crossge.necessities.Economy;
 
 import com.crossge.necessities.GetUUID;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
-public class BalChecks {
+public class BalChecks implements Economy {
     private File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
     private static HashMap<UUID, Double> balances = new HashMap<UUID, Double>();
     Formatter form = new Formatter();
@@ -33,6 +33,8 @@ public class BalChecks {
     }
 
     public double balance(UUID uuid) {
+        if (uuid == null)
+            return 0.0;
         String bal = bal(uuid);
         return bal == null ? 0.0 : Double.parseDouble(bal);
     }
@@ -78,7 +80,7 @@ public class BalChecks {
     }
 
     public boolean doesPlayerExist(UUID uuid) {
-        return balances.containsKey(uuid);
+        return uuid != null && balances.containsKey(uuid);
     }
 
     public void addPlayerToList(UUID uuid) {
@@ -104,5 +106,234 @@ public class BalChecks {
 
     public void addMoney(UUID uuid, double amount) {
         setMoney(uuid, Double.toString(Double.parseDouble(bal(uuid)) + amount));
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public boolean hasBankSupport() {
+        return false;
+    }
+
+    @Override
+    public int fractionalDigits() {
+        return 0;
+    }
+
+    @Override
+    public String format(double v) {
+        return form.roundTwoDecimals(v);
+    }
+
+    @Override
+    public String currencyNamePlural() {
+        return null;
+    }
+
+    @Override
+    public String currencyNameSingular() {
+        return null;
+    }
+
+    @Override
+    public boolean hasAccount(String s) {
+        return doesPlayerExist(get.getOfflineID(s));
+    }
+
+    @Override
+    public boolean hasAccount(OfflinePlayer offlinePlayer) {
+        return doesPlayerExist(offlinePlayer.getUniqueId());
+    }
+
+    @Override
+    public double getBalance(String s) {
+        return balance(get.getOfflineID(s));
+    }
+
+    @Override
+    public double getBalance(OfflinePlayer offlinePlayer) {
+        return balance(offlinePlayer.getUniqueId());
+    }
+
+    @Override
+    public boolean has(String s, double v) {
+        return getBalance(s) - v >= 0;
+    }
+
+    @Override
+    public boolean has(OfflinePlayer offlinePlayer, double v) {
+        return getBalance(offlinePlayer) - v >= 0;
+    }
+
+    @Override
+    public EconomyResponse withdrawPlayer(String s, double v) {
+        removeMoney(get.getOfflineID(s), v);
+        return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.NOT_IMPLEMENTED, "no implemented response yet");//TODO: Maybe?
+    }
+
+    @Override
+    public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
+        removeMoney(offlinePlayer.getUniqueId(), v);
+        return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.NOT_IMPLEMENTED, "no implemented response yet");//TODO: Maybe?
+    }
+
+    @Override
+    public EconomyResponse depositPlayer(String s, double v) {
+        addMoney(get.getOfflineID(s), v);
+        return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.NOT_IMPLEMENTED, "no implemented response yet");//TODO: Maybe?
+    }
+
+    @Override
+    public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
+        addMoney(offlinePlayer.getUniqueId(), v);
+        return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.NOT_IMPLEMENTED, "no implemented response yet");//TODO: Maybe?
+    }
+
+    @Override
+    public boolean createPlayerAccount(String s) {
+        UUID uuid = get.getOfflineID(s);
+        if (!doesPlayerExist(uuid)) {
+            addPlayerToList(uuid);
+            return true;
+        } else
+            return false;
+    }
+
+    @Override
+    public boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
+        UUID uuid = offlinePlayer.getUniqueId();
+        if (!doesPlayerExist(uuid)) {
+            addPlayerToList(uuid);
+            return true;
+        } else
+            return false;
+    }
+//UNUSED METHODS BELOW
+    @Override
+    public boolean hasAccount(String s, String s1) {
+        return false;
+    }
+
+    @Override
+    public boolean hasAccount(OfflinePlayer offlinePlayer, String s) {
+        return false;
+    }
+
+    @Override
+    public double getBalance(String s, String s1) {
+        return 0;
+    }
+
+    @Override
+    public double getBalance(OfflinePlayer offlinePlayer, String s) {
+        return 0;
+    }
+
+    @Override
+    public boolean has(String s, String s1, double v) {
+        return false;
+    }
+
+    @Override
+    public boolean has(OfflinePlayer offlinePlayer, String s, double v) {
+        return false;
+    }
+
+    @Override
+    public EconomyResponse withdrawPlayer(String s, String s1, double v) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, String s, double v) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse depositPlayer(String s, String s1, double v) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, String s, double v) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse createBank(String s, String s1) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse createBank(String s, OfflinePlayer offlinePlayer) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse deleteBank(String s) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse bankBalance(String s) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse bankHas(String s, double v) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse bankWithdraw(String s, double v) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse bankDeposit(String s, double v) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse isBankOwner(String s, String s1) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse isBankOwner(String s, OfflinePlayer offlinePlayer) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse isBankMember(String s, String s1) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse isBankMember(String s, OfflinePlayer offlinePlayer) {
+        return null;
+    }
+
+    @Override
+    public List<String> getBanks() {
+        return null;
+    }
+
+    @Override
+    public boolean createPlayerAccount(String s, String s1) {
+        return false;
+    }
+
+    @Override
+    public boolean createPlayerAccount(OfflinePlayer offlinePlayer, String s) {
+        return false;
     }
 }

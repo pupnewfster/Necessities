@@ -5,14 +5,18 @@ import com.crossge.necessities.Commands.Economy.*;
 import com.crossge.necessities.Commands.Guilds.CmdGuild;
 import com.crossge.necessities.Commands.RankManager.*;
 import com.crossge.necessities.Commands.WorldManager.*;
+import com.crossge.necessities.Economy.BalChecks;
 import com.crossge.necessities.Economy.shops.ShopDatabase;
 import com.crossge.necessities.Economy.shops.inventory.InventoryListener;
 import com.crossge.necessities.Janet.Janet;
 import com.crossge.necessities.RankManager.UserManager;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -47,6 +51,9 @@ public class Necessities extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new Listeners(), this);
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
+
+        Bukkit.getServicesManager().register(Economy.class, new BalChecks(), Bukkit.getPluginManager().getPlugin("Vault"), ServicePriority.Normal);
+
         getLogger().info("Necessities enabled.");
     }
 
