@@ -157,7 +157,7 @@ public class Listeners implements Listener {
                 @Override
                 public void run() {
                     Bukkit.broadcastMessage(welcome);
-                    Bukkit.broadcastMessage(JanetName + "Welcome to Survival Craft! Enjoy your stay.");
+                    Bukkit.broadcastMessage(JanetName + "Welcome to GamezGalaxy! Enjoy your stay.");
                 }
             });
         } else {
