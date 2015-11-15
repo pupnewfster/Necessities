@@ -103,6 +103,8 @@ public class User {
         RankManager rm = new RankManager();
         if (configUsers.contains(getUUID().toString() + ".rank"))
             this.rank = rm.getRank(configUsers.getString(getUUID().toString() + ".rank"));
+        else
+            this.rank = rm.getRank("Guest");
         for (String subrank : configUsers.getStringList(uuid + ".subranks"))
             if (!subrank.equals(""))
                 this.subranks.add(subrank);
