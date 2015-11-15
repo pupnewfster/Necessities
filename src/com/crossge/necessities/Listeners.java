@@ -857,9 +857,9 @@ public class Listeners implements Listener {
             if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !player.hasPermission("Necessities.guilds.admin")/* && !player.getWorld().getName().equalsIgnoreCase("BattleGrounds")*/)
                 u.removePower();
             Player killer = player.getKiller();//TODO: better reward amount
-            if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && killer != null && killer != player &&
-                    !killer.hasPermission("Necessities.nopvpLoss") && !player.hasPermission("Necessities.nopvpLoss")/* &&
-                    killer.getWorld().getName().equalsIgnoreCase("BattleGrounds")*/) {
+            /*if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && killer != null && killer != player &&
+                    !killer.hasPermission("Necessities.nopvpLoss") && !player.hasPermission("Necessities.nopvpLoss") &&
+                    killer.getWorld().getName().equalsIgnoreCase("BattleGrounds")) {
                 Double amount = Double.parseDouble(bal.bal(player.getUniqueId())) * 0.1;
                 amount = Double.parseDouble(form.roundTwoDecimals(amount));
                 player.sendMessage(var.getMessages() + "Your lost " + var.getMoney() + " $" + form.addCommas(form.roundTwoDecimals(amount)) + var.getMessages() +
@@ -868,7 +868,7 @@ public class Listeners implements Listener {
                 killer.sendMessage(var.getMessages() + "Your looted " + var.getMoney() + " $" + form.addCommas(form.roundTwoDecimals(amount)) + var.getMessages() +
                         " from " + var.getObj() + player.getDisplayName());
                 bal.addMoney(killer.getUniqueId(), amount);
-            }
+            }*/
             if (e.getDeathMessage().contains("using"))
                 e.setDeathMessage(e.getDeathMessage().substring(0, e.getDeathMessage().indexOf("by ")) + "by " +
                         e.getDeathMessage().substring(e.getDeathMessage().indexOf("[") + 1, e.getDeathMessage().length() - 1));
