@@ -4,7 +4,6 @@ import com.crossge.necessities.Necessities;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
 import java.util.Arrays;
@@ -30,6 +29,11 @@ public class UserManager {
                 players.get(p.getUniqueId()).givePerms();
             }
         });
+    }
+
+    public void forceParseUser(final Player p) {
+        players.put(p.getUniqueId(), new User(p));
+        players.get(p.getUniqueId()).givePerms();
     }
 
     public HashMap<UUID, User> getUsers() {

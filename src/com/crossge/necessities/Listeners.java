@@ -98,7 +98,7 @@ public class Listeners implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         final Player p = e.getPlayer();
         um.addUser(p);
-        um.parseUser(p);
+        um.forceParseUser(p);
         User u = um.getUser(p.getUniqueId());
         if (u.getNick() != null)
             p.setDisplayName(u.getNick());
