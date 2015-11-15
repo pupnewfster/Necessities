@@ -22,10 +22,10 @@ public class UserManager {
     }
 
     public void parseUser(final Player p) {
+        players.put(p.getUniqueId(), new User(p));
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
             @Override
             public void run() {
-                players.put(p.getUniqueId(), new User(p));
                 players.get(p.getUniqueId()).givePerms();
             }
         });
