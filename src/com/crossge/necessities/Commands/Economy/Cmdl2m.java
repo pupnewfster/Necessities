@@ -27,7 +27,9 @@ public class Cmdl2m extends EconomyCmd {
                 return true;
             }
 
-            double money = calculateMoney(level);
+            int exp = levelToExp(p.getLevel(), p.getLevel() - level);
+            double money = 2 * exp;
+
             p.setLevel(p.getLevel() - level);
             balc.removeMoney(p.getUniqueId(), money);
             //PShop.econ.depositPlayer(Bukkit.getOfflinePlayer(p.getUniqueId()), money);
@@ -36,6 +38,22 @@ public class Cmdl2m extends EconomyCmd {
         }
 
         return true;
+    }
+
+    public int levelToExp(int currentLevel, int destination) {
+        int exp = 0;
+
+        for (; currentLevel > destination; currentLevel--) {
+            if (currentLevel <= 16) {
+                exp += (2 * currentLevel) + 7;
+            } else if (currentLevel >= 17 && currentLevel <= 31) {
+                exp += (5 * currentLevel) - 38;
+            } else {
+                exp += (9 * currentLevel) - 158;
+            }
+        }
+
+        return exp;
     }
 
     public double calculateMoney(int level) {
