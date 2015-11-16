@@ -46,7 +46,10 @@ public class User {
     private double power = 0.0;
     private Guild guild;
     private long lastAction = 0;
+    private long lastAFK = 0;
     private int pastTotal = 0;
+    private int lastActionTask = 0;
+    private int afkTask = 0;
     private long login = 0;
     private String lastContact;
     private Player bukkitPlayer;
@@ -333,15 +336,17 @@ public class User {
 
     public void setLastAction(long time) {
         this.lastAction = time;
+        int temp = this.lastActionTask;
         if (getPlayer() != null && getPlayer().hasPermission("Necessities.afk"))
             try {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                this.lastActionTask = Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         if (!isAfk() && getPlayer() != null && (System.currentTimeMillis() - getLastAction()) / 1000.0 >= 299.9)
                             setAfk(true);
                     }
                 }, 20 * 300);
+                Bukkit.getScheduler().cancelTask(temp);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -492,6 +497,29 @@ public class User {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        this.lastAFK = System.currentTimeMillis();
+        if (!getPlayer().hasPermission("Necessities.afkkickimune")) {
+            if (isAfk()) {
+                int temp = this.afkTask;
+                try {
+                    this.afkTask = Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isAfk() && getPlayer() != null && (System.currentTimeMillis() - getLastAFK()) / 1000.0 >= 299.9)
+                                bukkitPlayer.kickPlayer(ChatColor.RED + "AFK for too long!");
+                        }
+                    }, 20 * 300);
+                    Bukkit.getScheduler().cancelTask(temp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else
+                Bukkit.getScheduler().cancelTask(this.afkTask);
+        }
+    }
+
+    private long getLastAFK() {
+        return this.lastAFK;
     }
 
     public String getLastC() {

@@ -73,7 +73,7 @@ public class Listeners implements Listener {
     BalChecks balc = new BalChecks();
     Formatter form = new Formatter();
     Signs economySigns = new Signs();
-    BalChecks bal = new BalChecks();
+    //BalChecks bal = new BalChecks();
     Console console = new Console();
     Materials mat = new Materials();
     Variables var = new Variables();
@@ -284,8 +284,9 @@ public class Listeners implements Listener {
             u.cancelTp();
         if (u.isAfk() && locationChanged)
             u.setAfk(false);
-        if (config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager") && locationChanged) {
+        if (locationChanged)
             u.setLastAction(System.currentTimeMillis());
+        if (config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager") && locationChanged) {
             Location destination = pm.portalDestination(to);
             if (destination != null)
                 e.getPlayer().teleport(destination);
@@ -415,6 +416,8 @@ public class Listeners implements Listener {
         User u = um.getUser(e.getPlayer().getUniqueId());
         if (u.isAfk())
             u.setAfk(false);
+        if (hide.isHidden(u.getPlayer()) && e.getAction().equals(Action.PHYSICAL))//cancel crop breaking when hidden
+            e.setCancelled(true);
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin"))
             if ((e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && ((e.getItem() != null && !e.getItem().getType().isEdible()/*.isBlock()*/) ||
@@ -777,6 +780,12 @@ public class Listeners implements Listener {
             e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
+        } else if (player.hasPermission("Necessities.opBroadcast") && e.getMessage().startsWith("#")) {
+            e.setFormat(var.getMessages() + "To Ops - " + ChatColor.WHITE + e.getFormat());
+            e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
+            e.setMessage(e.getMessage().replaceFirst("#", ""));
         }
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.getGuild() != null && u.getGuild().getRank(uuid) != null) {
             String prefix = gm.getPrefix(u.getGuild().getRank(uuid));
@@ -1098,5 +1107,11 @@ public class Listeners implements Listener {
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
+    }
+
+    @EventHandler
+    public void onPickupItem(PlayerPickupItemEvent e) {
+        if (hide.isHidden(e.getPlayer()))
+            e.setCancelled(true);
     }
 }

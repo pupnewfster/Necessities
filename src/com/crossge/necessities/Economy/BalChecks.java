@@ -112,7 +112,7 @@ public class BalChecks implements Economy {
 
     @Override
     public String getName() {
-        return null;
+        return "GGEconomy";
     }
 
     @Override
@@ -132,12 +132,12 @@ public class BalChecks implements Economy {
 
     @Override
     public String currencyNamePlural() {
-        return null;
+        return "gz";
     }
 
     @Override
     public String currencyNameSingular() {
-        return null;
+        return "gz";
     }
 
     @Override

@@ -738,6 +738,7 @@ permissions:
             Necessities.unignoreable: true
             Necessities.spamcommands: true
             Necessities.canCombatLog: true
+            Necessities.afkkickimune: true
             Necessities.titleOthers: true
             Necessities.opBroadcast: true
             Necessities.freeCommand: true
@@ -1551,4 +1552,7 @@ permissions:
         default: op
     Necessities.wrench:
         description: Wrench to toggle states of blocks.
+        default: op
+    Necessities.afkkickimune:
+        description: Cannot be kicked for being afk too long.
         default: op
