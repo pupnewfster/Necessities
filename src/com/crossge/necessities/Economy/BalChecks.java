@@ -173,25 +173,25 @@ public class BalChecks implements Economy {
     @Override
     public EconomyResponse withdrawPlayer(String s, double v) {
         removeMoney(get.getOfflineID(s), v);
-        return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.NOT_IMPLEMENTED, "no implemented response yet");//TODO: Maybe?
+        return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
         removeMoney(offlinePlayer.getUniqueId(), v);
-        return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.NOT_IMPLEMENTED, "no implemented response yet");//TODO: Maybe?
+        return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse depositPlayer(String s, double v) {
         addMoney(get.getOfflineID(s), v);
-        return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.NOT_IMPLEMENTED, "no implemented response yet");//TODO: Maybe?
+        return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
         addMoney(offlinePlayer.getUniqueId(), v);
-        return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.NOT_IMPLEMENTED, "no implemented response yet");//TODO: Maybe?
+        return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override

@@ -775,12 +775,14 @@ public class Listeners implements Listener {
         }
         YamlConfiguration configTitles = YamlConfiguration.loadConfiguration(configFileTitles);
         e.setFormat(ChatColor.translateAlternateColorCodes('&', config.getString("Necessities.ChatFormat")));
-        if (u.opChat()) {
+        boolean isop = u.opChat();
+        if (isop) {
             e.setFormat(var.getMessages() + "To Ops - " + ChatColor.WHITE + e.getFormat());
             e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
         } else if (player.hasPermission("Necessities.opBroadcast") && e.getMessage().startsWith("#")) {
+            isop = true;
             e.setFormat(var.getMessages() + "To Ops - " + ChatColor.WHITE + e.getFormat());
             e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
@@ -818,7 +820,7 @@ public class Listeners implements Listener {
             if (!e.getRecipients().isEmpty()) {
                 ArrayList<Player> toRem = new ArrayList<Player>();
                 for (Player recip : e.getRecipients())
-                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (u.opChat() && !recip.hasPermission("Necessities.opBroadcast")))
+                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (isop && !recip.hasPermission("Necessities.opBroadcast")))
                         toRem.add(recip);
                 for (Player recip : toRem)
                     e.getRecipients().remove(recip);

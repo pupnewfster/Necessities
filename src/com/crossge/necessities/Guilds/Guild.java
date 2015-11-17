@@ -246,7 +246,7 @@ public class Guild {
     public int getMaxPower() {
         if (this.power == -1)
             return -1;
-        return getTotal() * 10;
+        return getTotal() * 20;
     }
 
     public String onlineMembers() {

@@ -284,9 +284,7 @@ public class User {
             if (isBacking()) {
                 if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand")) {
                     Formatter form = new Formatter();
-                    double price = Double.parseDouble(bal.bal(this.userUUID)) * .15;
-                    if (price > 1000.0)
-                        price = 1000.0;
+                    double price = Double.parseDouble(bal.bal(this.userUUID)) * .07;
                     bal.removeMoney(this.userUUID, price);
                     this.bukkitPlayer.sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() +
                             " was removed from your acount.");
@@ -306,9 +304,7 @@ public class User {
                     if (isBacking()) {
                         if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand")) {
                             Formatter form = new Formatter();
-                            double price = Double.parseDouble(bal.bal(getUUID())) * .15;
-                            if (price > 1000.0)
-                                price = 1000.0;
+                            double price = Double.parseDouble(bal.bal(getUUID())) * .07;
                             bal.removeMoney(getUUID(), price);
                             getPlayer().sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() +
                                     " was removed from your acount.");
@@ -737,8 +733,9 @@ public class User {
     }
 
     public void removePower() {
-        if (this.power - 2 < -10)
-            this.power = -10;
+        return;//Disable power loss for GG
+        /*if (this.power - 2 < -20)
+            this.power = -20;
         else
             this.power -= 2;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
@@ -751,14 +748,14 @@ public class User {
             e.printStackTrace();
         }
         if (this.guild != null)
-            this.guild.updatePower();
+            this.guild.updatePower();*/
     }
 
     public void addPower() {
         if (this.afk)
             return;
-        if (this.power + 0.03333 > 10)
-            this.power = 10;
+        if (this.power + 0.03333 > 20)
+            this.power = 20;
         else
             this.power += 0.03333;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
