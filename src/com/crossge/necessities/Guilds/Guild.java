@@ -224,7 +224,7 @@ public class Guild {
     }
 
     public boolean isAlly(Guild ally) {
-        return this.allies.contains(ally.getName());
+        return ally != null && this.allies.contains(ally.getName());
     }
 
     public boolean isEnemy(Guild enemy) {
