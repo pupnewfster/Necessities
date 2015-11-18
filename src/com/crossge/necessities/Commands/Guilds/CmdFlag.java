@@ -73,6 +73,14 @@ public class CmdFlag extends GuildCmd {
                 sender.sendMessage(var.getMessages() + "Explosions are enabled in this guild's territory.");
             else
                 sender.sendMessage(var.getMessages() + "Explosions are disabled in this guild's territory.");
+            if (g.canHostileSpawn())
+                sender.sendMessage(var.getMessages() + "Hostile mobs can spawn in this guild's territory.");
+            else
+                sender.sendMessage(var.getMessages() + "Hostile mobs cannot spawn in this guild's territory.");
+            if (g.allowInteract())
+                sender.sendMessage(var.getMessages() + "Players may interact in this guild's territory.");
+            else
+                sender.sendMessage(var.getMessages() + "Players may not interact in this guild's territory.");
         }
         if (opper.equalsIgnoreCase("permanent")) {
             g.setPermanent(Boolean.parseBoolean(bool));
@@ -98,6 +106,18 @@ public class CmdFlag extends GuildCmd {
                 sender.sendMessage(var.getMessages() + "Explosions are now enabled in this guild's territory.");
             else
                 sender.sendMessage(var.getMessages() + "Explosions are now disabled in this guild's territory.");
+        } else if (opper.equalsIgnoreCase("interact")) {
+            g.setInteract(Boolean.parseBoolean(bool));
+            if (bool.equalsIgnoreCase("true"))
+                sender.sendMessage(var.getMessages() + "Players can now interact with doors in this guild's territory.");
+            else
+                sender.sendMessage(var.getMessages() + "Players can no longer interact with doors in this guild's territory.");
+        } else if (opper.equalsIgnoreCase("hostilespawn")) {
+            g.setHostileSpawn(Boolean.parseBoolean(bool));
+            if (bool.equalsIgnoreCase("true"))
+                sender.sendMessage(var.getMessages() + "Hostile mobs can now spawn in this guild's territory.");
+            else
+                sender.sendMessage(var.getMessages() + "Hostile mobs no longer can spawn in this guild's territory.");
         }
         return true;
     }

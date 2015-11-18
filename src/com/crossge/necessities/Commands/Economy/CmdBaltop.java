@@ -22,7 +22,7 @@ public class CmdBaltop extends EconomyCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer.toString(totalpages));
             return true;
         }
-        sender.sendMessage(ChatColor.GOLD + "Balanace Top Page [" + Integer.toString(page) + "/" + Integer.toString(totalpages) + "]");
+        sender.sendMessage(ChatColor.GOLD + "Balance Top Page [" + Integer.toString(page) + "/" + Integer.toString(totalpages) + "]");
         page = page - 1;
         bal = balc.balTop(page, time);
         while (bal != null) {

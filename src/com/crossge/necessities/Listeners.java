@@ -22,10 +22,7 @@ import org.bukkit.block.*;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
@@ -444,7 +441,7 @@ public class Listeners implements Listener {
                         owner = gm.chunkOwner(new Location(e.getPlayer().getWorld(), e.getClickedBlock().getX(), e.getClickedBlock().getY(),
                                 e.getClickedBlock().getZ() - 1).getChunk());
                 }
-                if (owner != null && u.getGuild() != owner) {
+                if (owner != null && u.getGuild() != owner && !owner.allowInteract()) {
                     if (e.getAction().equals(Action.PHYSICAL) && !owner.isAlly(u.getGuild()))
                         e.setCancelled(true);
                     else {
@@ -725,6 +722,8 @@ public class Listeners implements Listener {
             final Vector v = a.getVelocity();
             final int fire = a.getFireTicks();
             final Player shooter = (Player) e.getEntity();
+            if (!e.getBow().getItemMeta().hasLore())
+                return;
             if (e.getBow().getItemMeta().getLore().contains("Machine gun"))
                 for (int i = 0; i < 63; i++)
                     try {
@@ -892,10 +891,11 @@ public class Listeners implements Listener {
         User u = um.getUser(e.getPlayer().getUniqueId());
         if (u.isJailed())
             e.setCancelled(true);
-        if (!e.isCancelled()) {
+        if (!e.isCancelled() && !e.getMessage().contains("login") && !e.getMessage().contains("register")) {
             spy.broadcast(player.getName(), e.getMessage());
             String message = bot.logCom(player.getUniqueId(), e.getMessage());
             e.setMessage(message);
+            u.setLastAction(System.currentTimeMillis());
             if (u.isAfk() && !message.startsWith("/afk") && !message.startsWith("/away"))
                 u.setAfk(false);
             YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
@@ -1115,5 +1115,15 @@ public class Listeners implements Listener {
     public void onPickupItem(PlayerPickupItemEvent e) {
         if (hide.isHidden(e.getPlayer()))
             e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onCreateSpawn(CreatureSpawnEvent e) {
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
+            Guild g = gm.chunkOwner(e.getLocation().getChunk());
+            if (g != null && !g.canHostileSpawn() && e.getEntity() instanceof Monster)
+                e.setCancelled(true);
+        }
     }
 }

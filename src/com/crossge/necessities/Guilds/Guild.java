@@ -27,6 +27,8 @@ public class Guild {
     private boolean pvp = true;
     private boolean permanent = false;
     private boolean explosions = true;
+    private boolean interact = false;
+    private boolean hostileSpawn = true;
     private String description = "";
     private String leader;
     private String name;
@@ -43,6 +45,10 @@ public class Guild {
             this.pvp = configGuild.getBoolean("flag.pvp");
         if (configGuild.contains("flag.explosions"))
             this.explosions = configGuild.getBoolean("flag.explosions");
+        if (configGuild.contains("flag.interact"))
+            this.interact = configGuild.getBoolean("flag.interact");
+        if (configGuild.contains("flag.hostileSpawn"))
+            this.hostileSpawn = configGuild.getBoolean("flag.hostileSpawn");
         if (configGuild.contains("leader"))
             this.leader = configGuild.getString("leader");
         if (configGuild.contains("description"))
@@ -140,6 +146,36 @@ public class Guild {
         }
     }
 
+    public boolean allowInteract() {
+        return this.interact;
+    }
+
+    public void setInteract(boolean allow) {
+        YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
+        this.interact = allow;
+        configGuild.set("flag.interact", allow);
+        try {
+            configGuild.save(this.configFileGuild);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean canHostileSpawn() {
+        return this.hostileSpawn;
+    }
+
+    public void setHostileSpawn(boolean can) {
+        YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
+        this.hostileSpawn = can;
+        configGuild.set("flag.hostileSpawn", can);
+        try {
+            configGuild.save(this.configFileGuild);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean canExplode() {
         return this.explosions;
     }
@@ -228,7 +264,7 @@ public class Guild {
     }
 
     public boolean isEnemy(Guild enemy) {
-        return this.enemies.contains(enemy.getName());
+        return enemy != null && this.enemies.contains(enemy.getName());
     }
 
     public int getLand() {
