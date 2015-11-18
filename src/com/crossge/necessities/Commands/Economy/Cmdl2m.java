@@ -22,6 +22,11 @@ public class Cmdl2m extends EconomyCmd {
                 return true;
             }
 
+            if (level <= 0) {
+                p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Number of levels must be positive.");
+                return true;
+            }
+
             if (p.getLevel() < level) {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have that many levels.");
                 return true;

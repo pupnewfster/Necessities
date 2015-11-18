@@ -46,7 +46,10 @@ public class User {
     private double power = 0.0;
     private Guild guild;
     private long lastAction = 0;
+    private long lastAFK = 0;
     private int pastTotal = 0;
+    private int lastActionTask = 0;
+    private int afkTask = 0;
     private long login = 0;
     private String lastContact;
     private Player bukkitPlayer;
@@ -144,6 +147,8 @@ public class User {
 
     private void readIgnored() {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         if (configUsers.contains(getUUID().toString() + ".ignored")) {
             for (String name : configUsers.getStringList(getUUID().toString() + ".ignored"))
                 if (!name.equals(""))
@@ -166,6 +171,8 @@ public class User {
         if (!this.ignored.contains(uuid)) {//this should already be checked but whatevs
             this.ignored.add(uuid);
             YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+            if (!configUsers.contains(getUUID().toString()))
+                return;
             List<String> ign = configUsers.getStringList(uuid.toString() + ".ignored");
             if (ign.contains(""))
                 ign.remove("");
@@ -183,6 +190,8 @@ public class User {
         if (this.ignored.contains(uuid)) {//this should already be checked but whatevs
             this.ignored.remove(uuid);
             YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+            if (!configUsers.contains(getUUID().toString()))
+                return;
             List<String> ign = configUsers.getStringList(uuid.toString() + ".ignored");
             ign.remove(uuid.toString());
             if (ign.isEmpty())
@@ -199,6 +208,8 @@ public class User {
     public void leaveGuild() {
         this.guild = null;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".guild", null);
         try {
             configUsers.save(configFileUsers);
@@ -218,6 +229,8 @@ public class User {
     public void joinGuild(Guild g) {
         this.guild = g;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".guild", g.getName());
         try {
             configUsers.save(configFileUsers);
@@ -271,9 +284,7 @@ public class User {
             if (isBacking()) {
                 if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand")) {
                     Formatter form = new Formatter();
-                    double price = Double.parseDouble(bal.bal(this.userUUID)) * .15;
-                    if (price > 1000.0)
-                        price = 1000.0;
+                    double price = Double.parseDouble(bal.bal(this.userUUID)) * .07;
                     bal.removeMoney(this.userUUID, price);
                     this.bukkitPlayer.sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() +
                             " was removed from your acount.");
@@ -293,9 +304,7 @@ public class User {
                     if (isBacking()) {
                         if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand")) {
                             Formatter form = new Formatter();
-                            double price = Double.parseDouble(bal.bal(getUUID())) * .15;
-                            if (price > 1000.0)
-                                price = 1000.0;
+                            double price = Double.parseDouble(bal.bal(getUUID())) * .07;
                             bal.removeMoney(getUUID(), price);
                             getPlayer().sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() +
                                     " was removed from your acount.");
@@ -323,15 +332,17 @@ public class User {
 
     public void setLastAction(long time) {
         this.lastAction = time;
+        int temp = this.lastActionTask;
         if (getPlayer() != null && getPlayer().hasPermission("Necessities.afk"))
             try {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                this.lastActionTask = Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         if (!isAfk() && getPlayer() != null && (System.currentTimeMillis() - getLastAction()) / 1000.0 >= 299.9)
                             setAfk(true);
                     }
                 }, 20 * 300);
+                Bukkit.getScheduler().cancelTask(temp);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -356,6 +367,8 @@ public class User {
     public void setRank(Rank r) {
         this.rank = r;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".rank", r.getName());
         try {
             configUsers.save(configFileUsers);
@@ -373,6 +386,8 @@ public class User {
         this.nick = message != null ? ChatColor.translateAlternateColorCodes('&', message) : null;
         updateListName();
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".nick", message);
         try {
             configUsers.save(configFileUsers);
@@ -388,6 +403,8 @@ public class User {
     public void setLastPos(Location l) {
         this.lastPos = l;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".location.world", l.getWorld().getName());
         configUsers.set(getUUID().toString() + ".location.x", l.getX());
         configUsers.set(getUUID().toString() + ".location.y", l.getY());
@@ -408,6 +425,8 @@ public class User {
     public void setJailed(boolean jail) {
         this.jailed = jail;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".jailed", jail);
         try {
             configUsers.save(configFileUsers);
@@ -436,6 +455,8 @@ public class User {
     public void setMuted(boolean tomute) {
         this.muted = tomute;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".muted", this.muted);
         try {
             configUsers.save(configFileUsers);
@@ -464,12 +485,37 @@ public class User {
             Bukkit.broadcastMessage(var.getMe() + "*" + getRank().getColor() + getPlayer().getDisplayName() + var.getMe() + " is " + (isAfk() ? "now" : "no longer") + " AFK");
         }
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".afk", isafk);
         try {
             configUsers.save(configFileUsers);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        this.lastAFK = System.currentTimeMillis();
+        if (!getPlayer().hasPermission("Necessities.afkkickimune")) {
+            if (isAfk()) {
+                int temp = this.afkTask;
+                try {
+                    this.afkTask = Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isAfk() && getPlayer() != null && (System.currentTimeMillis() - getLastAFK()) / 1000.0 >= 299.9)
+                                bukkitPlayer.kickPlayer(ChatColor.RED + "AFK for too long!");
+                        }
+                    }, 20 * 300);
+                    Bukkit.getScheduler().cancelTask(temp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else
+                Bukkit.getScheduler().cancelTask(this.afkTask);
+        }
+    }
+
+    private long getLastAFK() {
+        return this.lastAFK;
     }
 
     public String getLastC() {
@@ -519,6 +565,8 @@ public class User {
 
     private void readHomes() {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         if (configUsers.contains(getUUID().toString() + ".homeslist"))
             for (String home : configUsers.getStringList(getUUID().toString() + ".homeslist"))
                 if (!home.equals(""))
@@ -533,6 +581,8 @@ public class User {
     public void addHome(Location l, String name) {
         name = name.toLowerCase().trim();
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         List<String> homelist = configUsers.getStringList(getUUID().toString() + ".homeslist");
         if (homelist.isEmpty()) {
             configUsers.set(getUUID().toString() + ".homeslist", Arrays.asList(name));
@@ -560,6 +610,8 @@ public class User {
     public void delHome(String name) {
         name = name.toLowerCase().trim();
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         List<String> homelist = configUsers.getStringList(getUUID().toString() + ".homeslist");
         homelist.remove(name);
         if (homelist.isEmpty())
@@ -681,11 +733,14 @@ public class User {
     }
 
     public void removePower() {
-        if (this.power - 2 < -10)
-            this.power = -10;
+        return;//Disable power loss for GG
+        /*if (this.power - 2 < -20)
+            this.power = -20;
         else
             this.power -= 2;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".power", this.power);
         try {
             configUsers.save(configFileUsers);
@@ -693,17 +748,19 @@ public class User {
             e.printStackTrace();
         }
         if (this.guild != null)
-            this.guild.updatePower();
+            this.guild.updatePower();*/
     }
 
     public void addPower() {
         if (this.afk)
             return;
-        if (this.power + 0.03333 > 10)
-            this.power = 10;
+        if (this.power + 0.03333 > 20)
+            this.power = 20;
         else
             this.power += 0.03333;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
         configUsers.set(getUUID().toString() + ".power", this.power);
         try {
             configUsers.save(configFileUsers);

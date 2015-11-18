@@ -73,7 +73,7 @@ public class Listeners implements Listener {
     BalChecks balc = new BalChecks();
     Formatter form = new Formatter();
     Signs economySigns = new Signs();
-    BalChecks bal = new BalChecks();
+    //BalChecks bal = new BalChecks();
     Console console = new Console();
     Materials mat = new Materials();
     Variables var = new Variables();
@@ -284,8 +284,9 @@ public class Listeners implements Listener {
             u.cancelTp();
         if (u.isAfk() && locationChanged)
             u.setAfk(false);
-        if (config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager") && locationChanged) {
+        if (locationChanged)
             u.setLastAction(System.currentTimeMillis());
+        if (config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager") && locationChanged) {
             Location destination = pm.portalDestination(to);
             if (destination != null)
                 e.getPlayer().teleport(destination);
@@ -415,6 +416,8 @@ public class Listeners implements Listener {
         User u = um.getUser(e.getPlayer().getUniqueId());
         if (u.isAfk())
             u.setAfk(false);
+        if (hide.isHidden(u.getPlayer()) && e.getAction().equals(Action.PHYSICAL))//cancel crop breaking when hidden
+            e.setCancelled(true);
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin"))
             if ((e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && ((e.getItem() != null && !e.getItem().getType().isEdible()/*.isBlock()*/) ||
@@ -772,11 +775,19 @@ public class Listeners implements Listener {
         }
         YamlConfiguration configTitles = YamlConfiguration.loadConfiguration(configFileTitles);
         e.setFormat(ChatColor.translateAlternateColorCodes('&', config.getString("Necessities.ChatFormat")));
-        if (u.opChat()) {
+        boolean isop = u.opChat();
+        if (isop) {
             e.setFormat(var.getMessages() + "To Ops - " + ChatColor.WHITE + e.getFormat());
             e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
+        } else if (player.hasPermission("Necessities.opBroadcast") && e.getMessage().startsWith("#")) {
+            isop = true;
+            e.setFormat(var.getMessages() + "To Ops - " + ChatColor.WHITE + e.getFormat());
+            e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
+            e.setMessage(e.getMessage().replaceFirst("#", ""));
         }
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.getGuild() != null && u.getGuild().getRank(uuid) != null) {
             String prefix = gm.getPrefix(u.getGuild().getRank(uuid));
@@ -809,7 +820,7 @@ public class Listeners implements Listener {
             if (!e.getRecipients().isEmpty()) {
                 ArrayList<Player> toRem = new ArrayList<Player>();
                 for (Player recip : e.getRecipients())
-                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (u.opChat() && !recip.hasPermission("Necessities.opBroadcast")))
+                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (isop && !recip.hasPermission("Necessities.opBroadcast")))
                         toRem.add(recip);
                 for (Player recip : toRem)
                     e.getRecipients().remove(recip);
@@ -1098,5 +1109,11 @@ public class Listeners implements Listener {
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
+    }
+
+    @EventHandler
+    public void onPickupItem(PlayerPickupItemEvent e) {
+        if (hide.isHidden(e.getPlayer()))
+            e.setCancelled(true);
     }
 }
