@@ -10,7 +10,7 @@ public class CmdBuyRank extends EconomyCmd {
 
     public boolean commandUse(CommandSender sender, String[] args) {
         if (args.length != 1) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid rank to buy.");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid rank to buy. View the ranks with /rankprices");
             return true;
         }
         if (sender instanceof Player) {

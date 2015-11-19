@@ -20,7 +20,7 @@ public class CmdPower extends GuildCmd {
             if (args.length == 0) {
                 User u = um.getUser(p.getUniqueId());
                 sender.sendMessage(var.getGuildCol() + "You " + var.getMessages() + " - Power / Maxpower: " + var.getGuildMsgs() + form.roundTwoDecimals(u.getPower())
-                        + " / 10.0");
+                        + " / 20.0");
                 return true;
             }
         }
@@ -43,10 +43,10 @@ public class CmdPower extends GuildCmd {
         }
         if (!(sender instanceof Player))
             sender.sendMessage(var.getNeutral() + u.getName() + var.getMessages() + " - Power / Maxpower: " + var.getGuildMsgs() + form.roundTwoDecimals(u.getPower())
-                    + " / 10.0");
+                    + " / 20.0");
         else
             sender.sendMessage(u.getGuild().relation(um.getUser(((Player) sender).getUniqueId()).getGuild()) + u.getName() + var.getMessages() +
-                    " - Power / Maxpower: " + var.getGuildMsgs() + form.roundTwoDecimals(u.getPower()) + " / 10.00");
+                    " - Power / Maxpower: " + var.getGuildMsgs() + form.roundTwoDecimals(u.getPower()) + " / 20.00");
         return true;
     }
 }
