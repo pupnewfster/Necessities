@@ -326,6 +326,17 @@ public class Listeners implements Listener {
     @SuppressWarnings("deprecation")
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
+        //Guild check
+        User u = um.getUser(e.getPlayer().getUniqueId());
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
+            Guild owner = gm.chunkOwner(e.getBlock().getChunk());
+            if (!e.getPlayer().hasPermission("Necessities.guilds.admin") && owner != null && u.getGuild() != owner) {
+                e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
+                e.setCancelled(true);
+            }
+        }
+
         ItemMeta meta = e.getItemInHand().getItemMeta();
         Inventory inv = null;
         Block b = e.getBlock();
