@@ -306,6 +306,11 @@ commands:
       usage: /<command> <player> <reason>
       permission: Necessities.ban
       aliases: [nban, banplayer, nbanplayer]
+   tempban:
+      description: Bans <player> for <duration> and an optional <reason>.
+      usage: /<command> <player> <duration> <reason>
+      permission: Necessities.tempban
+      aliases: [ntempban, tempbanplayer, ntempbanplayer]
    unban:
       description: Unbans <player>.
       usage: /<command> <player>
@@ -786,6 +791,7 @@ permissions:
             Necessities.weather: true
             Necessities.bracket: true
             Necessities.janetai: true
+            Necessities.tempban: true
             Necessities.repair: true
             Necessities.keepxp: true
             Necessities.rename: true
@@ -1555,4 +1561,7 @@ permissions:
         default: op
     Necessities.afkkickimune:
         description: Cannot be kicked for being afk too long.
+        default: op
+    Necessities.tempban:
+        description: Allows one to tempban others.
         default: op

@@ -27,6 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
@@ -326,9 +327,9 @@ public class Listeners implements Listener {
         //Guild check
         User u = um.getUser(e.getPlayer().getUniqueId());
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
+        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
             Guild owner = gm.chunkOwner(e.getBlock().getChunk());
-            if (!e.getPlayer().hasPermission("Necessities.guilds.admin") && owner != null && u.getGuild() != owner) {
+            if (owner != null && u.getGuild() != owner) {
                 e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
                 e.setCancelled(true);
             }
@@ -427,16 +428,22 @@ public class Listeners implements Listener {
         if (hide.isHidden(u.getPlayer()) && e.getAction().equals(Action.PHYSICAL))//cancel crop breaking when hidden
             e.setCancelled(true);
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin"))
+        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
             if ((e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && ((e.getItem() != null && !e.getItem().getType().isEdible()/*.isBlock()*/) ||
                     e.getClickedBlock().getState() instanceof InventoryHolder || e.getClickedBlock().getType().equals(Material.WOODEN_DOOR) ||
-                    e.getClickedBlock().getType().equals(Material.STONE_BUTTON) || e.getClickedBlock().getType().equals(Material.WOOD_BUTTON) ||
-                    e.getClickedBlock().getType().equals(Material.WOOD_PLATE) || e.getClickedBlock().getType().equals(Material.STONE_PLATE) ||
-                    e.getClickedBlock().getType().equals(Material.GOLD_PLATE) || e.getClickedBlock().getType().equals(Material.IRON_PLATE) ||
-                    e.getClickedBlock().getType().equals(Material.TRAP_DOOR) || e.getClickedBlock().getType().equals(Material.LEVER) ||
-                    e.getClickedBlock().getType().equals(Material.BED_BLOCK) || e.getClickedBlock().getType().equals(Material.DIODE_BLOCK_OFF) ||
-                    e.getClickedBlock().getType().equals(Material.DIODE_BLOCK_ON) || e.getClickedBlock().getType().equals(Material.REDSTONE_COMPARATOR_ON) ||
-                    e.getClickedBlock().getType().equals(Material.REDSTONE_COMPARATOR_OFF))) || e.getAction().equals(Action.PHYSICAL)) {
+                    e.getClickedBlock().getType().equals(Material.ACACIA_DOOR) || e.getClickedBlock().getType().equals(Material.BIRCH_DOOR) ||
+                    e.getClickedBlock().getType().equals(Material.DARK_OAK_DOOR) || e.getClickedBlock().getType().equals(Material.JUNGLE_DOOR) ||
+                    e.getClickedBlock().getType().equals(Material.SPRUCE_DOOR) || e.getClickedBlock().getType().equals(Material.ACACIA_FENCE_GATE) ||
+                    e.getClickedBlock().getType().equals(Material.BIRCH_FENCE_GATE) || e.getClickedBlock().getType().equals(Material.DARK_OAK_FENCE_GATE) ||
+                    e.getClickedBlock().getType().equals(Material.FENCE_GATE) || e.getClickedBlock().getType().equals(Material.JUNGLE_FENCE_GATE) ||
+                    e.getClickedBlock().getType().equals(Material.SPRUCE_FENCE_GATE) || e.getClickedBlock().getType().equals(Material.STONE_BUTTON) ||
+                    e.getClickedBlock().getType().equals(Material.WOOD_BUTTON) || e.getClickedBlock().getType().equals(Material.WOOD_PLATE) ||
+                    e.getClickedBlock().getType().equals(Material.STONE_PLATE) || e.getClickedBlock().getType().equals(Material.GOLD_PLATE) ||
+                    e.getClickedBlock().getType().equals(Material.IRON_PLATE) || e.getClickedBlock().getType().equals(Material.TRAP_DOOR) ||
+                    e.getClickedBlock().getType().equals(Material.LEVER) || e.getClickedBlock().getType().equals(Material.BED_BLOCK) ||
+                    e.getClickedBlock().getType().equals(Material.DIODE_BLOCK_OFF) || e.getClickedBlock().getType().equals(Material.DIODE_BLOCK_ON) ||
+                    e.getClickedBlock().getType().equals(Material.REDSTONE_COMPARATOR_ON) || e.getClickedBlock().getType().equals(Material.REDSTONE_COMPARATOR_OFF))) ||
+                    e.getAction().equals(Action.PHYSICAL)) {
                 Guild owner = gm.chunkOwner(e.getClickedBlock().getChunk());
                 if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
                     if (e.getBlockFace().equals(BlockFace.EAST))
@@ -452,15 +459,33 @@ public class Listeners implements Listener {
                         owner = gm.chunkOwner(new Location(e.getPlayer().getWorld(), e.getClickedBlock().getX(), e.getClickedBlock().getY(),
                                 e.getClickedBlock().getZ() - 1).getChunk());
                 }
-                if (owner != null && u.getGuild() != owner && !owner.allowInteract()) {
-                    if (e.getAction().equals(Action.PHYSICAL) && !owner.isAlly(u.getGuild()))
+                if (owner != null && u.getGuild() != owner) {
+                    if ((e.getClickedBlock().getType().equals(Material.WOODEN_DOOR) || e.getClickedBlock().getType().equals(Material.SPRUCE_FENCE_GATE) ||
+                            e.getClickedBlock().getType().equals(Material.ACACIA_DOOR) || e.getClickedBlock().getType().equals(Material.BIRCH_DOOR) ||
+                            e.getClickedBlock().getType().equals(Material.DARK_OAK_DOOR) || e.getClickedBlock().getType().equals(Material.JUNGLE_DOOR) ||
+                            e.getClickedBlock().getType().equals(Material.SPRUCE_DOOR) || e.getClickedBlock().getType().equals(Material.ACACIA_FENCE_GATE) ||
+                            e.getClickedBlock().getType().equals(Material.BIRCH_FENCE_GATE) || e.getClickedBlock().getType().equals(Material.DARK_OAK_FENCE_GATE) ||
+                            e.getClickedBlock().getType().equals(Material.FENCE_GATE) || e.getClickedBlock().getType().equals(Material.JUNGLE_FENCE_GATE)) && owner.allowInteract()) {
+
+                    } else if (e.getAction().equals(Action.PHYSICAL))
                         e.setCancelled(true);
                     else {
                         e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
+                        if (e.getClickedBlock().getType().equals(Material.WOODEN_DOOR) || e.getClickedBlock().getType().equals(Material.SPRUCE_FENCE_GATE) ||
+                                e.getClickedBlock().getType().equals(Material.ACACIA_DOOR) || e.getClickedBlock().getType().equals(Material.BIRCH_DOOR) ||
+                                e.getClickedBlock().getType().equals(Material.DARK_OAK_DOOR) || e.getClickedBlock().getType().equals(Material.JUNGLE_DOOR) ||
+                                e.getClickedBlock().getType().equals(Material.SPRUCE_DOOR) || e.getClickedBlock().getType().equals(Material.ACACIA_FENCE_GATE) ||
+                                e.getClickedBlock().getType().equals(Material.BIRCH_FENCE_GATE) || e.getClickedBlock().getType().equals(Material.DARK_OAK_FENCE_GATE) ||
+                                e.getClickedBlock().getType().equals(Material.FENCE_GATE) || e.getClickedBlock().getType().equals(Material.JUNGLE_FENCE_GATE)) {
+                            e.getClickedBlock().getState().update();
+                            if (e.getClickedBlock().getLocation().getBlockY() > 0)
+                                e.getClickedBlock().getRelative(BlockFace.DOWN).getState().update();
+                        }
                         e.setCancelled(true);
                     }
                 }
             }
+        }
         if (e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (e.getAction() == Action.LEFT_CLICK_BLOCK)
                 u.setLeft(e.getClickedBlock().getLocation());
@@ -682,12 +707,12 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onPVP(EntityDamageByEntityEvent e) {
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
             final Player p = (Player) e.getEntity();
             final Player damager = (Player) e.getDamager();
             User u = um.getUser(p.getUniqueId());
             User d = um.getUser(damager.getUniqueId());
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
             if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && (gm.chunkOwner(p.getLocation().getChunk()) != null &&
                     !gm.chunkOwner(p.getLocation().getChunk()).canPVP()) ||
                     (gm.chunkOwner(damager.getLocation().getChunk()) != null && !gm.chunkOwner(damager.getLocation().getChunk()).canPVP()))
@@ -708,6 +733,49 @@ public class Listeners implements Listener {
                     }, 200);
                 } catch (Exception er) {
                     er.printStackTrace();
+                }
+            }
+        } else if (e.getDamager() instanceof Player) {
+            Player damager = (Player) e.getDamager();
+            if ((e.getEntity() instanceof ItemFrame || e.getEntity() instanceof Painting) && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") &&
+                !damager.hasPermission("Necessities.guilds.admin")) {
+                Guild owner = gm.chunkOwner(e.getEntity().getLocation().getChunk());
+                User u = um.getUser(damager.getUniqueId());
+                if (owner != null && u.getGuild() != owner) {
+                    u.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
+                    e.setCancelled(true);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteractEntity(PlayerInteractAtEntityEvent e) {
+        User u = um.getUser(e.getPlayer().getUniqueId());
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (e.getRightClicked() instanceof ItemFrame && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") &&
+                !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
+            Guild owner = gm.chunkOwner(e.getRightClicked().getLocation().getChunk());
+            if (owner != null && u.getGuild() != owner) {
+                u.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
+                ItemFrame frame = (ItemFrame) e.getRightClicked();
+                frame.setRotation(frame.getRotation().rotateCounterClockwise());
+                e.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onHangingBreak(HangingBreakByEntityEvent e) {
+        if (e.getRemover() != null && e.getRemover() instanceof Player) {
+            Player p = (Player) e.getRemover();
+            User u = um.getUser(p.getUniqueId());
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+            if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !p.hasPermission("Necessities.guilds.admin")) {
+                Guild owner = gm.chunkOwner(e.getEntity().getLocation().getChunk());
+                if (owner != null && u.getGuild() != owner) {
+                    u.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
+                    e.setCancelled(true);
                 }
             }
         }
@@ -873,6 +941,8 @@ public class Listeners implements Listener {
             bot.logDeath(player.getUniqueId(), e.getDeathMessage());
             e.setKeepLevel(player.hasPermission("Necessities.keepxp"));
             e.setKeepInventory(player.hasPermission("Necessities.keepitems"));
+            if (player.hasPermission("Necessities.keepxp"))
+                e.setDroppedExp(0);
             User u = um.getUser(player.getUniqueId());
             u.setLastPos(player.getLocation());
             if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !player.hasPermission("Necessities.guilds.admin")/* && !player.getWorld().getName().equalsIgnoreCase("BattleGrounds")*/)
@@ -1135,6 +1205,19 @@ public class Listeners implements Listener {
             Guild g = gm.chunkOwner(e.getLocation().getChunk());
             if (g != null && !g.canHostileSpawn() && e.getEntity() instanceof Monster)
                 e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onArmorStandChange(PlayerArmorStandManipulateEvent e) {
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
+            Guild owner = gm.chunkOwner(e.getRightClicked().getLocation().getChunk());
+            User u = um.getUser(e.getPlayer().getUniqueId());
+            if (owner != null && u.getGuild() != owner && !owner.allowInteract()) {
+                e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
+                e.setCancelled(true);
+            }
         }
     }
 }

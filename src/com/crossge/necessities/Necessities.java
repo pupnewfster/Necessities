@@ -200,6 +200,8 @@ public class Necessities extends JavaPlugin {
             com = new CmdToggleChat();
         else if (isEqual(name, "ban"))
             com = new CmdBan();
+        else if (isEqual(name, "tempban"))
+            com = new CmdTempban();
         else if (isEqual(name, "unban"))
             com = new CmdUnban();
         else if (isEqual(name, "banip"))

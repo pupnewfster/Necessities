@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,6 +31,14 @@ public class CmdHide extends Cmd {
                 p.sendMessage(var.getMessages() + "You are now visible.");
                 Bukkit.broadcast(var.getMessages() + "To Ops - " + var.getObj() + p.getDisplayName() + var.getMessages() + " - is now " + ChatColor.DARK_GRAY +
                         "visible" + var.getMessages() + ".", "Necessities.opBroadcast");
+                RankManager rm = new RankManager();
+                String temp = Bukkit.getServerName();
+                String rank = "";
+                if (temp.contains(" "))
+                    temp = "world";
+                if (!rm.getOrder().isEmpty())
+                    rank = ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ");
+                Bukkit.broadcastMessage(ChatColor.WHITE + temp + " " + rank + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE + "Welcome Back.");
                 if (u.opChat()) {
                     u.toggleOpChat();
                     p.sendMessage(var.getMessages() + "You are no longer sending messages to ops.");
