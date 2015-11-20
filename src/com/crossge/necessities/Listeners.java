@@ -33,6 +33,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.server.ServerCommandEvent;
+import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -310,9 +311,9 @@ public class Listeners implements Listener {
     public void onBlockBreak(BlockBreakEvent e) {
         User u = um.getUser(e.getPlayer().getUniqueId());
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
+        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
             Guild owner = gm.chunkOwner(e.getBlock().getChunk());
-            if (!e.getPlayer().hasPermission("Necessities.guilds.admin") && owner != null && u.getGuild() != owner) {
+            if (owner != null && u.getGuild() != owner) {
                 e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
                 e.setCancelled(true);
             }
@@ -483,6 +484,25 @@ public class Listeners implements Listener {
                         }
                         e.setCancelled(true);
                     }
+                }
+            } else if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
+                Block b = e.getClickedBlock();
+                if (e.getBlockFace().equals(BlockFace.EAST) && b.getRelative(BlockFace.EAST).getType().equals(Material.FIRE))
+                    b = e.getClickedBlock().getRelative(BlockFace.EAST);
+                else if (e.getBlockFace().equals(BlockFace.SOUTH) && b.getRelative(BlockFace.SOUTH).getType().equals(Material.FIRE))
+                    b = e.getClickedBlock().getRelative(BlockFace.SOUTH);
+                else if (e.getBlockFace().equals(BlockFace.WEST) && b.getRelative(BlockFace.WEST).getType().equals(Material.FIRE))
+                    b = e.getClickedBlock().getRelative(BlockFace.WEST);
+                else if (e.getBlockFace().equals(BlockFace.NORTH) && b.getRelative(BlockFace.NORTH).getType().equals(Material.FIRE))
+                    b = e.getClickedBlock().getRelative(BlockFace.NORTH);
+                else if (e.getBlockFace().equals(BlockFace.UP) && b.getRelative(BlockFace.UP).getType().equals(Material.FIRE))
+                    b = e.getClickedBlock().getRelative(BlockFace.UP);
+                else if (e.getBlockFace().equals(BlockFace.DOWN) && b.getRelative(BlockFace.DOWN).getType().equals(Material.FIRE))
+                    b = e.getClickedBlock().getRelative(BlockFace.DOWN);
+                Guild owner = gm.chunkOwner(b.getChunk());
+                if (owner != null && u.getGuild() != owner && b.getType().equals(Material.FIRE)) {
+                    e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
+                    e.setCancelled(true);
                 }
             }
         }
@@ -735,17 +755,15 @@ public class Listeners implements Listener {
                     er.printStackTrace();
                 }
             }
-        } else if (e.getDamager() instanceof Player) {
+        } else if (e.getDamager() instanceof Player && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
             Player damager = (Player) e.getDamager();
-            if ((e.getEntity() instanceof ItemFrame || e.getEntity() instanceof Painting) && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") &&
-                !damager.hasPermission("Necessities.guilds.admin")) {
-                Guild owner = gm.chunkOwner(e.getEntity().getLocation().getChunk());
-                User u = um.getUser(damager.getUniqueId());
-                if (owner != null && u.getGuild() != owner) {
-                    u.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
-                    e.setCancelled(true);
-                }
-            }
+            Guild owner = gm.chunkOwner(e.getEntity().getLocation().getChunk());
+            User u = um.getUser(damager.getUniqueId());
+            if ((e.getEntity() instanceof ItemFrame || e.getEntity() instanceof Painting) && !damager.hasPermission("Necessities.guilds.admin") && owner != null && u.getGuild() != owner) {
+                u.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
+                e.setCancelled(true);
+            } else if (owner != null && !owner.canHostileSpawn() && !damager.hasPermission("Necessities.guilds.admin"))
+                e.setCancelled(true);
         }
     }
 
@@ -1209,12 +1227,26 @@ public class Listeners implements Listener {
     }
 
     @EventHandler
+    public void onVehicleDamage(VehicleDamageEvent e) {
+        if(e.getAttacker() instanceof Player) {
+            Player player = (Player) e.getAttacker();
+            User u = um.getUser(player.getUniqueId());
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+            if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !player.hasPermission("Necessities.guilds.admin")) {
+                Guild g = gm.chunkOwner(e.getVehicle().getLocation().getChunk());
+                if (g != null && u.getGuild() != g)
+                    e.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
     public void onArmorStandChange(PlayerArmorStandManipulateEvent e) {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
             Guild owner = gm.chunkOwner(e.getRightClicked().getLocation().getChunk());
             User u = um.getUser(e.getPlayer().getUniqueId());
-            if (owner != null && u.getGuild() != owner && !owner.allowInteract()) {
+            if (owner != null && u.getGuild() != owner) {
                 e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
                 e.setCancelled(true);
             }
