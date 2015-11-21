@@ -98,7 +98,7 @@ public class Listeners implements Listener {
         final Player p = e.getPlayer();
         um.addUser(p);
         um.forceParseUser(p);
-        User u = um.getUser(p.getUniqueId());
+        final User u = um.getUser(p.getUniqueId());
         if (u.getNick() != null)
             p.setDisplayName(u.getNick());
         UUID uuid = p.getUniqueId();
@@ -188,6 +188,10 @@ public class Listeners implements Listener {
                     p.setFlying(true);
                     p.sendMessage(var.getMessages() + "Fly enabled.");
                 }
+                Necessities.getInstance().addHeader(p);
+                Necessities.getInstance().addJanet(p);
+                Necessities.getInstance().updateAll(p);
+                u.updateListName();
                 File f = new File("plugins/Necessities/motd.txt");
                 if (f.exists())
                     try {

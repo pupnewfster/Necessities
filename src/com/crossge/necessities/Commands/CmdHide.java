@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;
 import org.bukkit.Bukkit;
@@ -89,11 +90,13 @@ public class CmdHide extends Cmd {
         for (Player x : Bukkit.getOnlinePlayers())
             if (!x.equals(p) && x.canSee(p) && !x.hasPermission("Necessities.seehidden"))
                 x.hidePlayer(p);
+        Necessities.getInstance().removePlayer(p);
     }
 
     private void unhidePlayer(Player p) {
         for (Player x : Bukkit.getOnlinePlayers())
             if (!x.equals(p) && !x.canSee(p))
                 x.showPlayer(p);
+        Necessities.getInstance().addPlayer(p);
     }
 }

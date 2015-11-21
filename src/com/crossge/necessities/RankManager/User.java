@@ -97,6 +97,8 @@ public class User {
         this.login = System.currentTimeMillis();
         readHomes();
         readIgnored();
+        updateListName();
+        Necessities.getInstance().updateAll(this.bukkitPlayer);
     }
 
     public User(UUID uuid) {
@@ -438,6 +440,11 @@ public class User {
     public void updateListName() {
         if (this.bukkitPlayer == null)
             return;
+        if (Necessities.getInstance().isProtocolLibLoaded()) {
+            this.bukkitPlayer.setDisplayName(getRank().getColor() + (this.nick == null ? this.bukkitPlayer.getName() : this.nick));
+            Necessities.getInstance().updateName(this.bukkitPlayer);
+            return;
+        }
         if (this.nick == null) {
             if (!this.bukkitPlayer.getPlayerListName().equals(this.bukkitPlayer.getName()))
                 this.bukkitPlayer.setPlayerListName(getRank().getColor() + this.bukkitPlayer.getName());
