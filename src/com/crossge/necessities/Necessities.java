@@ -29,12 +29,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.List;
 import java.util.UUID;
 
 public class Necessities extends JavaPlugin {
     private ProtocolManager protocolManager;
+    private WrappedSignedProperty skin;
     private static Necessities instance;
     private static UUID janetID;
     private File configFile = new File("plugins/Necessities", "config.yml");
@@ -152,7 +156,12 @@ public class Necessities extends JavaPlugin {
                 StructureModifier<List<PlayerInfoData>> infoData = tabList.getPlayerInfoDataLists();
                 StructureModifier<EnumWrappers.PlayerInfoAction> infoAction = tabList.getPlayerInfoAction();
                 List<PlayerInfoData> playerInfo = infoData.read(0);
-                playerInfo.add(new PlayerInfoData(new WrappedGameProfile(janetID, "Janet"), 0, EnumWrappers.NativeGameMode.CREATIVE,
+                WrappedGameProfile janetProfile = new WrappedGameProfile(janetID, "Janet");
+                if (this.skin == null)
+                    this.skin = getSkin();
+                if (this.skin != null)
+                    janetProfile.getProperties().put("textures", this.skin);
+                playerInfo.add(new PlayerInfoData(janetProfile, 0, EnumWrappers.NativeGameMode.CREATIVE,
                         WrappedChatComponent.fromText(ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") + "Janet")));
                 infoData.write(0, playerInfo);
                 infoAction.write(0, EnumWrappers.PlayerInfoAction.ADD_PLAYER);
@@ -167,12 +176,35 @@ public class Necessities extends JavaPlugin {
             try {
                 PacketContainer tabList = this.protocolManager.createPacket(PacketType.Play.Server.PLAYER_LIST_HEADER_FOOTER);
                 StructureModifier<WrappedChatComponent> chatStuff = tabList.getChatComponents();
-                chatStuff.write(0, WrappedChatComponent.fromText("GamezGalaxy"));
+                chatStuff.write(0, WrappedChatComponent.fromText(ChatColor.GREEN + "GamezGalaxy"));
                 chatStuff.write(1, WrappedChatComponent.fromText(ChatColor.BLUE + "http://gamezgalaxy.com"));
                 this.protocolManager.sendServerPacket(p, tabList);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+    }
+
+    private WrappedSignedProperty getSkin() {
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://sessionserver.mojang.com/session/minecraft/profile/" +
+                    UUID.fromString("136f2ba6-2be3-444c-a296-8ec597edb57e").toString().replaceAll("-", "") + "?unsigned=false").openConnection().getInputStream()));
+            String value = "";
+            String signature = "";
+            int count = 0;
+            for (char c : in.readLine().toCharArray()) {
+                if (c == '"')
+                    count++;
+                else if (count == 17)
+                    value += c;
+                else if (count == 21)
+                    signature += c;
+                if (count > 21)
+                    break;
+            }
+            in.close();
+            return new WrappedSignedProperty("textures", value, signature);
+        } catch (Exception ignored) { }
+        return null;
     }
 
 
