@@ -33,6 +33,8 @@ public class PowerManager {
         if (!players.contains(p))
             return;
         final User u = um.getUser(p.getUniqueId());
+        if (u.getPower() == 20)
+            return;
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
         scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
             @Override

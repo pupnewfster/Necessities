@@ -1,5 +1,7 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Economy.BalChecks;
+import com.crossge.necessities.Economy.Formatter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -9,6 +11,9 @@ import java.util.UUID;
 
 public class CmdTitle extends Cmd {
     private File configFileTitles = new File("plugins/Necessities", "titles.yml");
+    private File configFile = new File("plugins/Necessities", "config.yml");
+    BalChecks balc = new BalChecks();
+    Formatter form = new Formatter();
 
     public boolean commandUse(CommandSender sender, String[] args) {
         if (args.length == 0) {
@@ -21,10 +26,12 @@ public class CmdTitle extends Cmd {
             return true;
         }
         Player target = sender.getServer().getPlayer(uuid);
+        boolean free = !(sender instanceof Player);
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (target != p && !p.hasPermission("Necessities.bracketOthers"))
                 target = p;
+            free = p.hasPermission("Necessities.freeCommand");
         }
         YamlConfiguration configTitles = YamlConfiguration.loadConfiguration(configFileTitles);
         if (args.length == 1) {
@@ -40,6 +47,16 @@ public class CmdTitle extends Cmd {
         String title = "";
         for (String arg : args)
             title += arg + " ";
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free) {
+            double price = 1000;
+            if (balc.balance(target.getUniqueId()) < 1000) {
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must have $1000 to change your title.");
+                return true;
+            }
+            balc.removeMoney(target.getUniqueId(), price);
+            target.sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() + " was removed from your acount.");
+        }
         title = title.replaceFirst(args[0], "").trim();
         configTitles.set(target.getUniqueId() + ".title", title);
         if (configTitles.get(target.getUniqueId() + ".color") == null)

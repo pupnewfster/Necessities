@@ -307,7 +307,7 @@ public class Janet {
             if (!whitelistedIP(temp)) {
                 if (validateIPAddress(temp))
                     orig[i] = starIP(orig[i]);
-                else if (!temp.contains("http://") && (temp.split("\\.").length == 3 || temp.split("\\.").length == 3))
+                /*else if (!temp.contains("http://") && (temp.split("\\.").length == 3 || temp.split("\\.").length == 3))
                     try {
                         URLConnection urlCon = new URL("http://" + temp).openConnection();
                         urlCon.connect();
@@ -318,7 +318,7 @@ public class Janet {
                             orig[i] = starIP(orig[i]);
                     } catch (Exception e) {
                         e.printStackTrace();
-                    }
+                    }*/
             }
         }
         String censored = "";

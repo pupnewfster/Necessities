@@ -1014,13 +1014,11 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onCommand(ServerCommandEvent e) {
-    	if (!e.getCommand().startsWith("list")) {
-	        if (console.chatToggled() && !e.getCommand().equalsIgnoreCase("togglechat") && !e.getCommand().equalsIgnoreCase("tc"))
-	            e.setCommand("say " + e.getCommand());
-	        e.setCommand(ChatColor.translateAlternateColorCodes('&', e.getCommand()));
-	        spy.broadcast(console.getName().replaceAll(":", "") + ChatColor.AQUA, e.getCommand());
-	        bot.logConsole(e.getCommand());
-        }
+        if (console.chatToggled() && !e.getCommand().equalsIgnoreCase("togglechat") && !e.getCommand().equalsIgnoreCase("tc"))
+            e.setCommand("say " + e.getCommand());
+        e.setCommand(ChatColor.translateAlternateColorCodes('&', e.getCommand()));
+        spy.broadcast(console.getName().replaceAll(":", "") + ChatColor.AQUA, e.getCommand());
+        bot.logConsole(e.getCommand());
     }
 
     @EventHandler

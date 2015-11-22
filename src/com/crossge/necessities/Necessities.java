@@ -3,7 +3,9 @@ package com.crossge.necessities;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.injector.BukkitUnwrapper;
 import com.comphenix.protocol.reflect.FieldUtils;
 import com.comphenix.protocol.reflect.FuzzyReflection;
@@ -22,6 +24,8 @@ import com.crossge.necessities.RankManager.UserManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -60,6 +64,7 @@ public class Necessities extends JavaPlugin {
         janetID = UUID.randomUUID();
         try {
             this.protocolManager = ProtocolLibrary.getProtocolManager();
+            addPacketListener();
         } catch (Exception e) {}//Not using protocollib
         Initialization init = new Initialization();
         init.initiateFiles();
@@ -69,6 +74,32 @@ public class Necessities extends JavaPlugin {
         Bukkit.getServicesManager().register(Economy.class, new BalChecks(), Bukkit.getPluginManager().getPlugin("Vault"), ServicePriority.Normal);
 
         getLogger().info("Necessities enabled.");
+    }
+
+    private void addPacketListener() {
+        /*final CmdHide hide = new CmdHide();
+        this.protocolManager.addPacketListener(new PacketAdapter(this, PacketType.Play.Server.BLOCK_ACTION, PacketType.Play.Server.NAMED_SOUND_EFFECT) {
+            @Override
+            public void onPacketSending(PacketEvent event) {
+                PacketType type = event.getPacketType();
+                if (type == PacketType.Play.Server.BLOCK_ACTION) {
+
+                    if (!hide.isHidden(event.getPlayer())) {
+
+                    }
+                    World world = event.getPlayer().getWorld();
+                    BlockPosition pos = event.getPacket().getBlockPositionModifier().read(0);
+                    if (world.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getType() == Material.CHEST || world.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getType() == Material.TRAPPED_CHEST ||
+                            world.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getType() == Material.ENDER_CHEST)
+                        event.setCancelled(true);
+                } else if (type == PacketType.Play.Server.NAMED_SOUND_EFFECT) {
+
+                    String soundEffectName = event.getPacket().getSpecificModifier(String.class).read(0);
+                    if (soundEffectName.contains("chest"))
+                        event.setCancelled(true);
+                }
+            }
+        });*/
     }
 
     public void removePlayer(Player p) {
@@ -425,9 +456,9 @@ public class Necessities extends JavaPlugin {
             com = new CmdPrice();
         else if (isEqual(name, "setprice"))
             com = new CmdSetPrice();
-        /*else if (isEqual(name, "buy"))
+        else if (isEqual(name, "buy"))
             com = new CmdBuy();
-        else if (isEqual(name, "sell"))
+        /*else if (isEqual(name, "sell"))
             com = new CmdSell();*/
         else if (isEqual(name, "taccept"))
             com = new CmdTAccept();

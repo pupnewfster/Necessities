@@ -24,6 +24,8 @@ public class Formatter {
     }
 
     public String capFirst(String matName) {
+        if (matName == null)
+            return "";
         String name = "";
         matName = matName.replaceAll("_", " ").toLowerCase();
         String[] namePieces = matName.split(" ");
