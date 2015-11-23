@@ -1,5 +1,6 @@
 package com.crossge.necessities.RankManager;
 
+import com.crossge.necessities.Commands.CmdHide;
 import com.crossge.necessities.Economy.BalChecks;
 import com.crossge.necessities.Economy.Formatter;
 import com.crossge.necessities.Economy.Materials;
@@ -9,7 +10,6 @@ import com.crossge.necessities.Necessities;
 import com.crossge.necessities.ScoreBoards;
 import com.crossge.necessities.Variables;
 import com.google.common.io.Files;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.util.BlockIterator;
@@ -26,36 +27,23 @@ import java.io.IOException;
 import java.util.*;
 
 public class User {
-    private File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
-    private File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
-    private File configFile = new File("plugins/Necessities", "config.yml");
+    private File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml"), configFileUsers = new File("plugins/Necessities/RankManager", "users.yml"),
+            configFile = new File("plugins/Necessities", "config.yml");
     private HashMap<String, Location> homes = new HashMap<String, Location>();
-    private ArrayList<String> permissions = new ArrayList<String>();
-    private ArrayList<String> subranks = new ArrayList<String>();
+    private ArrayList<String> permissions = new ArrayList<String>(), subranks = new ArrayList<String>();
     private ArrayList<UUID> ignored = new ArrayList<UUID>();
     private PermissionAttachment attachment;
     private String appended = "";
-    private boolean teleporting = false;
-    private boolean jailed = false;
-    private boolean opChat = false;
-    private boolean afk = false;
-    private boolean isbacking = false;
-    private boolean god = false;
-    private boolean muted = false;
-    private boolean autoClaiming = false;
+    private boolean teleporting = false, jailed = false, opChat = false, afk = false, isbacking = false, god = false, muted = false, autoClaiming = false, guildChat = false;
     private double power = 0.0;
+    private Inventory openInv;
     private Guild guild;
-    private long lastAction = 0;
-    private long lastAFK = 0;
-    private int pastTotal = 0;
-    private int lastActionTask = 0;
-    private int afkTask = 0;
+    private long lastAction = 0, lastAFK = 0;
+    private int pastTotal = 0, lastActionTask = 0, afkTask = 0;
     private long login = 0;
     private String lastContact;
     private Player bukkitPlayer;
-    private Location lastPos;
-    private Location right;
-    private Location left;
+    private Location lastPos, right, left;
     private UUID userUUID;
     private String nick;
     private Rank rank;
@@ -99,6 +87,11 @@ public class User {
         readIgnored();
         updateListName();
         Necessities.getInstance().updateAll(this.bukkitPlayer);
+        CmdHide hide = new CmdHide();
+        if (hide.isHidden(this.bukkitPlayer)) {
+            this.opChat = true;
+            hide.hidePlayer(this.bukkitPlayer);
+        }
     }
 
     public User(UUID uuid) {
@@ -737,6 +730,22 @@ public class User {
 
     public void toggleOpChat() {
         this.opChat = !this.opChat;
+    }
+
+    public boolean guildChat() {
+        return this.guildChat;
+    }
+
+    public void toggleGuildChat() {
+        this.guildChat = !this.guildChat;
+    }
+
+    public void setOpenInv(Inventory view) {
+        this.openInv = view;
+    }
+
+    public Inventory getOpenInv() {
+        return this.openInv;
     }
 
     public void removePower() {

@@ -2,6 +2,7 @@ package com.crossge.necessities.Commands;
 
 import com.crossge.necessities.Economy.BalChecks;
 import com.crossge.necessities.Economy.Formatter;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -48,16 +49,19 @@ public class CmdTitle extends Cmd {
         for (String arg : args)
             title += arg + " ";
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        title = title.replaceFirst(args[0], "").trim();
+        if (ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', title + "&r")).length() > 24) {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Titles have a maximum of 24 characters.");
+            return true;
+        }
         if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free) {
-            double price = 1000;
             if (balc.balance(target.getUniqueId()) < 1000) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must have $1000 to change your title.");
                 return true;
             }
-            balc.removeMoney(target.getUniqueId(), price);
-            target.sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() + " was removed from your acount.");
+            balc.removeMoney(target.getUniqueId(), 1000);
+            target.sendMessage(var.getMoney() + "$1000.00" + var.getMessages() + " was removed from your acount.");
         }
-        title = title.replaceFirst(args[0], "").trim();
         configTitles.set(target.getUniqueId() + ".title", title);
         if (configTitles.get(target.getUniqueId() + ".color") == null)
             configTitles.set(target.getUniqueId() + ".color", "r");

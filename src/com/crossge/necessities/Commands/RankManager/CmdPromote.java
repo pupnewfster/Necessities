@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands.RankManager;
 
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -32,7 +33,7 @@ public class CmdPromote extends RankCmd {
         String name = "Console";
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (!player.hasPermission("Necessities.rankmanager.setranksame") && rm.hasRank(um.getUser(player.getUniqueId()).getRank(), u.getRank())) {
+            if (!player.hasPermission("Necessities.rankmanager.setranksame") && rm.getOrder().indexOf(um.getUser(player.getUniqueId()).getRank()) - rm.getOrder().indexOf(u.getRank()) <= 1) {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You may not promote people to same rank as yourself.");
                 return true;
             }

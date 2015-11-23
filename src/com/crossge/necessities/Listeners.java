@@ -16,7 +16,6 @@ import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
 import com.crossge.necessities.WorldManager.PortalManager;
 import com.crossge.necessities.WorldManager.WorldManager;
-
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.command.PluginCommand;
@@ -160,11 +159,15 @@ public class Listeners implements Listener {
                 }
             });
         } else {
+            final boolean hidden = hide.isHidden(e.getPlayer());
             BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
             scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    Bukkit.broadcastMessage(JanetName + "Welcome back.");
+                    if (hidden)
+                        Bukkit.broadcast(var.getMessages() + "To Ops - " + JanetName + "Welcome back.", "Necessities.opBroadcast");
+                    else
+                        Bukkit.broadcastMessage(JanetName + "Welcome back.");
                 }
             });
         }
@@ -173,11 +176,17 @@ public class Listeners implements Listener {
         bot.logIn(uuid);
         hide.playerJoined(p);
         u.setLastAction(System.currentTimeMillis());
+        if (hide.isHidden(e.getPlayer())) {
+            Bukkit.broadcast(var.getMessages() + "To Ops - " + e.getJoinMessage(), "Necessities.opBroadcast");
+            e.setJoinMessage(null);
+            hide.hidePlayer(e.getPlayer());
+        }
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds"))
             power.addPlayer(p);
-        for (User m : um.getUsers().values())//TODO: Figure out if really needed 99% likely it is
-            m.updateListName();
+        if (!Necessities.getInstance().isProtocolLibLoaded())
+            for (User m : um.getUsers().values())
+                m.updateListName();
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
             @Override
             public void run() {
@@ -190,6 +199,7 @@ public class Listeners implements Listener {
                 }
                 Necessities.getInstance().addHeader(p);
                 Necessities.getInstance().addJanet(p);
+                Necessities.getInstance().refreshJanet(p);
                 Necessities.getInstance().updateAll(p);
                 u.updateListName();
                 File f = new File("plugins/Necessities/motd.txt");
@@ -224,7 +234,6 @@ public class Listeners implements Listener {
             u.setAfk(false);
         u.logOut();
         bot.logOut(uuid);
-        hide.removeP(uuid);
         um.removeUser(uuid);
         if (acb.contains(e.getPlayer())) {
             e.getPlayer().setHealth(0);
@@ -860,6 +869,9 @@ public class Listeners implements Listener {
     public void onChat(AsyncPlayerChatEvent e) {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         User u = um.getUser(e.getPlayer().getUniqueId());
+        if (u.isAfk())
+            u.setAfk(false);
+        u.setLastAction(System.currentTimeMillis());
         Player player = e.getPlayer();
         final UUID uuid = player.getUniqueId();
         String m = e.getMessage();
@@ -888,6 +900,11 @@ public class Listeners implements Listener {
             e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
             e.setMessage(e.getMessage().replaceFirst("#", ""));
+        } else if (u.guildChat()) {
+            e.setFormat(var.getMessages() + "To Guild - " + ChatColor.WHITE + e.getFormat());
+            e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
         }
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.getGuild() != null && u.getGuild().getRank(uuid) != null) {
             String prefix = gm.getPrefix(u.getGuild().getRank(uuid));
@@ -920,7 +937,8 @@ public class Listeners implements Listener {
             if (!e.getRecipients().isEmpty()) {
                 ArrayList<Player> toRem = new ArrayList<Player>();
                 for (Player recip : e.getRecipients())
-                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (isop && !recip.hasPermission("Necessities.opBroadcast")))
+                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (isop && !recip.hasPermission("Necessities.opBroadcast")) || (u.guildChat() && u.getGuild() != null &&
+                        u.getGuild() != um.getUser(recip.getUniqueId()).getGuild()))
                         toRem.add(recip);
                 for (Player recip : toRem)
                     e.getRecipients().remove(recip);
@@ -928,21 +946,16 @@ public class Listeners implements Listener {
             if (!e.getRecipients().isEmpty())
                 for (Player recip : e.getRecipients()) {
                     User r = um.getUser(recip.getUniqueId());
-                    if (u.getGuild() == null || u.getGuild().getRank(uuid) == null || (config.contains("Necessities.Guilds") &&
-                            !config.getBoolean("Necessities.Guilds")))
+                    if (u.getGuild() == null || u.getGuild().getRank(uuid) == null || (config.contains("Necessities.Guilds") && !config.getBoolean("Necessities.Guilds")))
                         recip.sendMessage(e.getFormat().replaceFirst("\\{GCOLOR\\}", "").replaceAll("\\{MESSAGE\\}", "") + e.getMessage());
                     else
-                        recip.sendMessage(e.getFormat().replaceFirst("\\{GCOLOR\\}", u.getGuild().relation(r.getGuild()) + "").replaceAll("\\{MESSAGE\\}",
-                                "") + e.getMessage());
+                        recip.sendMessage(e.getFormat().replaceFirst("\\{GCOLOR\\}", u.getGuild().relation(r.getGuild()) + "").replaceAll("\\{MESSAGE\\}", "") + e.getMessage());
                 }
             Bukkit.getConsoleSender().sendMessage(e.getFormat().replaceFirst("\\{GCOLOR\\}", var.getNeutral() + "").replaceAll("\\{MESSAGE\\}", "") +
                     e.getMessage());
         }
         e.setCancelled(true);
-        if (u.isAfk())
-            u.setAfk(false);
-        u.setLastAction(System.currentTimeMillis());
-        if (config.contains("Necessities.AI") && config.getBoolean("Necessities.AI"))
+        if (config.contains("Necessities.AI") && config.getBoolean("Necessities.AI") && !isop && !u.guildChat())
             try {
                 BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
                 scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
@@ -1207,13 +1220,14 @@ public class Listeners implements Listener {
         if (e.getInventory() instanceof PlayerInventory)
             invsee.closeInv((PlayerInventory) e.getInventory());
         User u = um.getUser(e.getPlayer().getUniqueId());
+        u.setOpenInv(null);
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
     }
 
     @EventHandler
-    public void onPickupItem(PlayerPickupItemEvent e) {
+     public void onPickupItem(PlayerPickupItemEvent e) {
         if (hide.isHidden(e.getPlayer()))
             e.setCancelled(true);
     }

@@ -18,6 +18,7 @@ import com.crossge.necessities.Commands.RankManager.*;
 import com.crossge.necessities.Commands.WorldManager.*;
 import com.crossge.necessities.Economy.BalChecks;
 import com.crossge.necessities.Janet.Janet;
+import com.crossge.necessities.RankManager.Rank;
 import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
@@ -26,10 +27,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -37,6 +42,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -83,17 +90,19 @@ public class Necessities extends JavaPlugin {
             public void onPacketSending(PacketEvent event) {
                 PacketType type = event.getPacketType();
                 if (type == PacketType.Play.Server.BLOCK_ACTION) {
-
-                    if (!hide.isHidden(event.getPlayer())) {
-
-                    }
                     World world = event.getPlayer().getWorld();
                     BlockPosition pos = event.getPacket().getBlockPositionModifier().read(0);
-                    if (world.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getType() == Material.CHEST || world.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getType() == Material.TRAPPED_CHEST ||
-                            world.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getType() == Material.ENDER_CHEST)
-                        event.setCancelled(true);
+                    if (world.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getType() == Material.CHEST || world.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getType() == Material.TRAPPED_CHEST) {
+                        Block b = world.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
+                        Inventory i = ((InventoryHolder) b.getState()).getInventory();
+                        for (User u : um.getUsers().values()) {
+                            if (u.getOpenInv() != null && i != null && u.getOpenInv().getContents().equals(i.getContents()) && hide.isHidden(u.getPlayer())) {
+                                Bukkit.broadcastMessage("TEST");
+                                event.setCancelled(true);
+                            }
+                        }
+                    }
                 } else if (type == PacketType.Play.Server.NAMED_SOUND_EFFECT) {
-
                     String soundEffectName = event.getPacket().getSpecificModifier(String.class).read(0);
                     if (soundEffectName.contains("chest"))
                         event.setCancelled(true);
@@ -196,6 +205,28 @@ public class Necessities extends JavaPlugin {
                         WrappedChatComponent.fromText(ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") + "Janet")));
                 infoData.write(0, playerInfo);
                 infoAction.write(0, EnumWrappers.PlayerInfoAction.ADD_PLAYER);
+                this.protocolManager.sendServerPacket(p, tabList);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    }
+
+    public void refreshJanet(Player p) {
+        if (this.protocolManager != null)
+            try {
+                PacketContainer tabList = this.protocolManager.createPacket(PacketType.Play.Server.PLAYER_INFO, true);
+                StructureModifier<List<PlayerInfoData>> infoData = tabList.getPlayerInfoDataLists();
+                StructureModifier<EnumWrappers.PlayerInfoAction> infoAction = tabList.getPlayerInfoAction();
+                List<PlayerInfoData> playerInfo = infoData.read(0);
+                WrappedGameProfile janetProfile = new WrappedGameProfile(janetID, "Janet");
+                if (this.skin == null)
+                    this.skin = getSkin();
+                if (this.skin != null)
+                    janetProfile.getProperties().put("textures", this.skin);
+                playerInfo.add(new PlayerInfoData(janetProfile, 0, EnumWrappers.NativeGameMode.CREATIVE,
+                        WrappedChatComponent.fromText(ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") + "Janet")));
+                infoData.write(0, playerInfo);
+                infoAction.write(0, EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME);
                 this.protocolManager.sendServerPacket(p, tabList);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -441,6 +472,8 @@ public class Necessities extends JavaPlugin {
             com = new CmdBazooka();
         else if (isEqual(name, "wrench"))
             com = new CmdWrench();
+        else if (isEqual(name, "chestlook"))
+            com = new CmdChestLook();
             //Economy
         else if (isEqual(name, "bal"))
             com = new CmdBalance();
@@ -458,8 +491,8 @@ public class Necessities extends JavaPlugin {
             com = new CmdSetPrice();
         else if (isEqual(name, "buy"))
             com = new CmdBuy();
-        /*else if (isEqual(name, "sell"))
-            com = new CmdSell();*/
+        else if (isEqual(name, "sell"))
+            com = new CmdSell();
         else if (isEqual(name, "taccept"))
             com = new CmdTAccept();
         else if (isEqual(name, "tdeny"))
@@ -573,10 +606,11 @@ public class Necessities extends JavaPlugin {
     @Override
     public void onDisable() {
         CmdCommandSpy cs = new CmdCommandSpy();
-        UserManager um = new UserManager();
+        CmdHide hide = new CmdHide();
         Janet bot = new Janet();
         um.unload();
         cs.unload();
+        hide.unload();
         bot.unload();
 
         getLogger().info("Necessities disabled.");

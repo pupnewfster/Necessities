@@ -1,6 +1,7 @@
 package com.crossge.necessities.Commands.RankManager;
 
 import com.crossge.necessities.Economy.Formatter;
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.Rank;
 import com.crossge.necessities.RankManager.User;
 import org.bukkit.Bukkit;
@@ -34,7 +35,8 @@ public class CmdSetrank extends RankCmd {
         String name = "Console";
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (!player.hasPermission("Necessities.rankmanager.setranksame") && rm.hasRank(um.getUser(player.getUniqueId()).getRank(), r)) {
+            if (!player.hasPermission("Necessities.rankmanager.setranksame") && (rm.getOrder().indexOf(um.getUser(player.getUniqueId()).getRank()) - rm.getOrder().indexOf(u.getRank()) <= 0 ||
+                    rm.getOrder().indexOf(um.getUser(player.getUniqueId()).getRank()) - rm.getOrder().indexOf(r) <= 0)) {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You may not change the rank of someone higher than you.");
                 return true;
             }

@@ -1,7 +1,6 @@
 package com.crossge.necessities.Economy;
 
 import com.crossge.necessities.Variables;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;

@@ -32,14 +32,17 @@ public class CmdNick extends Cmd {
                 return true;
             } else if (args.length == 1) {
                 UUID uuid = get.getID(args[0]);
+                if (ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', args[0] + "&r")).length() > 24) {
+                    p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Nicks have a maximum of 24 characters.");
+                    return true;
+                }
                 if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free) {
-                    double price = 2000;
                     if (balc.balance(p.getUniqueId()) < 2000) {
-                        sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must have $2000 to change your nick.");
+                        p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must have $2000 to change your nick.");
                         return true;
                     }
-                    balc.removeMoney(p.getUniqueId(), price);
-                    p.sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() + " was removed from your acount.");
+                    balc.removeMoney(p.getUniqueId(), 2000);
+                    p.sendMessage(var.getMoney() + "$2000.00" + var.getMessages() + " was removed from your acount.");
                 }
                 if (uuid == null) {
                     User u = um.getUser(p.getUniqueId());
@@ -78,14 +81,17 @@ public class CmdNick extends Cmd {
             sender.sendMessage(var.getMessages() + "Nickname for " + var.getObj() + target.getName() + var.getMessages() + " removed");
         } else {
             User u = um.getUser(target.getUniqueId());
+            if (ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', args[1] + "&r")).length() > 24) {
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Nicks have a maximum of 24 characters.");
+                return true;
+            }
             if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free) {
-                double price = 2000;
                 if (balc.balance(target.getUniqueId()) < 2000) {
                     sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must have $2000 to change your nick.");
                     return true;
                 }
-                balc.removeMoney(target.getUniqueId(), price);
-                target.sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() + " was removed from your acount.");
+                balc.removeMoney(target.getUniqueId(), 2000);
+                target.sendMessage(var.getMoney() + "$2000.00" + var.getMessages() + " was removed from your acount.");
             }
             u.setNick("~" + args[1] + "&r");
             target.setDisplayName("~" + ChatColor.translateAlternateColorCodes('&', args[1] + "&r"));

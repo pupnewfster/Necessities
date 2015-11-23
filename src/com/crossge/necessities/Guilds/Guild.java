@@ -520,7 +520,7 @@ public class Guild {
     }
 
     public boolean isNeutral(Guild g) {
-        return this.allies.contains(g.getName()) || this.enemies.contains(g.getName());
+        return !this.allies.contains(g.getName()) && !this.enemies.contains(g.getName());
     }
 
     public void kick(UUID uuid) {

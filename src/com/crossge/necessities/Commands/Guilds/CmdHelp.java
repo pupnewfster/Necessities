@@ -108,6 +108,8 @@ public class CmdHelp extends GuildCmd {
                 helpList.add(var.getMessages() + "/guild flag [pvp|permanent|infinite|explosions] [value]" + ChatColor.WHITE + " - Sets a guild flag.");
             if (p.hasPermission("Necessities.guilds.disband"))
                 helpList.add(var.getMessages() + "/guild disband" + ChatColor.WHITE + " - Disbands your guild.");
+            if (p.hasPermission("Necessities.guilds.chat"))
+                helpList.add(var.getMessages() + "/guild chat" + ChatColor.WHITE + " - Toggles guild chat.");
             if (p.hasPermission("Necessities.guilds.help"))
                 helpList.add(var.getMessages() + "/guild help [page]" + ChatColor.WHITE + " - Shows help for guild commands.");
         } else {
@@ -135,6 +137,7 @@ public class CmdHelp extends GuildCmd {
             helpList.add(var.getMessages() + "/guild enemy [guild]" + ChatColor.WHITE + " - Sets [guild] as an enemy.");
             helpList.add(var.getMessages() + "/guild flag [pvp|permanent|infinite] [value]" + ChatColor.WHITE + " - Sets a guild flag.");
             helpList.add(var.getMessages() + "/guild disband" + ChatColor.WHITE + " - Disbands your guild.");
+            helpList.add(var.getMessages() + "/guild chat" + ChatColor.WHITE + " - Toggles guild chat.");
             helpList.add(var.getMessages() + "/guild help [page]" + ChatColor.WHITE + " - Shows help for guild commands.");
         }
     }

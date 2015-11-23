@@ -16,6 +16,11 @@ commands:
       usage: /<command> <level_amount>
       permission: Necessities.economy.l2m
       aliases: [lm, nlm, nl2m]
+   chestlook:
+      description: Opens the chest you are looking at.
+      usage: /<command>
+      permission: Necessities.chestlook
+      aliases: [cl, ncl, nchestlook]
    machinegun:
       description: Turns your bow into a machine gun.
       usage: /<command>
@@ -767,6 +772,7 @@ permissions:
             Necessities.extOthers: true
             Necessities.godOthers: true
             Necessities.flyOthers: true
+            Necessities.chestlook: true
             Necessities.gamemode: true
             Necessities.setspawn: true
             Necessities.ragequit: true
@@ -937,6 +943,7 @@ permissions:
                 Necessities.guilds.claim: true
                 Necessities.guilds.admin: true
                 Necessities.guilds.enemy: true
+                Necessities.guilds.chat: true
                 Necessities.guilds.list: true
                 Necessities.guilds.info: true
                 Necessities.guilds.home: true
@@ -961,6 +968,9 @@ permissions:
         default: true
     Necessities.guilds.home:
         description: Allows you to use /guild home.
+        default: true
+    Necessities.guilds.chat:
+        description: Allows you to use /guild chat.
         default: true
     Necessities.guilds.description:
         description: Allows you to use /guild description.
@@ -1564,4 +1574,7 @@ permissions:
         default: op
     Necessities.tempban:
         description: Allows one to tempban others.
+        default: op
+    Necessities.chestlook:
+        description: Allows one to look at chests.
         default: op

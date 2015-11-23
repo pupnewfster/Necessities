@@ -1,6 +1,7 @@
 package com.crossge.necessities;
 
 import com.crossge.necessities.Commands.CmdCommandSpy;
+import com.crossge.necessities.Commands.CmdHide;
 import com.crossge.necessities.Economy.*;
 import com.crossge.necessities.Guilds.GuildManager;
 import com.crossge.necessities.Guilds.PowerManager;
@@ -30,6 +31,7 @@ public class Initialization {
     private File configFileIds = new File("plugins/Necessities/Economy", "ids.yml");
     private File configFileCensors = new File("plugins/Necessities", "censors.yml");
     private File configFileSpying = new File("plugins/Necessities", "spying.yml");
+    private File configFileHiding = new File("plugins/Necessities", "hiding.yml");
     private File configFileTitles = new File("plugins/Necessities", "titles.yml");
     private File configFile = new File("plugins/Necessities", "config.yml");
     MaterialNames matNames = new MaterialNames();
@@ -48,6 +50,7 @@ public class Initialization {
     Wrenched wrench = new Wrenched();
     Materials mat = new Materials();
     Console console = new Console();
+    CmdHide hide = new CmdHide();
     GetUUID get = new GetUUID();
     JanetAI ai = new JanetAI();
     Prices pr = new Prices();
@@ -86,6 +89,7 @@ public class Initialization {
         bot.initiate();
         wrench.initiate();
         cs.init();
+        hide.init();
         warns.initiate();
         ai.initiate();
 
@@ -138,6 +142,7 @@ public class Initialization {
         addYML(configFileWrench);
         addYML(configFilePrices);
         addYML(configFileSpying);
+        addYML(configFileHiding);
         addYML(configFileWarps);
         addYML(configFileLogIn);
         addYML(configFileUsers);

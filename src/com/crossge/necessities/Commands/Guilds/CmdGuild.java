@@ -43,7 +43,7 @@ public class CmdGuild extends Cmd {
             cmd = new CmdMod();
         else if (subCmd.equalsIgnoreCase("leader") || subCmd.equalsIgnoreCase("owner"))
             cmd = new CmdLeader();
-        else if (subCmd.equalsIgnoreCase("claim") || subCmd.equalsIgnoreCase("c"))
+        else if (subCmd.equalsIgnoreCase("claim"))
             cmd = new CmdClaim();
         else if (subCmd.equalsIgnoreCase("autoclaim"))
             cmd = new CmdAutoclaim();
@@ -61,6 +61,8 @@ public class CmdGuild extends Cmd {
             cmd = new CmdFlag();
         else if (subCmd.equalsIgnoreCase("disband"))
             cmd = new CmdDisband();
+        else if (subCmd.equalsIgnoreCase("chat") || subCmd.equalsIgnoreCase("c"))
+            cmd = new CmdChat();
         else
             cmd = new CmdHelp();
         return cmd.commandUse(sender, subArgs);

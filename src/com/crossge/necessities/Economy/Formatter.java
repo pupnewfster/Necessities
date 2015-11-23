@@ -35,6 +35,8 @@ public class Formatter {
     }
 
     private String upercaseFirst(String word) {
+        if (word == null)
+            return "";
         String firstCapitalized = "";
         if (word.length() > 0)
             firstCapitalized = word.substring(0, 1).toUpperCase();
