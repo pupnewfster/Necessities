@@ -29,6 +29,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.server.ServerCommandEvent;
@@ -675,6 +676,12 @@ public class Listeners implements Listener {
                 }
             }
         }
+        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (e.getClickedBlock().getType().equals(Material.CHEST) || e.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) &&
+                hide.isHidden(e.getPlayer())) {
+            e.setCancelled(true);
+            u.setInvLoc(e.getClickedBlock().getLocation());
+            e.getPlayer().openInventory(((InventoryHolder) e.getClickedBlock().getState()).getInventory());
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -1220,7 +1227,16 @@ public class Listeners implements Listener {
         if (e.getInventory() instanceof PlayerInventory)
             invsee.closeInv((PlayerInventory) e.getInventory());
         User u = um.getUser(e.getPlayer().getUniqueId());
-        u.setOpenInv(null);
+        u.setLastAction(System.currentTimeMillis());
+        if (u.isAfk())
+            u.setAfk(false);
+    }
+
+    @EventHandler
+    public void onInventoryOpen(InventoryOpenEvent e) {
+        User u = um.getUser(e.getPlayer().getUniqueId());
+        if (e.getInventory() instanceof PlayerInventory)
+            u.setInvLoc(null);
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
@@ -1230,6 +1246,14 @@ public class Listeners implements Listener {
      public void onPickupItem(PlayerPickupItemEvent e) {
         if (hide.isHidden(e.getPlayer()))
             e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onEntityTarget(EntityTargetEvent e) {
+        if (e.getTarget() instanceof Player && e.getReason().equals(EntityTargetEvent.TargetReason.CLOSEST_PLAYER) && hide.isHidden((Player) e.getTarget())) {
+            e.setCancelled(true);
+            e.setTarget(null);
+        }
     }
 
     @EventHandler

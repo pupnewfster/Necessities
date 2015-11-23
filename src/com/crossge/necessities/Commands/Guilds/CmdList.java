@@ -11,11 +11,7 @@ import java.util.UUID;
 public class CmdList extends GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         ArrayList<String> guildList = new ArrayList<String>();
-        int guildless = 0;
-        for (UUID uuid : um.getUsers().keySet())
-            if (um.getUser(uuid).getGuild() == null)
-                guildless++;
-        guildList.add(var.getGuildMsgs() + "" + guildless + " guildless online");
+
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.list")) {
@@ -23,17 +19,30 @@ public class CmdList extends GuildCmd {
                 return true;
             }
             User u = um.getUser(p.getUniqueId());
+            int guildless = 0;
+            for (UUID uuid : um.getUsers().keySet()) {
+                User x = um.getUser(uuid);
+                if (x.getGuild() == null && x.getPlayer() != null && p.canSee(x.getPlayer()))
+                    guildless++;
+            }
+            guildList.add(var.getGuildMsgs() + "" + guildless + " guildless online");
             for (String name : gm.getGuilds().keySet()) {
                 Guild g = gm.getGuild(name);
-                guildList.add(g.relation(u.getGuild()) + g.getName() + " " + var.getGuildMsgs() + g.getOnline() + "/" + g.getTotal() + " online, " + g.getLand() + "/" +
+                guildList.add(g.relation(u.getGuild()) + g.getName() + " " + var.getGuildMsgs() + g.getOnline(p.hasPermission("Necessities.seehidden")) + "/" + g.getTotal() + " online, " + g.getLand() + "/" +
                         form.roundTwoDecimals(g.getPower()) + "/" + g.getMaxPower() + ".00");
             }
-        } else
+        } else {
+            int guildless = 0;
+            for (UUID uuid : um.getUsers().keySet())
+                if (um.getUser(uuid).getGuild() == null)
+                    guildless++;
+            guildList.add(var.getGuildMsgs() + "" + guildless + " guildless online");
             for (String name : gm.getGuilds().keySet()) {
                 Guild g = gm.getGuild(name);
-                guildList.add(var.getNeutral() + g.getName() + " " + var.getGuildMsgs() + g.getOnline() + "/" + g.getTotal() + " online, " + g.getLand() + "/" +
+                guildList.add(var.getNeutral() + g.getName() + " " + var.getGuildMsgs() + g.getOnline(true) + "/" + g.getTotal() + " online, " + g.getLand() + "/" +
                         form.roundTwoDecimals(g.getPower()) + "/" + g.getMaxPower() + ".00");
             }
+        }
         int page = 0;
         if (args.length != 0 && !form.isLegal(args[0])) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid help page.");

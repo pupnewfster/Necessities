@@ -76,8 +76,14 @@ public class CmdInfo extends GuildCmd {
                     enemies += other.relation(gm.getGuild(enemy)) + enemy + ", ";
             sender.sendMessage(var.getMessages() + "Enemies: " + enemies.substring(0, enemies.length() - 2));
         }
-        sender.sendMessage(var.getMessages() + "Members online: " + var.getNeutral() + g.onlineMembers());
-        sender.sendMessage(var.getMessages() + "Members offline: " + var.getNeutral() + g.offlineMember());
+        if (sender instanceof Player) {
+            Player p = (Player) sender;
+            p.sendMessage(var.getMessages() + "Members online: " + var.getNeutral() + g.onlineMembers(p.hasPermission("Necessities.seehidden")));
+            p.sendMessage(var.getMessages() + "Members offline: " + var.getNeutral() + g.offlineMember(p.hasPermission("Necessities.seehidden")));
+        } else {
+            sender.sendMessage(var.getMessages() + "Members online: " + var.getNeutral() + g.onlineMembers(true));
+            sender.sendMessage(var.getMessages() + "Members offline: " + var.getNeutral() + g.offlineMember(true));
+        }
         return true;
     }
 

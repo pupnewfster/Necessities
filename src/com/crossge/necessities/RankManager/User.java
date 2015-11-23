@@ -17,7 +17,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.util.BlockIterator;
@@ -36,14 +35,13 @@ public class User {
     private String appended = "";
     private boolean teleporting = false, jailed = false, opChat = false, afk = false, isbacking = false, god = false, muted = false, autoClaiming = false, guildChat = false;
     private double power = 0.0;
-    private Inventory openInv;
     private Guild guild;
     private long lastAction = 0, lastAFK = 0;
     private int pastTotal = 0, lastActionTask = 0, afkTask = 0;
     private long login = 0;
     private String lastContact;
     private Player bukkitPlayer;
-    private Location lastPos, right, left;
+    private Location lastPos, right, left, invLoc;
     private UUID userUUID;
     private String nick;
     private Rank rank;
@@ -740,12 +738,12 @@ public class User {
         this.guildChat = !this.guildChat;
     }
 
-    public void setOpenInv(Inventory view) {
-        this.openInv = view;
+    public void setInvLoc(Location loc) {
+        this.invLoc = loc;
     }
 
-    public Inventory getOpenInv() {
-        return this.openInv;
+    public Location getInvLoc() {
+        return this.invLoc;
     }
 
     public void removePower() {

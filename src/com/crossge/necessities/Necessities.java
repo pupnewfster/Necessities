@@ -18,23 +18,17 @@ import com.crossge.necessities.Commands.RankManager.*;
 import com.crossge.necessities.Commands.WorldManager.*;
 import com.crossge.necessities.Economy.BalChecks;
 import com.crossge.necessities.Janet.Janet;
-import com.crossge.necessities.RankManager.Rank;
 import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -42,8 +36,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -84,31 +76,45 @@ public class Necessities extends JavaPlugin {
     }
 
     private void addPacketListener() {
-        /*final CmdHide hide = new CmdHide();
+        final CmdHide hide = new CmdHide();
         this.protocolManager.addPacketListener(new PacketAdapter(this, PacketType.Play.Server.BLOCK_ACTION, PacketType.Play.Server.NAMED_SOUND_EFFECT) {
             @Override
             public void onPacketSending(PacketEvent event) {
                 PacketType type = event.getPacketType();
                 if (type == PacketType.Play.Server.BLOCK_ACTION) {
-                    World world = event.getPlayer().getWorld();
                     BlockPosition pos = event.getPacket().getBlockPositionModifier().read(0);
-                    if (world.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getType() == Material.CHEST || world.getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getType() == Material.TRAPPED_CHEST) {
-                        Block b = world.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
-                        Inventory i = ((InventoryHolder) b.getState()).getInventory();
+                    Block b = event.getPlayer().getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
+                    if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST) {
+                        Block n = b.getRelative(BlockFace.NORTH);
+                        Block e = b.getRelative(BlockFace.EAST);
+                        Block s = b.getRelative(BlockFace.SOUTH);
+                        Block w = b.getRelative(BlockFace.WEST);
                         for (User u : um.getUsers().values()) {
-                            if (u.getOpenInv() != null && i != null && u.getOpenInv().getContents().equals(i.getContents()) && hide.isHidden(u.getPlayer())) {
-                                Bukkit.broadcastMessage("TEST");
-                                event.setCancelled(true);
-                            }
+                            Location loc = u.getInvLoc();
+                            if (loc != null && hide.isHidden(u.getPlayer()))
+                                if (b.getLocation().equals(loc) || (n.getLocation().equals(loc) && n.getType().equals(b.getType())) || (e.getLocation().equals(loc) && e.getType().equals(b.getType())) ||
+                                        (s.getLocation().equals(loc) && s.getType().equals(b.getType())) || (w.getLocation().equals(loc) && w.getType().equals(b.getType()))) {
+                                    event.setCancelled(true);
+                                    break;
+                                }
                         }
                     }
                 } else if (type == PacketType.Play.Server.NAMED_SOUND_EFFECT) {
                     String soundEffectName = event.getPacket().getSpecificModifier(String.class).read(0);
-                    if (soundEffectName.contains("chest"))
-                        event.setCancelled(true);
+                    if (soundEffectName.contains("chest")) {
+                        Block b = event.getPlayer().getWorld().getBlockAt(event.getPacket().getIntegers().read(0)/8, event.getPacket().getIntegers().read(1)/8, event.getPacket().getIntegers().read(2)/8);
+                        if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST) {
+                            for (User u : um.getUsers().values())
+                                if (u.getInvLoc() != null && hide.isHidden(u.getPlayer()))
+                                    if (b.getLocation().equals(u.getInvLoc())) {
+                                        event.setCancelled(true);
+                                        break;
+                                    }
+                        }
+                    }
                 }
             }
-        });*/
+        });
     }
 
     public void removePlayer(Player p) {
@@ -472,8 +478,6 @@ public class Necessities extends JavaPlugin {
             com = new CmdBazooka();
         else if (isEqual(name, "wrench"))
             com = new CmdWrench();
-        else if (isEqual(name, "chestlook"))
-            com = new CmdChestLook();
             //Economy
         else if (isEqual(name, "bal"))
             com = new CmdBalance();

@@ -1,5 +1,6 @@
 package com.crossge.necessities.Guilds;
 
+import com.crossge.necessities.Commands.CmdHide;
 import com.crossge.necessities.RankManager.UserManager;
 import com.crossge.necessities.Variables;
 import org.bukkit.*;
@@ -285,51 +286,57 @@ public class Guild {
         return getTotal() * 20;
     }
 
-    public String onlineMembers() {
+    public String onlineMembers(boolean countHidden) {
+        CmdHide hide = new CmdHide();
         String member = "";
-        if (!this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) != null)
+        if (!this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) != null &&
+                (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(this.leader)))))
             member += Bukkit.getPlayer(UUID.fromString(this.leader)).getName() + ", ";
         if (!this.mods.isEmpty())
             for (String id : this.mods)
-                if (Bukkit.getPlayer(UUID.fromString(id)) != null)
+                if (Bukkit.getPlayer(UUID.fromString(id)) != null && (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(id)))))
                     member += Bukkit.getPlayer(UUID.fromString(id)).getName() + ", ";
         if (!this.members.isEmpty())
             for (String id : this.members)
-                if (Bukkit.getPlayer(UUID.fromString(id)) != null)
+                if (Bukkit.getPlayer(UUID.fromString(id)) != null && (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(id)))))
                     member += Bukkit.getPlayer(UUID.fromString(id)).getName() + ", ";
         if (member.contains(", "))
             member = member.substring(0, member.length() - 2);
         return member;
     }
 
-    public String offlineMember() {
+    public String offlineMember(boolean countHidden) {
+        CmdHide hide = new CmdHide();
         String member = "";
-        if (!this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) == null)
+        if (!this.leader.equals("") && !this.leader.equals("Janet") && (Bukkit.getPlayer(UUID.fromString(this.leader)) == null ||
+                (!countHidden && hide.isHidden(Bukkit.getPlayer(UUID.fromString(this.leader))))))
             member += Bukkit.getOfflinePlayer(UUID.fromString(this.leader)).getName() + ", ";
         if (!this.mods.isEmpty())
             for (String id : this.mods)
-                if (Bukkit.getPlayer(UUID.fromString(id)) == null)
+                if (Bukkit.getPlayer(UUID.fromString(id)) == null || (!countHidden && hide.isHidden(Bukkit.getPlayer(UUID.fromString(id)))))
                     member += Bukkit.getOfflinePlayer(UUID.fromString(id)).getName() + ", ";
         if (!this.members.isEmpty())
             for (String id : this.members)
-                if (Bukkit.getPlayer(UUID.fromString(id)) == null)
+                if (Bukkit.getPlayer(UUID.fromString(id)) == null || (!countHidden && hide.isHidden(Bukkit.getPlayer(UUID.fromString(id)))))
                     member += Bukkit.getOfflinePlayer(UUID.fromString(id)).getName() + ", ";
         if (member.contains(", "))
             member = member.substring(0, member.length() - 2);
         return member;
     }
 
-    public int getOnline() {
+    public int getOnline(boolean countHidden) {
+        CmdHide hide = new CmdHide();
         int online = 0;
-        if (!this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) != null)
+        if (!this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) != null &&
+                (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(this.leader)))))
             online++;
         if (!this.mods.isEmpty())
             for (String id : this.mods)
-                if (Bukkit.getPlayer(UUID.fromString(id)) != null)
+                if (Bukkit.getPlayer(UUID.fromString(id)) != null && (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(id)))))
                     online++;
         if (!this.members.isEmpty())
             for (String id : this.members)
-                if (Bukkit.getPlayer(UUID.fromString(id)) != null)
+                if (Bukkit.getPlayer(UUID.fromString(id)) != null && (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(id)))))
                     online++;
         return online;
     }

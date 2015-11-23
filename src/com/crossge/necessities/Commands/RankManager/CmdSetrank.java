@@ -1,7 +1,6 @@
 package com.crossge.necessities.Commands.RankManager;
 
 import com.crossge.necessities.Economy.Formatter;
-import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.Rank;
 import com.crossge.necessities.RankManager.User;
 import org.bukkit.Bukkit;

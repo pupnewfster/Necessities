@@ -1,6 +1,5 @@
 package com.crossge.necessities.Commands.RankManager;
 
-import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
