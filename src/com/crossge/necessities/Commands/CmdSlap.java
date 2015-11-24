@@ -19,7 +19,7 @@ public class CmdSlap extends Cmd {
             return true;
         }
         Player target = sender.getServer().getPlayer(uuid);
-        Location loc = new Location(target.getWorld(), target.getLocation().getBlockX(), 1250, target.getLocation().getBlockZ());
+        Location loc = new Location(target.getWorld(), target.getLocation().getBlockX(), 2500, target.getLocation().getBlockZ());
         target.teleport(loc);
         if (sender instanceof Player) {
             Player player = (Player) sender;

@@ -39,7 +39,6 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Diode;
 import org.bukkit.material.MaterialData;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
 
 import java.io.BufferedReader;
@@ -151,8 +150,7 @@ public class Listeners implements Listener {
                     }
             }
             get.addUUID(uuid);
-            BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-            scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     Bukkit.broadcastMessage(welcome);
@@ -161,8 +159,7 @@ public class Listeners implements Listener {
             });
         } else {
             final boolean hidden = hide.isHidden(e.getPlayer());
-            BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-            scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
                 @Override
                 public void run() {
                     if (hidden)
@@ -178,7 +175,7 @@ public class Listeners implements Listener {
         hide.playerJoined(p);
         u.setLastAction(System.currentTimeMillis());
         if (hide.isHidden(e.getPlayer())) {
-            Bukkit.broadcast(var.getMessages() + "To Ops - " + e.getJoinMessage(), "Necessities.opBroadcast");
+            Bukkit.broadcast(var.getMessages() + "To Ops -" + e.getJoinMessage(), "Necessities.opBroadcast");
             e.setJoinMessage(null);
             hide.hidePlayer(e.getPlayer());
         }
@@ -228,7 +225,7 @@ public class Listeners implements Listener {
                         um.getUser(e.getPlayer().getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET + "", var.getGuildMsgs() + ""));
         User u = um.getUser(e.getPlayer().getUniqueId());
         if (hide.isHidden(e.getPlayer())) {
-            Bukkit.broadcast(var.getMessages() + "To Ops - " + e.getQuitMessage(), "Necessities.opBroadcast");
+            Bukkit.broadcast(var.getMessages() + "To Ops -" + e.getQuitMessage(), "Necessities.opBroadcast");
             e.setQuitMessage(null);
         }
         if (u.isAfk())
@@ -267,12 +264,11 @@ public class Listeners implements Listener {
         if (u.isAfk())
             u.setAfk(false);
         u.setLastAction(System.currentTimeMillis());
-        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
             @Override
             public void run() {
-            	if (!from.equals(s))
-            		u.saveInventory(s, from);
+                if (!from.equals(s))
+                    u.saveInventory(s, from);
             }
         });
     }
@@ -306,8 +302,7 @@ public class Listeners implements Listener {
         }
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !from.getChunk().equals(to.getChunk())) {
             if (u.isClaiming()) {
-                BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-                scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         e.getPlayer().performCommand("guild claim");
@@ -763,8 +758,7 @@ public class Listeners implements Listener {
                             (gm.chunkOwner(damager.getLocation().getChunk()) == null || gm.chunkOwner(damager.getLocation().getChunk()).canPVP()))) {
                 acb.addToCombat(p, damager);
                 try {
-                    BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-                    scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
                         @Override
                         public void run() {
                             acb.removeFromCombat(p);
@@ -844,8 +838,7 @@ public class Listeners implements Listener {
             if (e.getBow().getItemMeta().getLore().contains("Machine gun"))
                 for (int i = 0; i < 63; i++)
                     try {
-                        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-                        scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
                             @Override
                             public void run() {
                                 Arrow temp = (Arrow) e.getEntity().getWorld().spawnEntity(l, EntityType.ARROW);
@@ -964,8 +957,7 @@ public class Listeners implements Listener {
         e.setCancelled(true);
         if (config.contains("Necessities.AI") && config.getBoolean("Necessities.AI") && !isop && !u.guildChat())
             try {
-                BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-                scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
                     @Override
                     public void run() {
                         ai.parseMessage(uuid, message);
@@ -1156,8 +1148,7 @@ public class Listeners implements Listener {
                     item.setItemMeta(meta);
                     e.setCurrentItem(item);
                     try {
-                        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-                        scheduler.scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
                             @Override
                             public void run() {//removes the client side bug of item showing as still there
                                 inv.setItem(0, new ItemStack(Material.STONE));

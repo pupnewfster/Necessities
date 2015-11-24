@@ -353,6 +353,10 @@ public class User {
         return this.bukkitPlayer == null ? Bukkit.getOfflinePlayer(this.userUUID).getName() : this.bukkitPlayer.getName();
     }
 
+    public String getDispName() {
+        return this.bukkitPlayer == null ? Bukkit.getOfflinePlayer(this.userUUID).getName() : getRank().getTitle() + this.bukkitPlayer.getDisplayName();
+    }
+
     public Rank getRank() {
         return this.rank;
     }
@@ -480,7 +484,12 @@ public class User {
         if (getPlayer() != null) {
             this.bukkitPlayer.setSleepingIgnored(this.afk);
             Variables var = new Variables();
-            Bukkit.broadcastMessage(var.getMe() + "*" + getRank().getColor() + getPlayer().getDisplayName() + var.getMe() + " is " + (isAfk() ? "now" : "no longer") + " AFK");
+            CmdHide hide = new CmdHide();
+            if (hide.isHidden(this.bukkitPlayer))
+                Bukkit.broadcast(var.getMessages() + "To Ops - " + var.getMe() + "*" + getRank().getColor() + getPlayer().getDisplayName() + var.getMe() + " is " + (isAfk() ? "now" : "no longer") + " AFK",
+                        "Necessities.opBroadcast");
+            else
+                Bukkit.broadcastMessage(var.getMe() + "*" + getRank().getColor() + getPlayer().getDisplayName() + var.getMe() + " is " + (isAfk() ? "now" : "no longer") + " AFK");
         }
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         if (!configUsers.contains(getUUID().toString()))

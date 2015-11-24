@@ -47,6 +47,7 @@ public class Necessities extends JavaPlugin {
     private File configFile = new File("plugins/Necessities", "config.yml");
     UserManager um = new UserManager();
     RankManager rm = new RankManager();
+    DonationReader dr = new DonationReader();
 
     public static Necessities getInstance() {
         return instance;
@@ -67,11 +68,11 @@ public class Necessities extends JavaPlugin {
         } catch (Exception e) {}//Not using protocollib
         Initialization init = new Initialization();
         init.initiateFiles();
-
         getServer().getPluginManager().registerEvents(new Listeners(), this);
 
         Bukkit.getServicesManager().register(Economy.class, new BalChecks(), Bukkit.getPluginManager().getPlugin("Vault"), ServicePriority.Normal);
 
+        dr.init();
         getLogger().info("Necessities enabled.");
     }
 
@@ -616,7 +617,7 @@ public class Necessities extends JavaPlugin {
         cs.unload();
         hide.unload();
         bot.unload();
-
+        dr.disconnect();
         getLogger().info("Necessities disabled.");
     }
 }

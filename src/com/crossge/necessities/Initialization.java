@@ -180,6 +180,7 @@ public class Initialization {
                 config.set("Necessities.firstTime", "Welcome {NAME}!");
                 config.set("Necessities.firstItems", Arrays.asList(""));
                 config.set("Console.AliveStatus", "Alive");
+                config.set("Necessities.DonationPass", "password");
                 config.save(configFile);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -218,6 +219,8 @@ public class Initialization {
                 config.set("Necessities.log", false);
             if (!config.contains("Necessities.customDeny"))
                 config.set("Necessities.customDeny", false);
+            if (!config.contains("Necessities.DonationPass"))
+                config.set("Necessities.DonationPass", "password");
             try {
                 config.save(configFile);
             } catch (Exception e) {
