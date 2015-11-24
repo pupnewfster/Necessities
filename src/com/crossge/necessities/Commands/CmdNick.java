@@ -46,8 +46,13 @@ public class CmdNick extends Cmd {
                 }
                 if (uuid == null) {
                     User u = um.getUser(p.getUniqueId());
-                    u.setNick("~" + args[0] + "&r");
-                    p.setDisplayName("~" + ChatColor.translateAlternateColorCodes('&', args[0] + "&r"));
+                    String nick = args[0];
+                    if (p.hasPermission("Necessities.magicchat"))
+                        nick = ChatColor.translateAlternateColorCodes('&', nick);
+                    else
+                        nick = ChatColor.translateAlternateColorCodes('&', nick.replaceAll("&k", ""));
+                    u.setNick("~" + nick + "&r");
+                    p.setDisplayName("~" + ChatColor.translateAlternateColorCodes('&', nick + "&r"));
                     p.sendMessage(var.getMessages() + "Nickname set to " + p.getDisplayName());
                     return true;
                 }

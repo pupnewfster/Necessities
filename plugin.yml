@@ -646,6 +646,11 @@ commands:
       usage: /<command> <player> <rank>
       permission: Necessities.rankmanager.setrank
       aliases: [rank, nsetrank, nrank]
+   reloadpermissions:
+      description: Reloads the permissions from file.
+      usage: /<command>
+      permission: Necessities.rankmanager.reloadpermissions
+      aliases: [reloadperm, nreloadpermissions, nreloadperm, relperm, nrelperm, relpermissions, nrelpermissions]
    addpermission:
       description: Adds <permission node> to <rank>'s permission nodes.
       usage: /<command> <rank> <permission node>
@@ -759,6 +764,7 @@ permissions:
             Necessities.keepitems: true
             Necessities.nopvpLoss: true
             Necessities.colorchat: true
+            Necessities.magicchat: true
             Necessities.lightning: true
             Necessities.workbench: true
             Necessities.advertise: true
@@ -881,6 +887,7 @@ permissions:
               children:
                 Necessities.rankmanager.addpermissionuser: true
                 Necessities.rankmanager.delpermissionuser: true
+                Necessities.rankmanager.reloadpermissions: true
                 Necessities.rankmanager.addpermsubrank: true
                 Necessities.rankmanager.delpermsubrank: true
                 Necessities.rankmanager.addsubrankuser: true
@@ -1188,6 +1195,9 @@ permissions:
     Necessities.rankmanager.delpermsubrank:
         description: Allows you to remove a permission from a subranks permissions.
         default: op
+    Necessities.rankmanager.reloadpermissions:
+        description: Allows you to reload the permissions from file.
+        default: op
     Necessities.rankmanager.addpermissionuser:
         description: Allows you to add a permission to a players permissions.
         default: op
@@ -1427,6 +1437,9 @@ permissions:
         default: op
     Necessities.colorchat:
         description: You are can speak with colors.
+        default: op
+    Necessities.magicchat:
+        description: You are can speak with &k.
         default: op
     Necessities.say:
         description: You can speak to the server.

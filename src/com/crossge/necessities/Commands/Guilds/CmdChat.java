@@ -56,8 +56,12 @@ public class CmdChat extends GuildCmd {
         send = send.replaceAll("\\{RANK\\}", ChatColor.translateAlternateColorCodes('&', um.getUser(uuid).getRank().getTitle()));
         send = send.replaceAll("\\{NAME\\}", player.getDisplayName());
         send = send.replaceAll("\\{MESSAGE\\}", "");
-        if (player.hasPermission("Necessities.colorchat"))
-            message = ChatColor.translateAlternateColorCodes('&', message);
+        if (player.hasPermission("Necessities.colorchat")) {
+            if (player.hasPermission("Necessities.magicchat"))
+                message = ChatColor.translateAlternateColorCodes('&', message);
+            else
+                message = ChatColor.translateAlternateColorCodes('&', message.replaceAll("&k", ""));
+        }
         for (Player p : Bukkit.getOnlinePlayers()) {
             User u = um.getUser(p.getUniqueId());
             if (u.getGuild() != null && sender.getGuild() == u.getGuild())

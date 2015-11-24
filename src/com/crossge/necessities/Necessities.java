@@ -563,6 +563,8 @@ public class Necessities extends JavaPlugin {
             com = new CmdSubranks();
         else if (isEqual(name, "rankcmds"))
             com = new CmdRankCmds();
+        else if (isEqual(name, "reloadpermissions"))
+            com = new CmdReloadPermissions();
             //WorldManager
         else if (isEqual(name, "createworld"))
             com = new CmdCreateWorld();

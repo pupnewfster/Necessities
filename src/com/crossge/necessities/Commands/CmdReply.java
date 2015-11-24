@@ -30,8 +30,12 @@ public class CmdReply extends Cmd {
                 for (String arg : args)
                     message += arg + " ";
                 message = ChatColor.WHITE + message.trim();
-                if (p.hasPermission("Necessities.colorchat"))
-                    message = ChatColor.translateAlternateColorCodes('&', message);
+                if (p.hasPermission("Necessities.colorchat")) {
+                    if (p.hasPermission("Necessities.magicchat"))
+                        message = ChatColor.translateAlternateColorCodes('&', message);
+                    else
+                        message = ChatColor.translateAlternateColorCodes('&', message.replaceAll("&k", ""));
+                }
                 self.setLastC("Console");
                 console.setLastContact(self.getUUID());
                 p.sendMessage(var.getMessages() + "[me -> " + console.getName().replaceAll(":", "") + "] " + message);
@@ -56,8 +60,12 @@ public class CmdReply extends Cmd {
             for (String arg : args)
                 message += arg + " ";
             message = ChatColor.WHITE + message.trim();
-            if (p.hasPermission("Necessities.colorchat"))
-                message = ChatColor.translateAlternateColorCodes('&', message);
+            if (p.hasPermission("Necessities.colorchat")) {
+                if (p.hasPermission("Necessities.magicchat"))
+                    message = ChatColor.translateAlternateColorCodes('&', message);
+                else
+                    message = ChatColor.translateAlternateColorCodes('&', message.replaceAll("&k", ""));
+            }
             u.setLastC(self.getUUID().toString());
             self.setLastC(u.getUUID().toString());
             p.sendMessage(var.getMessages() + "[me -> " + t.getDisplayName() + var.getMessages() + "] " + message);

@@ -19,7 +19,7 @@ public class CmdWho extends Cmd {
             HashMap<Rank, String> online = new HashMap<Rank, String>();
             int numbOnline = 1;
             if (!rm.getOrder().isEmpty())
-                online.put(rm.getRank(rm.getOrder().size() - 1), "Janet, ");
+                online.put(rm.getRank(rm.getOrder().size() - 1), rm.getRank(rm.getOrder().size() - 1).getColor() + "Janet, ");
             if (!um.getUsers().isEmpty()) {
                 for (User u : um.getUsers().values())
                     if (!hide.isHidden(u.getPlayer())) {
@@ -51,7 +51,7 @@ public class CmdWho extends Cmd {
                 var.getObj() + Bukkit.getMaxPlayers() + var.getMessages() + " players online.");
         HashMap<Rank, String> online = new HashMap<Rank, String>();
         if (!rm.getOrder().isEmpty())
-            online.put(rm.getRank(rm.getOrder().size() - 1), "Janet, ");
+            online.put(rm.getRank(rm.getOrder().size() - 1), rm.getRank(rm.getOrder().size() - 1).getColor() + "Janet, ");
         if (!um.getUsers().isEmpty())
             for (User u : um.getUsers().values())
                 if (u.isAfk() && hide.isHidden(u.getPlayer())) {

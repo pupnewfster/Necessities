@@ -34,9 +34,12 @@ public class CmdWarn extends Cmd {
         for (int i = 1; i < args.length; i++)
             reason += args[i] + " ";
         reason = reason.trim();
-        if (sender instanceof Player && sender.hasPermission("Necessities.colorchat"))
-            reason = ChatColor.translateAlternateColorCodes('&', reason);
-        else if (!(sender instanceof Player))
+        if (sender instanceof Player && sender.hasPermission("Necessities.colorchat")) {
+            if (sender.hasPermission("Necessities.magicchat"))
+                reason = ChatColor.translateAlternateColorCodes('&', reason);
+            else
+                reason = ChatColor.translateAlternateColorCodes('&', reason.replaceAll("&k", ""));
+        } else if (!(sender instanceof Player))
             reason = ChatColor.translateAlternateColorCodes('&', reason);
         warns.warn(target.getUniqueId(), reason, name);
         return true;

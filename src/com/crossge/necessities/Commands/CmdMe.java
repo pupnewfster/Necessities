@@ -18,8 +18,12 @@ public class CmdMe extends Cmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are muted.");
                 return true;
             }
-            if (self.getPlayer().hasPermission("Necessities.colorchat"))
-                msg = ChatColor.translateAlternateColorCodes('&', msg);
+            if (self.getPlayer().hasPermission("Necessities.colorchat")) {
+                if (self.getPlayer().hasPermission("Necessities.magicchat"))
+                    msg = ChatColor.translateAlternateColorCodes('&', msg);
+                else
+                    msg = ChatColor.translateAlternateColorCodes('&', msg.replaceAll("&k", ""));
+            }
             sendMessage(self, msg);
         } else
             Bukkit.broadcastMessage(var.getMe() + "*" + console.getName().replaceAll(":", "") + var.getMe() + msg);

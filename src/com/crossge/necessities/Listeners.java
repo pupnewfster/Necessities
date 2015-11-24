@@ -929,8 +929,12 @@ public class Listeners implements Listener {
         e.setFormat(e.getFormat().replaceAll("\\{RANK\\}", rank));
         final String message = bot.logChat(uuid, e.getMessage());
         e.setMessage(message);//Why did it not previously setMessage?
-        if (player.hasPermission("Necessities.colorchat"))
-            e.setMessage(ChatColor.translateAlternateColorCodes('&', message));
+        if (player.hasPermission("Necessities.colorchat")) {
+            if (player.hasPermission("Necessities.magicchat"))
+                e.setMessage(ChatColor.translateAlternateColorCodes('&', message));
+            else
+                e.setMessage(ChatColor.translateAlternateColorCodes('&', message.replaceAll("&k", "")));
+        }
         if (u.isMuted())
             player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are muted.");
         else {

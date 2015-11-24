@@ -69,6 +69,14 @@ public class RankManager {
         }
     }
 
+    public void reloadPermissions() {
+        UserManager um = new UserManager();
+        for (Rank r : getOrder()) {
+            r.refreshPerms();
+            um.refreshRankPerm(r);
+        }
+    }
+
     public boolean validSubrank(String subrank) {
         return !subranks.containsKey(subrank.toLowerCase());
     }
