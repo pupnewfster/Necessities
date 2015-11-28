@@ -1,5 +1,7 @@
 package com.crossge.necessities;
 
+import com.TentacleLabs.GoogleAnalyticsPlugin.GoogleAnalyticsPlugin;
+import com.TentacleLabs.GoogleAnalyticsPlugin.Tracker;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -41,6 +43,7 @@ import java.util.UUID;
 
 public class Necessities extends JavaPlugin {
     private ProtocolManager protocolManager;
+    private Tracker googleAnalyticsTracker;
     private WrappedSignedProperty skin;
     private static Necessities instance;
     private static UUID janetID;
@@ -61,6 +64,11 @@ public class Necessities extends JavaPlugin {
     public void onEnable() {
         getLogger().info("Enabling Necessities...");
         instance = this;
+
+        if (!hookGoogle()) {
+            getLogger().warning("Could not hook into Google Analytics!");
+        }
+
         janetID = UUID.randomUUID();
         try {
             this.protocolManager = ProtocolLibrary.getProtocolManager();
@@ -74,6 +82,24 @@ public class Necessities extends JavaPlugin {
 
         dr.init();
         getLogger().info("Necessities enabled.");
+    }
+
+    private boolean hookGoogle() {
+        GoogleAnalyticsPlugin plugin;
+        if ((plugin = (GoogleAnalyticsPlugin)getServer().getPluginManager().getPlugin("GoogleAnalyticsPlugin")) == null)
+            return false;
+
+        googleAnalyticsTracker = plugin.getTracker();
+
+        return true;
+    }
+
+    public static boolean isTracking() {
+        return instance.googleAnalyticsTracker != null;
+    }
+
+    public static Tracker getTracker() {
+        return instance.googleAnalyticsTracker;
     }
 
     private void addPacketListener() {
@@ -621,5 +647,51 @@ public class Necessities extends JavaPlugin {
         bot.unload();
         dr.disconnect();
         getLogger().info("Necessities disabled.");
+    }
+
+    public static void trackAction(UUID uuid, String action, Object label) {
+        String clientId;
+        String ip;
+        boolean usesPluginChannel = false;
+
+        Player p = instance.getServer().getPlayer(uuid);
+        if (p == null) {
+            OfflinePlayer offlinep = instance.getServer().getOfflinePlayer(uuid);
+            clientId = offlinep.getName();
+            ip = "0.0.0.0";
+        } else {
+            clientId = p.getName();
+            if (p.getAddress() != null) {
+                ip = p.getAddress().toString().substring(1);
+            } else {
+                ip = "0.0.0.0";
+            }
+
+            usesPluginChannel = p.getListeningPluginChannels().size() != 0;
+        }
+
+        String clientVersion = instance.getServer().getVersion().substring("git-Bukkit".length());
+        String clientName = "Minecraft " + clientVersion.substring(0, clientVersion.indexOf("-")) + (usesPluginChannel ? " [Supports Plugin Channels]" : "");
+
+        instance.googleAnalyticsTracker.TrackAction(clientName, clientId, ip, clientId, action, label.toString());
+    }
+
+    public static void trackAction(Player p, String action, Object label) {
+        String clientId;
+        String ip;
+        boolean usesPluginChannel;
+
+        clientId = p.getName();
+        if (p.getAddress() != null) {
+            ip = p.getAddress().toString().substring(1);
+        } else {
+            ip = "0.0.0.0";
+        }
+
+        usesPluginChannel = p.getListeningPluginChannels().size() != 0;
+        String clientVersion = instance.getServer().getVersion().substring("git-Bukkit".length());
+        String clientName = "Minecraft " + clientVersion.substring(0, clientVersion.indexOf("-")) + (usesPluginChannel ? " [Supports Plugin Channels]" : "");
+
+        instance.googleAnalyticsTracker.TrackAction(clientName, clientId, ip, clientId, action, label.toString());
     }
 }

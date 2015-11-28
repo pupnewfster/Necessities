@@ -1,6 +1,7 @@
 package com.crossge.necessities.Economy;
 
 import com.crossge.necessities.GetUUID;
+import com.crossge.necessities.Necessities;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -99,10 +100,19 @@ public class BalChecks implements Economy {
 
     public void removeMoney(UUID uuid, double amount) {
         setMoney(uuid, Double.toString(Double.parseDouble(bal(uuid)) - amount));
+
+
+        if (Necessities.isTracking()) {
+            Necessities.trackAction(uuid, "LoseMoney", amount);
+        }
     }
 
     public void addMoney(UUID uuid, double amount) {
         setMoney(uuid, Double.toString(Double.parseDouble(bal(uuid)) + amount));
+
+        if (Necessities.isTracking()) {
+            Necessities.trackAction(uuid, "GainMoney", amount);
+        }
     }
 
     @Override
