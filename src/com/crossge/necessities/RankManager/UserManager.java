@@ -1,5 +1,6 @@
 package com.crossge.necessities.RankManager;
 
+import com.crossge.necessities.Hats.Hat;
 import com.crossge.necessities.Necessities;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -49,8 +50,14 @@ public class UserManager {
     }
 
     public void unload() {
-        for (UUID uuid : players.keySet())
-            players.get(uuid).removePerms();
+        for (UUID uuid : players.keySet()) {
+            User u = players.get(uuid);
+            Hat h = u.getHat();
+            if (h != null)
+                h.despawn();
+            u.updateTimePlayed();
+            u.removePerms();
+        }
     }
 
     public void addRankPerm(Rank r, String node) {
