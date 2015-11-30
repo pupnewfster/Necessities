@@ -3,6 +3,7 @@ package com.crossge.necessities.Commands;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -17,15 +18,17 @@ public class CmdBan extends Cmd {
             return true;
         }
         UUID uuid = get.getID(args[0]);
+        if (uuid == null)
+            uuid = get.getOfflineID(args[0]);
         if (uuid == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;
         }
-        Player target = sender.getServer().getPlayer(uuid);
+        OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
         String name = console.getName().replaceAll(":", "");
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            if (target.hasPermission("Necessities.antiBan")) {
+            if (target.getPlayer() != null && target.getPlayer().hasPermission("Necessities.antiBan")) {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You may not ban someone who has Necessities.antiBan.");
                 return true;
             }
@@ -40,7 +43,8 @@ public class CmdBan extends Cmd {
         }
         BanList bans = Bukkit.getBanList(BanList.Type.NAME);
         String theirName = target.getName();
-        target.kickPlayer(reason);
+        if (target.getPlayer() != null)
+            target.getPlayer().kickPlayer(reason);
         bans.addBan(theirName, reason, null, "Console");
         if (reason != null)
             Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + " for " + var.getObj() + reason);

@@ -10,6 +10,7 @@ import com.crossge.necessities.Economy.Signs;
 import com.crossge.necessities.Guilds.Guild;
 import com.crossge.necessities.Guilds.GuildManager;
 import com.crossge.necessities.Guilds.PowerManager;
+import com.crossge.necessities.Hats.Hat;
 import com.crossge.necessities.Janet.*;
 import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;
@@ -289,17 +290,20 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onPlayerMove(final PlayerMoveEvent e) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         User u = um.getUser(e.getPlayer().getUniqueId());
         Location from = e.getFrom();
         Location to = e.getTo();
         boolean locationChanged = Math.abs(from.getX() - to.getX()) > 0.1 || Math.abs(from.getY() - to.getY()) > 0.1 || Math.abs(from.getZ() - to.getZ()) > 0.1;
+        Hat h = u.getHat();
+        if (h != null && !e.isCancelled())
+            h.move(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ(), to.getYaw() - from.getYaw(), to.getPitch() - from.getPitch());
         if (u.isTeleporting() && locationChanged)
             u.cancelTp();
         if (u.isAfk() && locationChanged)
             u.setAfk(false);
         if (locationChanged)
             u.setLastAction(System.currentTimeMillis());
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager") && locationChanged) {
             Location destination = pm.portalDestination(to);
             if (destination != null)
@@ -1045,7 +1049,7 @@ public class Listeners implements Listener {
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent e) {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        User u = um.getUser(e.getPlayer().getUniqueId());
+        final User u = um.getUser(e.getPlayer().getUniqueId());
         if (!e.getFrom().getWorld().equals(e.getTo().getWorld())) {
             if (wm.multiple()) {
                 String s = wm.getSysPath(e.getTo().getWorld().getName()), from = wm.getSysPath(e.getFrom().getWorld().getName());
@@ -1056,8 +1060,27 @@ public class Listeners implements Listener {
             }
             if (!e.getPlayer().hasPermission("Necessities.ignoreGameMode"))
                 e.getPlayer().setGameMode(wm.getGameMode(e.getTo().getWorld().getName()));//sets gamemode of player to world they teleported to
-            for (User m : um.getUsers().values())
-                m.updateListName();
+            try {
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                    @Override
+                    public void run() {
+                        u.respawnHat();
+                    }
+                });
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+            if (!Necessities.getInstance().isProtocolLibLoaded())
+                for (User m : um.getUsers().values())
+                    m.updateListName();
+
+        } else {
+            Hat h = u.getHat();
+            if (h != null) {
+                Location from = e.getFrom();
+                Location to = e.getTo();
+                h.move(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ(), to.getYaw() - from.getYaw(), to.getPitch() - from.getPitch());
+            }
         }
         if (!u.isJailed() && (e.getCause().equals(TeleportCause.COMMAND) || e.getCause().equals(TeleportCause.PLUGIN))/* &&
                 !e.getFrom().getWorld().getName().equals("BattleGrounds")*/)
@@ -1190,6 +1213,13 @@ public class Listeners implements Listener {
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
+        Hat h = u.getHat();
+        if (h != null) {
+            if (e.isSneaking())
+                h.move(0, -0.25, 0, 0, 0);
+            else
+                h.move(0, 0.25, 0, 0, 0);
+        }
     }
 
     @EventHandler

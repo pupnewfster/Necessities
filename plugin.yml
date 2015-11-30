@@ -3,7 +3,7 @@ main: com.crossge.necessities.Necessities
 version: 2.1.0
 description: Adds the necessities a server needs
 authors: [Cross Gaming Development Team]
-softdepend: [Vault, ProtocolLib]
+softdepend: [Vault, ProtocolLib, GoogleAnalyticsPlugin]
 
 commands:
    craft:
@@ -91,11 +91,16 @@ commands:
       usage: /<command>
       permission: Necessities.chest
       aliases: [chestplate, nchest, nchestplate]
+   blockhat:
+      description: Put a block hat on.
+      usage: /<command>
+      permission: Necessities.blockhat
+      aliases: [nblockhat, nhelmet, nhelmet]
    hat:
       description: Put a hat on.
-      usage: /<command>
+      usage: /<command> <type>
       permission: Necessities.hat
-      aliases: [nhat, nhelmet, nhelmet]
+      aliases: [nhat]
    imp:
       description: Impersonates <name>.
       usage: /<command> <name|message> <message>
@@ -773,6 +778,7 @@ permissions:
             Necessities.extOthers: true
             Necessities.godOthers: true
             Necessities.flyOthers: true
+            Necessities.blockhat: true
             Necessities.gamemode: true
             Necessities.setspawn: true
             Necessities.ragequit: true
@@ -1259,6 +1265,9 @@ permissions:
         description: Allows you to do put chestplates on.
         default: op
     Necessities.hat:
+        description: Allows you to do put fancy hats on.
+        default: op
+    Necessities.blockhat:
         description: Allows you to do put hats on.
         default: op
     Necessities.workbench:

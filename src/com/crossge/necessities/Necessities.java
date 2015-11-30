@@ -65,9 +65,8 @@ public class Necessities extends JavaPlugin {
         getLogger().info("Enabling Necessities...");
         instance = this;
 
-        if (!hookGoogle()) {
+        if (!hookGoogle())
             getLogger().warning("Could not hook into Google Analytics!");
-        }
 
         janetID = UUID.randomUUID();
         try {
@@ -88,9 +87,7 @@ public class Necessities extends JavaPlugin {
         GoogleAnalyticsPlugin plugin;
         if ((plugin = (GoogleAnalyticsPlugin)getServer().getPluginManager().getPlugin("GoogleAnalyticsPlugin")) == null)
             return false;
-
         googleAnalyticsTracker = plugin.getTracker();
-
         return true;
     }
 
@@ -351,6 +348,8 @@ public class Necessities extends JavaPlugin {
             com = new CmdBoots();
         else if (isEqual(name, "chest"))
             com = new CmdChest();
+        else if (isEqual(name, "blockhat"))
+            com = new CmdBlockHat();
         else if (isEqual(name, "hat"))
             com = new CmdHat();
         else if (isEqual(name, "workbench"))

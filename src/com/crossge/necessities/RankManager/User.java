@@ -6,6 +6,8 @@ import com.crossge.necessities.Economy.Formatter;
 import com.crossge.necessities.Economy.Materials;
 import com.crossge.necessities.Guilds.Guild;
 import com.crossge.necessities.Guilds.GuildManager;
+import com.crossge.necessities.Hats.Hat;
+import com.crossge.necessities.Hats.HatType;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.ScoreBoards;
 import com.crossge.necessities.Variables;
@@ -42,6 +44,7 @@ public class User {
     private String lastContact;
     private Player bukkitPlayer;
     private Location lastPos, right, left, invLoc;
+    private Hat hat = null;
     private UUID userUUID;
     private String nick;
     private Rank rank;
@@ -74,6 +77,8 @@ public class User {
         }
         if (configUsers.contains(getUUID().toString() + ".timePlayed"))
             this.pastTotal = configUsers.getInt(getUUID().toString() + ".timePlayed");
+        if (configUsers.contains(getUUID().toString() + ".hat"))
+            this.hat = Hat.fromType(HatType.valueOf(configUsers.getString(getUUID().toString() + ".hat")), this.bukkitPlayer.getLocation());
         if (configUsers.contains(getUUID().toString() + ".location"))
             this.lastPos = new Location(Bukkit.getWorld(configUsers.getString(getUUID().toString() + ".location.world")),
                     Double.parseDouble(configUsers.getString(getUUID().toString() + ".location.x")), Double.parseDouble(configUsers.getString(getUUID().toString() +
@@ -121,7 +126,7 @@ public class User {
         readIgnored();
     }
 
-    public void logOut() {
+    public void updateTimePlayed() {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         if (this.login != 0) {
             configUsers.set(getUUID().toString() + ".timePlayed", (int) (this.pastTotal + (System.currentTimeMillis() - this.login) / 1000));
@@ -131,11 +136,17 @@ public class User {
                 e.printStackTrace();
             }
         }
-        ScoreBoards sb = new ScoreBoards();
-        sb.delPlayer(this);
-        this.bukkitPlayer = null;
         this.pastTotal = 0;
         this.login = 0;
+    }
+
+    public void logOut() {
+        updateTimePlayed();
+        ScoreBoards sb = new ScoreBoards();
+        sb.delPlayer(this);
+        if (this.hat != null)
+            this.hat.despawn();
+        this.bukkitPlayer = null;
     }
 
     private void readIgnored() {
@@ -408,6 +419,32 @@ public class User {
         configUsers.set(getUUID().toString() + ".location.z", l.getZ());
         configUsers.set(getUUID().toString() + ".location.yaw", l.getYaw());
         configUsers.set(getUUID().toString() + ".location.pitch", l.getPitch());
+        try {
+            configUsers.save(configFileUsers);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Hat getHat() {
+        return this.hat;
+    }
+
+    public void respawnHat() {
+        if (this.hat == null || this.bukkitPlayer == null)
+            return;
+        this.hat.despawn();
+        this.hat = Hat.fromType(this.hat.getType(), this.bukkitPlayer.getLocation());
+    }
+
+    public void setHat(Hat hat) {
+        if (this.hat != null)
+            this.hat.despawn();
+        this.hat = hat;
+        YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
+        configUsers.set(getUUID().toString() + ".hat", this.hat == null ? null : this.hat.getType().toString());
         try {
             configUsers.save(configFileUsers);
         } catch (Exception e) {
