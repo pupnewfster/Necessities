@@ -42,6 +42,7 @@ public class Fedora extends Hat {
             ArmorStand a = (ArmorStand) w.spawnEntity(new Location(w, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), 0), EntityType.ARMOR_STAND);
             a.setVisible(false);
             a.setGravity(false);
+            a.setMarker(true);
             this.armorStands.add(a);
         }
     }

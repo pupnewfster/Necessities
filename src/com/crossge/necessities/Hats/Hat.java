@@ -42,6 +42,7 @@ public abstract class Hat {
             ArmorStand a = (ArmorStand) w.spawnEntity(new Location(w, loc.getX(), loc.getY(), loc.getZ()), EntityType.ARMOR_STAND);
             a.setVisible(false);
             a.setGravity(false);
+            a.setMarker(true);
             this.armorStands.add(a);
         }
     }
