@@ -19,6 +19,7 @@ import com.crossge.necessities.Commands.Guilds.CmdGuild;
 import com.crossge.necessities.Commands.RankManager.*;
 import com.crossge.necessities.Commands.WorldManager.*;
 import com.crossge.necessities.Economy.BalChecks;
+import com.crossge.necessities.Hats.HatType;
 import com.crossge.necessities.Janet.Janet;
 import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;

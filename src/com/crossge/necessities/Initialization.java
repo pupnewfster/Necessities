@@ -5,6 +5,7 @@ import com.crossge.necessities.Commands.CmdHide;
 import com.crossge.necessities.Economy.*;
 import com.crossge.necessities.Guilds.GuildManager;
 import com.crossge.necessities.Guilds.PowerManager;
+import com.crossge.necessities.Hats.HatType;
 import com.crossge.necessities.Janet.Janet;
 import com.crossge.necessities.Janet.JanetAI;
 import com.crossge.necessities.Janet.JanetWarn;
@@ -67,6 +68,8 @@ public class Initialization {
         fileCreate("plugins/Necessities/rules.txt");
         fileCreate("plugins/Necessities/faq.txt");
         createYaml();
+        HatType.mapHats();
+
         //RankManager
         rm.setRanks();
         rm.setSubranks();
