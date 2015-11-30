@@ -15,6 +15,7 @@ public class CmdHat extends Cmd {
                     p.sendMessage(var.getMessages() + validTypes());
                 } else {
                     u.setHat(null);
+                    p.sendMessage(var.getMessages() + "You are no longer wearing a hat.");
                 }
                 return true;
             }
@@ -35,6 +36,7 @@ public class CmdHat extends Cmd {
                 return true;
             }
             u.setHat(h);
+            p.sendMessage(var.getMessages() + "You are now wearing a " + var.getObj() + type.getName().toLowerCase().replaceAll("_", " ") + var.getMessages() + ".");
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to wear a hat.");
         return true;

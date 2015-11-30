@@ -40,5 +40,19 @@ public class Design extends Hat {
             this.armorStands.get(i).setSmall(true);
             this.armorStands.get(i).setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(i * turn), 0));
         }*/
+
+        /*final ArmorStand a = this.armorStands.get(0);
+        final Location center = loc;
+        Bukkit.getScheduler().runTaskTimer(Necessities.getInstance(), new Runnable(){
+            @Override
+            public void run() {
+                double an = Math.atan2(a.getLocation().getZ() - center.getZ(), a.getLocation().getX() - center.getX()) + Math.toRadians(count += 1);
+                double xn = center.getX() +  Math.cos(an);
+                double zn = center.getZ() + Math.sin(an);
+                Location loc = a.getLocation().clone();
+                loc.setX(xn);
+                loc.setZ(zn);
+                a.teleport(loc);
+            }}, 0, 20);*/
     }
 }
