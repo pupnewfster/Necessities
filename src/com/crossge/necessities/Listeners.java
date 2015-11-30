@@ -125,6 +125,11 @@ public class Listeners implements Listener {
         if (!get.hasJoined(uuid)) {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
             final String welcome = ChatColor.translateAlternateColorCodes('&', config.getString("Necessities.firstTime")).replaceAll("\\{NAME\\}", p.getName());
+
+            if (Necessities.isTracking()) {
+                Necessities.trackAction(p, "NewLogin", p.getName());
+            }
+
             if (config.contains("Spawn")) {
                 World world = Bukkit.getWorld(config.getString("Spawn.world"));
                 double x = Double.parseDouble(config.getString("Spawn.x"));
