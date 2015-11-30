@@ -1,5 +1,7 @@
 package com.crossge.necessities.Commands;
-import com.crossge.necessities.Hats.*;
+
+import com.crossge.necessities.Hats.Hat;
+import com.crossge.necessities.Hats.HatType;
 import com.crossge.necessities.RankManager.User;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

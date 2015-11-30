@@ -19,7 +19,7 @@ import com.crossge.necessities.Commands.Guilds.CmdGuild;
 import com.crossge.necessities.Commands.RankManager.*;
 import com.crossge.necessities.Commands.WorldManager.*;
 import com.crossge.necessities.Economy.BalChecks;
-import com.crossge.necessities.Hats.HatType;
+import com.crossge.necessities.Guilds.PowerManager;
 import com.crossge.necessities.Janet.Janet;
 import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;
@@ -47,7 +47,7 @@ public class Necessities extends JavaPlugin {
     private Tracker googleAnalyticsTracker;
     private WrappedSignedProperty skin;
     private static Necessities instance;
-    private static UUID janetID;
+    private UUID janetID;
     private File configFile = new File("plugins/Necessities", "config.yml");
     UserManager um = new UserManager();
     RankManager rm = new RankManager();
@@ -93,11 +93,11 @@ public class Necessities extends JavaPlugin {
     }
 
     public static boolean isTracking() {
-        return instance.googleAnalyticsTracker != null;
+        return getInstance().googleAnalyticsTracker != null;
     }
 
     public static Tracker getTracker() {
-        return instance.googleAnalyticsTracker;
+        return getInstance().googleAnalyticsTracker;
     }
 
     private void addPacketListener() {
@@ -129,12 +129,19 @@ public class Necessities extends JavaPlugin {
                     if (soundEffectName.contains("chest")) {
                         Block b = event.getPlayer().getWorld().getBlockAt(event.getPacket().getIntegers().read(0)/8, event.getPacket().getIntegers().read(1)/8, event.getPacket().getIntegers().read(2)/8);
                         if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST) {
-                            for (User u : um.getUsers().values())
-                                if (u.getInvLoc() != null && hide.isHidden(u.getPlayer()))
-                                    if (b.getLocation().equals(u.getInvLoc())) {
+                            Block n = b.getRelative(BlockFace.NORTH);
+                            Block e = b.getRelative(BlockFace.EAST);
+                            Block s = b.getRelative(BlockFace.SOUTH);
+                            Block w = b.getRelative(BlockFace.WEST);
+                            for (User u : um.getUsers().values()) {
+                                Location loc = u.getInvLoc();
+                                if (loc != null && hide.isHidden(u.getPlayer()))
+                                    if (b.getLocation().equals(loc) || (n.getLocation().equals(loc) && n.getType().equals(b.getType())) || (e.getLocation().equals(loc) && e.getType().equals(b.getType())) ||
+                                            (s.getLocation().equals(loc) && s.getType().equals(b.getType())) || (w.getLocation().equals(loc) && w.getType().equals(b.getType()))) {
                                         event.setCancelled(true);
                                         break;
                                     }
+                            }
                         }
                     }
                 }
@@ -641,6 +648,8 @@ public class Necessities extends JavaPlugin {
         CmdCommandSpy cs = new CmdCommandSpy();
         CmdHide hide = new CmdHide();
         Janet bot = new Janet();
+        PowerManager power = new PowerManager();
+        power.unload();
         um.unload();
         cs.unload();
         hide.unload();

@@ -793,7 +793,7 @@ public class User {
     }
 
     public void removePower() {
-        return;//Disable power loss for GG
+        //Disable power loss for GG
         /*if (this.power - 2 < -20)
             this.power = -20;
         else
