@@ -2,6 +2,9 @@ package com.crossge.necessities.Hats;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 
@@ -24,6 +27,17 @@ public class StrawHat extends Hat {
             this.armorStands.get(360/turn + i).setHelmet(new ItemStack(Material.HAY_BLOCK, 1));
             this.armorStands.get(360/turn + i).setSmall(true);
             this.armorStands.get(360/turn + i).setHeadPose(new EulerAngle(Math.toRadians(45), Math.toRadians(i * turnV), 0));
+        }
+    }
+
+    @Override
+    protected void spawn(int num, Location loc) {
+        World w = loc.getWorld();
+        for (int i = 0; i < num; i ++) {
+            ArmorStand a = (ArmorStand) w.spawnEntity(new Location(w, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), 0), EntityType.ARMOR_STAND);
+            a.setVisible(false);
+            a.setGravity(false);
+            this.armorStands.add(a);
         }
     }
 }
