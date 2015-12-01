@@ -693,4 +693,50 @@ public class Necessities extends JavaPlugin {
 
         instance.googleAnalyticsTracker.TrackAction(clientName, clientId, ip, clientId, action, label.toString());
     }
+
+    public static void trackActionWithValue(UUID uuid, String action, Object label, Object value) {
+        String clientId;
+        String ip;
+        boolean usesPluginChannel = false;
+
+        Player p = instance.getServer().getPlayer(uuid);
+        if (p == null) {
+            OfflinePlayer offlinep = instance.getServer().getOfflinePlayer(uuid);
+            clientId = offlinep.getName();
+            ip = "0.0.0.0";
+        } else {
+            clientId = p.getName();
+            if (p.getAddress() != null) {
+                ip = p.getAddress().toString().substring(1);
+            } else {
+                ip = "0.0.0.0";
+            }
+
+            usesPluginChannel = p.getListeningPluginChannels().size() != 0;
+        }
+
+        String clientVersion = instance.getServer().getVersion().substring("git-Bukkit".length());
+        String clientName = "Minecraft " + clientVersion.substring(0, clientVersion.indexOf("-")) + (usesPluginChannel ? " [Supports Plugin Channels]" : "");
+
+        instance.googleAnalyticsTracker.TrackActionWithValue(clientName, clientId, ip, clientId, action, label.toString(), value.toString());
+    }
+
+    public static void trackActionWithValue(Player p, String action, Object label, Object value) {
+        String clientId;
+        String ip;
+        boolean usesPluginChannel;
+
+        clientId = p.getName();
+        if (p.getAddress() != null) {
+            ip = p.getAddress().toString().substring(1);
+        } else {
+            ip = "0.0.0.0";
+        }
+
+        usesPluginChannel = p.getListeningPluginChannels().size() != 0;
+        String clientVersion = instance.getServer().getVersion().substring("git-Bukkit".length());
+        String clientName = "Minecraft " + clientVersion.substring(0, clientVersion.indexOf("-")) + (usesPluginChannel ? " [Supports Plugin Channels]" : "");
+
+        instance.googleAnalyticsTracker.TrackActionWithValue(clientName, clientId, ip, clientId, action, label.toString(), value.toString());
+    }
 }

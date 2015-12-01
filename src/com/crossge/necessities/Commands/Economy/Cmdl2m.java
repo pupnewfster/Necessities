@@ -41,7 +41,7 @@ public class Cmdl2m extends EconomyCmd {
             //PShop.econ.depositPlayer(Bukkit.getOfflinePlayer(p.getUniqueId()), money);
 
             if (Necessities.isTracking()) {
-                Necessities.trackAction(p, "ConvertLevel", level);
+                Necessities.trackActionWithValue(p, "ConvertLevel", level, level);
             }
 
             p.sendMessage("" + ChatColor.GREEN + ChatColor.BOLD + "+" + ChatColor.RESET + " Converted " + ChatColor.BOLD + level + ChatColor.RESET + " levels to " + var.getMoney() + "$" + money + ChatColor.RESET + "!");

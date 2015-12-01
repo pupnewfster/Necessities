@@ -103,7 +103,7 @@ public class BalChecks implements Economy {
 
 
         if (Necessities.isTracking()) {
-            Necessities.trackAction(uuid, "LoseMoney", amount);
+            Necessities.trackActionWithValue(uuid, "LoseMoney", amount, amount);
         }
     }
 
@@ -111,7 +111,7 @@ public class BalChecks implements Economy {
         setMoney(uuid, Double.toString(Double.parseDouble(bal(uuid)) + amount));
 
         if (Necessities.isTracking()) {
-            Necessities.trackAction(uuid, "GainMoney", amount);
+            Necessities.trackActionWithValue(uuid, "GainMoney", amount, amount);
         }
     }
 
