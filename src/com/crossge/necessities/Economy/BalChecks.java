@@ -10,6 +10,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class BalChecks implements Economy {
@@ -24,6 +25,11 @@ public class BalChecks implements Economy {
         for (String key : configUsers.getKeys(false))
             if (key != null && !key.equals("null") && !key.equals(""))//TODO: Is this needed or did I fix the null even having ability to show up
                 balances.put(UUID.fromString(key), configUsers.getDouble(key + ".balance"));
+        try {
+            trackAllBals();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Retrieved all balances.");
     }
 
@@ -85,12 +91,45 @@ public class BalChecks implements Economy {
         setMoney(uuid, "500.0");
     }
 
+    public void trackAllBals() throws IOException {
+        if (!Necessities.isTracking())
+            return;
+
+        File check = new File("plugins/Necessities", "track.yml");
+        if (!check.exists())
+            check.createNewFile();
+
+        YamlConfiguration configTracker = YamlConfiguration.loadConfiguration(check);
+
+        boolean didSend = configTracker.getBoolean("economy.init", false);
+
+        if (!didSend) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Pushing Economy data.");
+            for (UUID id : balances.keySet()) {
+                Double money = balances.get(id);
+                Necessities.trackActionWithValue(id, "Economy", money, money);
+            }
+
+            configTracker.set("economy.init", true);
+            configTracker.save(check);
+        }
+    }
+
     public void setMoney(UUID uuid, String amount) {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         if (!form.isLegal(amount))
             return;
-        balances.put(uuid, Double.parseDouble(amount));
-        configUsers.set(uuid.toString() + ".balance", Double.parseDouble(amount));
+
+        double val = Double.parseDouble(amount);
+        if (Necessities.isTracking()) {
+            if (balances.containsKey(uuid)) {
+                double old = balances.get(uuid);
+                double change = val - old;
+                Necessities.trackActionWithValue(uuid, "Economy", change, change);
+            }
+        }
+        balances.put(uuid, val);
+        configUsers.set(uuid.toString() + ".balance", val);
         try {
             configUsers.save(configFileUsers);
         } catch (Exception e) {
@@ -100,19 +139,10 @@ public class BalChecks implements Economy {
 
     public void removeMoney(UUID uuid, double amount) {
         setMoney(uuid, Double.toString(Double.parseDouble(bal(uuid)) - amount));
-
-
-        if (Necessities.isTracking()) {
-            Necessities.trackActionWithValue(uuid, "LoseMoney", amount, amount);
-        }
     }
 
     public void addMoney(UUID uuid, double amount) {
         setMoney(uuid, Double.toString(Double.parseDouble(bal(uuid)) + amount));
-
-        if (Necessities.isTracking()) {
-            Necessities.trackActionWithValue(uuid, "GainMoney", amount, amount);
-        }
     }
 
     @Override
