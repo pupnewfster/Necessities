@@ -10,16 +10,14 @@ import java.io.File;
 import java.util.*;
 
 public class RankManager {
-    private File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml");
-    private File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
-    private static HashMap<String, String> subranks = new HashMap<String, String>();
-    private static HashMap<String, Rank> ranks = new HashMap<String, Rank>();
-    private static ArrayList<Rank> order = new ArrayList<Rank>();
-    private static ArrayList<String> names = new ArrayList<String>();
+    private File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml"), configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
+    private static HashMap<String, String> subranks = new HashMap<>();
+    private static HashMap<String, Rank> ranks = new HashMap<>();
+    private static ArrayList<Rank> order = new ArrayList<>();
+    private static ArrayList<String> names = new ArrayList<>();
 
     public void readRanks() {
-        YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
-        YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
+        YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks), configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
         for (String rank : configRanks.getKeys(false)) {
             if (configRanks.contains(rank + ".previousRank")) {
                 if (names.contains(configRanks.getString(rank + ".previousRank")))
@@ -57,8 +55,10 @@ public class RankManager {
     }
 
     private void updatePerms() {
-        ArrayList<String> p = new ArrayList<String>();
+        ArrayList<String> p = new ArrayList<>();
         for (Permission perm : Bukkit.getPluginManager().getPermissions()) {
+            if (perm.getName().equals("*"))
+                continue;
             for (String t : perm.getChildren().keySet())
                 if (!p.contains(t))
                     p.add(t);

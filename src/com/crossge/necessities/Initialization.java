@@ -63,6 +63,7 @@ public class Initialization {
         dirCreate("plugins/Necessities/Logs");
         dirCreate("plugins/Necessities/Economy");
         dirCreate("plugins/Necessities/RankManager");
+        dirCreate("plugins/Necessities/WorldManager");
         dirCreate("plugins/Necessities/Guilds");
         fileCreate("plugins/Necessities/motd.txt");
         fileCreate("plugins/Necessities/rules.txt");

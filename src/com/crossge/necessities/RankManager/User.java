@@ -30,23 +30,21 @@ import java.util.*;
 public class User {
     private File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml"), configFileUsers = new File("plugins/Necessities/RankManager", "users.yml"),
             configFile = new File("plugins/Necessities", "config.yml");
-    private HashMap<String, Location> homes = new HashMap<String, Location>();
-    private ArrayList<String> permissions = new ArrayList<String>(), subranks = new ArrayList<String>();
-    private ArrayList<UUID> ignored = new ArrayList<UUID>();
+    private HashMap<String, Location> homes = new HashMap<>();
+    private ArrayList<String> permissions = new ArrayList<>(), subranks = new ArrayList<>();
+    private ArrayList<UUID> ignored = new ArrayList<>();
+    private String appended = "", nick = null, lastContact;
     private PermissionAttachment attachment;
-    private String appended = "";
     private boolean teleporting = false, jailed = false, opChat = false, afk = false, isbacking = false, god = false, muted = false, autoClaiming = false, guildChat = false;
     private double power = 0.0;
     private Guild guild;
     private long lastAction = 0, lastAFK = 0;
     private int pastTotal = 0, lastActionTask = 0, afkTask = 0;
     private long login = 0;
-    private String lastContact;
     private Player bukkitPlayer;
     private Location lastPos, right, left, invLoc;
     private Hat hat = null;
     private UUID userUUID;
-    private String nick;
     private Rank rank;
 
     public User(Player p) {

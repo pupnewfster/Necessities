@@ -7,6 +7,7 @@ import com.crossge.necessities.RankManager.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -111,6 +112,15 @@ public class CmdWhois extends RankCmd {
             if (p.isFlying())
                 flying = ChatColor.GREEN + "true " + ChatColor.RESET + " (flying)";
             sender.sendMessage(var.getMessages() + " - Fly mode: " + flying);
+        } else {
+            OfflinePlayer p = Bukkit.getOfflinePlayer(u.getUUID());
+            if (p.isBanned())
+                banned = ChatColor.GREEN + "true";
+            sender.sendMessage(var.getMessages() + " - Banned: " + banned);
+            String op = ChatColor.DARK_RED + "false";
+            if (p.isOp())
+                op = ChatColor.GREEN + "true";
+            sender.sendMessage(var.getMessages() + " - OP: " + op);
         }
         String afk = ChatColor.DARK_RED + "false";
         if (u.isAfk())

@@ -307,12 +307,6 @@ public class Necessities extends JavaPlugin {
         return null;
     }
 
-
-    private int getPlayerPing(Player player) throws IllegalAccessException {
-        Object entity = new BukkitUnwrapper().unwrapItem(player);
-        return (Integer) FieldUtils.readField(FuzzyReflection.fromObject(entity).getFieldByName("ping"), entity);
-    }
-
     public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args) {
         return getCmd(cmd.getName()).commandUse(sender, args);
     }
@@ -682,7 +676,7 @@ public class Necessities extends JavaPlugin {
         String clientVersion = instance.getServer().getVersion().substring("git-Bukkit".length());
         String clientName = "Minecraft " + clientVersion.substring(0, clientVersion.indexOf("-")) + (usesPluginChannel ? " [Supports Plugin Channels]" : "");
 
-        instance.googleAnalyticsTracker.TrackAction(clientName, clientId, ip, clientId, action, label.toString());
+        getInstance().googleAnalyticsTracker.TrackAction(clientName, clientId, ip, clientId, action, label.toString());
     }
 
     public static void trackAction(Player p, String action, Object label) {
@@ -701,7 +695,7 @@ public class Necessities extends JavaPlugin {
         String clientVersion = instance.getServer().getVersion().substring("git-Bukkit".length());
         String clientName = "Minecraft " + clientVersion.substring(0, clientVersion.indexOf("-")) + (usesPluginChannel ? " [Supports Plugin Channels]" : "");
 
-        instance.googleAnalyticsTracker.TrackAction(clientName, clientId, ip, clientId, action, label.toString());
+        getInstance().googleAnalyticsTracker.TrackAction(clientName, clientId, ip, clientId, action, label.toString());
     }
 
     public static void trackActionWithValue(UUID uuid, String action, Object label, Object value) {
@@ -728,7 +722,7 @@ public class Necessities extends JavaPlugin {
         String clientVersion = instance.getServer().getVersion().substring("git-Bukkit".length());
         String clientName = "Minecraft " + clientVersion.substring(0, clientVersion.indexOf("-")) + (usesPluginChannel ? " [Supports Plugin Channels]" : "");
 
-        instance.googleAnalyticsTracker.TrackActionWithValue(clientName, clientId, ip, clientId, action, label.toString(), value.toString());
+        getInstance().googleAnalyticsTracker.TrackActionWithValue(clientName, clientId, ip, clientId, action, label.toString(), value.toString());
     }
 
     public static void trackActionWithValue(Player p, String action, Object label, Object value) {
@@ -747,6 +741,6 @@ public class Necessities extends JavaPlugin {
         String clientVersion = instance.getServer().getVersion().substring("git-Bukkit".length());
         String clientName = "Minecraft " + clientVersion.substring(0, clientVersion.indexOf("-")) + (usesPluginChannel ? " [Supports Plugin Channels]" : "");
 
-        instance.googleAnalyticsTracker.TrackActionWithValue(clientName, clientId, ip, clientId, action, label.toString(), value.toString());
+        getInstance().googleAnalyticsTracker.TrackActionWithValue(clientName, clientId, ip, clientId, action, label.toString(), value.toString());
     }
 }

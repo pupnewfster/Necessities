@@ -88,7 +88,7 @@ public class UserManager {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         if (configUsers.contains(player.getUniqueId().toString()))
             return;
-        configUsers.set(player.getUniqueId().toString() + ".rank", "Guest");
+        configUsers.set(player.getUniqueId().toString() + ".rank", rm.getRank(0).getName());
         configUsers.set(player.getUniqueId().toString() + ".permissions", Arrays.asList(""));
         configUsers.set(player.getUniqueId().toString() + ".subranks", Arrays.asList(""));
         configUsers.set(player.getUniqueId().toString() + ".balance", 0.0);
