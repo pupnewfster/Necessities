@@ -91,6 +91,26 @@ public class GuildManager {
         guilds.put(name.toLowerCase(), new Guild(name));
     }
 
+    public void renameGuild(Guild g, String name) {
+        String oldName = g.getName();
+        File fileGuild = new File("plugins/Necessities/Guilds", g.getName() + ".yml");
+        fileGuild.renameTo(new File("plugins/Necessities/Guilds", name + ".yml"));
+        g.rename(name);
+        YamlConfiguration configGuilds = YamlConfiguration.loadConfiguration(configFileGuilds);
+        List<String> guildList = configGuilds.getStringList("guilds");
+        guildList.remove(oldName);
+        guildList.add(name);
+        configGuilds.set("guilds", guildList);
+        try {
+            configGuilds.save(configFileGuilds);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        guilds.remove(oldName.toLowerCase());
+        guilds.put(name.toLowerCase(), g);
+    }
+
     public Guild getGuild(String name) {
         return guilds.get(name.toLowerCase());
     }

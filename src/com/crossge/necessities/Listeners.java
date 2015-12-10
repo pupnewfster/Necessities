@@ -51,10 +51,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class Listeners implements Listener {
-    private File configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml");
-    private File configFileLogIn = new File("plugins/Necessities", "loginmessages.yml");
-    private File configFileTitles = new File("plugins/Necessities", "titles.yml");
-    private File configFile = new File("plugins/Necessities", "config.yml");
+    private File configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml"), configFileLogIn = new File("plugins/Necessities", "loginmessages.yml"),
+            configFileTitles = new File("plugins/Necessities", "titles.yml"), configFile = new File("plugins/Necessities", "config.yml");
     private static String JanetName = "";
     AntiCombatLog acb = new AntiCombatLog();
     CmdCommandSpy spy = new CmdCommandSpy();
@@ -72,7 +70,6 @@ public class Listeners implements Listener {
     BalChecks balc = new BalChecks();
     Formatter form = new Formatter();
     Signs economySigns = new Signs();
-    //BalChecks bal = new BalChecks();
     Console console = new Console();
     Materials mat = new Materials();
     Variables var = new Variables();
@@ -1101,7 +1098,7 @@ public class Listeners implements Listener {
     public void onExplosion(EntityExplodeEvent e) {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
-            ArrayList<Integer> indexes = new ArrayList<Integer>();
+            ArrayList<Integer> indexes = new ArrayList<>();
             for (int i = 0; i < e.blockList().size(); i++) {
                 Guild g = gm.chunkOwner(e.blockList().get(i).getChunk());
                 if (g != null && !g.canExplode())

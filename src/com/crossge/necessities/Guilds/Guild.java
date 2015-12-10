@@ -14,14 +14,9 @@ import java.util.UUID;
 
 public class Guild {
     private File configFileGuild;
-    private ArrayList<String> allies = new ArrayList<String>();
-    private ArrayList<String> enemies = new ArrayList<String>();
-    private ArrayList<String> mods = new ArrayList<String>();
-    private ArrayList<String> members = new ArrayList<String>();
-    private ArrayList<UUID> invited = new ArrayList<UUID>();
-    private ArrayList<String> claims = new ArrayList<String>();
-    private ArrayList<Guild> allyInvites = new ArrayList<Guild>();
-    private ArrayList<Guild> neutralInvites = new ArrayList<Guild>();
+    private ArrayList<String> allies = new ArrayList<>(), enemies = new ArrayList<>(), mods = new ArrayList<>(), members = new ArrayList<>(), claims = new ArrayList<>();
+    private ArrayList<UUID> invited = new ArrayList<>();
+    private ArrayList<Guild> allyInvites = new ArrayList<>(), neutralInvites = new ArrayList<>();
     private int totalMembers = 0;
     private Location home;
     private double power = 0.0;
@@ -145,6 +140,26 @@ public class Guild {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void rename(String newName) {
+        UserManager um = new UserManager();
+        GuildManager gm = new GuildManager();
+        for (String enemy : this.enemies)
+            gm.getGuild(enemy).setNeutral(this);
+        for (String ally : this.allies)
+            gm.getGuild(ally).setNeutral(this);
+        this.name = newName;
+        if (!this.leader.equals("") && !this.leader.equals("Janet"))
+            um.getUser(UUID.fromString(this.leader)).joinGuild(this);//Already is this but force updates the name
+        for (String id : this.mods)
+            um.getUser(UUID.fromString(id)).joinGuild(this);//Already is this but force updates the name
+        for (String id : this.members)
+            um.getUser(UUID.fromString(id)).joinGuild(this);//Already is this but force updates the name
+        for (String enemy : this.enemies)
+            gm.getGuild(enemy).addEnemy(this);
+        for (String ally : this.allies)
+            gm.getGuild(ally).addAlly(this);
     }
 
     public boolean allowInteract() {

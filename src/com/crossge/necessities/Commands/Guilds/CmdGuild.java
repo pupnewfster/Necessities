@@ -63,6 +63,8 @@ public class CmdGuild extends Cmd {
             cmd = new CmdDisband();
         else if (subCmd.equalsIgnoreCase("chat") || subCmd.equalsIgnoreCase("c"))
             cmd = new CmdChat();
+        else if (subCmd.equalsIgnoreCase("rename") || subCmd.equalsIgnoreCase("r"))
+            cmd = new CmdRename();
         else
             cmd = new CmdHelp();
         return cmd.commandUse(sender, subArgs);

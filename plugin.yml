@@ -941,6 +941,7 @@ permissions:
                 Necessities.guilds.unclaim: true
                 Necessities.guilds.sethome: true
                 Necessities.guilds.neutral: true
+                Necessities.guilds.rename: true
                 Necessities.guilds.leader: true
                 Necessities.guilds.create: true
                 Necessities.guilds.invite: true
@@ -963,6 +964,9 @@ permissions:
                 Necessities.guilds.map: true
     Necessities.guilds.guild:
         description: Allows you to use /guild.
+        default: true
+    Necessities.guilds.rename:
+        description: Allows you to use /guild rename.
         default: true
     Necessities.guilds.list:
         description: Allows you to use /guild list.
