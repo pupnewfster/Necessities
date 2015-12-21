@@ -10,13 +10,13 @@ import java.util.Calendar;
 import java.util.UUID;
 
 public class JanetAI {//TODO: Upgrade
-    private static ArrayList<String> heyMessages = new ArrayList<String>();
+    private static ArrayList<String> heyMessages = new ArrayList<>();
     private static String[] janetNamed = new String[16];
     private static String[] feelingMessages = new String[20];
     private static String[] stalkerMessages = new String[4];
     private static String[] drunkMessages = new String[10];
     private static String JanetName = "";
-    JanetRandom r = new JanetRandom();
+    private static JanetRandom r = new JanetRandom();
 
     public void parseMessage(UUID uuid, String message) {
         Player p = Bukkit.getPlayer(uuid);
@@ -26,7 +26,16 @@ public class JanetAI {//TODO: Upgrade
         else if (message.toLowerCase().contains("what day is it") || message.toLowerCase().contains("what is the date") ||
                 message.toLowerCase().contains("whats the date") || message.toLowerCase().contains("what's the date"))
             Bukkit.broadcastMessage(JanetName + "The date is: " + date());
-        else if (message.toLowerCase().contains("can i be op") || message.toLowerCase().contains("may i be op") ||
+        else if (message.toLowerCase().startsWith("!") && p.hasPermission("Necessities.janetai")) {
+            if (message.toLowerCase().startsWith("!meme") || message.toLowerCase().startsWith("!memes") || message.toLowerCase().startsWith("!memenumber")) {
+                int applePie = 0;
+                try {
+                    applePie = Integer.parseInt(message.split(" ")[1]);
+                } catch (Exception e) {
+                }
+                Bukkit.broadcastMessage(JanetName + r.memeRandom(applePie));
+            }
+        } else if (message.toLowerCase().contains("can i be op") || message.toLowerCase().contains("may i be op") ||
                 message.toLowerCase().contains("can i have op") || message.toLowerCase().contains("may i have op") ||
                 message.toLowerCase().contains("can i get op") || message.toLowerCase().contains("may i get op") ||
                 message.toLowerCase().contains("can i be admin") || message.toLowerCase().contains("may i be admin") ||

@@ -5,12 +5,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.UUID;
 
 public class GetUUID {
-    private static HashMap<String, UUID> uuids = new HashMap<String, UUID>();
+    private static HashMap<String, UUID> uuids = new HashMap<>();
     private File configFileUUIDs = new File("plugins/Necessities/RankManager", "users.yml");
 
     public UUID getID(String name) {
