@@ -52,10 +52,10 @@ public class JanetAI {//TODO: Upgrade
             if (message.toLowerCase().contains("how are you") || message.toLowerCase().contains("what is up") ||
                     message.toLowerCase().contains("sup") || message.toLowerCase().contains("whats up") ||
                     message.toLowerCase().contains("how was your day"))
-                Bukkit.broadcastMessage(JanetName + feelingMessages[r.rInt(feelingMessages.length)]);
+                Bukkit.broadcastMessage(JanetName + feelingMessages[r.memeRandom(feelingMessages.length)]);
             else if (message.toLowerCase().startsWith("hello") || message.toLowerCase().startsWith("hey") ||
                     message.toLowerCase().startsWith("hi") || message.toLowerCase().startsWith("hai"))
-                Bukkit.broadcastMessage(JanetName + heyMessages.get(r.rInt(heyMessages.size())));
+                Bukkit.broadcastMessage(JanetName + heyMessages.get(r.memeRandom(heyMessages.size())));
             else if (message.toLowerCase().contains("i love you") || message.toLowerCase().contains("do you love me") ||
                     message.toLowerCase().contains("i wub you") || message.toLowerCase().contains("do you wub me") ||
                     message.toLowerCase().contains("love me")) {
@@ -81,12 +81,12 @@ public class JanetAI {//TODO: Upgrade
                 else
                     Bukkit.broadcastMessage(JanetName + "No, *slaps " + p.getName() + "*.");
             } else if (message.toLowerCase().contains("i see you") || message.toLowerCase().contains("i am following you"))
-                Bukkit.broadcastMessage(JanetName + stalkerMessages[r.rInt(stalkerMessages.length)]);
+                Bukkit.broadcastMessage(JanetName + stalkerMessages[r.memeRandom(stalkerMessages.length)]);
             else if (message.toLowerCase().contains("your drunk") || message.toLowerCase().contains("you are drunk") ||
                     message.toLowerCase().contains("you're drunk") || message.toLowerCase().contains("is drunk"))
-                Bukkit.broadcastMessage(JanetName + drunkMessages[r.rInt(drunkMessages.length)]);
+                Bukkit.broadcastMessage(JanetName + drunkMessages[r.memeRandom(drunkMessages.length)]);
             else
-                Bukkit.broadcastMessage(JanetName + janetNamed[r.rInt(janetNamed.length)]);
+                Bukkit.broadcastMessage(JanetName + janetNamed[r.memeRandom(janetNamed.length)]);
         }
     }
 

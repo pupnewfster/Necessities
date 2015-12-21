@@ -19,7 +19,7 @@ public class JanetRandom extends Random {
     }
 
     public int memeRandom(int m) {
-        return (int) Math.sqrt(Math.abs(Math.pow(m, 2)*pies[rInt(pies.length)].nextInt(m)/Math.PI))%m;//sqrt((mathExpression/pi)*(applePie)) = meme
+        return (int) Math.sqrt(Math.abs(Math.pow(m, 2)*(pies[rInt(pies.length)].nextInt(m)/Math.PI)))%m;//sqrt((mathExpression/pi)*(applePie)) = meme
     }
 
     private static class ApplePie extends Random {
