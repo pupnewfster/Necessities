@@ -62,7 +62,7 @@ public class CmdTempban extends Cmd {
         bans.addBan(theirName, reason, date, "Console");
         if (reason != null)
             Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + " for " + var.getObj() + minutes + var.getMessages() +
-                    " " + plural(minutes) + " and the reason: " + var.getObj() + reason);
+                    " " + plural(minutes) + " for the reason: " + var.getObj() + reason);
         else
             Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + " for " + var.getObj() + minutes + var.getMessages() + " " + plural(minutes) + ".");
         return true;

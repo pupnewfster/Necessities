@@ -45,8 +45,8 @@ public class JanetRandom extends Random {
 
     private static class BlueberryPie extends Random {
         @Override
-        public int nextInt(int m) {//Returns a random int from 0 - m
-            return (int) Math.pow(3.5, 2.6268656716417910447761194029851)*nextInt();
+        public int nextInt(int m) {
+            return (int) Math.pow(3.5, 2.6268656716417910447761194029851)*nextInt();//Gragas ad per level raised to sneaky's kda on Gragas in season 4
         }
     }
 
