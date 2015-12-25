@@ -962,7 +962,7 @@ public class Listeners implements Listener {
                     e.getMessage());
         }
         e.setCancelled(true);
-        if (config.contains("Necessities.AI") && config.getBoolean("Necessities.AI") && !isop && !u.guildChat())
+        if (config.contains("Necessities.AI") && config.getBoolean("Necessities.AI") && (!isop || message.startsWith("!")) && !u.guildChat())
             try {
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
                     @Override

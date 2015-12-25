@@ -27,14 +27,15 @@ public class JanetAI {//TODO: Upgrade
                 message.toLowerCase().contains("whats the date") || message.toLowerCase().contains("what's the date"))
             Bukkit.broadcastMessage(JanetName + "The date is: " + date());
         else if (message.toLowerCase().startsWith("!") && p.hasPermission("Necessities.janetai")) {
-            if (message.toLowerCase().startsWith("!meme") || message.toLowerCase().startsWith("!memes") || message.toLowerCase().startsWith("!memenumber")) {
+            if (message.toLowerCase().startsWith("!meme ") || message.toLowerCase().startsWith("!memes ") || message.toLowerCase().startsWith("!memenumber ")) {
                 int applePie = 0;
                 try {
                     applePie = Integer.parseInt(message.split(" ")[1]);
                 } catch (Exception e) {
                 }
                 Bukkit.broadcastMessage(JanetName + r.memeRandom(applePie));
-            }
+            } else if (message.toLowerCase().startsWith("!say "))
+                Bukkit.broadcastMessage(JanetName + message.replaceFirst("!say ", ""));
         } else if (message.toLowerCase().contains("can i be op") || message.toLowerCase().contains("may i be op") ||
                 message.toLowerCase().contains("can i have op") || message.toLowerCase().contains("may i have op") ||
                 message.toLowerCase().contains("can i get op") || message.toLowerCase().contains("may i get op") ||
