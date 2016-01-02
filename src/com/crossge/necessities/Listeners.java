@@ -40,6 +40,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Diode;
 import org.bukkit.material.MaterialData;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
 
 import java.io.BufferedReader;
@@ -963,15 +964,12 @@ public class Listeners implements Listener {
         }
         e.setCancelled(true);
         if (config.contains("Necessities.AI") && config.getBoolean("Necessities.AI") && (!isop || message.startsWith("!")) && !u.guildChat())
-            try {
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-                    @Override
-                    public void run() {
-                        ai.parseMessage(uuid, message);
-                    }
-                });
-            } catch (Exception er) {
-            }
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    ai.parseMessage(uuid, message);
+                }
+            });
     }
 
     @EventHandler
@@ -1022,7 +1020,10 @@ public class Listeners implements Listener {
                 u.setAfk(false);
             YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
             if (config.contains("Necessities.customDeny") && config.getBoolean("Necessities.customDeny")) {
-                PluginCommand pc = Bukkit.getPluginCommand(e.getMessage().split(" ")[0].replaceFirst("/", ""));
+                PluginCommand pc = null;
+                try {
+                    pc = Bukkit.getPluginCommand(e.getMessage().split(" ")[0].replaceFirst("/", ""));
+                } catch (Exception er) {}//Invalid command
                 if (pc != null && !pc.testPermissionSilent(player)) {
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have permission to perform this command.");
                     e.setCancelled(true);

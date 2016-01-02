@@ -750,10 +750,12 @@ permissions:
             Necessities.ignoreGameMode: true
             Necessities.bracketOthers: true
             Necessities.unsafeEnchant: true
+            Necessities.logoutmessage: true
             Necessities.unignoreable: true
             Necessities.spamcommands: true
             Necessities.canCombatLog: true
             Necessities.afkkickimune: true
+            Necessities.loginmessage: true
             Necessities.titleOthers: true
             Necessities.opBroadcast: true
             Necessities.freeCommand: true
