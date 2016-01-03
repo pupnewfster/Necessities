@@ -73,8 +73,12 @@ public class JanetSlack {
                 JSONObject message = (JSONObject) messages.get(i);
                 if (!message.containsKey("subtype") && !wasZero) {
                     String name = getUserInfo((String) message.get("user"));
-                    if (!name.contains("janet"))
-                        sendOps(name + ": " + message.get("text"));
+                    if (!name.contains("janet")) {
+                        String text = (String) message.get("text");
+                        while (text.contains("<") && text.contains(">"))
+                            text = text.split("<@")[0] + "@" + getUserInfo(text.split("<@")[1].split(">:")[0]) + ":" + text.split("<@")[1].split(">:")[1];
+                        sendOps(name + ": " + text);
+                    }
                 }
                 if (i == 0)
                     latest = (String) message.get("ts");
@@ -86,7 +90,7 @@ public class JanetSlack {
         Bukkit.broadcast(var.getMessages() + "To Ops - " + ChatColor.WHITE + message, "Necessities.opBroadcast");
     }
 
-    private String getUserInfo(String id) {//Store previous names in a list
+    private String getUserInfo(String id) {
         if (userMap.containsKey(id))
             return userMap.get(id);
         String output = "";
