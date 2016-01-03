@@ -407,6 +407,10 @@ public class Necessities extends JavaPlugin {
             com = new CmdEnderChest();
         else if (isEqual(name, "invsee"))
             com = new CmdInvsee();
+        else if (isEqual(name, "slack"))
+            com = new CmdSlack();
+        else if (isEqual(name, "requestmod"))
+            com = new CmdRequestMod();
         else if (isEqual(name, "top"))
             com = new CmdTop();
         else if (isEqual(name, "speed"))

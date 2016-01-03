@@ -65,6 +65,7 @@ public class Listeners implements Listener {
     GuildManager gm = new GuildManager();
     JanetSigns signs = new JanetSigns();
     JanetBooks books = new JanetBooks();
+    JanetSlack slack = new JanetSlack();
     CmdInvsee invsee = new CmdInvsee();
     UserManager um = new UserManager();
     Wrenched wrench = new Wrenched();
@@ -904,6 +905,11 @@ public class Listeners implements Listener {
             e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
             e.setMessage(e.getMessage().replaceFirst("#", ""));
+        } else if (u.slackChat()) {
+            e.setFormat(var.getMessages() + "To Slack - " + ChatColor.WHITE + e.getFormat());
+            e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
         } else if (u.guildChat()) {
             e.setFormat(var.getMessages() + "To Guild - " + ChatColor.WHITE + e.getFormat());
             e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
@@ -943,10 +949,10 @@ public class Listeners implements Listener {
             player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are muted.");
         else {
             if (!e.getRecipients().isEmpty()) {
-                ArrayList<Player> toRem = new ArrayList<Player>();
+                ArrayList<Player> toRem = new ArrayList<>();
                 for (Player recip : e.getRecipients())
-                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (isop && !recip.hasPermission("Necessities.opBroadcast")) || (u.guildChat() && u.getGuild() != null &&
-                        u.getGuild() != um.getUser(recip.getUniqueId()).getGuild()))
+                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (isop && !recip.hasPermission("Necessities.opBroadcast")) || (isop && !recip.hasPermission("Necessities.slack"))
+                            || (u.guildChat() && u.getGuild() != null && u.getGuild() != um.getUser(recip.getUniqueId()).getGuild()))
                         toRem.add(recip);
                 for (Player recip : toRem)
                     e.getRecipients().remove(recip);
@@ -961,6 +967,8 @@ public class Listeners implements Listener {
                 }
             Bukkit.getConsoleSender().sendMessage(e.getFormat().replaceFirst("\\{GCOLOR\\}", var.getNeutral() + "").replaceAll("\\{MESSAGE\\}", "") +
                     e.getMessage());
+            if (u.slackChat())
+                slack.sendMessage(ChatColor.stripColor(e.getFormat().replaceFirst("\\{GCOLOR\\}", var.getNeutral() + "").replaceAll("\\{MESSAGE\\}", "") + e.getMessage()));
         }
         e.setCancelled(true);
         if (config.contains("Necessities.AI") && config.getBoolean("Necessities.AI") && (!isop || message.startsWith("!")) && !u.guildChat())

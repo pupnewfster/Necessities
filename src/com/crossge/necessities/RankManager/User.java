@@ -35,10 +35,10 @@ public class User {
     private ArrayList<UUID> ignored = new ArrayList<>();
     private String appended = "", nick = null, lastContact;
     private PermissionAttachment attachment;
-    private boolean teleporting = false, jailed = false, opChat = false, afk = false, isbacking = false, god = false, muted = false, autoClaiming = false, guildChat = false;
+    private boolean teleporting = false, jailed = false, opChat = false, afk = false, isbacking = false, god = false, muted = false, autoClaiming = false, guildChat = false, slackChat = false;
     private double power = 0.0;
     private Guild guild;
-    private long lastAction = 0, lastAFK = 0;
+    private long lastAction = 0, lastAFK = 0, lastRequest = 0;
     private int pastTotal = 0, lastActionTask = 0, afkTask = 0;
     private long login = 0;
     private Player bukkitPlayer;
@@ -364,6 +364,14 @@ public class User {
 
     public String getDispName() {
         return this.bukkitPlayer == null ? Bukkit.getOfflinePlayer(this.userUUID).getName() : ChatColor.translateAlternateColorCodes('&', getRank().getTitle() + this.bukkitPlayer.getDisplayName());
+    }
+
+    public long getLastRequest() {
+        return this.lastRequest == 0 ? System.currentTimeMillis() : this.lastRequest;
+    }
+
+    public void setLastRequest(long time) {
+        this.lastRequest = time;
     }
 
     public Rank getRank() {
@@ -764,6 +772,14 @@ public class User {
 
     public void setClaiming(boolean value) {
         this.autoClaiming = value;
+    }
+
+    public boolean slackChat() {
+        return this.slackChat;
+    }
+
+    public void toggleSlackChat() {
+        this.slackChat = !this.slackChat;
     }
 
     public boolean opChat() {

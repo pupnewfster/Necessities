@@ -31,6 +31,16 @@ commands:
       usage: /<command>
       permission: Necessities.wrench
       aliases: [nwrench]
+   requestmod:
+      description: Requests a mod to get on.
+      usage: /<command> <reason>
+      permission: Necessities.requestmod
+      aliases: [nrequestmod, requestop, nrequestop, requestadmin, nrequestadmin, requestmanager, nrequestmanager, requestdirector, nrequestdirector, modrequest, nmodrequest, oprequest, noprequest, adminrequest, nadminrequest, managerrequest, nmanagerrequest, directorrequest, ndirectorrequest]
+   slack:
+      description: Toggles slackchat.
+      usage: /<command> <message>
+      permission: Necessities.slack
+      aliases: [nslack, sc, nsc]
    ragequit:
       description: Ragequits the server!
       usage: /<command>
@@ -768,6 +778,7 @@ permissions:
             Necessities.feedOthers: true
             Necessities.healOthers: true
             Necessities.machinegun: true
+            Necessities.requestmod: true
             Necessities.keepitems: true
             Necessities.nopvpLoss: true
             Necessities.colorchat: true
@@ -814,6 +825,7 @@ permissions:
             Necessities.tphere: true
             Necessities.tpdeny: true
             Necessities.wrench: true
+            Necessities.slack: true
             Necessities.tppos: true
             Necessities.tpall: true
             Necessities.unban: true
@@ -1063,6 +1075,9 @@ permissions:
     Necessities.tpdeny:
         description: Allows you to deny teleport requests.
         default: true
+    Necessities.requestmod:
+        description: Allows you to request a mod to get on.
+        default: true
     Necessities.msg:
         description: Allows you to message people.
         default: true
@@ -1254,6 +1269,9 @@ permissions:
         default: op
     Necessities.warn:
         description: Allows you to warn players.
+        default: op
+    Necessities.slack:
+        description: Allows you to enter slack chat.
         default: op
     Necessities.slap:
         description: Allows you to slap a player.
