@@ -15,8 +15,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.HashMap;
 
 public class JanetSlack {
+    private static HashMap<String, String> userMap = new HashMap<>();
     private static BukkitRunnable historyReader;
     private static String token, latest = "0";
     private Variables var = new Variables();
@@ -41,6 +43,7 @@ public class JanetSlack {
     public void disable() {
         sendMessage("Disconnected.");
         historyReader.cancel();
+        userMap.clear();
     }
 
     public void sendMessage(String message) {
@@ -83,7 +86,9 @@ public class JanetSlack {
         Bukkit.broadcast(var.getMessages() + "To Ops - " + ChatColor.WHITE + message, "Necessities.opBroadcast");
     }
 
-    private String getUserInfo(String id) {
+    private String getUserInfo(String id) {//Store previous names in a list
+        if (userMap.containsKey(id))
+            return userMap.get(id);
         String output = "";
         try {
             URL obj = new URL("https://slack.com/api/" + "users.info" + "?token=" + token + "&user=" + id + "&pretty=1");
@@ -104,6 +109,7 @@ public class JanetSlack {
             JSONObject user = (JSONObject) json.get("user");
             output = (String) user.get("name");
         } catch (Exception e) {}
+        userMap.put(id, output);
         return output;
     }
 
