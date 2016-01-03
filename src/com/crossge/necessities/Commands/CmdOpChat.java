@@ -58,7 +58,6 @@ public class CmdOpChat extends Cmd {
                 message = ChatColor.translateAlternateColorCodes('&', message.replaceAll("&k", ""));
         }
         Bukkit.broadcast(send + message, "Necessities.opBroadcast");
-        Bukkit.getConsoleSender().sendMessage(send + message);
     }
 
     private void consoleToOps(String message) {

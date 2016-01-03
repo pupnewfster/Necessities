@@ -8,6 +8,7 @@ import com.crossge.necessities.Guilds.PowerManager;
 import com.crossge.necessities.Hats.HatType;
 import com.crossge.necessities.Janet.Janet;
 import com.crossge.necessities.Janet.JanetAI;
+import com.crossge.necessities.Janet.JanetSlack;
 import com.crossge.necessities.Janet.JanetWarn;
 import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.WorldManager.PortalManager;
@@ -42,6 +43,7 @@ public class Initialization {
     WarpManager warps = new WarpManager();
     WorldManager wm = new WorldManager();
     GuildManager gm = new GuildManager();
+    JanetSlack slack = new JanetSlack();
     ScoreBoards sb = new ScoreBoards();
     RankManager rm = new RankManager();
     JanetWarn warns = new JanetWarn();
@@ -96,6 +98,7 @@ public class Initialization {
         hide.init();
         warns.initiate();
         ai.initiate();
+        slack.init();
 
         //Guilds
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
@@ -185,6 +188,7 @@ public class Initialization {
                 config.set("Necessities.firstItems", Arrays.asList(""));
                 config.set("Console.AliveStatus", "Alive");
                 config.set("Necessities.DonationPass", "password");
+                config.set("Necessities.SlackToken", "token");
                 config.save(configFile);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -225,6 +229,8 @@ public class Initialization {
                 config.set("Necessities.customDeny", false);
             if (!config.contains("Necessities.DonationPass"))
                 config.set("Necessities.DonationPass", "password");
+            if (!config.contains("Necessities.SlackToken"))
+                config.set("Necessities.SlackToken", "token");
             try {
                 config.save(configFile);
             } catch (Exception e) {

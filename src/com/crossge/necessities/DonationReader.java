@@ -57,7 +57,6 @@ public class DonationReader {
             stmt2.close();
             conn.close();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

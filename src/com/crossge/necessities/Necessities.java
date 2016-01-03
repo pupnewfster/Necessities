@@ -18,6 +18,7 @@ import com.crossge.necessities.Commands.WorldManager.*;
 import com.crossge.necessities.Economy.BalChecks;
 import com.crossge.necessities.Guilds.PowerManager;
 import com.crossge.necessities.Janet.Janet;
+import com.crossge.necessities.Janet.JanetSlack;
 import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
@@ -67,10 +68,11 @@ public class Necessities extends JavaPlugin {
             getLogger().warning("Could not hook into Google Analytics!");
 
         janetID = UUID.randomUUID();
-        try {
-            this.protocolManager = ProtocolLibrary.getProtocolManager();
-            addPacketListener();
-        } catch (Exception e) {}//Not using protocollib
+        if (getServer().getPluginManager().getPlugin("ProtocolLib") != null)
+            try {
+                this.protocolManager = ProtocolLibrary.getProtocolManager();
+                addPacketListener();
+            } catch (Exception e) {}//Not using protocollib
         Initialization init = new Initialization();
         init.initiateFiles();
         getServer().getPluginManager().registerEvents(new Listeners(), this);
@@ -640,10 +642,12 @@ public class Necessities extends JavaPlugin {
         CmdHide hide = new CmdHide();
         Janet bot = new Janet();
         PowerManager power = new PowerManager();
+        JanetSlack slack = new JanetSlack();
         power.unload();
         um.unload();
         cs.unload();
         hide.unload();
+        slack.disable();
         bot.unload();
         dr.disconnect();
         getLogger().info("Necessities disabled.");
