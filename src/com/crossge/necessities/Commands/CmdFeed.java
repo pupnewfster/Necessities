@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -29,7 +30,7 @@ public class CmdFeed extends Cmd {
             if (!p.hasPermission("Necessities.feedOthers"))
                 uuid = p.getUniqueId();
         }
-        Player target = sender.getServer().getPlayer(uuid);
+        Player target = Bukkit.getPlayer(uuid);
         target.setFoodLevel(20);
         target.setSaturation(5);
         target.sendMessage(var.getMessages() + "You have been satisfied.");

@@ -3,7 +3,7 @@ package com.crossge.necessities.Economy;
 import java.util.HashMap;
 
 public class Trade {
-    private static HashMap<String, String> trades = new HashMap<String, String>();
+    private static HashMap<String, String> trades = new HashMap<>();
 
     public boolean hasTrade(String pname, String offerpname) {
         return trades.containsKey(pname + " " + offerpname);

@@ -11,8 +11,8 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class WarpManager {
-    private static HashMap<String, Warp> warps = new HashMap<String, Warp>();
-    private static HashMap<String, String> lowerNames = new HashMap<String, String>();
+    private static HashMap<String, Warp> warps = new HashMap<>();
+    private static HashMap<String, String> lowerNames = new HashMap<>();
     private File configFileWarps = new File("plugins/Necessities/WorldManager", "warps.yml");
 
     public void initiate() {

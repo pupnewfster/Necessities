@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class Wrenched {
-    private static ArrayList<String> locs = new ArrayList<String>();
+    private static ArrayList<String> locs = new ArrayList<>();
     private File configFileWrench = new File("plugins/Necessities", "wrenched.yml");
 
     public void initiate() {

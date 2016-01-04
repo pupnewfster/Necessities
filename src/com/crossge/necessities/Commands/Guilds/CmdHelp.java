@@ -28,7 +28,7 @@ public class CmdHelp extends GuildCmd {
             page = 1;
         int time = 0;
         int rounder = 0;
-        ArrayList<String> helpList = new ArrayList<String>();
+        ArrayList<String> helpList = new ArrayList<>();
         setHelp(helpList, sender);
         if (helpList.size() % 10 != 0)
             rounder = 1;

@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands.Economy;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -18,7 +19,7 @@ public class CmdTDeny extends EconomyCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
                 return true;
             }
-            Player target = sender.getServer().getPlayer(uuid);
+            Player target = Bukkit.getPlayer(uuid);
             String pname = player.getName();
             String offerpname = target.getName();
             if (tr.hasTrade(pname, offerpname)) {

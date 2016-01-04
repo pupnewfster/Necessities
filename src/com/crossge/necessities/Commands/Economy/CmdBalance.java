@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class CmdBalance extends EconomyCmd {
@@ -29,7 +31,7 @@ public class CmdBalance extends EconomyCmd {
                 }
                 playersname = Bukkit.getOfflinePlayer(uuid).getName();
             } else
-                playersname = sender.getServer().getPlayer(uuid).getName();
+                playersname = Bukkit.getPlayer(uuid).getName();
             String balance = balc.bal(uuid);
             if (balance == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player is not in my records. If the player is offline, please use the full and most recent name.");
@@ -42,5 +44,22 @@ public class CmdBalance extends EconomyCmd {
 
     private String ownerShip(String name) {
         return (name.endsWith("s") || name.endsWith("S")) ? name + "'" : name + "'s";
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        List<String> complete = new ArrayList<>();
+        String search = "";
+        if (args.length > 0)
+            search = args[args.length - 1];
+        if (sender instanceof Player) {
+            for (Player p : Bukkit.getOnlinePlayers())
+                if (p.getName().startsWith(search) && ((Player) sender).canSee(p))
+                    complete.add(p.getName());
+        } else
+            for (Player p : Bukkit.getOnlinePlayers())
+                if (p.getName().startsWith(search))
+                    complete.add(p.getName());
+        return complete;
     }
 }

@@ -18,7 +18,7 @@ public class CmdMachineGun extends Cmd {
                 return true;
             }
             ItemMeta handMeta = hand.getItemMeta();
-            ArrayList<String> lore = new ArrayList<String>();
+            ArrayList<String> lore = new ArrayList<>();
             if (handMeta.hasLore())
                 lore = (ArrayList<String>) handMeta.getLore();
             if (lore.contains("Machine gun")) {

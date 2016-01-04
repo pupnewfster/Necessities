@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class GuildManager {
-    private static HashMap<String, Guild> guilds = new HashMap<String, Guild>();
+    private static HashMap<String, Guild> guilds = new HashMap<>();
     private File configFileProtected = new File("plugins/Necessities/Guilds", "Protected.yml");
     private File configFileGuilds = new File("plugins/Necessities/Guilds", "guilds.yml");
 

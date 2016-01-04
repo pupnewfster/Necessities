@@ -10,8 +10,7 @@ import java.util.UUID;
 
 public class CmdList extends GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        ArrayList<String> guildList = new ArrayList<String>();
-
+        ArrayList<String> guildList = new ArrayList<>();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.list")) {

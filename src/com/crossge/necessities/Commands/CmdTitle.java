@@ -2,6 +2,7 @@ package com.crossge.necessities.Commands;
 
 import com.crossge.necessities.Economy.BalChecks;
 import com.crossge.necessities.Economy.Formatter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -26,7 +27,7 @@ public class CmdTitle extends Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;
         }
-        Player target = sender.getServer().getPlayer(uuid);
+        Player target = Bukkit.getPlayer(uuid);
         boolean free = !(sender instanceof Player);
         if (sender instanceof Player) {
             Player p = (Player) sender;

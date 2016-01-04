@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class JanetWarn {
-    private static HashMap<UUID, Integer> warnCount = new HashMap<UUID, Integer>();
+    private static HashMap<UUID, Integer> warnCount = new HashMap<>();
     private static String JanetName = "";
     JanetLog log = new JanetLog();
     private File configFile = new File("plugins/Necessities", "config.yml");

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class CmdPrices {
     private File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
-    private static ArrayList<String> co = new ArrayList<String>();
+    private static ArrayList<String> co = new ArrayList<>();
     RankManager rm = new RankManager();
     Formatter form = new Formatter();
 
@@ -53,7 +53,7 @@ public class CmdPrices {
     }
 
     private void ordList() {
-        ArrayList<String> temp = new ArrayList<String>();
+        ArrayList<String> temp = new ArrayList<>();
         for (Rank r : rm.getOrder())
             for (String cmd : co)
                 if (r.getName().toUpperCase().equals(cmd.split(" ")[1]))

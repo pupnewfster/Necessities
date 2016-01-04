@@ -1,6 +1,7 @@
 package com.crossge.necessities.Commands;
 
 import com.crossge.necessities.RankManager.User;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -39,7 +40,7 @@ public class CmdGod extends Cmd {
             if (!p.hasPermission("Necessities.godOthers"))
                 uuid = p.getUniqueId();
         }
-        Player target = sender.getServer().getPlayer(uuid);
+        Player target = Bukkit.getPlayer(uuid);
         User u = um.getUser(uuid);
         if (u.godmode()) {
             target.sendMessage(var.getMessages() + "God mode " + var.getObj() + "disabled" + var.getMessages() + ".");

@@ -23,7 +23,7 @@ public class CmdHighfive extends Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid player.");
             return true;
         }
-        Player target = sender.getServer().getPlayer(uuid);
+        Player target = Bukkit.getPlayer(uuid);
         if (sender instanceof Player) {
             Player player = (Player) sender;
             target.sendMessage(var.getObj() + player.getName() + var.getMessages() + " just highfived you.");

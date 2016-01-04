@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -33,7 +34,7 @@ public class CmdHeal extends Cmd {
             if (!p.hasPermission("Necessities.healOthers"))
                 uuid = p.getUniqueId();
         }
-        Player target = sender.getServer().getPlayer(uuid);
+        Player target = Bukkit.getPlayer(uuid);
         target.setHealth(20);
         target.setFoodLevel(20);
         for (PotionEffect potion : target.getActivePotionEffects())

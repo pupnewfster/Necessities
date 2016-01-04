@@ -20,8 +20,8 @@ public class CmdMap extends GuildCmd {
             }
             Chunk c = p.getLocation().getChunk();
             String up = up(p.getLocation().getYaw());
-            ArrayList<Chunk> chunks = new ArrayList<Chunk>();
-            HashMap<Guild, String> symbols = new HashMap<Guild, String>();
+            ArrayList<Chunk> chunks = new ArrayList<>();
+            HashMap<Guild, String> symbols = new HashMap<>();
             for (int z = -4; z < 5; z++)
                 for (int x = -19; x < 20; x++) {
                     int cX = c.getX();
@@ -71,8 +71,7 @@ public class CmdMap extends GuildCmd {
             String name = "(" + c.getX() + "," + c.getZ() + ") ";
             if (owner != null) {
                 name += owner.getName();
-                sender.sendMessage(var.getMessages() + parant(name.length() / 2) + ".[ " + owner.relation(u.getGuild()) + name + var.getMessages() + " ]." +
-                        parant(name.length() / 2));
+                sender.sendMessage(var.getMessages() + parant(name.length() / 2) + ".[ " + owner.relation(u.getGuild()) + name + var.getMessages() + " ]." + parant(name.length() / 2));
             } else {
                 name += "Wilderness";
                 sender.sendMessage(var.getMessages() + parant(name.length() / 2) + ".[ " + var.getWild() + name + var.getMessages() + " ]." + parant(name.length() / 2));
@@ -95,25 +94,15 @@ public class CmdMap extends GuildCmd {
                 Guild g = gm.chunkOwner(chunks.get(i));
                 if (i == 175)
                     line += ChatColor.AQUA + "+";
-                else if (u.getGuild() == null) {
-                    line += var.getNeutral() + "-";
-                    if (g == null)
-                        line += var.getNeutral() + "-";
-                    else
-                        line += var.getNeutral() + symbols.get(g);
-                } else {
-                    if (g == null)
-                        line += var.getNeutral() + "-";
-                    else
-                        line += u.getGuild().relation(g) + symbols.get(g);
-                }
+                else if (u.getGuild() == null)
+                    line += var.getNeutral() + (g == null ? "-" : symbols.get(g));
+                else
+                    line += (g == null ? var.getNeutral() + "-" : u.getGuild().relation(g) + symbols.get(g));
+
             }
             String key = "";
             for (Guild g : symbols.keySet())
-                if (u.getGuild() == null)
-                    key += var.getNeutral() + symbols.get(g) + ": " + g.getName() + ", ";
-                else
-                    key += u.getGuild().relation(g) + symbols.get(g) + ": " + g.getName() + ", ";
+                key += (u.getGuild() == null ? var.getNeutral() + symbols.get(g) + ": " + g.getName() + ", " : u.getGuild().relation(g) + symbols.get(g) + ": " + g.getName() + ", ");
             if (!key.equals(""))
                 sender.sendMessage(key.substring(0, key.length() - 2));
         } else

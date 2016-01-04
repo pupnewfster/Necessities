@@ -4,6 +4,7 @@ import com.crossge.necessities.Economy.BalChecks;
 import com.crossge.necessities.Economy.Formatter;
 import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -57,7 +58,7 @@ public class CmdNick extends Cmd {
                     p.sendMessage(var.getMessages() + "Nickname set to " + p.getDisplayName());
                     return true;
                 }
-                Player target = sender.getServer().getPlayer(uuid);
+                Player target = Bukkit.getPlayer(uuid);
                 if (!p.hasPermission("Necessities.nickOthers"))
                     target = p;
                 target.setDisplayName(target.getName());
@@ -76,7 +77,7 @@ public class CmdNick extends Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;
         }
-        Player target = sender.getServer().getPlayer(uuid);
+        Player target = Bukkit.getPlayer(uuid);
         if (sender instanceof Player && !sender.hasPermission("Necessities.nickOthers"))
             target = ((Player) sender);
         if (args.length == 1) {

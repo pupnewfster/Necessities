@@ -13,10 +13,10 @@ public class Materials {
     private File configFileIds = new File("plugins/Necessities/Economy", "ids.yml");
     private File configFileFriendlyNames = new File("plugins/Necessities/Economy", "friendlynames.yml");
     private File configFilePluralyNames = new File("plugins/Necessities/Economy", "pluralnames.yml");
-    private static HashMap<Integer, String> idsToNames = new HashMap<Integer, String>();
-    private static HashMap<String, String> friendlyNames = new HashMap<String, String>();
-    private static HashMap<String, String> customNames = new HashMap<String, String>();
-    private static HashMap<String, String> plural = new HashMap<String, String>();
+    private static HashMap<Integer, String> idsToNames = new HashMap<>();
+    private static HashMap<String, String> friendlyNames = new HashMap<>();
+    private static HashMap<String, String> customNames = new HashMap<>();
+    private static HashMap<String, String> plural = new HashMap<>();
     Formatter form = new Formatter();
 
     public void readIds() {

@@ -9,10 +9,7 @@ public class CmdAfk extends Cmd {
         if (sender instanceof Player) {
             Player p = (Player) sender;
             User u = um.getUser(p.getUniqueId());
-            if (!u.isAfk())
-                p.sendMessage(var.getMessages() + "You are now afk.");
-            else
-                p.sendMessage(var.getMessages() + "You are no longer afk.");
+            p.sendMessage(var.getMessages() + (!u.isAfk() ? "You are now afk." : "You are no longer afk."));
             u.setAfk(!u.isAfk());
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot go afk.");

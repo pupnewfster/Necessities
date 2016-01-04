@@ -934,8 +934,6 @@ public class User {
     }
 
     private String plural(int times) {
-        if (times == 1)
-            return "";
-        return "s";
+        return times == 1 ? "" : "s";
     }
 }

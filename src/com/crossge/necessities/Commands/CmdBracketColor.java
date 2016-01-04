@@ -26,7 +26,7 @@ public class CmdBracketColor extends Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;
         }
-        Player target = sender.getServer().getPlayer(uuid);
+        Player target = Bukkit.getPlayer(uuid);
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (target != p && !p.hasPermission("Necessities.bracketOthers"))
@@ -55,7 +55,7 @@ public class CmdBracketColor extends Cmd {
     }
 
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        List<String> complete = new ArrayList<String>();
+        List<String> complete = new ArrayList<>();
         String search = "";
         if (args.length > 0)
             search = args[args.length - 1];

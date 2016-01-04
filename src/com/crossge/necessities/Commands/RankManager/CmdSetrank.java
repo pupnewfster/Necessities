@@ -1,6 +1,5 @@
 package com.crossge.necessities.Commands.RankManager;
 
-import com.crossge.necessities.Economy.Formatter;
 import com.crossge.necessities.RankManager.Rank;
 import com.crossge.necessities.RankManager.User;
 import org.bukkit.Bukkit;
@@ -10,20 +9,17 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class CmdSetrank extends RankCmd {
-    Formatter form = new Formatter();
-
     public boolean commandUse(CommandSender sender, String[] args) {
         if (args.length != 2) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a user and a rank to set the user's rank to.");
             return true;
         }
         UUID uuid = get.getID(args[0]);
-        if (uuid == null) {
+        if (uuid == null)
             uuid = get.getOfflineID(args[0]);
-            if (uuid == null) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
-                return true;
-            }
+        if (uuid == null) {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
+            return true;
         }
         User u = um.getUser(uuid);
         Rank r = rm.getRank(form.capFirst(args[1]));
@@ -42,13 +38,7 @@ public class CmdSetrank extends RankCmd {
             name = player.getName();
         }
         um.updateUserRank(u, uuid, r);
-        Bukkit.broadcastMessage(var.getMessages() + name + " set " + plural(get.nameFromString(uuid.toString())) + " rank to " + u.getRank().getName() + ".");
+        Bukkit.broadcastMessage(var.getMessages() + name + " set " + form.plural(get.nameFromString(uuid.toString())) + " rank to " + u.getRank().getName() + ".");
         return true;
-    }
-
-    private String plural(String name) {
-        if (name.endsWith("s"))
-            return name + "'";
-        return name + "'s";
     }
 }

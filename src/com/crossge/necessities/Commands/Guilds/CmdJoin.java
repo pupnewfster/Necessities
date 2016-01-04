@@ -27,12 +27,11 @@ public class CmdJoin extends GuildCmd {
             Guild g = gm.getGuild(args[0]);
             if (g == null) {
                 UUID uuid = get.getID(args[0]);
-                if (uuid == null) {
+                if (uuid == null)
                     uuid = get.getOfflineID(args[0]);
-                    if (uuid == null) {
-                        sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
-                        return true;
-                    }
+                if (uuid == null) {
+                    sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
+                    return true;
                 }
                 if (um.getUser(uuid) != null)
                     g = um.getUser(uuid).getGuild();

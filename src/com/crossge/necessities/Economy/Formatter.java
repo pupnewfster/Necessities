@@ -44,4 +44,8 @@ public class Formatter {
             firstCapitalized += word.substring(1);
         return firstCapitalized;
     }
+
+    public String plural(String name) {
+        return name.endsWith("s") ? name + "'" : name + "'s";
+    }
 }

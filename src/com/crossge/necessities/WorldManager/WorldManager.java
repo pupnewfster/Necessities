@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class WorldManager {
     private File configFileWM = new File("plugins/Necessities/WorldManager", "worlds.yml");
-    private static HashMap<String,String> invSys = new HashMap<String,String>();
+    private static HashMap<String,String> invSys = new HashMap<>();
     private File configFile = new File("plugins/Necessities", "config.yml");
 
     public void initiate() {

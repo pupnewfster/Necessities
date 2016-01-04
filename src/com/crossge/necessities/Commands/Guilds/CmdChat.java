@@ -32,11 +32,8 @@ public class CmdChat extends GuildCmd {
             message = message.trim();
             if (args.length > 0)
                 sendGuild(p.getUniqueId(), message);
-            else if (!u.guildChat()) {
-                p.sendMessage(var.getMessages() + "You are now sending messages only to guild members.");
-                u.toggleGuildChat();
-            } else {
-                p.sendMessage(var.getMessages() + "You are no longer sending messages to guild members.");
+            else {
+                p.sendMessage(var.getMessages() + (!u.guildChat() ? "You are now sending messages only to guild members." : "You are no longer sending messages to guild members."));
                 u.toggleGuildChat();
             }
         } else
@@ -56,12 +53,8 @@ public class CmdChat extends GuildCmd {
         send = send.replaceAll("\\{RANK\\}", ChatColor.translateAlternateColorCodes('&', um.getUser(uuid).getRank().getTitle()));
         send = send.replaceAll("\\{NAME\\}", player.getDisplayName());
         send = send.replaceAll("\\{MESSAGE\\}", "");
-        if (player.hasPermission("Necessities.colorchat")) {
-            if (player.hasPermission("Necessities.magicchat"))
-                message = ChatColor.translateAlternateColorCodes('&', message);
-            else
-                message = ChatColor.translateAlternateColorCodes('&', message.replaceAll("&k", ""));
-        }
+        if (player.hasPermission("Necessities.colorchat"))
+            message = ChatColor.translateAlternateColorCodes('&', (player.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", "")));
         for (Player p : Bukkit.getOnlinePlayers()) {
             User u = um.getUser(p.getUniqueId());
             if (u.getGuild() != null && sender.getGuild() == u.getGuild())

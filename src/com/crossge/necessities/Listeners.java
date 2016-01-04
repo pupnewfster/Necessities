@@ -40,7 +40,6 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Diode;
 import org.bukkit.material.MaterialData;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
 
 import java.io.BufferedReader;
@@ -375,7 +374,7 @@ public class Listeners implements Listener {
                     for (String en : s.split(" ")[4].split(","))
                         if (!en.equals("n"))
                             i.addUnsafeEnchantment(Enchantment.getById(Integer.parseInt(en.split("-")[0])), Integer.parseInt(en.split("-")[1]));
-                    ArrayList<String> lore = new ArrayList<String>();
+                    ArrayList<String> lore = new ArrayList<>();
                     for (String l : s.split(" ")[5].split(","))
                         if (!l.equals("n")) {
                             int lStart = l.indexOf('[');
@@ -631,13 +630,13 @@ public class Listeners implements Listener {
                                 inv.clear();
                             } else if (b.getType().equals(Material.MOB_SPAWNER)) {
                                 CreatureSpawner cs = (CreatureSpawner) b.getState();
-                                ArrayList<String> lore = new ArrayList<String>();
+                                ArrayList<String> lore = new ArrayList<>();
                                 lore.add(cs.getCreatureTypeName());
                                 meta.setLore(lore);
                                 contents.setItemMeta(meta);
                             } else if (b.getType().equals(Material.SIGN) || b.getType().equals(Material.SIGN_POST) || b.getType().equals(Material.WALL_SIGN)) {
                                 Sign s = (Sign) b.getState();
-                                ArrayList<String> lore = new ArrayList<String>();
+                                ArrayList<String> lore = new ArrayList<>();
                                 lore.add(s.getLine(0));
                                 lore.add(s.getLine(1));
                                 lore.add(s.getLine(2));
@@ -686,8 +685,8 @@ public class Listeners implements Listener {
 
     @SuppressWarnings("deprecation")
     private ArrayList<String> getLore(Inventory inv) {
-        ArrayList<String> lore = new ArrayList<String>();
-        HashMap<String, String> condensedLore = new HashMap<String, String>();
+        ArrayList<String> lore = new ArrayList<>();
+        HashMap<String, String> condensedLore = new HashMap<>();
         for (int i = 0; i < inv.getSize(); i++) {//loc amount type damage enchants meta name
             if (inv.getItem(i) != null && !inv.getItem(i).getType().equals(Material.AIR)) {
                 String enchants = "";

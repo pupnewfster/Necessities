@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -18,7 +19,7 @@ public class CmdTp extends Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;
         }
-        Player target = sender.getServer().getPlayer(uuid);
+        Player target = Bukkit.getPlayer(uuid);
         if (sender instanceof Player && args.length == 1) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.seehidden") && hide.isHidden(target)) {
@@ -38,7 +39,7 @@ public class CmdTp extends Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;
         }
-        Player targetTo = sender.getServer().getPlayer(uuidTo);
+        Player targetTo = Bukkit.getPlayer(uuidTo);
         target.teleport(safe.getSafe(targetTo.getLocation()));
         String name = "Console";
         if (sender instanceof Player)

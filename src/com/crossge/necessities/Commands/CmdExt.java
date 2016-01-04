@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -28,7 +29,7 @@ public class CmdExt extends Cmd {
             if (!p.hasPermission("Necessities.extOthers"))
                 uuid = p.getUniqueId();
         }
-        Player target = sender.getServer().getPlayer(uuid);
+        Player target = Bukkit.getPlayer(uuid);
         target.setFireTicks(0);
         target.sendMessage(var.getMessages() + "You have been extinguished.");
         sender.sendMessage(var.getMessages() + "Extinguished player: " + var.getObj() + target.getDisplayName());

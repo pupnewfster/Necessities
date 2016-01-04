@@ -13,13 +13,8 @@ public class CmdAutoclaim extends GuildCmd {
                 return true;
             }
             User u = um.getUser(p.getUniqueId());
-            if (u.isClaiming()) {
-                u.setClaiming(false);
-                sender.sendMessage(var.getMessages() + "No longer automatically claiming land.");
-            } else {
-                u.setClaiming(true);
-                sender.sendMessage(var.getMessages() + "Now automatically claiming land.");
-            }
+            sender.sendMessage(var.getMessages() + (u.isClaiming() ? "No longer automatically claiming land." : "Now automatically claiming land."));
+            u.setClaiming(!u.isClaiming());
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to claim land.");
         return true;

@@ -105,7 +105,7 @@ public class CmdEnchant extends Cmd {
     }
 
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        List<String> complete = new ArrayList<String>();
+        List<String> complete = new ArrayList<>();
         String search = "";
         if (args.length > 0)
             search = args[args.length - 1];

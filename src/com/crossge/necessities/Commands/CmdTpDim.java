@@ -1,6 +1,7 @@
 package com.crossge.necessities.Commands;
 
 import com.crossge.necessities.Economy.Formatter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -22,7 +23,7 @@ public class CmdTpDim extends Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;
         }
-        Player target = sender.getServer().getPlayer(uuid);
+        Player target = Bukkit.getPlayer(uuid);
         World dim = sender.getServer().getWorld(args[1]);
         if (dim == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid dimension.");

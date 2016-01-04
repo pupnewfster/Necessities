@@ -2,7 +2,6 @@ package com.crossge.necessities.Commands.RankManager;
 
 import com.crossge.necessities.Commands.CmdHide;
 import com.crossge.necessities.Economy.BalChecks;
-import com.crossge.necessities.Economy.Formatter;
 import com.crossge.necessities.RankManager.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,10 +16,9 @@ import java.util.Calendar;
 import java.util.UUID;
 
 public class CmdWhois extends RankCmd {
-    BalChecks bal = new BalChecks();
-    Formatter form = new Formatter();
-    CmdHide hide = new CmdHide();
     private File configFile = new File("plugins/Necessities", "config.yml");
+    BalChecks bal = new BalChecks();
+    CmdHide hide = new CmdHide();
 
     public boolean commandUse(CommandSender sender, String[] args) {
         if (args.length == 0) {
@@ -28,12 +26,11 @@ public class CmdWhois extends RankCmd {
             return true;
         }
         UUID uuid = get.getID(args[0]);
-        if (uuid == null) {
+        if (uuid == null)
             uuid = get.getOfflineID(args[0]);
-            if (uuid == null) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
-                return true;
-            }
+        if (uuid == null) {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
+            return true;
         }
         User u = um.getUser(uuid);
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
@@ -41,10 +38,7 @@ public class CmdWhois extends RankCmd {
         if (u.getPlayer() != null)
             sender.sendMessage(var.getMessages() + " - Nick: " + ChatColor.RESET + u.getPlayer().getDisplayName());
         else {
-            if (u.getNick() == null)
-                sender.sendMessage(var.getMessages() + " - Name: " + ChatColor.RESET + u.getName());
-            else
-                sender.sendMessage(var.getMessages() + " - Nick: " + ChatColor.RESET + u.getNick());
+            sender.sendMessage(var.getMessages() + (u.getNick() == null ? " - Name: " + ChatColor.RESET + u.getName() : " - Nick: " + ChatColor.RESET + u.getNick()));
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(Bukkit.getOfflinePlayer(uuid).getLastPlayed());
             String second = Integer.toString(c.get(Calendar.SECOND));
@@ -90,50 +84,21 @@ public class CmdWhois extends RankCmd {
                 gamemode = "Creative";
             sender.sendMessage(var.getMessages() + " - Gamemode: " + ChatColor.RESET + gamemode);
         }
-        String godmode = ChatColor.DARK_RED + "false";
-        if (u.godmode())
-            godmode = ChatColor.GREEN + "true";
-        sender.sendMessage(var.getMessages() + " - God mode: " + godmode);
-        String banned = ChatColor.DARK_RED + "false";
+        sender.sendMessage(var.getMessages() + " - God mode: " + (u.godmode() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
         if (u.getPlayer() != null) {
             Player p = u.getPlayer();
-            if (p.isBanned())
-                banned = ChatColor.GREEN + "true";
-            sender.sendMessage(var.getMessages() + " - Banned: " + banned);
-            String visible = ChatColor.GREEN + "true";
-            if (hide.isHidden(p))
-                visible = ChatColor.DARK_RED + "false";
-            sender.sendMessage(var.getMessages() + " - Visible: " + visible);
-            String op = ChatColor.DARK_RED + "false";
-            if (p.isOp())
-                op = ChatColor.GREEN + "true";
-            sender.sendMessage(var.getMessages() + " - OP: " + op);
-            String flying = ChatColor.DARK_RED + "false" + ChatColor.RESET + " (not flying)";
-            if (p.isFlying())
-                flying = ChatColor.GREEN + "true " + ChatColor.RESET + " (flying)";
-            sender.sendMessage(var.getMessages() + " - Fly mode: " + flying);
+            sender.sendMessage(var.getMessages() + " - Banned: " + (p.isBanned() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
+            sender.sendMessage(var.getMessages() + " - Visible: " + (hide.isHidden(p) ? ChatColor.DARK_RED + "false" : ChatColor.GREEN + "true"));
+            sender.sendMessage(var.getMessages() + " - OP: " + (p.isOp() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
+            sender.sendMessage(var.getMessages() + " - Fly mode: " + (p.isFlying() ? ChatColor.GREEN + "true " + ChatColor.RESET + " (flying)" : ChatColor.DARK_RED + "false" + ChatColor.RESET + " (not flying)"));
         } else {
             OfflinePlayer p = Bukkit.getOfflinePlayer(u.getUUID());
-            if (p.isBanned())
-                banned = ChatColor.GREEN + "true";
-            sender.sendMessage(var.getMessages() + " - Banned: " + banned);
-            String op = ChatColor.DARK_RED + "false";
-            if (p.isOp())
-                op = ChatColor.GREEN + "true";
-            sender.sendMessage(var.getMessages() + " - OP: " + op);
+            sender.sendMessage(var.getMessages() + " - Banned: " + (p.isBanned() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
+            sender.sendMessage(var.getMessages() + " - OP: " + (p.isOp() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
         }
-        String afk = ChatColor.DARK_RED + "false";
-        if (u.isAfk())
-            afk = ChatColor.GREEN + "true";
-        sender.sendMessage(var.getMessages() + " - AFK: " + afk);
-        String jailed = ChatColor.DARK_RED + "false";
-        if (u.isJailed())
-            jailed = ChatColor.GREEN + "true";
-        sender.sendMessage(var.getMessages() + " - Jailed: " + jailed);
-        String muted = ChatColor.DARK_RED + "false";
-        if (u.isMuted())
-            muted = ChatColor.GREEN + "true";
-        sender.sendMessage(var.getMessages() + " - Muted: " + muted);
+        sender.sendMessage(var.getMessages() + " - AFK: " + (u.isAfk() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
+        sender.sendMessage(var.getMessages() + " - Jailed: " + (u.isJailed() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
+        sender.sendMessage(var.getMessages() + " - Muted: " + (u.isMuted() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
         return true;
     }
 

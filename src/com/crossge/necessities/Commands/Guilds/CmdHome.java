@@ -21,7 +21,7 @@ public class CmdHome extends GuildCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Your guild does not have a home set.");
                 return true;
             }
-            sender.sendMessage(var.getMessages() + "Teleporting to guild home.");
+            sender.sendMessage(var.getMessages() + "Teleporting to guild home...");
             u.teleport(safe.getSafe(u.getGuild().getHome()));
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to go to your guilds home.");

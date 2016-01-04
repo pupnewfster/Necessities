@@ -15,7 +15,7 @@ import java.util.*;
 
 public class BalChecks implements Economy {
     private File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
-    private static HashMap<UUID, Double> balances = new HashMap<UUID, Double>();
+    private static HashMap<UUID, Double> balances = new HashMap<>();
     Formatter form = new Formatter();
     GetUUID get = new GetUUID();
 
@@ -46,7 +46,7 @@ public class BalChecks implements Economy {
     public String balTop(int page, int time) {//TODO: Make baltop more efficient
         if (balances.size() < time + page + 1 || time == 10)
             return null;//Check before hand because this means you dont have to sort if it not valid
-        ArrayList<Double> balsort = new ArrayList<Double>();
+        ArrayList<Double> balsort = new ArrayList<>();
         for (double doub : balances.values())
             balsort.add(doub);
         if (balsort.size() <= page*10 + time)

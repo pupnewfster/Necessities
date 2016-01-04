@@ -16,7 +16,7 @@ public class CmdImp extends Cmd {
         UUID uuid = get.getID(args[0]);
         Player p = null;
         if (uuid != null)
-            p = sender.getServer().getPlayer(uuid);
+            p = Bukkit.getPlayer(uuid);
         if (args.length > 1 && p != null) {
             String message = "";
             for (String a : args)

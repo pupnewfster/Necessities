@@ -23,7 +23,6 @@ public class CmdDisband extends GuildCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not in a  guild.");
                 return true;
             }
-
             if (args.length > 0) {
                 Guild g = gm.getGuild(args[0]);
                 if (g == null) {

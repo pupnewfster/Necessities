@@ -25,12 +25,11 @@ public class CmdLeader extends GuildCmd {
                 return true;
             }
             UUID uuid = get.getID(args[0]);
-            if (uuid == null) {
+            if (uuid == null)
                 uuid = get.getOfflineID(args[0]);
-                if (uuid == null) {
-                    sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
-                    return true;
-                }
+            if (uuid == null) {
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
+                return true;
             }
             User them = um.getUser(uuid);
             if (them.getGuild() == null || !u.getGuild().equals(them.getGuild())) {

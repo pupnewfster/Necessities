@@ -54,7 +54,7 @@ public class CmdDelHome extends Cmd {
     }
 
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        List<String> complete = new ArrayList<String>();
+        List<String> complete = new ArrayList<>();
         String search = "";
         if (args.length == 1)
             search = args[0];

@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Economy.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -9,7 +10,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class CmdInvsee extends Cmd {
-    private static HashMap<PlayerInventory, Player> openInvs = new HashMap<PlayerInventory, Player>();
+    private static HashMap<PlayerInventory, Player> openInvs = new HashMap<>();
+    Formatter form = new Formatter();
 
     public Player getFromInv(PlayerInventory pinv) {
         return openInvs.get(pinv);
@@ -38,16 +40,10 @@ public class CmdInvsee extends Cmd {
             }
             PlayerInventory inv = target.getInventory();
             openInvs.put(inv, target);
-            p.sendMessage(var.getObj() + plural(target.getName()) + var.getMessages() + " inventory opened.");
+            p.sendMessage(var.getObj() + form.plural(target.getName()) + var.getMessages() + " inventory opened.");
             p.openInventory(inv);
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have an inventory.");
         return true;
-    }
-
-    private String plural(String message) {
-        if (message.endsWith("s"))
-            return message + "'";
-        return message + "'s";
     }
 }

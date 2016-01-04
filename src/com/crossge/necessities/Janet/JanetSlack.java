@@ -21,7 +21,6 @@ import org.json.simple.parser.JSONParser;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -247,7 +246,7 @@ public class JanetSlack {
             sendMessage("Error: You are restricted or ultra restricted");
             return;
         }
-        String name = info.getName();
+        final String name = info.getName();
         if (message.startsWith("!")) {
             String m = "";
             if (message.startsWith("!help")) {
@@ -449,13 +448,18 @@ public class JanetSlack {
                     sendMessage("Error: Invalid player.");
                     return;
                 }
-                Player target = Bukkit.getPlayer(uuid);
+                final Player target = Bukkit.getPlayer(uuid);
                 if (target.hasPermission("Necessities.antiPWarn")) {
                     sendMessage("Error: You may not warn someone who has Necessities.antiPWarn.");
                     return;
                 }
-                String reason = message.replaceFirst(message.split(" ")[0], "").trim();
-                warns.warn(target.getUniqueId(), reason, name);
+                final String reason = message.replaceFirst(message.split(" ")[0], "").trim();
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                    @Override
+                    public void run() {
+                        warns.warn(target.getUniqueId(), reason, name);
+                    }
+                });
                 m += target.getName() + " was warned by " + name + " for " + reason + ".\n";
             } else if (message.startsWith("!worlds")) {
                 String levels = "";
@@ -525,7 +529,7 @@ public class JanetSlack {
                         }
                     });
                 }
-                bans.addBan(theirName, reason, null, "Console");
+                bans.addBan(theirName, reason, null, "Slack_" + name);
                 Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + (reason.equals("") ? "." : " for " + var.getObj() + reason + var.getMessages() + "."));
                 m += name + " banned " + theirName + (reason.equals("") ? "." : " for " + reason + ".") + "\n";
             } else if (message.startsWith("!unban ") && info.isAdmin()) {
@@ -601,7 +605,7 @@ public class JanetSlack {
                     sendMessage("Error: You may not ban someone who has Necessities.antiBan.");
                     return;
                 }
-                int minutes = 0;
+                int minutes;
                 try {
                     minutes = Integer.parseInt(message.split(" ")[1]);
                 } catch (Exception e) {
@@ -624,7 +628,7 @@ public class JanetSlack {
                     });
                 }
                 Date date = new Date(System.currentTimeMillis() + minutes * 60 * 1000);
-                bans.addBan(theirName, reason, date, "Console");
+                bans.addBan(theirName, reason, date, "Slack_" + name);
                 Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + " for " + var.getObj() + minutes + var.getMessages() +
                         " " + (minutes == 1 ? "minute" : "minutes") + (reason.equals("") ? "." : " for the reason " + var.getObj() + reason + var.getMessages() + "."));
                 m += name + " banned " + theirName + " for " + minutes + " " + (minutes == 1 ? "minute" : "minutes") + (reason.equals("") ? "." : " for the reason " + reason + ".") + "\n";
@@ -651,7 +655,7 @@ public class JanetSlack {
                             target.getPlayer().kickPlayer(reason);
                         }
                     });
-                    bans.addBan(theirIP, reason, null, "Console");
+                    bans.addBan(theirIP, reason, null, "Slack_" + name);
                     Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + (reason.equals("") ? "." : " for " + var.getObj() + reason + var.getMessages() + "."));
                     m += name + " banned " + theirName + (reason.equals("") ? "." : " for " + reason + ".") + "\n";
                 } else {

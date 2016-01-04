@@ -1,7 +1,5 @@
 package com.crossge.necessities.Janet;
 
-import org.bukkit.Bukkit;
-
 import java.util.Random;
 
 public class JanetRandom extends Random {

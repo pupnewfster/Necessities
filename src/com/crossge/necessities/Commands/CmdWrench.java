@@ -15,7 +15,7 @@ public class CmdWrench extends Cmd {
             ItemStack stick = new ItemStack(Material.STICK, 1);
             ItemMeta wrench = stick.getItemMeta();
             wrench.setDisplayName("Wrench");
-            ArrayList<String> lore = new ArrayList<String>();
+            ArrayList<String> lore = new ArrayList<>();
             lore.add("Wrench");
             wrench.setLore(lore);
             stick.setItemMeta(wrench);

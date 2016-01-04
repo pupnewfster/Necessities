@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 
 public class AntiCombatLog {
-    public static HashMap<Player, Long> inCombat = new HashMap<Player, Long>();
+    public static HashMap<Player, Long> inCombat = new HashMap<>();
     Variables var = new Variables();
 
     public void addToCombat(Player p, Player other) {

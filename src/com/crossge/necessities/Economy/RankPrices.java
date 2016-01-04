@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class RankPrices {
     private File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
-    private static HashMap<String, Double> rankPrices = new HashMap<String, Double>();
+    private static HashMap<String, Double> rankPrices = new HashMap<>();
     RankManager rm = new RankManager();
 
     public void initiate() {

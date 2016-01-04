@@ -24,7 +24,7 @@ public class CmdEco extends EconomyCmd {
             }
             targetsname = Bukkit.getOfflinePlayer(uuid).getName();
         } else
-            target = sender.getServer().getPlayer(uuid);
+            target = Bukkit.getPlayer(uuid);
         if (target != null)
             targetsname = target.getName();
         if (!balc.doesPlayerExist(uuid)) {

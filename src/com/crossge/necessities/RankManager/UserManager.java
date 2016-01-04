@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class UserManager {
     private File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
-    private static HashMap<UUID, User> players = new HashMap<UUID, User>();
+    private static HashMap<UUID, User> players = new HashMap<>();
     RankManager rm = new RankManager();
 
     public void readUsers() {

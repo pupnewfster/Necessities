@@ -17,14 +17,11 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class Janet {
-    private static HashMap<UUID, Long[]> lastChat = new HashMap<UUID, Long[]>();
-    private static HashMap<UUID, Long[]> lastCmd = new HashMap<UUID, Long[]>();
-    private static ArrayList<String> badwords = new ArrayList<String>();
-    private static ArrayList<String> goodwords = new ArrayList<String>();
-    private static ArrayList<String> ips = new ArrayList<String>();
+    private static HashMap<UUID, Long[]> lastChat = new HashMap<>(), lastCmd = new HashMap<>();
+    private static ArrayList<String> badwords = new ArrayList<>(), goodwords = new ArrayList<>(), ips = new ArrayList<>();
+    private File configFile = new File("plugins/Necessities", "config.yml");
     JanetWarn warns = new JanetWarn();
     JanetLog log = new JanetLog();
-    private File configFile = new File("plugins/Necessities", "config.yml");
 
     public void initiate() {//now has its own function instead of reading them all every time Janet was re-initiated
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Janet initiating...");
@@ -148,7 +145,7 @@ public class Janet {
 
     public String internalLang(String message) {
         String[] orig = message.replaceAll("[^a-zA-Z ]", "").toUpperCase().split(" ");
-        ArrayList<String> bad = new ArrayList<String>();
+        ArrayList<String> bad = new ArrayList<>();
         for (String badword : badwords) {
             ArrayList<String> s = removeSpaces(orig, badword);
             for (String w : s)
@@ -191,7 +188,7 @@ public class Janet {
         String censored = "";
         String temp = orig.toUpperCase().replaceAll("[^a-zA-Z]", "");
         String t = removeConsec(temp);
-        HashMap<Integer, Character> stars = new HashMap<Integer, Character>();
+        HashMap<Integer, Character> stars = new HashMap<>();
         String s = t;
         for (String b : bad) {
             temp = temp.replaceAll(b, stars(b));
@@ -221,7 +218,7 @@ public class Janet {
     }
 
     private ArrayList<String> removeSpaces(String[] msgs, String word) {
-        ArrayList<String> messages = new ArrayList<String>();
+        ArrayList<String> messages = new ArrayList<>();
         String temp = "";
         String t1 = "";
         for (int i = 0; i < msgs.length; i++) {

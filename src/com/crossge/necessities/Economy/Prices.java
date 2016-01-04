@@ -9,9 +9,9 @@ import java.util.HashMap;
 
 public class Prices {
     private File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
-    private static HashMap<String, Double> sellPrices = new HashMap<String, Double>();
-    private static HashMap<String, Double> buyPrices = new HashMap<String, Double>();
-    private static HashMap<String, String> price = new HashMap<String, String>();
+    private static HashMap<String, Double> sellPrices = new HashMap<>();
+    private static HashMap<String, Double> buyPrices = new HashMap<>();
+    private static HashMap<String, String> price = new HashMap<>();
     Materials mat = new Materials();//TODO: Ability to set price for damage values probs use a dash or something in storing datavalue
 
     public String cost(String direction, String itemName) {

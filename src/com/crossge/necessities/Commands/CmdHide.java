@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class CmdHide extends Cmd {
-    private static ArrayList<UUID> hidden = new ArrayList<UUID>();
+    private static ArrayList<UUID> hidden = new ArrayList<>();
     private File configFileHiding = new File("plugins/Necessities", "hiding.yml");
     private File configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml");
     private File configFileLogIn = new File("plugins/Necessities", "loginmessages.yml");

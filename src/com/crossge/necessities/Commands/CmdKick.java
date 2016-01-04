@@ -18,7 +18,7 @@ public class CmdKick extends Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;
         }
-        Player target = sender.getServer().getPlayer(uuid);
+        Player target = Bukkit.getPlayer(uuid);
         String name = "Console";
         if (sender instanceof Player) {
             Player p = (Player) sender;

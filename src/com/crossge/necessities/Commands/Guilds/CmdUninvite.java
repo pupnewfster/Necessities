@@ -35,8 +35,7 @@ public class CmdUninvite extends GuildCmd {
                 return true;
             }
             u.getGuild().uninvite(uuid);
-            Bukkit.getPlayer(uuid).sendMessage(var.getMessages() + "Your invitation to join " + var.getObj() + u.getGuild().getName() + var.getMessages() +
-                    " has been revoked.");
+            Bukkit.getPlayer(uuid).sendMessage(var.getMessages() + "Your invitation to join " + var.getObj() + u.getGuild().getName() + var.getMessages() + " has been revoked.");
             sender.sendMessage(var.getMessages() + "Successfully uninvited " + var.getObj() + them.getName() + var.getMessages() + " to your guild.");
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to uninvite someone from a guild.");
