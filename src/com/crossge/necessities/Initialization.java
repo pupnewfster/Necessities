@@ -192,6 +192,7 @@ public class Initialization {
                 config.set("Necessities.SlackToken", "token");
                 config.set("Necessities.SlackChanel", "channel");
                 config.set("Necessities.ChannelID", "channelID");
+                config.set("Necessities.WebHook", "webHook");
                 config.save(configFile);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -238,6 +239,8 @@ public class Initialization {
                 config.set("Necessities.SlackChanel", "channel");
             if (!config.contains("Necessities.ChannelID"))
                 config.set("Necessities.ChannelID", "channelID");
+            if (!config.contains("Necessities.WebHook"))
+                config.set("Necessities.WebHook", "webHook");
             try {
                 config.save(configFile);
             } catch (Exception e) {

@@ -138,8 +138,6 @@ public class CmdWhois extends RankCmd {
     }
 
     private String corTime(String time) {
-        if (time.length() == 1)
-            return "0" + time;
-        return time;
+        return time.length() == 1 ? "0" + time : time;
     }
 }

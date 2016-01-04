@@ -84,8 +84,6 @@ public class CmdWho extends Cmd {
     }
 
     private String amount(int a) {
-        if (a == 1)
-            return "is";
-        return "are";
+        return a == 1 ? "is" : "are";
     }
 }
