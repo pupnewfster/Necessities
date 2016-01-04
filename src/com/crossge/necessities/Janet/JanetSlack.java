@@ -22,14 +22,12 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
+import java.util.regex.Pattern;
 
 public class JanetSlack {
     private static File configFile = new File("plugins/Necessities", "config.yml");
-    private static HashMap<String, String> userMap = new HashMap<>();
+    private static HashMap<String, SlackUser> userMap = new HashMap<>();
     private static boolean justLoaded = true, isConnected = false;
     private static String token, channel, channelID, hook, latest;
     private static BukkitRunnable historyReader;
@@ -114,12 +112,12 @@ public class JanetSlack {
             for (int i = messages.size() - 1; i >= 0; i--) {
                 JSONObject message = (JSONObject) messages.get(i);
                 if (!message.containsKey("subtype") && !justLoaded) {
-                    String name = getUserInfo((String) message.get("user"));
-                    if (!name.contains("janet")) {
+                    SlackUser info = getUserInfo((String) message.get("user"));
+                    if (!info.getName().contains("janet")) {
                         String text = (String) message.get("text");
                         while (text.contains("<") && text.contains(">"))
                             text = text.split("<@")[0] + "@" + getUserInfo(text.split("<@")[1].split(">:")[0]) + ":" + text.split("<@")[1].split(">:")[1];
-                        sendSlackChat(name, text);
+                        sendSlackChat(info, text);
                     }
                 }
                 if (i == 0)
@@ -129,34 +127,110 @@ public class JanetSlack {
         justLoaded = false;
     }
 
+    private SlackUser getUserInfo(String id) {
+        if (userMap.containsKey(id))
+            return userMap.get(id);
+        //Almost never should get past this point as it maps the users when it connects unless a new user gets invited
+        String output = "";
+        try {
+            URL url = new URL("https://slack.com/api/users.info?token=" + token + "&user=" + id + "&pretty=1");
+            HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+            while ((inputLine = in.readLine()) != null)
+                response.append(inputLine);
+            in.close();
+            JSONParser jsonParser = new JSONParser();
+            userMap.put(id, new SlackUser((JSONObject) jsonParser.parse(response.toString())));
+        } catch (Exception e) {}
+        return userMap.get(id);
+    }
+
+    private void sendPost(String url) {
+        try {
+            URL obj = new URL(url);
+            HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+            con.setRequestMethod("POST");
+            con.getInputStream();
+        } catch (Exception e) {}
+    }
+
+    private void connect() {
+        if (isConnected)
+            return;
+        try {
+            URL url = new URL("https://slack.com/api/rtm.start?token=" + token + "&simple_latest=true&pretty=1");
+            HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null)
+                response.append(inputLine);
+            in.close();
+
+            JSONParser jsonParser = new JSONParser();
+            JSONObject json = (JSONObject) jsonParser.parse(response.toString());
+            //Get a more recent timestamp than zero so first history pass is more efficient
+            latest = (String) json.get("latest_event_ts");
+            //Map users
+            JSONArray users = (JSONArray) json.get("users");
+            for (int i = users.size() - 1; i >= 0; i--) {
+                JSONObject user = (JSONObject) users.get(i);
+                String id = (String) user.get("id");
+                if (!userMap.containsKey(id))
+                    userMap.put(id, new SlackUser(user));
+            }
+        } catch (Exception e) {}
+        sendPost("https://slack.com/api/users.setPresence?token=" + token + "&presence=active&pretty=1");
+        historyReader = new BukkitRunnable() {
+            @Override
+            public void run() {
+                getHistory();
+            }
+        };
+        historyReader.runTaskTimerAsynchronously(Necessities.getInstance(), 0, 20);
+        sendMessage("Connected.");
+        isConnected = true;
+    }
+
     private String corTime(String time) {
         return time.length() == 1 ? "0" + time : time;
     }
 
-    private void sendSlackChat(String name, String message) {
+    private void sendSlackChat(SlackUser info, String message) {
+        String name = info.getName();
         if (message.startsWith("!")) {
             String m = "";
             if (message.startsWith("!help")) {
-                m += "!help ~ View the different commands.\n";
-                m += "!whois <name> ~ View information about <name>.\n";
-                m += "!who ~ View the online players.\n";
-                m += "!baltop <page> ~ View <page> of baltop.\n";
-                m += "!bal <name> ~ View <name>'s balance.\n";
-                m += "!meme <number> ~ Generate a number between 0 and <number>.\n";
-                m += "!warn <name> <reason> ~ Warn <name> for <reason>.\n";
-                m += "!say <message> ~ Sends the message <message> to the playesr on the server.\n";
-                m += "!devs ~ View the devs.\n";
-                m += "!worlds ~ View the loaded worlds.\n";
-
-                //Admin commands
-                //Kick
-                //Tempban
-                //Ban
-                //Slap
-                //Mute
-
+                m += "!help <page> ~ View the help messages on <page>.\n";
+                if (info.isMember()) {
+                    m += "!whois <name> ~ View information about <name>.\n";
+                    m += "!who ~ View the online players.\n";
+                    m += "!baltop <page> ~ View <page> of baltop.\n";
+                    m += "!bal <name> ~ View <name>'s balance.\n";
+                    m += "!devs ~ View the devs.\n";
+                    m += "!warn <name> <reason> ~ Warn <name> for <reason>.\n";
+                    m += "!worlds ~ View the loaded worlds.\n";
+                }
+                if (info.isAdmin()) {//Admin commands
+                    m += "!meme <number> ~ Generate a number between 0 and <number>.\n";
+                    m += "!say <message> ~ Sends the message <message> to the playesr on the server.\n";
+                    m += "!kick <name> <reason> ~ Kicks <name> for an optional <reason>.\n";
+                    m += "!tempban <name> <time> <reason> ~ Tempbans <name> for <time> and an optional <reason>.\n";
+                    m += "!ban <name> <reason> ~ Bans <name> for an optional <reason>.\n";
+                    m += "!unban <name> ~ Unbans <name>.\n";
+                    m += "!banip <ip> <reason> ~ Bans <ip> for an optional <reason>.\n";
+                    m += "!unbanip <ip> ~ Unbans <ip>.\n";
+                    m += "!slap <name> ~ Slaps <name> sky high.\n";
+                    m += "!mute <name> ~ Mutes and unmutes <name>.\n";
+                }
                 //multiple help pages
-            } else if (message.startsWith("!whois ")) {
+            } else if (message.startsWith("!whois ") && info.isMember()) {
                 if (message.split(" ").length == 1) {
                     sendMessage("Error: You must enter a player to view info of.");
                     return;
@@ -225,7 +299,7 @@ public class JanetSlack {
                     m += " - Visible: " + (hide.isHidden(p) ? "false" : "true") +"\n";
                 } else
                     m += " - Banned: " + (Bukkit.getOfflinePlayer(u.getUUID()).isBanned() ? "true" : "false") + "\n";
-            } else if (message.startsWith("!who")) {
+            } else if (message.startsWith("!who") && info.isMember()) {
                 int numbOnline = Bukkit.getOnlinePlayers().size() + 1;
                 HashMap<Rank, String> online = new HashMap<>();
                 if (!rm.getOrder().isEmpty())
@@ -259,7 +333,9 @@ public class JanetSlack {
                     if (online.containsKey(r))
                         m += r.getName() + "s: " + online.get(r).trim().substring(0, online.get(r).length() - 2) + "\n";
                 }
-            } else if (message.startsWith("!baltop") || message.startsWith("!moeytop")) {
+            } else if (message.startsWith("!devs") && info.isMember()) {
+                m += "The Devs for Necessities are: pupnewfster, Mod_Chris, and hypereddie10.";
+            } else if ((message.startsWith("!baltop") || message.startsWith("!moneytop") || message.startsWith("!balancetop")) && info.isMember()) {
                 int page = 0;
                 if (message.split(" ").length > 2) {
                     if (!form.isLegal(message.split(" ")[1])) {
@@ -287,7 +363,7 @@ public class JanetSlack {
                     time++;
                     bal = balc.balTop(page, time);
                 }
-            } else if (message.startsWith("!bal ") || message.startsWith("!balance ") || message.startsWith("!money ")) {
+            } else if ((message.startsWith("!bal ") || message.startsWith("!balance ") || message.startsWith("!money ")) && info.isMember()) {
                 if (message.split(" ").length == 1) {
                     sendMessage("Error: You must enter a player to view info of.");
                     return;
@@ -310,14 +386,7 @@ public class JanetSlack {
                     return;
                 }
                 m += ((playersname.endsWith("s") || playersname.endsWith("S")) ? playersname + "'" : playersname + "'s") + " balance is: " + "$" + form.addCommas(balance);
-            } else if (message.startsWith("!meme ")) {
-                int applePie = 0;
-                try {
-                    applePie = Integer.parseInt(message.split(" ")[1]);
-                } catch (Exception e) {
-                }
-                m += r.memeRandom(applePie);
-            } else if (message.startsWith("!warn ")) {
+            } else if (message.startsWith("!warn ") && info.isMember()) {
                 message = message.replaceFirst("!warn ", "");
                 if (message.split(" ").length < 2) {
                     sendMessage("Error: You must enter a player to warn and a reason.");
@@ -336,9 +405,7 @@ public class JanetSlack {
                 String reason = message.replaceFirst(message.split(" ")[0], "").trim();
                 warns.warn(target.getUniqueId(), reason, name);
                 m += target.getName() + " was warned by " + name + " for " + reason + ".";
-            } else if (message.startsWith("!devs")) {
-                m += "The Devs for Necessities are: pupnewfster, Mod_Chris, and hypereddie10.";
-            } else if (message.startsWith("!worlds")) {
+            } else if (message.startsWith("!worlds") && info.isMember()) {
                 String levels = "";
                 ArrayList<String> worlds = new ArrayList<>();
                 for (World world : Bukkit.getWorlds())
@@ -347,9 +414,247 @@ public class JanetSlack {
                     levels += worlds.get(i) + ", ";
                 levels += "and " + worlds.get(worlds.size() - 1) + ".";
                 m += "The worlds are: " + levels;
-            } else if (message.startsWith("!say ")) {
+            } else if (message.startsWith("!say ") && info.isAdmin()) {
                 Bukkit.broadcastMessage(ChatColor.WHITE + name + ": " + message.replaceFirst("!say ", ""));
                 return;
+            } else if (message.startsWith("!meme ") && info.isAdmin()) {
+                int applePie = 0;
+                try {
+                    applePie = Integer.parseInt(message.split(" ")[1]);
+                } catch (Exception e) { }
+                m += r.memeRandom(applePie);
+            } else if (message.startsWith("!kick ") && info.isAdmin()) {
+                message = message.replaceFirst("!kick ", "");
+                if (message.split(" ").length == 0) {
+                    sendMessage("Error: You must enter a player to kick and a reason.");
+                    return;
+                }
+                UUID uuid = get.getID(message.split(" ")[0]);
+                if (uuid == null) {
+                    sendMessage("Error: Invalid player.");
+                    return;
+                }
+                final Player target = Bukkit.getPlayer(uuid);
+                final String reason = ChatColor.translateAlternateColorCodes('&', message.replaceFirst(message.split(" ")[0], "").trim());
+                Bukkit.broadcastMessage(var.getMessages() + name + " kicked " + var.getObj() + target.getName() + (reason.equals("") ? "" : var.getMessages() + " for " + var.getObj() + reason));
+                m += name + " kicked " + target.getName() + (reason.equals("") ? "" : " for " + reason);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                    @Override
+                    public void run() {
+                        target.kickPlayer(reason);
+                    }
+                });
+            } else if (message.startsWith("!ban ") && info.isAdmin()) {
+                message = message.replaceFirst("!ban ", "");
+                if (message.split(" ").length == 0) {
+                    sendMessage("Error: You must enter a player to ban.");
+                    return;
+                }
+                UUID uuid = get.getID(message.split(" ")[0]);
+                if (uuid == null)
+                    uuid = get.getOfflineID(message.split(" ")[0]);
+                if (uuid == null) {
+                    sendMessage("Error: Invalid player.");
+                    return;
+                }
+                final OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
+                if (target.getPlayer() != null && target.getPlayer().hasPermission("Necessities.antiBan") && !info.isOwner()) {
+                    sendMessage("Error: You may not ban someone who has Necessities.antiBan.");
+                    return;
+                }
+                final String reason = (message.split(" ").length > 1) ? message.replaceFirst(message.split(" ")[0], "").trim() : "";
+                String theirName = target.getName();
+                BanList bans = Bukkit.getBanList(BanList.Type.NAME);
+                if (target.getPlayer() != null) {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                        @Override
+                        public void run() {
+                            target.getPlayer().kickPlayer(reason);
+                        }
+                    });
+                }
+                bans.addBan(theirName, reason, null, "Console");
+                Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + (reason.equals("") ? "." : " for " + var.getObj() + reason + var.getMessages() + "."));
+                m += name + " banned " + theirName + (reason.equals("") ? "." : " for " + reason + ".");
+            } else if (message.startsWith("!unban ") && info.isAdmin()) {
+                message = message.replaceFirst("!unban ", "");
+                if (message.split(" ").length == 0) {
+                    sendMessage("Error: You must enter a player to unban.");
+                    return;
+                }
+                UUID uuid = get.getID(message.split(" ")[0]);
+                if (uuid == null)
+                    uuid = get.getOfflineID(message.split(" ")[0]);
+                if (uuid == null) {
+                    sendMessage( "Error: Invalid player.");
+                    return;
+                }
+                OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
+                BanList bans = Bukkit.getBanList(BanList.Type.NAME);
+                String theirName = target.getName();
+                if (!bans.isBanned(theirName)) {
+                    sendMessage("Error: That player is not banned.");
+                    return;
+                }
+                bans.pardon(theirName);
+                Bukkit.broadcastMessage(var.getMessages() + name + " unbanned " + theirName + ".");
+                m += name + " unbanned " + theirName + ".";
+            } else if (message.startsWith("!mute ") && info.isAdmin()) {
+                message = message.replaceFirst("!mute ", "");
+                if (message.split(" ").length == 0) {
+                    sendMessage("Error: You must enter a player to mute.");
+                    return;
+                }
+                UUID uuid = get.getID(message.split(" ")[0]);
+                if (uuid == null) {
+                    sendMessage("Error: Invalid player.");
+                    return;
+                }
+                User u = um.getUser(uuid);
+                Bukkit.broadcastMessage(var.getObj() + name + var.getMessages() + (!u.isMuted() ? " muted " : " unmuted ") + var.getObj() + u.getPlayer().getDisplayName() + var.getMessages() + ".");
+                u.getPlayer().sendMessage(var.getDemote() + "You have been " + var.getObj() + (!u.isMuted() ? "muted" : "unmuted") + var.getMessages() + ".");
+                m += name + (!u.isMuted() ? " muted " : " unmuted ") + u.getPlayer().getDisplayName() + ".";
+                u.setMuted(!u.isMuted());
+            } else if (message.startsWith("!slap ") && info.isAdmin()) {
+                message = message.replaceFirst("!slap ", "");
+                if (message.split(" ").length == 0) {
+                    sendMessage("Error: You must enter a player to slap.");
+                    return;
+                }
+                UUID uuid = get.getID(message.split(" ")[0]);
+                if (uuid == null) {
+                    sendMessage("Error: Invalid player.");
+                    return;
+                }
+                Player target = Bukkit.getPlayer(uuid);
+                Location loc = target.getLocation().clone().add(0, 2500, 0);
+                target.teleport(loc);
+                Bukkit.broadcastMessage(var.getMessages() + target.getName() + " was slapped sky high by " + name);
+                m += target.getName() + " was slapped sky high by " + name;
+            } else if (message.startsWith("!tempban ") && info.isAdmin()) {
+                message = message.replaceFirst("!tempban ", "");
+                if (message.split(" ").length < 2) {
+                    sendMessage("Error: You must enter a player to ban and a duration in minutes.");
+                    return;
+                }
+                UUID uuid = get.getID(message.split(" ")[0]);
+                if (uuid == null)
+                    uuid = get.getOfflineID(message.split(" ")[0]);
+                if (uuid == null) {
+                    sendMessage("Error: Invalid player.");
+                    return;
+                }
+                final OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
+                if (target.getPlayer() != null && target.getPlayer().hasPermission("Necessities.antiBan") && !info.isOwner()) {
+                    sendMessage("Error: You may not ban someone who has Necessities.antiBan.");
+                    return;
+                }
+                int minutes = 0;
+                try {
+                    minutes = Integer.parseInt(message.split(" ")[1]);
+                } catch (Exception e) {
+                    sendMessage("Error: Invalid time, please enter a time in minutes.");
+                    return;
+                }
+                if (minutes < 0) {
+                    sendMessage("Error: Invalid time, please enter a time in minutes.");
+                    return;
+                }
+                final String reason = (message.split(" ").length > 2) ? message.replaceFirst(message.split(" ")[0], "").trim() : "";
+                BanList bans = Bukkit.getBanList(BanList.Type.NAME);
+                String theirName = target.getName();
+                if (target.getPlayer() != null) {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                        @Override
+                        public void run() {
+                            target.getPlayer().kickPlayer(reason);
+                        }
+                    });
+                }
+                Date date = new Date(System.currentTimeMillis() + minutes * 60 * 1000);
+                bans.addBan(theirName, reason, date, "Console");
+                Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + " for " + var.getObj() + minutes + var.getMessages() +
+                        " " + (minutes == 1 ? "minute" : "minutes") + (reason.equals("") ? "." : " for the reason " + var.getObj() + reason + var.getMessages() + "."));
+                m += name + " banned " + theirName + " for " + minutes + " " + (minutes == 1 ? "minute" : "minutes") + (reason.equals("") ? "." : " for the reason " + reason + ".");
+            } else if (message.startsWith("!banip ") && info.isAdmin()) {//TODO
+                message = message.replaceFirst("!banip ", "");
+                if (message.split(" ").length == 0) {
+                    sendMessage("Error: You must enter an ip to ban.");
+                    return;
+                }
+                UUID uuid = get.getID(message.split(" ")[0]);
+                if (uuid != null) {
+                    final Player target = Bukkit.getPlayer(uuid);
+                    if (target.hasPermission("Necessities.antiBan") && !info.isOwner()) {
+                        sendMessage("Error: You may not ban someone who has Necessities.antiBan.");
+                        return;
+                    }
+                    final String reason = (message.split(" ").length > 1) ? message.replaceFirst(message.split(" ")[0], "").trim() : "";
+                    String theirName = target.getName();
+                    BanList bans = Bukkit.getBanList(BanList.Type.IP);
+                    String theirIP = target.getAddress().toString().split("/")[1].split(":")[0];
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                        @Override
+                        public void run() {
+                            target.getPlayer().kickPlayer(reason);
+                        }
+                    });
+                    bans.addBan(theirIP, reason, null, "Console");
+                    Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + (reason.equals("") ? "." : " for " + var.getObj() + reason + var.getMessages() + "."));
+                    m += name + " banned " + theirName + (reason.equals("") ? "." : " for " + reason + ".");
+                } else {
+                    boolean validIp = false;
+                    try {
+                        final Pattern ipAdd = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+                                "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+                        validIp = ipAdd.matcher(message.split(" ")[0]).matches();
+                    } catch (Exception e) { }
+                    if (!validIp) {
+                        sendMessage("Error: Invalid ip.");
+                        return;
+                    }
+                    final String reason = (message.split(" ").length > 1) ? message.replaceFirst(message.split(" ")[0], "").trim() : "";
+                    BanList bans = Bukkit.getBanList(BanList.Type.IP);
+                    String theirIP = message.split(" ")[0];
+                    for (final Player t : Bukkit.getOnlinePlayers())
+                        if (t.getAddress().toString().split("/")[1].split(":")[0].equals(theirIP)) {
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                                @Override
+                                public void run() {
+                                    t.getPlayer().kickPlayer(reason);
+                                }
+                            });
+                            break;
+                        }
+                    bans.addBan(theirIP, reason, null, "Console");
+                    Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirIP + var.getMessages() + (reason.equals("") ? "." : " for " + var.getObj() + reason + var.getMessages() + "."));
+                    m += name + " banned " + theirIP + (reason.equals("") ? "." : " for " + reason + ".");
+                }
+            } else if (message.startsWith("!unbanip ") && info.isAdmin()) {//TODO
+                message = message.replaceFirst("!unbanip ", "");
+                if (message.split(" ").length == 0) {
+                    sendMessage("Error: You must enter an ip to unban.");
+                    return;
+                }
+                boolean validIp = false;
+                try {
+                    final Pattern ipAdd = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+                            "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+                    validIp = ipAdd.matcher(message.split(" ")[0]).matches();
+                } catch (Exception e) { }
+                if (!validIp) {
+                    sendMessage("Error: Invalid ip.");
+                    return;
+                }
+                BanList bans = Bukkit.getBanList(BanList.Type.IP);
+                String theirIP = message.split(" ")[0];
+                if (!bans.isBanned(theirIP)) {
+                    sendMessage("Error: That ip is not banned.");
+                    return;
+                }
+                bans.pardon(theirIP);
+                Bukkit.broadcastMessage(var.getMessages() + name + " unbanned " + theirIP + ".");
+                m += name + " unbanned " + theirIP + ".";
             } else {
                 Bukkit.broadcast(var.getMessages() + "To Slack - " + ChatColor.WHITE + name + ": " + message, "Necessities.slack");
                 return;
@@ -359,77 +664,60 @@ public class JanetSlack {
             Bukkit.broadcast(var.getMessages() + "To Slack - " + ChatColor.WHITE + name + ": " + message, "Necessities.slack");
     }
 
-    private String getUserInfo(String id) {
-        if (userMap.containsKey(id))
-            return userMap.get(id);
-        //Almost never should get past this point as it maps the users when it connects unless a new user gets invited
-        String output = "";
-        try {
-            URL url = new URL("https://slack.com/api/users.info?token=" + token + "&user=" + id + "&pretty=1");
-            HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
+    private class SlackUser {
+        private String id, name;
+        private int rank = 0;
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-            while ((inputLine = in.readLine()) != null)
-                response.append(inputLine);
-            in.close();
-            JSONParser jsonParser = new JSONParser();
-            JSONObject json = (JSONObject) jsonParser.parse(response.toString());
-            JSONObject user = (JSONObject) json.get("user");
-            output = (String) user.get("name");
-        } catch (Exception e) {}
-        userMap.put(id, output);
-        return output;
-    }
+        public SlackUser(JSONObject json) {
+            this.id = (String) json.get("id");
+            this.name = (String) json.get("name");
+            if ((boolean) json.get("is_primary_owner"))
+                this.rank = 3;
+            else if ((boolean) json.get("is_owner"))
+                this.rank = 2;
+            else if ((boolean) json.get("is_admin"))
+                this.rank = 1;
+            else if ((boolean) json.get("is_ultra_restricted"))
+                this.rank = -2;
+            else if ((boolean) json.get("is_restricted"))
+                this.rank = -1;
+            //else leave it at 0 for member
+        }
 
-    private void sendPost(String url) {
-        try {
-            URL obj = new URL(url);
-            HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-            con.setRequestMethod("POST");
-            con.getInputStream();
-        } catch (Exception e) {}
-    }
+        public String getName() {
+            return this.name;
+        }
 
-    private void connect() {
-        if (isConnected)
-            return;
-        try {
-            URL url = new URL("https://slack.com/api/rtm.start?token=" + token + "&simple_latest=true&pretty=1");
-            HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
+        public String getId() {
+            return this.id;
+        }
 
-            while ((inputLine = in.readLine()) != null)
-                response.append(inputLine);
-            in.close();
+        public int getRank() {
+            return this.rank;
+        }
 
-            JSONParser jsonParser = new JSONParser();
-            JSONObject json = (JSONObject) jsonParser.parse(response.toString());
-            //Get a more recent timestamp than zero so first history pass is more efficient
-            latest = (String) json.get("latest_event_ts");
-            //Map users
-            JSONArray users = (JSONArray) json.get("users");
-            for (int i = users.size() - 1; i >= 0; i--) {
-                JSONObject user = (JSONObject) users.get(i);
-                String id = (String) user.get("id");
-                if (!userMap.containsKey(id))
-                    userMap.put(id, (String) user.get("name"));
-            }
-        } catch (Exception e) {}
-        sendPost("https://slack.com/api/users.setPresence?token=" + token + "&presence=active&pretty=1");
-        historyReader = new BukkitRunnable() {
-            @Override
-            public void run() {
-                getHistory();
-            }
-        };
-        historyReader.runTaskTimerAsynchronously(Necessities.getInstance(), 0, 20);
-        sendMessage("Connected.");
-        isConnected = true;
+        public boolean isUltraRestricted() {
+            return this.rank >= -2;
+        }
+
+        public boolean isRestricted() {
+            return this.rank >= -1;
+        }
+
+        public boolean isMember() {
+            return this.rank >= 0;
+        }
+
+        public boolean isAdmin() {
+            return this.rank >= 1;
+        }
+
+        public boolean isOwner() {
+            return this.rank >= 2;
+        }
+
+        public boolean isPrimaryOwner() {
+            return this.rank >= 3;
+        }
     }
 }

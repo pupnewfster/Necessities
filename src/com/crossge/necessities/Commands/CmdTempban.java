@@ -47,9 +47,8 @@ public class CmdTempban extends Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid time, please enter a time in minutes.");
             return true;
         }
-        String reason = null;
+        String reason = "";
         if (args.length > 2) {
-            reason = "";
             for (int i = 2; i < args.length; i++)
                 reason += args[i] + " ";
             reason = ChatColor.translateAlternateColorCodes('&', reason.trim());
@@ -60,11 +59,8 @@ public class CmdTempban extends Cmd {
             target.getPlayer().kickPlayer(reason);
         Date date = new Date(System.currentTimeMillis() + minutes * 60 * 1000);
         bans.addBan(theirName, reason, date, "Console");
-        if (reason != null)
-            Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + " for " + var.getObj() + minutes + var.getMessages() +
-                    " " + plural(minutes) + " for the reason: " + var.getObj() + reason);
-        else
-            Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + " for " + var.getObj() + minutes + var.getMessages() + " " + plural(minutes) + ".");
+        Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + " for " + var.getObj() + minutes + var.getMessages() +
+                " " + plural(minutes) + (reason.equals("") ? "." : " for the reason " + var.getObj() + reason + var.getMessages() + "."));
         return true;
     }
 

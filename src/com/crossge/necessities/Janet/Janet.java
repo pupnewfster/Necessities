@@ -8,6 +8,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -303,7 +306,7 @@ public class Janet {
             if (!whitelistedIP(temp)) {
                 if (validateIPAddress(temp))
                     orig[i] = starIP(orig[i]);
-                /*else if (!temp.contains("http://") && (temp.split("\\.").length == 3 || temp.split("\\.").length == 3))
+                else if (!temp.contains("http://") && (temp.split("\\.").length == 3 || temp.split("\\.").length == 3))
                     try {
                         URLConnection urlCon = new URL("http://" + temp).openConnection();
                         urlCon.connect();
@@ -312,9 +315,7 @@ public class Janet {
                         is.close();
                         if (validateIPAddress(u))
                             orig[i] = starIP(orig[i]);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }*/
+                    } catch (Exception e) { }
             }
         }
         String censored = "";
@@ -332,9 +333,7 @@ public class Janet {
             final Pattern ipAdd = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                     "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
             return ipAdd.matcher(ipAddress).matches();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         return false;
     }
 
