@@ -90,10 +90,10 @@ public class JanetSlack {
             OutputStream os = con.getOutputStream();
             os.write(json.toString().getBytes("UTF-8"));
             os.close();
-            con.getInputStream();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            InputStream is = con.getInputStream();
+            is.close();
+            con.disconnect();
+        } catch (Exception e) { }
 
     }
 
@@ -156,7 +156,9 @@ public class JanetSlack {
             URL obj = new URL(url);
             HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
             con.setRequestMethod("POST");
-            con.getInputStream();
+            InputStream is = con.getInputStream();
+            is.close();
+            con.disconnect();
         } catch (Exception e) {}
     }
 
@@ -215,6 +217,7 @@ public class JanetSlack {
     private void setHelp() {
         ArrayList<String> temp = new ArrayList<>();
         temp.add("!help <page> ~ View the help messages on <page>.");
+        temp.add("!rank ~ Shows you what rank you have.");
         temp.add("!whois <name> ~ View information about <name>.");
         temp.add("!who ~ View the online players.");
         temp.add("!baltop <page> ~ View <page> of baltop.");
@@ -277,6 +280,8 @@ public class JanetSlack {
                 }
                 if (page + 1 < totalpages)
                     m += "Type !help " + Integer.toString(page + 2) + " to read the next page.\n";
+            } else if (message.startsWith("!rank")) {
+                m += info.getRankName() + "\n";
             } else if (message.startsWith("!whois ")) {
                 if (message.split(" ").length == 1) {
                     sendMessage("Error: You must enter a player to view info of.");
@@ -765,6 +770,22 @@ public class JanetSlack {
 
         public boolean isPrimaryOwner() {
             return this.rank >= 3;
+        }
+
+        public String getRankName() {
+            if (isPrimaryOwner())
+                return "Primary Owner";
+            else if (isOwner())
+                return "Owner";
+            else if (isAdmin())
+                return "Admin";
+            else if (isMember())
+                return "Member";
+            else if (isRestricted())
+                return "Restricted";
+            else if (isUltraRestricted())
+                return "Ultra Restricted";
+            return "Error";
         }
     }
 }
