@@ -333,7 +333,9 @@ public class JanetSlack {
                     sendMessage("Error: You may not warn someone who has Necessities.antiPWarn.");
                     return;
                 }
-                warns.warn(target.getUniqueId(), message.replaceFirst(message.split(" ")[0], "").trim(), name);
+                String reason = message.replaceFirst(message.split(" ")[0], "").trim();
+                warns.warn(target.getUniqueId(), reason, name);
+                m += target.getName() + " was warned by " + name + " for " + reason + ".";
             } else if (message.startsWith("!devs")) {
                 m += "The Devs for Necessities are: pupnewfster, Mod_Chris, and hypereddie10.";
             } else if (message.startsWith("!worlds")) {
@@ -426,7 +428,7 @@ public class JanetSlack {
                 getHistory();
             }
         };
-        historyReader.runTaskTimerAsynchronously(Necessities.getInstance(), 0, 20);
+        historyReader.runTaskTimerAsynchronously(Necessities.getInstance(), 0, 1);
         sendMessage("Connected.");
         isConnected = true;
     }
