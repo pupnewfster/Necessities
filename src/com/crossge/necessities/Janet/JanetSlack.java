@@ -10,10 +10,7 @@ import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
 import com.crossge.necessities.Variables;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -25,6 +22,7 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.UUID;
@@ -34,13 +32,15 @@ public class JanetSlack {
     private static HashMap<String, String> userMap = new HashMap<>();
     private static boolean justLoaded = true, isConnected = false;
     private static String token, channel, channelID, hook, latest;
-    private static URL hookURL;
     private static BukkitRunnable historyReader;
-    Variables var = new Variables();
+    private static JanetRandom r = new JanetRandom();
+    private static URL hookURL;
     RankManager rm = new RankManager();
     UserManager um = new UserManager();
+    JanetWarn warns = new JanetWarn();
     Formatter form = new Formatter();
     BalChecks balc = new BalChecks();
+    Variables var = new Variables();
     CmdHide hide = new CmdHide();
     GetUUID get = new GetUUID();
 
@@ -142,12 +142,26 @@ public class JanetSlack {
                 m += "!who ~ View the online players.\n";
                 m += "!baltop <page> ~ View <page> of baltop.\n";
                 m += "!bal <name> ~ View <name>'s balance.\n";
+                m += "!meme <number> ~ Generate a number between 0 and <number>.\n";
+                m += "!warn <name> <reason> ~ Warn <name> for <reason>.\n";
+                m += "!say <message> ~ Sends the message <message> to the playesr on the server.\n";
+                m += "!devs ~ View the devs.\n";
+                m += "!worlds ~ View the loaded worlds.\n";
+
+                //Admin commands
+                //Kick
+                //Tempban
+                //Ban
+                //Slap
+                //Mute
+
+                //multiple help pages
             } else if (message.startsWith("!whois ")) {
-                if (message.split("!whois ").length == 1) {
+                if (message.split(" ").length == 1) {
                     sendMessage("Error: You must enter a player to view info of.");
                     return;
                 }
-                String target = message.split("!whois ")[1];
+                String target = message.split(" ")[1];
                 UUID uuid = get.getID(target);
                 if (uuid == null) {
                     uuid = get.getOfflineID(target);
@@ -207,16 +221,10 @@ public class JanetSlack {
                     else if (p.getGameMode() == GameMode.CREATIVE)
                         gamemode = "Creative";
                     m += " - Gamemode: " + gamemode + "\n";
-                }
-                m += " - God mode: " + (u.godmode() ? "true" : "false") + "\n";
-                if (u.getPlayer() != null) {
-                    Player p = u.getPlayer();
                     m += " - Banned: " + (p.isBanned() ? "true" : "false") + "\n";
                     m += " - Visible: " + (hide.isHidden(p) ? "false" : "true") +"\n";
-                } else {
-                    OfflinePlayer p = Bukkit.getOfflinePlayer(u.getUUID());
-                    m += " - Banned: " + (p.isBanned() ? "true" : "false") + "\n";
-                }
+                } else
+                    m += " - Banned: " + (Bukkit.getOfflinePlayer(u.getUUID()).isBanned() ? "true" : "false") + "\n";
             } else if (message.startsWith("!who")) {
                 int numbOnline = Bukkit.getOnlinePlayers().size() + 1;
                 HashMap<Rank, String> online = new HashMap<>();
@@ -251,16 +259,16 @@ public class JanetSlack {
                     if (online.containsKey(r))
                         m += r.getName() + "s: " + online.get(r).trim().substring(0, online.get(r).length() - 2) + "\n";
                 }
-            } else if (message.startsWith("!baltop")) {
+            } else if (message.startsWith("!baltop") || message.startsWith("!moeytop")) {
                 int page = 0;
-                if (message.split("!baltop ").length > 1) {
-                    if (!form.isLegal(message.split("!baltop ")[1])) {
+                if (message.split(" ").length > 2) {
+                    if (!form.isLegal(message.split(" ")[1])) {
                         sendMessage("Error: You must enter a valid baltop page.");
                         return;
                     }
                     page = Integer.parseInt(message.split("!baltop ")[1]);
                 }
-                if (message.split("!baltop ").length == 0 || page == 0)
+                if (message.split(" ").length <= 1 || page == 0)
                     page = 1;
                 int time = 0;
                 String bal;
@@ -279,12 +287,12 @@ public class JanetSlack {
                     time++;
                     bal = balc.balTop(page, time);
                 }
-            } else if (message.startsWith("!bal ")) {
-                if (message.split("!bal ").length == 1) {
+            } else if (message.startsWith("!bal ") || message.startsWith("!balance ") || message.startsWith("!money ")) {
+                if (message.split(" ").length == 1) {
                     sendMessage("Error: You must enter a player to view info of.");
                     return;
                 }
-                String target = message.split("!bal ")[1];
+                String target = message.split(" ")[1];
                 String playersname;
                 UUID uuid = get.getID(target);
                 if (uuid == null) {
@@ -301,7 +309,45 @@ public class JanetSlack {
                     sendMessage("Error: That player is not in my records. If the player is offline, please use the full and most recent name.");
                     return;
                 }
-                m += ownerShip(playersname) + " balance is: " + "$" + form.addCommas(balance);
+                m += ((playersname.endsWith("s") || playersname.endsWith("S")) ? playersname + "'" : playersname + "'s") + " balance is: " + "$" + form.addCommas(balance);
+            } else if (message.startsWith("!meme ")) {
+                int applePie = 0;
+                try {
+                    applePie = Integer.parseInt(message.split(" ")[1]);
+                } catch (Exception e) {
+                }
+                m += r.memeRandom(applePie);
+            } else if (message.startsWith("!warn ")) {
+                message = message.replaceFirst("!warn ", "");
+                if (message.split(" ").length < 2) {
+                    sendMessage("Error: You must enter a player to warn and a reason.");
+                    return;
+                }
+                UUID uuid = get.getID(message.split(" ")[0]);
+                if (uuid == null) {
+                    sendMessage("Error: Invalid player.");
+                    return;
+                }
+                Player target = Bukkit.getPlayer(uuid);
+                if (target.hasPermission("Necessities.antiPWarn")) {
+                    sendMessage("Error: You may not warn someone who has Necessities.antiPWarn.");
+                    return;
+                }
+                warns.warn(target.getUniqueId(), message.replaceFirst(message.split(" ")[0], "").trim(), name);
+            } else if (message.startsWith("!devs")) {
+                m += "The Devs for Necessities are: pupnewfster, Mod_Chris, and hypereddie10.";
+            } else if (message.startsWith("!worlds")) {
+                String levels = "";
+                ArrayList<String> worlds = new ArrayList<>();
+                for (World world : Bukkit.getWorlds())
+                    worlds.add(world.getName());
+                for (int i = 0; i < worlds.size() - 1; i++)
+                    levels += worlds.get(i) + ", ";
+                levels += "and " + worlds.get(worlds.size() - 1) + ".";
+                m += "The worlds are: " + levels;
+            } else if (message.startsWith("!say ")) {
+                Bukkit.broadcastMessage(ChatColor.WHITE + name + ": " + message.replaceFirst("!say ", ""));
+                return;
             } else {
                 Bukkit.broadcast(var.getMessages() + "To Slack - " + ChatColor.WHITE + name + ": " + message, "Necessities.slack");
                 return;
@@ -309,10 +355,6 @@ public class JanetSlack {
             sendMessage(m);
         } else
             Bukkit.broadcast(var.getMessages() + "To Slack - " + ChatColor.WHITE + name + ": " + message, "Necessities.slack");
-    }
-
-    private String ownerShip(String name) {
-        return (name.endsWith("s") || name.endsWith("S")) ? name + "'" : name + "'s";
     }
 
     private String getUserInfo(String id) {

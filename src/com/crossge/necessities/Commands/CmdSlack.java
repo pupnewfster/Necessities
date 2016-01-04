@@ -60,12 +60,12 @@ public class CmdSlack extends Cmd {
                 message = ChatColor.translateAlternateColorCodes('&', message.replaceAll("&k", ""));
         }
         Bukkit.broadcast(send + message, "Necessities.slack");
-        slack.sendMessage(send + message);
+        slack.sendMessage(send.replaceFirst("To Slack - ", "") + message);
     }
 
     private void consoleToSlack(String message) {
         String send = var.getMessages() + "To Slack - " + console.getName() + ChatColor.WHITE + " " + ChatColor.translateAlternateColorCodes('&', message.trim());
         Bukkit.broadcast(send, "Necessities.slack");
-        slack.sendMessage(send);
+        slack.sendMessage(console.getName() + " " + ChatColor.translateAlternateColorCodes('&', message.trim()));
     }
 }
