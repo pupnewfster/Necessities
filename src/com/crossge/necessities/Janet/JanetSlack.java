@@ -428,7 +428,7 @@ public class JanetSlack {
                 getHistory();
             }
         };
-        historyReader.runTaskTimerAsynchronously(Necessities.getInstance(), 0, 1);
+        historyReader.runTaskTimerAsynchronously(Necessities.getInstance(), 0, 20);
         sendMessage("Connected.");
         isConnected = true;
     }
