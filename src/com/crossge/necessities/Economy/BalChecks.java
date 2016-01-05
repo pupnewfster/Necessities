@@ -1,5 +1,6 @@
 package com.crossge.necessities.Economy;
 
+import com.crossge.necessities.Formatter;
 import com.crossge.necessities.GetUUID;
 import com.crossge.necessities.Necessities;
 import net.milkbowl.vault.economy.Economy;
@@ -34,9 +35,7 @@ public class BalChecks implements Economy {
     }
 
     public String bal(UUID uuid) {
-        if (!balances.containsKey(uuid))
-            return null;
-        return form.roundTwoDecimals(balances.get(uuid));
+        return !balances.containsKey(uuid) ? null : form.roundTwoDecimals(balances.get(uuid));
     }
 
     public double balance(UUID uuid) {
@@ -94,22 +93,17 @@ public class BalChecks implements Economy {
     public void trackAllBals() throws IOException {
         if (!Necessities.isTracking())
             return;
-
         File check = new File("plugins/Necessities", "track.yml");
         if (!check.exists())
             check.createNewFile();
-
         YamlConfiguration configTracker = YamlConfiguration.loadConfiguration(check);
-
         boolean didSend = configTracker.getBoolean("economy.init", false);
-
         if (!didSend) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Pushing Economy data.");
             for (UUID id : balances.keySet()) {
                 Double money = balances.get(id);
                 Necessities.trackActionWithValue(id, "Economy", money, money);
             }
-
             configTracker.set("economy.init", true);
             configTracker.save(check);
         }
@@ -132,9 +126,7 @@ public class BalChecks implements Economy {
         configUsers.set(uuid.toString() + ".balance", val);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void removeMoney(UUID uuid, double amount) {

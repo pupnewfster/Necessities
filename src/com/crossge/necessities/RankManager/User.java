@@ -2,8 +2,8 @@ package com.crossge.necessities.RankManager;
 
 import com.crossge.necessities.Commands.CmdHide;
 import com.crossge.necessities.Economy.BalChecks;
-import com.crossge.necessities.Economy.Formatter;
 import com.crossge.necessities.Economy.Materials;
+import com.crossge.necessities.Formatter;
 import com.crossge.necessities.Guilds.Guild;
 import com.crossge.necessities.Guilds.GuildManager;
 import com.crossge.necessities.Hats.Hat;
@@ -33,18 +33,17 @@ public class User {
     private HashMap<String, Location> homes = new HashMap<>();
     private ArrayList<String> permissions = new ArrayList<>(), subranks = new ArrayList<>();
     private ArrayList<UUID> ignored = new ArrayList<>();
-    private String appended = "", nick = null, lastContact;
-    private PermissionAttachment attachment;
     private boolean teleporting = false, jailed = false, opChat = false, afk = false, isbacking = false, god = false, muted = false, autoClaiming = false, guildChat = false, slackChat = false;
-    private double power = 0.0;
-    private Guild guild;
-    private long lastAction = 0, lastAFK = 0, lastRequest = 0;
+    private long lastAction = 0, lastAFK = 0, lastRequest = 0, login = 0;
     private int pastTotal = 0, lastActionTask = 0, afkTask = 0;
-    private long login = 0;
-    private Player bukkitPlayer;
+    private String appended = "", nick = null, lastContact;
     private Location lastPos, right, left, invLoc;
+    private PermissionAttachment attachment;
+    private Player bukkitPlayer;
+    private double power = 0.0;
     private Hat hat = null;
     private UUID userUUID;
+    private Guild guild;
     private Rank rank;
 
     public User(Player p) {
@@ -130,9 +129,7 @@ public class User {
             configUsers.set(getUUID().toString() + ".timePlayed", (int) (this.pastTotal + (System.currentTimeMillis() - this.login) / 1000));
             try {
                 configUsers.save(configFileUsers);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
         }
         this.pastTotal = 0;
         this.login = 0;
@@ -159,9 +156,7 @@ public class User {
             configUsers.set(getUUID().toString() + ".ignored", Arrays.asList(""));
             try {
                 configUsers.save(configFileUsers);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
         }
     }
 
@@ -182,9 +177,7 @@ public class User {
             configUsers.set(uuid.toString() + ".ignored", ign);
             try {
                 configUsers.save(configFileUsers);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
         }
     }
 
@@ -201,9 +194,7 @@ public class User {
             configUsers.set(uuid.toString() + ".ignored", ign);
             try {
                 configUsers.save(configFileUsers);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
         }
     }
 
@@ -215,9 +206,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".guild", null);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
     
     public String getAppended() {
@@ -236,9 +225,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".guild", g.getName());
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public double getPower() {
@@ -297,8 +284,7 @@ public class User {
             return;
         }
         this.teleporting = true;
-        this.bukkitPlayer.sendMessage(var.getMessages() + "Teleportation will begin in " + ChatColor.RED + this.rank.getTpDelay() + var.getMessages() +
-                " seconds, don't move.");
+        this.bukkitPlayer.sendMessage(var.getMessages() + "Teleportation will begin in " + ChatColor.RED + this.rank.getTpDelay() + var.getMessages() + " seconds, don't move.");
         Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
             @Override
             public void run() {
@@ -308,8 +294,7 @@ public class User {
                             Formatter form = new Formatter();
                             double price = Double.parseDouble(bal.bal(getUUID())) * .07;
                             bal.removeMoney(getUUID(), price);
-                            getPlayer().sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() +
-                                    " was removed from your acount.");
+                            getPlayer().sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() + " was removed from your acount.");
                         }
                         setBacking(false);
                     }
@@ -345,9 +330,7 @@ public class User {
                     }
                 }, 20 * 300);
                 Bukkit.getScheduler().cancelTask(temp);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
     }
 
     public boolean isTeleporting() {
@@ -386,9 +369,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".rank", r.getName());
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         refreshPerms();
     }
 
@@ -405,9 +386,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".nick", message);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public Location getLastPos() {
@@ -427,9 +406,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".location.pitch", l.getPitch());
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public Hat getHat() {
@@ -453,9 +430,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".hat", this.hat == null ? null : this.hat.getType().getName());
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public boolean isJailed() {
@@ -470,9 +445,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".jailed", jail);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void updateListName() {
@@ -505,9 +478,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".muted", this.muted);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void setGod(boolean godmode) {
@@ -540,9 +511,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".afk", isafk);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         this.lastAFK = System.currentTimeMillis();
         if (!getPlayer().hasPermission("Necessities.afkkickimune")) {
             if (isAfk()) {
@@ -556,9 +525,7 @@ public class User {
                         }
                     }, 20 * 300);
                     Bukkit.getScheduler().cancelTask(temp);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                } catch (Exception e) { }
             } else
                 Bukkit.getScheduler().cancelTask(this.afkTask);
         }
@@ -651,9 +618,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".homes." + name + ".pitch", Float.toString(l.getPitch()));
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         this.homes.put(name, l);
     }
 
@@ -670,9 +635,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".homes." + name, null);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         this.homes.remove(name);
     }
 
@@ -818,9 +781,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".power", this.power);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         if (this.guild != null)
             this.guild.updatePower();*/
     }
@@ -838,9 +799,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".power", this.power);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         if (this.guild != null)
             this.guild.updatePower();
     }
@@ -872,16 +831,12 @@ public class User {
     	File f = new File("world/playerdata/" + this.bukkitPlayer.getUniqueId() + ".dat");
     	try {
 			Files.copy(f, new File(dirFrom, this.bukkitPlayer.getUniqueId() + ".dat"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		} catch (IOException e) { }
     	File saved = new File(dir, this.bukkitPlayer.getUniqueId() + ".dat");
     	if (saved.exists()) {//if exists transfer and load otherwise just set to the defaults of world and inv and enderchest and xp
         	try {
     			Files.copy(saved, new File("world/playerdata/" + this.bukkitPlayer.getUniqueId() + ".dat"));
-    		} catch (IOException e) {
-    			e.printStackTrace();
-    		}
+    		} catch (IOException e) { }
     		this.bukkitPlayer.loadData();
     		this.bukkitPlayer.setTicksLived(ticks);
     	} else {

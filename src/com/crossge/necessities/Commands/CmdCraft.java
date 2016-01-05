@@ -32,16 +32,10 @@ public class CmdCraft extends Cmd {
                 ShapedRecipe s = (ShapedRecipe) r;
                 for (Character c : s.getIngredientMap().keySet())
                     if (s.getIngredientMap().get(c) != null)
-                        if (items.containsKey(s.getIngredientMap().get(c)))
-                            items.put(s.getIngredientMap().get(c), items.get(s.getIngredientMap().get(c)) + 1);
-                        else
-                            items.put(s.getIngredientMap().get(c), 1);
+                        items.put(s.getIngredientMap().get(c), items.containsKey(s.getIngredientMap().get(c)) ? items.get(s.getIngredientMap().get(c)) + 1 : 1);
             } else if (r instanceof ShapelessRecipe)
                 for (ItemStack i : ((ShapelessRecipe) r).getIngredientList())
-                    if (items.containsKey(i))
-                        items.put(i, items.get(i) + 1);
-                    else
-                        items.put(i, 1);
+                    items.put(i, items.containsKey(i) ? items.get(i) + 1 : 1);
             for (ItemStack i : items.keySet())
                 Bukkit.broadcastMessage(items.get(i) + " " + i.getType().toString());
             Bukkit.broadcastMessage("results in " + r.getResult().getAmount() + " " + r.getResult().getType().toString());

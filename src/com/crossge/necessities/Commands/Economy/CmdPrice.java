@@ -5,21 +5,20 @@ import org.bukkit.entity.Player;
 
 public class CmdPrice extends EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        if (args.length > 2 || args.length == 0) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter the item you want to know the price of and wether to buy or sell.");
+        if (args.length == 0) {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter the item you want to know the price of and whether to buy or sell.");
             return true;
         }
         String itemName = args[0];
         String oper = args[0];
         if (sender instanceof Player) {
-            Player player = (Player) sender;
             if (args.length == 1)
-                itemName = player.getItemInHand().getType().name();
-        } else if (args.length != 2) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter the item you want to know the price of and wether to buy or sell.");
+                itemName = ((Player) sender).getItemInHand().getType().name();
+        } else if (args.length < 2) {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter the item you want to know the price of and whether to buy or sell.");
             return true;
         }
-        if (args.length == 2)
+        if (args.length > 1)
             oper = args[1];
         if (form.isLegal(itemName))
             itemName = mat.idToName(Integer.parseInt(itemName));
@@ -29,10 +28,8 @@ public class CmdPrice extends EconomyCmd {
             return true;
         }
         String file;
-        if (oper.equalsIgnoreCase("buy"))
-            file = "buy";
-        else if (oper.equalsIgnoreCase("sell"))
-            file = "sell";
+        if (oper.equalsIgnoreCase("buy") || oper.equalsIgnoreCase("sell"))
+            file = oper.toLowerCase();
         else {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input either buy or sell");
             return true;

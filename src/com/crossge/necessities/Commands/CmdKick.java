@@ -19,7 +19,7 @@ public class CmdKick extends Cmd {
             return true;
         }
         Player target = Bukkit.getPlayer(uuid);
-        String name = "Console";
+        String name = console.getName().replaceAll(":", "");
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (target.hasPermission("Necessities.antiKick") && !p.hasPermission("Necessities.kickany")) {

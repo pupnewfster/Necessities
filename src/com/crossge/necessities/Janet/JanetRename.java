@@ -6,8 +6,8 @@ import org.bukkit.entity.Player;
 import java.io.File;
 
 public class JanetRename {
-    Janet bot = new Janet();
     private File configFile = new File("plugins/Necessities", "config.yml");
+    Janet bot = new Janet();
 
     public String parseRename(String message, Player p) {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);

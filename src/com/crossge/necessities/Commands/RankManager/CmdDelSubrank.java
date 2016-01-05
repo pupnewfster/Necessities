@@ -21,7 +21,7 @@ public class CmdDelSubrank extends RankCmd {
         }
         subrank = rm.getSub(subrank);
         rm.updateRankSubrank(r, subrank, true);
-        sender.sendMessage(var.getMessages() + "Removed " + var.getObj() + subrank + var.getMessages() + " from " + var.getObj() + form.plural(r.getName()) + var.getMessages() + " subranks.");
+        sender.sendMessage(var.getMessages() + "Removed " + var.getObj() + subrank + var.getMessages() + " from " + var.getObj() + form.ownerShip(r.getName()) + var.getMessages() + " subranks.");
         return true;
     }
 }

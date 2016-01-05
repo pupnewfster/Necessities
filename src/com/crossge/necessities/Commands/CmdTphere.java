@@ -1,6 +1,5 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.Economy.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -8,7 +7,6 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class CmdTphere extends Cmd {
-    Formatter form = new Formatter();
     CmdHide hide = new CmdHide();
 
     public boolean commandUse(CommandSender sender, String[] args) {

@@ -10,11 +10,10 @@ public class CmdMore extends Cmd {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             ItemStack hand = player.getItemInHand();
-            if (hand.getType() == Material.AIR) {
+            if (hand.getType() == Material.AIR)
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not holding an item.");
-                return true;
-            }
-            hand.setAmount(64);
+            else
+                hand.setAmount(64);
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You can do not have any items.");
         return true;

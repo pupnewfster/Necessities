@@ -9,15 +9,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class Rank {
-    private File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml");
-    private File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
+    private File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml"), configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
     private ArrayList<String> permissions = new ArrayList<>();
-    private Rank previous;
-    private Rank next;
-    private String title = "";
-    private String name = "";
-    private int maxHomes = 1;
-    private int tpdelay = 0;
+    private String title = "", name = "";
+    private int maxHomes = 1, tpdelay = 0;
+    private Rank previous, next;
 
     public Rank(String name) {
         this.name = name;

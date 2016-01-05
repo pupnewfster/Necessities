@@ -1,6 +1,5 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.Economy.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -8,8 +7,6 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class CmdExp extends Cmd {
-    Formatter form = new Formatter();
-
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
@@ -73,8 +70,7 @@ public class CmdExp extends Cmd {
                     Bukkit.getPlayer(uuid).giveExp(-Bukkit.getPlayer(uuid).getTotalExperience());
                     Bukkit.getPlayer(uuid).giveExp(Integer.parseInt(args[2]));
                 }
-                sender.sendMessage(var.getObj() + Bukkit.getPlayer(uuid).getName() + var.getMessages() + " now has " + var.getObj() +
-                        Bukkit.getPlayer(uuid).getTotalExperience() + var.getMessages() + " exp.");
+                sender.sendMessage(var.getObj() + Bukkit.getPlayer(uuid).getName() + var.getMessages() + " now has " + var.getObj() + Bukkit.getPlayer(uuid).getTotalExperience() + var.getMessages() + " exp.");
                 return true;
             }
             if (args[0].equalsIgnoreCase("give")) {
@@ -100,8 +96,7 @@ public class CmdExp extends Cmd {
                     }
                     Bukkit.getPlayer(uuid).giveExp(Integer.parseInt(args[2]));
                 }
-                sender.sendMessage(var.getObj() + Bukkit.getPlayer(uuid).getName() + var.getMessages() + " now has " + var.getObj() +
-                        Bukkit.getPlayer(uuid).getTotalExperience() + var.getMessages() + " exp.");
+                sender.sendMessage(var.getObj() + Bukkit.getPlayer(uuid).getName() + var.getMessages() + " now has " + var.getObj() + Bukkit.getPlayer(uuid).getTotalExperience() + var.getMessages() + " exp.");
             }
         }
         return true;

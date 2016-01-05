@@ -183,9 +183,7 @@ public class MaterialNames {
         configNames.set("STONE_SLAB2", Arrays.asList("REDSANDSTONESLAB"));
         try {
             configNames.save(configFileNames);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     private void setFriendlyNames() {
@@ -331,9 +329,7 @@ public class MaterialNames {
         configFriendlyNames.set("RED_SANDSTONE_STAIRS", "RED SANDSTONE STAIR");
         try {
             configFriendlyNames.save(configFileFriendlyNames);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     private void setPluralNames() {
@@ -559,8 +555,6 @@ public class MaterialNames {
         configPluralNames.set("DARKOAKDOOR", "DARK OAK DOORS");
         try {
             configPluralNames.save(configFilePluralyNames);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 }

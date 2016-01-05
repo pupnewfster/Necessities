@@ -20,8 +20,7 @@ public class CmdBuy extends EconomyCmd {
             String balance = balc.bal(player.getUniqueId());
             double intbal = Double.parseDouble(balance);
             int amount;
-            String itemName;
-            String temp;
+            String itemName, temp;
             short data = 0;
             if (args.length == 2) {
                 temp = args[0].replaceAll(":", " ");
@@ -73,13 +72,11 @@ public class CmdBuy extends EconomyCmd {
                 if (!noFit.isEmpty()) {
                     amount = amount - noFit.get(0).getAmount();
                     cost = pr.getCost("buy", itemName, amount);
-                    player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have enough inventory space to buy that much of that item,"
-                            + " buying the amount you have inventory space for.");
+                    player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have enough inventory space to buy that much of that item, buying the amount you have inventory space for.");
                 }
                 balc.removeMoney(player.getUniqueId(), cost);
                 itemName = form.capFirst(mat.getName(itemName));
-                player.sendMessage(var.getMessages() + "You bought " + var.getObj() + Integer.toString(amount) + " " + mat.pluralize(itemName, amount) + var.getMessages() +
-                        ".");
+                player.sendMessage(var.getMessages() + "You bought " + var.getObj() + Integer.toString(amount) + " " + mat.pluralize(itemName, amount) + var.getMessages() + ".");
                 player.sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(cost)) + var.getMessages() + " was removed from your acount.");
             }
         } else

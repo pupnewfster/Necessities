@@ -20,22 +20,14 @@ import java.io.File;
 import java.util.Arrays;
 
 public class Initialization {
-    private File configFileFriendlyNames = new File("plugins/Necessities/Economy", "friendlynames.yml");
-    private File configFilePluralyNames = new File("plugins/Necessities/Economy", "pluralnames.yml");
-    private File configFileWarps = new File("plugins/Necessities/WorldManager", "warps.yml");
-    private File configFilePM = new File("plugins/Necessities/WorldManager", "portals.yml");
-    private File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
-    private File configFileWM = new File("plugins/Necessities/WorldManager", "worlds.yml");
-    private File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
-    private File configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml");
-    private File configFileLogIn = new File("plugins/Necessities", "loginmessages.yml");
-    private File configFileWrench = new File("plugins/Necessities", "wrenched.yml");
-    private File configFileIds = new File("plugins/Necessities/Economy", "ids.yml");
-    private File configFileCensors = new File("plugins/Necessities", "censors.yml");
-    private File configFileSpying = new File("plugins/Necessities", "spying.yml");
-    private File configFileHiding = new File("plugins/Necessities", "hiding.yml");
-    private File configFileTitles = new File("plugins/Necessities", "titles.yml");
-    private File configFile = new File("plugins/Necessities", "config.yml");
+    private File configFileFriendlyNames = new File("plugins/Necessities/Economy", "friendlynames.yml"), configFilePluralyNames = new File("plugins/Necessities/Economy", "pluralnames.yml"),
+            configFileWarps = new File("plugins/Necessities/WorldManager", "warps.yml"), configFilePM = new File("plugins/Necessities/WorldManager", "portals.yml"),
+            configFileUsers = new File("plugins/Necessities/RankManager", "users.yml"), configFileWM = new File("plugins/Necessities/WorldManager", "worlds.yml"),
+            configFilePrices = new File("plugins/Necessities/Economy", "prices.yml"), configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml"),
+            configFileLogIn = new File("plugins/Necessities", "loginmessages.yml"), configFileWrench = new File("plugins/Necessities", "wrenched.yml"),
+            configFileIds = new File("plugins/Necessities/Economy", "ids.yml"), configFileCensors = new File("plugins/Necessities", "censors.yml"),
+            configFileSpying = new File("plugins/Necessities", "spying.yml"), configFileHiding = new File("plugins/Necessities", "hiding.yml"),
+            configFileTitles = new File("plugins/Necessities", "titles.yml"), configFile = new File("plugins/Necessities", "config.yml");
     MaterialNames matNames = new MaterialNames();
     PowerManager power = new PowerManager();
     CmdCommandSpy cs = new CmdCommandSpy();
@@ -98,7 +90,6 @@ public class Initialization {
         hide.init();
         warns.initiate();
         ai.initiate();
-        slack.init();
 
         //Guilds
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
@@ -114,6 +105,8 @@ public class Initialization {
             rp.initiate();
             cmdp.upList();//Command prices are disabled anyways atm
         }
+
+        slack.init();
     }
 
     private void dirCreate(String directory) {
@@ -127,18 +120,14 @@ public class Initialization {
         if (!f.exists())
             try {
                 f.createNewFile();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
     }
 
     private void addYML(File file) {
         if (!file.exists())
             try {
                 file.createNewFile();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
     }
 
     private void createYaml() {
@@ -165,9 +154,7 @@ public class Initialization {
                 config.set("goodwords", Arrays.asList(""));
                 config.set("ips", Arrays.asList(""));
                 config.save(configFileCensors);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
         if (!configFile.exists())
             try {
                 configFile.createNewFile();
@@ -194,9 +181,7 @@ public class Initialization {
                 config.set("Necessities.ChannelID", "channelID");
                 config.set("Necessities.WebHook", "webHook");
                 config.save(configFile);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
         else {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
             if (!config.contains("Necessities.warns"))
@@ -243,9 +228,7 @@ public class Initialization {
                 config.set("Necessities.WebHook", "webHook");
             try {
                 config.save(configFile);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
         }
     }
 }

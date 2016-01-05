@@ -47,14 +47,11 @@ public class CmdWhois extends RankCmd {
             String day = Integer.toString(c.get(Calendar.DATE));
             String month = Integer.toString(c.get(Calendar.MONTH) + 1);
             String year = Integer.toString(c.get(Calendar.YEAR));
-            String date = month + "/" + day + "/" + year;
             hour = corTime(hour);
             minute = corTime(minute);
             second = corTime(second);
-            String time = hour + ":" + minute + " and " + second + " second";
-            if (Integer.parseInt(second) > 1)
-                time = hour + ":" + minute + " and " + second + " seconds";
-            sender.sendMessage(var.getMessages() + " - Seen last on " + ChatColor.RESET + date + " at " + time);
+            sender.sendMessage(var.getMessages() + " - Seen last on " + ChatColor.RESET + month + "/" + day + "/" + year + " at " + hour + ":" + minute + " and " + second + " " +
+                    (Integer.parseInt(second) > 1 ? "seconds" : "second"));
         }
         sender.sendMessage(var.getMessages() + " - Time played: " + ChatColor.RESET + u.getTimePlayed());
         sender.sendMessage(var.getMessages() + " - Rank: " + ChatColor.RESET + u.getRank().getName());
@@ -78,10 +75,12 @@ public class CmdWhois extends RankCmd {
             Player p = u.getPlayer();
             sender.sendMessage(var.getMessages() + " - IP Adress: " + ChatColor.RESET + p.getAddress().toString().split("/")[1].split(":")[0]);
             String gamemode = "Survival";
-            if (p.getGameMode() == GameMode.ADVENTURE)
+            if (p.getGameMode().equals(GameMode.ADVENTURE))
                 gamemode = "Adventure";
-            else if (p.getGameMode() == GameMode.CREATIVE)
+            else if (p.getGameMode().equals(GameMode.CREATIVE))
                 gamemode = "Creative";
+            else if (p.getGameMode().equals(GameMode.SPECTATOR))
+                gamemode = "Spectator";
             sender.sendMessage(var.getMessages() + " - Gamemode: " + ChatColor.RESET + gamemode);
         }
         sender.sendMessage(var.getMessages() + " - God mode: " + (u.godmode() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));

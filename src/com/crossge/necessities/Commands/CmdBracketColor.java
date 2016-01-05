@@ -17,8 +17,7 @@ public class CmdBracketColor extends Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         if (args.length == 0 || (args.length > 1 && args[1].length() > 1) || (args.length == 1 && args[0].length() > 1)) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a player and the color for their brackets.");
-            String colors = ChatColor.translateAlternateColorCodes('&', "&00&11&22&33&44&55&66&77&88&99&aa&bb&cc&dd&ee&ff");
-            sender.sendMessage(var.getMessages() + "Valid colors are: " + colors);
+            sender.sendMessage(var.getMessages() + "Valid colors are: " + ChatColor.translateAlternateColorCodes('&', "&00&11&22&33&44&55&66&77&88&99&aa&bb&cc&dd&ee&ff"));
             return true;
         }
         UUID uuid = get.getID(args[0]);
@@ -37,9 +36,7 @@ public class CmdBracketColor extends Cmd {
             configTitles.set(target.getUniqueId() + ".color", "r");
             try {
                 configTitles.save(configFileTitles);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
             sender.sendMessage(var.getMessages() + "Bracket color reset for player " + var.getObj() + target.getName());
             return true;
         }
@@ -47,9 +44,7 @@ public class CmdBracketColor extends Cmd {
         configTitles.set(target.getUniqueId() + ".color", args[1]);
         try {
             configTitles.save(configFileTitles);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         sender.sendMessage(var.getMessages() + "Bracket color changed to " + color + "this" + var.getMessages() + " for player " + var.getObj() + target.getName());
         return true;
     }

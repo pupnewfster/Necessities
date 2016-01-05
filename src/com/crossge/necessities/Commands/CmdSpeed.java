@@ -1,12 +1,9 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.Economy.Formatter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CmdSpeed extends Cmd {
-    Formatter form = new Formatter();
-
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;

@@ -1,6 +1,5 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.Economy.Formatter;
 import com.crossge.necessities.Economy.Materials;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -9,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class CmdItem extends Cmd {
     Materials mat = new Materials();
-    Formatter form = new Formatter();
 
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
@@ -39,16 +37,14 @@ public class CmdItem extends Cmd {
             if (args.length == 2) {
 
                 p.getInventory().addItem(new ItemStack(Material.getMaterial(itemName), amount));
-                p.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.pluralize(form.capFirst(mat.getName(itemName)), amount)
-                        + var.getMessages() + ".");
+                p.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.pluralize(form.capFirst(mat.getName(itemName)), amount) + var.getMessages() + ".");
                 return true;
             }
             short data = 0;
             if (form.isLegal(args[2]))
                 data = Short.parseShort(args[2]);
             p.getInventory().addItem(new ItemStack(Material.getMaterial(itemName), amount, data));
-            p.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.pluralize(form.capFirst(mat.getName(itemName)), amount)
-                    + var.getMessages() + ".");
+            p.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.pluralize(form.capFirst(mat.getName(itemName)), amount) + var.getMessages() + ".");
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command.");
         return true;

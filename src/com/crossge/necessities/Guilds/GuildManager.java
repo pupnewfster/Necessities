@@ -13,8 +13,7 @@ import java.util.UUID;
 
 public class GuildManager {
     private static HashMap<String, Guild> guilds = new HashMap<>();
-    private File configFileProtected = new File("plugins/Necessities/Guilds", "Protected.yml");
-    private File configFileGuilds = new File("plugins/Necessities/Guilds", "guilds.yml");
+    private File configFileProtected = new File("plugins/Necessities/Guilds", "Protected.yml"), configFileGuilds = new File("plugins/Necessities/Guilds", "guilds.yml");
 
     public void initiate() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loading all guillds...");
@@ -40,20 +39,18 @@ public class GuildManager {
                 configProtected.set("flag.permanent", true);
                 configProtected.set("flag.pvp", false);
                 configProtected.set("flag.explosions", false);
+                configProtected.set("flag.interact", false);
+                configProtected.set("flag.hostileSpawn", false);
                 configProtected.set("claims", Arrays.asList(""));
                 configProtected.save(configFileProtected);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
         if (!configFileGuilds.exists())
             try {
                 configFileGuilds.createNewFile();
                 YamlConfiguration configGuilds = YamlConfiguration.loadConfiguration(configFileGuilds);
                 configGuilds.set("guilds", Arrays.asList("protected"));
                 configGuilds.save(configFileGuilds);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
     }
 
     public void createGuild(String name, UUID uuid) {
@@ -69,9 +66,7 @@ public class GuildManager {
             configGuilds.save(configFileGuilds);
             if (!fileGuild.exists())
                 fileGuild.createNewFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         guild.set("power", 0);
         guild.set("description", "Default description.");
         guild.set("leader", uuid.toString());
@@ -82,12 +77,12 @@ public class GuildManager {
         guild.set("flag.permanent", false);
         guild.set("flag.pvp", true);
         guild.set("flag.explosions", true);
+        guild.set("flag.interact", false);
+        guild.set("flag.hostileSpawn", true);
         guild.set("claims", Arrays.asList(""));
         try {
             guild.save(fileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         guilds.put(name.toLowerCase(), new Guild(name));
     }
 
@@ -103,10 +98,7 @@ public class GuildManager {
         configGuilds.set("guilds", guildList);
         try {
             configGuilds.save(configFileGuilds);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        } catch (Exception e) { }
         guilds.remove(oldName.toLowerCase());
         guilds.put(name.toLowerCase(), g);
     }
@@ -137,17 +129,11 @@ public class GuildManager {
         configGuilds.set("guilds", guildList);
         try {
             configGuilds.save(configFileGuilds);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public String getPrefix(String rank) {
-        if (rank.equalsIgnoreCase("leader"))
-            return "#";
-        if (rank.equalsIgnoreCase("mod"))
-            return "*";
-        return "";
+        return rank.equalsIgnoreCase("leader") ? "#" : rank.equalsIgnoreCase("mod") ? "*" : "";
     }
 
     public HashMap<String, Guild> getGuilds() {

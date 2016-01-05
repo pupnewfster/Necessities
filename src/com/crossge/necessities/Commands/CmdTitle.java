@@ -1,7 +1,6 @@
 package com.crossge.necessities.Commands;
 
 import com.crossge.necessities.Economy.BalChecks;
-import com.crossge.necessities.Economy.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -15,7 +14,6 @@ public class CmdTitle extends Cmd {
     private File configFileTitles = new File("plugins/Necessities", "titles.yml");
     private File configFile = new File("plugins/Necessities", "config.yml");
     BalChecks balc = new BalChecks();
-    Formatter form = new Formatter();
 
     public boolean commandUse(CommandSender sender, String[] args) {
         if (args.length == 0) {
@@ -40,9 +38,7 @@ public class CmdTitle extends Cmd {
             configTitles.set(target.getUniqueId() + ".title", null);
             try {
                 configTitles.save(configFileTitles);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
             sender.sendMessage(var.getMessages() + "Title removed for player " + var.getObj() + target.getName());
             return true;
         }
@@ -68,9 +64,7 @@ public class CmdTitle extends Cmd {
             configTitles.set(target.getUniqueId() + ".color", "r");
         try {
             configTitles.save(configFileTitles);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         sender.sendMessage(var.getMessages() + "Title set to " + title + var.getMessages() + " for player " + var.getObj() + target.getName());
         return true;
     }

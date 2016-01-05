@@ -35,8 +35,7 @@ public class CmdBuyCmd extends EconomyCmd {
 			}
 			Command com = player.getServer().getPluginCommand(cmd);
 			if(com == null) {
-				player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The command " + var.getObj() + cmd + var.getMessages() +
-						" is a nonexistant or built in command. Contact an admin if it exists.");
+				player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The command " + var.getObj() + cmd + var.getMessages() + " is a nonexistant or built in command. Contact an admin if it exists.");
 				return true;
 			}
 			String permNode = com.getPermission();

@@ -28,11 +28,14 @@ public class CmdRename extends Cmd {
             for (String arg : args)
                 name += arg + " ";
             name = name.trim();
-            name = ChatColor.translateAlternateColorCodes('&', name);
+            name = ChatColor.translateAlternateColorCodes('&', name).trim();
+            if (ChatColor.stripColor(name).trim().equals("")) {
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a name to rename your item to.");
+                return true;
+            }
             handMeta.setDisplayName(name);
             hand.setItemMeta(handMeta);
-            player.sendMessage(var.getMessages() + "Successfully renamed your " + var.getObj() + mat.pluralize(hand.getType().name(), 1) + var.getMessages() +
-                    " to " + var.getObj() + name);
+            player.sendMessage(var.getMessages() + "Successfully renamed your " + var.getObj() + mat.pluralize(hand.getType().name(), 1) + var.getMessages() + " to " + var.getObj() + name);
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You can not rename your items because you do not have any.");
         return true;

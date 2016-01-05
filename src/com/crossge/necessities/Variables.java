@@ -3,22 +3,9 @@ package com.crossge.necessities;
 import org.bukkit.ChatColor;
 
 public class Variables {
-    private ChatColor messages = ChatColor.GOLD;
-    private ChatColor me = ChatColor.DARK_PURPLE;
-    private ChatColor money = ChatColor.AQUA;
-    private ChatColor error = ChatColor.RED;
-    private ChatColor errorMsg = ChatColor.DARK_RED;
-    private ChatColor plugincolor = ChatColor.DARK_RED;
-    private ChatColor promoteMsg = ChatColor.GREEN;
-    private ChatColor catalog = ChatColor.BLUE;
-    private ChatColor demoteMsg = ChatColor.RED;
-    private ChatColor objectMsg = ChatColor.RED;
-    private ChatColor guildMsgs = ChatColor.YELLOW;
-    private ChatColor guild = ChatColor.GREEN;
-    private ChatColor ally = ChatColor.DARK_PURPLE;
-    private ChatColor enemy = ChatColor.RED;
-    private ChatColor neutral = ChatColor.WHITE;
-    private ChatColor wilderness = ChatColor.DARK_GREEN;
+    private ChatColor messages = ChatColor.GOLD, me = ChatColor.DARK_PURPLE, money = ChatColor.AQUA, error = ChatColor.RED, errorMsg = ChatColor.DARK_RED, plugincolor = ChatColor.DARK_RED,
+            promoteMsg = ChatColor.GREEN, catalog = ChatColor.BLUE, demoteMsg = ChatColor.RED, objectMsg = ChatColor.RED, guildMsgs = ChatColor.YELLOW, guild = ChatColor.GREEN, ally = ChatColor.DARK_PURPLE,
+            enemy = ChatColor.RED, neutral = ChatColor.WHITE, wilderness = ChatColor.DARK_GREEN;
 
     public ChatColor getWild() {
         return wilderness;

@@ -31,8 +31,8 @@ public class CmdHide extends Cmd {
                                 um.getUser(p.getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET + "", ChatColor.YELLOW + ""));
                 hidden.remove(p.getUniqueId());
                 p.sendMessage(var.getMessages() + "You are now visible.");
-                Bukkit.broadcast(var.getMessages() + "To Ops - " + var.getObj() + p.getDisplayName() + var.getMessages() + " - is now " + ChatColor.DARK_GRAY +
-                        "visible" + var.getMessages() + ".", "Necessities.opBroadcast");
+                Bukkit.broadcast(var.getMessages() + "To Ops - " + var.getObj() + p.getDisplayName() + var.getMessages() + " - is now " + ChatColor.DARK_GRAY + "visible" + var.getMessages() + ".",
+                        "Necessities.opBroadcast");
                 RankManager rm = new RankManager();
                 String rank = "";
                 if (!rm.getOrder().isEmpty())
@@ -50,8 +50,8 @@ public class CmdHide extends Cmd {
                                 um.getUser(p.getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET + "", ChatColor.YELLOW + ""));
                 hidden.add(p.getUniqueId());
                 p.sendMessage(var.getMessages() + "You are now hidden.");
-                Bukkit.broadcast(var.getMessages() + "To Ops - " + var.getObj() + p.getDisplayName() + var.getMessages() + " - is now " + ChatColor.WHITE +
-                        "invisible" + var.getMessages() + ".", "Necessities.opBroadcast");
+                Bukkit.broadcast(var.getMessages() + "To Ops - " + var.getObj() + p.getDisplayName() + var.getMessages() + " - is now " + ChatColor.WHITE + "invisible" + var.getMessages() + ".",
+                        "Necessities.opBroadcast");
                 if (!u.opChat()) {
                     u.toggleOpChat();
                     p.sendMessage(var.getMessages() + "You are now sending messages only to ops.");
@@ -101,9 +101,7 @@ public class CmdHide extends Cmd {
             configHiding.set(uuid.toString(), true);
         try {
             configHiding.save(configFileHiding);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void init() {

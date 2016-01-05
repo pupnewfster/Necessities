@@ -46,9 +46,7 @@ public class RankPrices {
         configPrices.set("ranks." + rankName, null);
         try {
             configPrices.save(configFilePrices);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void setCost(String rankName, String amount) {
@@ -58,9 +56,7 @@ public class RankPrices {
         configPrices.set("ranks." + rankName, Double.parseDouble(amount));
         try {
             configPrices.save(configFilePrices);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public int priceListPages() {

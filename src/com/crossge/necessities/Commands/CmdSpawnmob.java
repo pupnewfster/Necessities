@@ -1,6 +1,5 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.Economy.Formatter;
 import com.crossge.necessities.RankManager.User;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -9,8 +8,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class CmdSpawnmob extends Cmd {
-    Formatter form = new Formatter();
-
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
@@ -41,8 +38,7 @@ public class CmdSpawnmob extends Cmd {
             }
             for (int i = 0; i < amount; i++)
                 l.getWorld().spawnEntity(l, type);
-            p.sendMessage(var.getMessages() + "Spawned " + var.getObj() + amount + var.getMessages() + " of " + var.getObj() +
-                    type.toString().replaceAll("_", " ").toLowerCase() + var.getMessages() + ".");
+            p.sendMessage(var.getMessages() + "Spawned " + var.getObj() + amount + var.getMessages() + " of " + var.getObj() + type.toString().replaceAll("_", " ").toLowerCase() + var.getMessages() + ".");
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot spawn mobs because you are... nice?");
         return true;

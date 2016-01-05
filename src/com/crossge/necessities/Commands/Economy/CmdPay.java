@@ -44,8 +44,8 @@ public class CmdPay extends EconomyCmd {
             balc.addMoney(uuid, payamount);
             player.sendMessage(var.getMessages() + "You paid " + var.getObj() + targetsname + var.getMoney() + " $" + form.addCommas(form.roundTwoDecimals(payamount)));
             if (target != null)
-                target.sendMessage(var.getMessages() + "You received " + var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(payamount)) + var.getMessages() +
-                        " from " + var.getObj() + player.getName() + var.getMessages() + ".");
+                target.sendMessage(var.getMessages() + "You received " + var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(payamount)) + var.getMessages() + " from " + var.getObj() +
+                        player.getName() + var.getMessages() + ".");
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command or use cce");
         return true;

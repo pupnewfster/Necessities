@@ -7,8 +7,8 @@ import org.bukkit.inventory.meta.BookMeta;
 import java.io.File;
 
 public class JanetBooks {
-    Janet bot = new Janet();
     private File configFile = new File("plugins/Necessities", "config.yml");
+    Janet bot = new Janet();
 
     public String newTitle(String title, Player p) {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);

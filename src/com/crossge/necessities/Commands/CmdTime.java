@@ -35,33 +35,11 @@ public class CmdTime extends Cmd {
                     dim.setTime(Long.parseLong(args[0]));
             }
             if (args.length == 2) {
-                if (dim == null) {
-                    dim = p.getWorld();
-                    if (args[0].equalsIgnoreCase("add")) {
-                        if (validTick(args[1]))
-                            dim.setTime(dim.getTime() + Long.parseLong(args[1]));
-                    } else if (args[0].equalsIgnoreCase("set")) {
-                        if (args[1].equalsIgnoreCase("day") || args[1].equalsIgnoreCase("noon"))
-                            dim.setTime(6000);
-                        else if (args[1].equalsIgnoreCase("night") || args[1].equalsIgnoreCase("midnight"))
-                            dim.setTime(18000);
-                        else if (args[1].equalsIgnoreCase("dawn"))
-                            dim.setTime(23000);
-                        else if (args[1].equalsIgnoreCase("dusk"))
-                            dim.setTime(13000);
-                        else if (validTick(args[1]))
-                            dim.setTime(Long.parseLong(args[1]));
-                    } else if (args[0].equalsIgnoreCase("day") || args[1].equalsIgnoreCase("noon"))
-                        dim.setTime(6000);
-                    else if (args[0].equalsIgnoreCase("night") || args[1].equalsIgnoreCase("midnight"))
-                        dim.setTime(18000);
-                    else if (args[0].equalsIgnoreCase("dawn"))
-                        dim.setTime(23000);
-                    else if (args[0].equalsIgnoreCase("dusk"))
-                        dim.setTime(13000);
-                    else if (validTick(args[0]))
-                        dim.setTime(Long.parseLong(args[0]));
-                } else {
+                dim = p.getWorld();
+                if (args[0].equalsIgnoreCase("add")) {
+                    if (validTick(args[1]))
+                        dim.setTime(dim.getTime() + Long.parseLong(args[1]));
+                } else if (args[0].equalsIgnoreCase("set")) {
                     if (args[1].equalsIgnoreCase("day") || args[1].equalsIgnoreCase("noon"))
                         dim.setTime(6000);
                     else if (args[1].equalsIgnoreCase("night") || args[1].equalsIgnoreCase("midnight"))
@@ -72,7 +50,16 @@ public class CmdTime extends Cmd {
                         dim.setTime(13000);
                     else if (validTick(args[1]))
                         dim.setTime(Long.parseLong(args[1]));
-                }
+                } else if (args[0].equalsIgnoreCase("day") || args[1].equalsIgnoreCase("noon"))
+                    dim.setTime(6000);
+                else if (args[0].equalsIgnoreCase("night") || args[1].equalsIgnoreCase("midnight"))
+                    dim.setTime(18000);
+                else if (args[0].equalsIgnoreCase("dawn"))
+                    dim.setTime(23000);
+                else if (args[0].equalsIgnoreCase("dusk"))
+                    dim.setTime(13000);
+                else if (validTick(args[0]))
+                    dim.setTime(Long.parseLong(args[0]));
             } else {
                 if (dim == null) {
                     dim = p.getWorld();
@@ -150,8 +137,7 @@ public class CmdTime extends Cmd {
                     dim.setTime(Long.parseLong(args[1]));
             }
         }
-        sender.sendMessage(var.getMessages() + "The time was set to " + var.getObj() + dim.getTime() + var.getMessages() + " ticks in " + var.getObj() +
-                dim.getName() + var.getMessages() + ".");
+        sender.sendMessage(var.getMessages() + "The time was set to " + var.getObj() + dim.getTime() + var.getMessages() + " ticks in " + var.getObj() + dim.getName() + var.getMessages() + ".");
         return true;
     }
 
@@ -159,9 +145,7 @@ public class CmdTime extends Cmd {
         try {
             Long.parseLong(toTest);
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         return false;
     }
 }

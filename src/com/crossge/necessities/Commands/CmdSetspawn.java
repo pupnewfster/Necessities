@@ -21,9 +21,7 @@ public class CmdSetspawn extends Cmd {
             config.set("Spawn.pitch", Float.toString(p.getLocation().getPitch()));
             try {
                 config.save(configFile);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
             p.sendMessage(var.getMessages() + "Spawn set.");
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot set the spawn.");

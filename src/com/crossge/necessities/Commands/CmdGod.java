@@ -14,9 +14,9 @@ public class CmdGod extends Cmd {
             Player p = (Player) sender;
             if (args.length == 0) {
                 User u = um.getUser(p.getUniqueId());
-                if (u.godmode()) {
+                if (u.godmode())
                     p.sendMessage(var.getMessages() + "God mode " + var.getObj() + "disabled" + var.getMessages() + ".");
-                } else {
+                else {
                     p.setHealth(20);
                     p.setFoodLevel(20);
                     for (PotionEffect potion : p.getActivePotionEffects())

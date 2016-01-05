@@ -1,5 +1,6 @@
 package com.crossge.necessities.Economy;
 
+import com.crossge.necessities.Formatter;
 import com.crossge.necessities.Variables;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -20,7 +21,7 @@ public class Signs {
             if (itemName == null)
                 return false;
             String amount = ChatColor.stripColor(sign.getLine(2).trim());
-            return !form.isLegal(amount) ? false : pr.getCost(operation, itemName, Integer.parseInt(amount)) != -1 && Integer.parseInt(amount) > 0;
+            return form.isLegal(amount) && pr.getCost(operation, itemName, Integer.parseInt(amount)) != -1 && Integer.parseInt(amount) > 0;
         }
         return false;
     }

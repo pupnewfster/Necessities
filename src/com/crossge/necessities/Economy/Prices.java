@@ -42,9 +42,7 @@ public class Prices {
         }
         try {
             configPrices.save(configFilePrices);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         if (buyPrices.containsKey(itemName) && sellPrices.containsKey(itemName))
             price.put(itemName, Double.toString(buyPrices.get(itemName)) + " " + Double.toString(sellPrices.get(itemName)));
         else if (buyPrices.containsKey(itemName))

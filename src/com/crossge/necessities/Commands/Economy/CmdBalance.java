@@ -37,13 +37,9 @@ public class CmdBalance extends EconomyCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player is not in my records. If the player is offline, please use the full and most recent name.");
                 return true;
             }
-            sender.sendMessage(var.getObj() + ownerShip(playersname) + var.getMessages() + " balance is: " + var.getMoney() + "$" + form.addCommas(balance));
+            sender.sendMessage(var.getObj() + form.ownerShip(playersname) + var.getMessages() + " balance is: " + var.getMoney() + "$" + form.addCommas(balance));
         }
         return true;
-    }
-
-    private String ownerShip(String name) {
-        return (name.endsWith("s") || name.endsWith("S")) ? name + "'" : name + "'s";
     }
 
     @Override

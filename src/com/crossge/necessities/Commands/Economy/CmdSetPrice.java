@@ -5,8 +5,8 @@ import org.bukkit.entity.Player;
 
 public class CmdSetPrice extends EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        if (args.length == 0 || args.length == 1 || args.length > 3) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter the item and price for it and wether buying or selling price.");
+        if (args.length < 2) {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter the item and price for it and whether buying or selling price.");
             return true;
         }
         if (sender instanceof Player) {
@@ -23,10 +23,8 @@ public class CmdSetPrice extends EconomyCmd {
                     return true;
                 }
                 String file;
-                if (args[1].equalsIgnoreCase("buy"))
-                    file = "buy";
-                else if (args[1].equalsIgnoreCase("sell"))
-                    file = "sell";
+                if (args[1].equalsIgnoreCase("buy") || args[1].equalsIgnoreCase("sell"))
+                    file = args[1].toLowerCase();
                 else {
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input either sell or buy");
                     return true;
@@ -34,29 +32,21 @@ public class CmdSetPrice extends EconomyCmd {
                 if (args[0].equalsIgnoreCase("null")) {
                     pr.setCost(file, itemName, args[0]);
                     itemName = mat.pluralize(mat.getName(itemName), 2);
-                    if (args[1].equalsIgnoreCase("buy"))
-                        player.sendMessage(var.getObj() + itemName + var.getMessages() + " can no longer be bought");
-                    else
-                        player.sendMessage(var.getObj() + itemName + var.getMessages() + " can no longer be sold");
+                    player.sendMessage(var.getObj() + itemName + var.getMessages() + " can no longer be " + (args[1].equalsIgnoreCase("buy") ? "bought" : "sold"));
                 } else {
                     pr.setCost(file, itemName, form.roundTwoDecimals(Double.parseDouble(args[0])));
                     itemName = mat.pluralize(mat.getName(itemName), 2);
-                    if (args[1].equalsIgnoreCase("buy"))
-                        player.sendMessage(var.getObj() + ownerShip(itemName) + var.getMessages() + " buy price was set to " + var.getMoney() +
-                                "$" + form.addCommas(form.roundTwoDecimals(Double.parseDouble(args[0]))));
-                    else
-                        player.sendMessage(var.getObj() + ownerShip(itemName) + var.getMessages() + " sell price was set to " + var.getMoney() +
-                                "$" + form.addCommas(form.roundTwoDecimals(Double.parseDouble(args[0]))));
+                    player.sendMessage(var.getObj() + form.ownerShip(itemName) + var.getMessages() + " " + (args[1].equalsIgnoreCase("buy") ? "buy" : "sell") + " price was set to " + var.getMoney() + "$" +
+                            form.addCommas(form.roundTwoDecimals(Double.parseDouble(args[0]))));
                 }
                 return true;
             }
         }
-        if (args.length != 3) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter the item and price for it and wether buying or selling price.");
+        if (args.length < 3) {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter the item and price for it and whether buying or selling price.");
             return true;
         }
-        String itemName;
-        itemName = args[0];
+        String itemName = args[0];
         if (form.isLegal(itemName))
             itemName = mat.idToName(Integer.parseInt(itemName));
         if (!form.isLegal(args[1]) && !args[1].equalsIgnoreCase("null")) {
@@ -69,10 +59,8 @@ public class CmdSetPrice extends EconomyCmd {
             return true;
         }
         String file;
-        if (args[2].equalsIgnoreCase("buy"))
-            file = "buy";
-        else if (args[2].equalsIgnoreCase("sell"))
-            file = "sell";
+        if (args[2].equalsIgnoreCase("buy") || args[2].equalsIgnoreCase("sell"))
+            file = args[2].toLowerCase();
         else {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input either sell or buy");
             return true;
@@ -80,26 +68,13 @@ public class CmdSetPrice extends EconomyCmd {
         if (args[1].equalsIgnoreCase("null")) {
             pr.setCost(file, itemName, args[1]);
             itemName = mat.pluralize(mat.getName(itemName), 2);
-            if (args[2].equalsIgnoreCase("buy"))
-                sender.sendMessage(var.getObj() + itemName + var.getMessages() + " can no longer be bought");
-            else
-                sender.sendMessage(var.getObj() + itemName + var.getMessages() + " can no longer be sold");
+            sender.sendMessage(var.getObj() + itemName + var.getMessages() + " can no longer be " + (args[2].equalsIgnoreCase("buy") ? "bought" : "sold"));
         } else {
             pr.setCost(file, itemName, form.roundTwoDecimals(Double.parseDouble(args[1])));
             itemName = mat.pluralize(mat.getName(itemName), 2);
-            if (args[2].equalsIgnoreCase("buy"))
-                sender.sendMessage(var.getObj() + ownerShip(itemName) + var.getMessages() + " buy price was set to " + var.getMoney() +
-                        "$" + form.addCommas(form.roundTwoDecimals(Double.parseDouble(args[1]))));
-            else
-                sender.sendMessage(var.getObj() + ownerShip(itemName) + var.getMessages() + " sell price was set to " + var.getMoney() +
-                        "$" + form.addCommas(form.roundTwoDecimals(Double.parseDouble(args[1]))));
+            sender.sendMessage(var.getObj() + form.ownerShip(itemName) + var.getMessages() + " " + (args[2].equalsIgnoreCase("buy") ? "buy" : "sell") + " price was set to " + var.getMoney() + "$" +
+                    form.addCommas(form.roundTwoDecimals(Double.parseDouble(args[1]))));
         }
         return true;
-    }
-
-    private String ownerShip(String s) {
-        if (s.endsWith("s") || s.endsWith("S"))
-            return s + "'";
-        return s + "'s";
     }
 }

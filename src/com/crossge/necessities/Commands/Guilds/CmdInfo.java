@@ -1,6 +1,5 @@
 package com.crossge.necessities.Commands.Guilds;
 
-import com.crossge.necessities.Economy.Formatter;
 import com.crossge.necessities.Guilds.Guild;
 import com.crossge.necessities.RankManager.User;
 import org.bukkit.command.CommandSender;
@@ -9,8 +8,6 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class CmdInfo extends GuildCmd {
-    Formatter form = new Formatter();
-
     public boolean commandUse(CommandSender sender, String[] args) {
         Guild g = null;
         if (args.length != 0) {

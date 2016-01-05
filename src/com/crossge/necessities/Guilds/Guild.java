@@ -15,19 +15,13 @@ import java.util.UUID;
 public class Guild {
     private File configFileGuild;
     private ArrayList<String> allies = new ArrayList<>(), enemies = new ArrayList<>(), mods = new ArrayList<>(), members = new ArrayList<>(), claims = new ArrayList<>();
-    private ArrayList<UUID> invited = new ArrayList<>();
     private ArrayList<Guild> allyInvites = new ArrayList<>(), neutralInvites = new ArrayList<>();
+    private ArrayList<UUID> invited = new ArrayList<>();
+    private boolean pvp = true, permanent = false, explosions = true, interact = false, hostileSpawn = true;
+    private String description = "", leader, name;
     private int totalMembers = 0;
-    private Location home;
     private double power = 0.0;
-    private boolean pvp = true;
-    private boolean permanent = false;
-    private boolean explosions = true;
-    private boolean interact = false;
-    private boolean hostileSpawn = true;
-    private String description = "";
-    private String leader;
-    private String name;
+    private Location home;
 
     public Guild(String name) {
         this.name = name;
@@ -122,9 +116,7 @@ public class Guild {
         configGuild.set("power", this.power);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public boolean isPermanent() {
@@ -137,9 +129,7 @@ public class Guild {
         configGuild.set("flag.permanent", perm);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void rename(String newName) {
@@ -172,9 +162,7 @@ public class Guild {
         configGuild.set("flag.interact", allow);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public boolean canHostileSpawn() {
@@ -187,9 +175,7 @@ public class Guild {
         configGuild.set("flag.hostileSpawn", can);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public boolean canExplode() {
@@ -221,9 +207,7 @@ public class Guild {
         configGuild.set("leader", name);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public double getPower() {
@@ -248,9 +232,7 @@ public class Guild {
         configGuild.set("description", this.description);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public Location getHome() {
@@ -270,9 +252,7 @@ public class Guild {
         configGuild.set("home.pitch", Float.toString(l.getPitch()));
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public boolean isAlly(Guild ally) {
@@ -394,9 +374,7 @@ public class Guild {
         configGuild.set("home", null);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void claim(Chunk c) {
@@ -412,9 +390,7 @@ public class Guild {
         configGuild.set("claims", chunkList);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void unclaim(Chunk c) {
@@ -427,9 +403,7 @@ public class Guild {
         configGuild.set("claims", chunkList);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         if (this.home != null && this.home.getChunk().equals(c))
             delHome();
     }
@@ -441,9 +415,7 @@ public class Guild {
         configGuild.set("claims", Arrays.asList(""));
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public boolean isInvited(UUID uuid) {
@@ -493,9 +465,7 @@ public class Guild {
         configGuild.set("enemies", enemyList);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void addAlly(Guild g) {
@@ -510,9 +480,7 @@ public class Guild {
         configGuild.set("allies", allyList);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void setNeutral(Guild g) {
@@ -535,9 +503,7 @@ public class Guild {
         }
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         this.neutralInvites.remove(g);
     }
 
@@ -581,9 +547,7 @@ public class Guild {
         configGuild.set("power", this.power);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void join(UUID uuid) {
@@ -604,9 +568,7 @@ public class Guild {
         configGuild.set("power", this.power);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void sendMods(String message) {
@@ -624,9 +586,7 @@ public class Guild {
         configGuild.set("flag.explosions", exp);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void setPVP(boolean canPVP) {
@@ -635,9 +595,7 @@ public class Guild {
         configGuild.set("flag.pvp", canPVP);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void toggleInfinite() {
@@ -646,9 +604,7 @@ public class Guild {
             configGuild.set("power", -1);
             try {
                 configGuild.save(this.configFileGuild);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { }
         } else {
             this.power = 0;
             updatePower();
@@ -683,9 +639,7 @@ public class Guild {
         configGuild.set("members", memberList);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void addMod(UUID uuid) {
@@ -710,8 +664,6 @@ public class Guild {
         }
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 }

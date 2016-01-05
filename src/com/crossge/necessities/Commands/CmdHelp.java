@@ -1,6 +1,5 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.Economy.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -12,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class CmdHelp extends Cmd {
-    Formatter form = new Formatter();
-
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
@@ -37,8 +34,7 @@ public class CmdHelp extends Cmd {
             if (args.length == 0 || page == 0)
                 page = 1;
             int time = 0;
-            ArrayList<String> plugins = new ArrayList<>();
-            ArrayList<String> commands = new ArrayList<>();
+            ArrayList<String> plugins = new ArrayList<>(), commands = new ArrayList<>();
             for (Plugin p : Bukkit.getPluginManager().getPlugins()) {
                 if (search.equals("") || p.getName().equalsIgnoreCase(search)) {
                     if (p.getName().equalsIgnoreCase(search))

@@ -42,9 +42,7 @@ public class PortalManager {//TODO: add a method to update the things when a wor
         configPM.set(name, null);
         try {
             configPM.save(configFilePM);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         portals.remove(name);
         lowerNames.remove(name.toLowerCase());
     }
@@ -61,9 +59,7 @@ public class PortalManager {//TODO: add a method to update the things when a wor
         configPM.set(name + ".location.z2", right.getBlockZ());
         try {
             configPM.save(configFilePM);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         portals.put(name, new Portal(name));
         lowerNames.put(name.toLowerCase(), name);
     }

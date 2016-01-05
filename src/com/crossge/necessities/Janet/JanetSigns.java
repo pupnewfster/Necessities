@@ -7,14 +7,11 @@ import org.bukkit.entity.Player;
 import java.io.File;
 
 public class JanetSigns {
-    Janet bot = new Janet();
     private File configFile = new File("plugins/Necessities", "config.yml");
+    Janet bot = new Janet();
 
     public void censorSign(Sign s, Player p) {
-        String line0 = "";
-        String line1 = "";
-        String line2 = "";
-        String line3 = "";
+        String line0 = "", line1 = "", line2 = "", line3 = "";
         if (s.getLine(0) != null)
             line0 = s.getLine(0).trim();
         if (s.getLine(1) != null)

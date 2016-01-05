@@ -9,10 +9,8 @@ public class Trade {
         return trades.containsKey(pname + " " + offerpname);
     }
 
-    public void createTrade(String Inform) {
-        String key = Inform.split(" ")[0] + " " + Inform.split(" ")[1];
-        String value = Inform.split(" ")[2] + " " + Inform.split(" ")[3] + " " + Inform.split(" ")[4] + " " + Inform.split(" ")[5];
-        trades.put(key, value);
+    public void createTrade(String inf) {
+        trades.put(inf.split(" ")[0] + " " + inf.split(" ")[1], inf.split(" ")[2] + " " + inf.split(" ")[3] + " " + inf.split(" ")[4] + " " + inf.split(" ")[5]);
     }
 
     public String acceptTrade(String pname, String offerpname) {

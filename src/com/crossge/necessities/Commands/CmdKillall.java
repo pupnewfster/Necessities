@@ -1,6 +1,5 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.Economy.Formatter;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -8,8 +7,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class CmdKillall extends Cmd {
-    Formatter form = new Formatter();
-
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
@@ -21,8 +18,7 @@ public class CmdKillall extends Cmd {
                             t.getType().equals(EntityType.GIANT) || t.getType().equals(EntityType.MAGMA_CUBE) || t.getType().equals(EntityType.PIG_ZOMBIE) ||
                             t.getType().equals(EntityType.SILVERFISH) || t.getType().equals(EntityType.SKELETON) || t.getType().equals(EntityType.SLIME) ||
                             t.getType().equals(EntityType.SPIDER) || t.getType().equals(EntityType.WITCH) || t.getType().equals(EntityType.WITHER) ||
-                            t.getType().equals(EntityType.ZOMBIE) || t.getType().equals(EntityType.GUARDIAN) || t.getType().equals(EntityType.ENDERMITE) ||
-                            t.getType().equals(EntityType.RABBIT)) {
+                            t.getType().equals(EntityType.ZOMBIE) || t.getType().equals(EntityType.GUARDIAN) || t.getType().equals(EntityType.ENDERMITE)) {
                         t.remove();
                         i++;
                     }
@@ -191,6 +187,8 @@ public class CmdKillall extends Cmd {
             return EntityType.WITHER_SKULL;
         if (name.equals("itemframe"))
             return EntityType.ITEM_FRAME;
+        if (name.equals("armorstand"))
+            return EntityType.ARMOR_STAND;
         return null;
     }
 }

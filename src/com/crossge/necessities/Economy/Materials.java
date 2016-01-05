@@ -1,5 +1,6 @@
 package com.crossge.necessities.Economy;
 
+import com.crossge.necessities.Formatter;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -9,14 +10,10 @@ import java.io.File;
 import java.util.HashMap;
 
 public class Materials {
-    private File configFileNames = new File("plugins/Necessities/Economy", "itemnames.yml");
-    private File configFileIds = new File("plugins/Necessities/Economy", "ids.yml");
-    private File configFileFriendlyNames = new File("plugins/Necessities/Economy", "friendlynames.yml");
-    private File configFilePluralyNames = new File("plugins/Necessities/Economy", "pluralnames.yml");
+    private File configFileNames = new File("plugins/Necessities/Economy", "itemnames.yml"), configFileIds = new File("plugins/Necessities/Economy", "ids.yml"),
+            configFileFriendlyNames = new File("plugins/Necessities/Economy", "friendlynames.yml"), configFilePluralyNames = new File("plugins/Necessities/Economy", "pluralnames.yml");
+    private static HashMap<String, String> friendlyNames = new HashMap<>(), customNames = new HashMap<>(), plural = new HashMap<>();
     private static HashMap<Integer, String> idsToNames = new HashMap<>();
-    private static HashMap<String, String> friendlyNames = new HashMap<>();
-    private static HashMap<String, String> customNames = new HashMap<>();
-    private static HashMap<String, String> plural = new HashMap<>();
     Formatter form = new Formatter();
 
     public void readIds() {

@@ -46,24 +46,14 @@ public class CmdCmdPrices extends EconomyCmd {
                         tempn = "necessities." + price.split(" ")[0].toLowerCase();
                     hasNode = player.hasPermission(tempn);
                 }
-                price = formL(form.capFirst(price.split(" ")[0]),
-                        price.split(" ")[1],
-                        price.split(" ")[2],
-                        Integer.toString((page * 10) + time + 1) + ".",
-                        rank,
-                        hasNode);
+                price = formL(form.capFirst(price.split(" ")[0]), price.split(" ")[1], price.split(" ")[2], Integer.toString((page * 10) + time + 1) + ".", rank, hasNode);
                 player.sendMessage(price);
                 time++;
                 price = cmdp.priceLists(page, time);
             }
         } else
             while (price != null) {
-                price = formL(form.capFirst(price.split(" ")[0]),
-                        price.split(" ")[1],
-                        price.split(" ")[2],
-                        Integer.toString((page * 10) + time + 1) + ".",
-                        "CONSOLE",
-                        true);
+                price = formL(form.capFirst(price.split(" ")[0]), price.split(" ")[1], price.split(" ")[2], Integer.toString((page * 10) + time + 1) + ".", "CONSOLE", true);
                 sender.sendMessage(price);
                 time++;
                 price = cmdp.priceLists(page, time);
@@ -83,7 +73,7 @@ public class CmdCmdPrices extends EconomyCmd {
         } else {
             cost = "$" + form.addCommas(form.roundTwoDecimals(Double.parseDouble(cost)));
             price = ChatColor.GOLD + numb + var.getCatalog() + cmd + " can be bought for " + var.getMoney() + cost;
-            price +=  var.getCatalog() + (hasCmd ? "   Already Aquired." : " by " + form.plural(rank));
+            price +=  var.getCatalog() + (hasCmd ? "   Already Aquired." : " by " + form.ownerShip(rank));
         }
         return price;
     }

@@ -11,7 +11,7 @@ import java.util.List;
 public class CmdEnchant extends Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
-            if (args.length == 0 || args.length > 2) {
+            if (args.length == 0) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter an enchantment and a level to enchant it with.");
                 return true;
             }
@@ -29,8 +29,8 @@ public class CmdEnchant extends Cmd {
                 int level = ench.getMaxLevel();
                 if (ench.canEnchantItem(player.getInventory().getItemInHand())) {
                     player.getInventory().getItemInHand().addEnchantment(ench, level);
-                    player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() +
-                            " at level " + var.getObj() + Integer.toString(level) + var.getMessages() + ".");
+                    player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + " at level " + var.getObj() + Integer.toString(level) +
+                            var.getMessages() + ".");
                     return true;
                 }
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "This item can not support given enchantment.");
@@ -73,16 +73,15 @@ public class CmdEnchant extends Cmd {
                 } else if (ench != null && ench.canEnchantItem(player.getInventory().getItemInHand()) || player.hasPermission("Necessities.unsafeEnchant")) {
                     if (level == -1) {
                         player.getInventory().getItemInHand().addUnsafeEnchantment(ench, ench.getMaxLevel());
-                        player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() +
-                                " at max level.");
+                        player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + " at max level.");
                     } else {
                         if (level == 0) {
                             player.getInventory().getItemInHand().removeEnchantment(ench);
                             player.sendMessage(var.getMessages() + "Removed enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + ".");
                         } else {
                             player.getInventory().getItemInHand().addUnsafeEnchantment(ench, level);
-                            player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() +
-                                    " at level " + var.getObj() + Integer.toString(level) + var.getMessages() + ".");
+                            player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + " at level " + var.getObj() + Integer.toString(level) +
+                                    var.getMessages() + ".");
                         }
                     }
                     return true;
@@ -131,94 +130,112 @@ public class CmdEnchant extends Cmd {
         return complete;
     }
 
-    private String enchantFinder(String enchant) {//TODO: Update with 1.8 enchantment
+    private String enchantFinder(String enchant) {//TODO: Update with 1.9 enchantment
         enchant = enchant.toUpperCase();
-        if (enchant.equals("POWER"))
-            enchant = "ARROW_DAMAGE";
-        else if (enchant.equals("FLAME"))
-            enchant = "ARROW_FIRE";
-        else if (enchant.equals("INFINITY"))
-            enchant = "ARROW_INFINITY";
-        else if (enchant.equals("PUNCH"))
-            enchant = "ARROW_KNOCKBACK";
-        else if (enchant.equals("SHARPNESS"))
-            enchant = "DAMAGE_ALL";
-        else if (enchant.equals("BANEOFARTHROPODS"))
-            enchant = "DAMAGE_ARTHROPODS";
-        else if (enchant.equals("BANE"))
-            enchant = "DAMAGE_ARTHROPODS";
-        else if (enchant.equals("SMITE"))
-            enchant = "DAMAGE_UNDEAD";
-        else if (enchant.equals("EFFICIENCY"))
-            enchant = "DIG_SPEED";
-        else if (enchant.equals("UNBREAKING"))
-            enchant = "DURABILITY";
-        else if (enchant.equals("FIREASPECT"))
-            enchant = "FIRE_ASPECT";
-        else if (enchant.equals("FORTUNE"))
-            enchant = "LOOT_BONUS_BLOCKS";
-        else if (enchant.equals("LOOTING"))
-            enchant = "LOOT_BONUS_MOBS";
-        else if (enchant.equals("RESPIRATION"))
-            enchant = "OXYGEN";
-        else if (enchant.equals("PROTECTION"))
-            enchant = "PROTECTION_ENVIRONMENTAL";
-        else if (enchant.equals("BLASTPROTECTION"))
-            enchant = "PROTECTION_EXPLOSIONS";
-        else if (enchant.equals("FEATHERFALLING"))
-            enchant = "PROTECTION_FALL";
-        else if (enchant.equals("FIREPROTECTION"))
-            enchant = "PROTECTION_FIRE";
-        else if (enchant.equals("PROJECTILEPROTECTION"))
-            enchant = "PROTECTION_PROJECTILE";
-        else if (enchant.equals("SILKTOUCH"))
-            enchant = "SILK_TOUCH";
-        else if (enchant.equals("AQUAINFINITY"))
-            enchant = "WATER_WORKER";
-        return enchant;
+        switch (enchant) {
+            case "POWER":
+                return "ARROW_DAMAGE";
+            case "FLAME":
+                return "ARROW_FIRE";
+            case "INFINITY":
+                return "ARROW_INFINITY";
+            case "PUNCH":
+                return "ARROW_KNOCKBACK";
+            case "SHARPNESS":
+                return "DAMAGE_ALL";
+            case "BANEOFARTHROPODS":
+                return "DAMAGE_ARTHROPODS";
+            case "BANE":
+                return "DAMAGE_ARTHROPODS";
+            case "SMITE":
+                return "DAMAGE_UNDEAD";
+            case "EFFICIENCY":
+                return "DIG_SPEED";
+            case "UNBREAKING":
+                return "DURABILITY";
+            case "FIREASPECT":
+                return "FIRE_ASPECT";
+            case "FORTUNE":
+                return "LOOT_BONUS_BLOCKS";
+            case "LOOTING":
+                return "LOOT_BONUS_MOBS";
+            case "RESPIRATION":
+                return "OXYGEN";
+            case "PROTECTION":
+                return "PROTECTION_ENVIRONMENTAL";
+            case "BLASTPROTECTION":
+                return "PROTECTION_EXPLOSIONS";
+            case "FEATHERFALLING":
+                return "PROTECTION_FALL";
+            case "FIREPROTECTION":
+                return "PROTECTION_FIRE";
+            case "PROJECTILEPROTECTION":
+                return "PROTECTION_PROJECTILE";
+            case "SILKTOUCH":
+                return "SILK_TOUCH";
+            case "AQUAINFINITY":
+                return "WATER_WORKER";
+            case "DEPTHSTRIDER":
+                return "DEPTH_STRIDER";
+            case "LUCKOFTHESEAS":
+                return "LUCK";
+            case "LURE":
+                return "LURE";
+            default:
+                return enchant;
+        }
     }
 
     private String trueName(String enchant) {
-        if (enchant.equals("ARROW_DAMAGE"))
-            enchant = "power";
-        else if (enchant.equals("ARROW_FIRE"))
-            enchant = "flame";
-        else if (enchant.equals("ARROW_INFINITY"))
-            enchant = "infinity";
-        else if (enchant.equals("ARROW_KNOCKBACK"))
-            enchant = "punch";
-        else if (enchant.equals("DAMAGE_ALL"))
-            enchant = "sharpness";
-        else if (enchant.equals("DAMAGE_ARTHROPODS"))
-            enchant = "bane of arthropods";
-        else if (enchant.equals("DAMAGE_UNDEAD"))
-            enchant = "smite";
-        else if (enchant.equals("DIG_SPEED"))
-            enchant = "efficiency";
-        else if (enchant.equals("DURABILITY"))
-            enchant = "unbreaking";
-        else if (enchant.equals("FIRE_ASPECT"))
-            enchant = "fire aspect";
-        else if (enchant.equals("LOOT_BONUS_BLOCKS"))
-            enchant = "fortune";
-        else if (enchant.equals("LOOT_BONUS_MOBS"))
-            enchant = "looting";
-        else if (enchant.equals("OXYGEN"))
-            enchant = "respiration";
-        else if (enchant.equals("PROTECTION_ENVIRONMENTAL"))
-            enchant = "protection";
-        else if (enchant.equals("PROTECTION_EXPLOSIONS"))
-            enchant = "blast protection";
-        else if (enchant.equals("PROTECTION_FALL"))
-            enchant = "feather falling";
-        else if (enchant.equals("PROTECTION_FIRE"))
-            enchant = "fire protection";
-        else if (enchant.equals("PROTECTION_PROJECTILE"))
-            enchant = "projectile protection";
-        else if (enchant.equals("SILK_TOUCH"))
-            enchant = "silk touch";
-        else if (enchant.equals("WATER_WORKER"))
-            enchant = "aqua infinity";
-        return enchant.toLowerCase();
+        switch (enchant) {
+            case "ARROW_DAMAGE":
+                return "power";
+            case "ARROW_FIRE":
+                return "flame";
+            case "ARROW_INFINITY":
+                return "infinity";
+            case "ARROW_KNOCKBACK":
+                return "punch";
+            case "DAMAGE_ALL":
+                return "sharpness";
+            case "DAMAGE_ARTHROPODS":
+                return "bane of arthropods";
+            case "DAMAGE_UNDEAD":
+                return "smite";
+            case "DIG_SPEED":
+                return "efficiency";
+            case "DURABILITY":
+                return "unbreaking";
+            case "FIRE_ASPECT":
+                return "fire aspect";
+            case "LOOT_BONUS_BLOCKS":
+                return "fortune";
+            case "LOOT_BONUS_MOBS":
+                return "looting";
+            case "OXYGEN":
+                return "respiration";
+            case "PROTECTION_ENVIRONMENTAL":
+                return "protection";
+            case "PROTECTION_EXPLOSIONS":
+                return "blast protection";
+            case "PROTECTION_FALL":
+                return "feather falling";
+            case "PROTECTION_FIRE":
+                return "fire protection";
+            case "PROTECTION_PROJECTILE":
+                return "projectile protection";
+            case "SILK_TOUCH":
+                return "silk touch";
+            case "WATER_WORKER":
+                return "aqua infinity";
+            case "DEPTH_STRIDER":
+                return "depth strider";
+            case "LURE":
+                return "lure";
+            case "LUCK":
+                return "luck";
+            default:
+                return enchant.toLowerCase();
+        }
     }
 }

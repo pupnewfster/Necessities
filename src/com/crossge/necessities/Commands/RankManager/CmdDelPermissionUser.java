@@ -20,7 +20,7 @@ public class CmdDelPermissionUser extends RankCmd {
         }
         String node = args[1];
         um.updateUserPerms(uuid, node, true);
-        sender.sendMessage(var.getMessages() + "Removed " + var.getObj() + node + var.getMessages() + " from " + var.getObj() + form.plural(get.nameFromString(uuid.toString())) + var.getMessages() + " permissions.");
+        sender.sendMessage(var.getMessages() + "Removed " + var.getObj() + node + var.getMessages() + " from " + var.getObj() + form.ownerShip(get.nameFromString(uuid.toString())) + var.getMessages() + " permissions.");
         return true;
     }
 }

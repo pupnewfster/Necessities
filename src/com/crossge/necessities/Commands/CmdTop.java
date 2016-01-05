@@ -14,12 +14,8 @@ public class CmdTop extends Cmd {
             Location top = p.getLocation();
             double topy = 0;
             for (int i = 0; i < top.getWorld().getMaxHeight(); i++)
-                if ((new Location(top.getWorld(), top.getX(), i, top.getZ())).getBlock().getType().isSolid()) {
-                    if (mat.isSlab((new Location(top.getWorld(), top.getX(), i, top.getZ())).getBlock()))
-                        topy = i + .5;
-                    else
-                        topy = i + 1;
-                }
+                if ((new Location(top.getWorld(), top.getX(), i, top.getZ())).getBlock().getType().isSolid())
+                    topy = i + (mat.isSlab((new Location(top.getWorld(), top.getX(), i, top.getZ())).getBlock()) ? .5 : 1);
             p.teleport(new Location(top.getWorld(), top.getX(), topy, top.getZ(), top.getYaw(), top.getPitch()));
             p.sendMessage(var.getMessages() + "Teleporting to top.");
         } else

@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class CmdEco extends EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        if (args.length > 3 || args.length == 0 || args.length == 1) {
+        if (args.length < 2) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a player and the type of edit you want to do.");
             sender.sendMessage(var.getMessages() + "Valid edits are: reset, give, take, and set.");
             return true;
@@ -36,7 +36,7 @@ public class CmdEco extends EconomyCmd {
             sender.sendMessage(var.getMessages() + "Your successfully reset the balance of " + var.getObj() + targetsname + var.getMessages() + ".");
             return true;
         }
-        if (args.length == 3) {
+        if (args.length > 2) {
             if (!form.isLegal(args[2])) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid amount of money to modify the player with.");
                 return true;
@@ -48,16 +48,16 @@ public class CmdEco extends EconomyCmd {
             String setamount = form.roundTwoDecimals(amount);
             if (args[0].equalsIgnoreCase("give")) {
                 balc.addMoney(uuid, amount);
-                sender.sendMessage(var.getMessages() + "Your successfully gave " + var.getMoney() + " $" + form.addCommas(setamount) + var.getMessages() + " to " +
-                        var.getObj() + targetsname + var.getMessages() + ".");
+                sender.sendMessage(var.getMessages() + "Your successfully gave " + var.getMoney() + " $" + form.addCommas(setamount) + var.getMessages() + " to " + var.getObj() + targetsname +
+                        var.getMessages() + ".");
             } else if (args[0].equalsIgnoreCase("take") && intbal - amount >= 0) {
                 balc.removeMoney(uuid, amount);
-                sender.sendMessage(var.getMessages() + "Your successfully took " + var.getMoney() + " $" + form.addCommas(setamount) + var.getMessages() + " from " +
-                        var.getObj() + targetsname + var.getMessages() + ".");
+                sender.sendMessage(var.getMessages() + "Your successfully took " + var.getMoney() + " $" + form.addCommas(setamount) + var.getMessages() + " from " + var.getObj() + targetsname +
+                        var.getMessages() + ".");
             } else if (args[0].equalsIgnoreCase("set")) {
                 balc.setMoney(uuid, setamount);
-                sender.sendMessage(var.getMessages() + "Your successfully set the balance of " + var.getObj() + targetsname + var.getMessages() + " to " +
-                        var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(amount)));
+                sender.sendMessage(var.getMessages() + "Your successfully set the balance of " + var.getObj() + targetsname + var.getMessages() + " to " + var.getMoney() + "$" +
+                        form.addCommas(form.roundTwoDecimals(amount)));
             }
         }
         return true;

@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 public class CmdBaltop extends EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         int page = 0;
-        if (args.length >= 1) {
+        if (args.length > 0) {
             if (!form.isLegal(args[0])) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid baltop page.");
                 return true;
@@ -26,8 +26,7 @@ public class CmdBaltop extends EconomyCmd {
         page = page - 1;
         bal = balc.balTop(page, time);
         while (bal != null) {
-            bal = ChatColor.GOLD + Integer.toString((page * 10) + time + 1) + ". " + var.getCatalog() +
-                    bal.split(" ")[0] + " has: " + var.getMoney() + "$" + form.addCommas(bal.split(" ")[1]);
+            bal = ChatColor.GOLD + Integer.toString((page * 10) + time + 1) + ". " + var.getCatalog() + bal.split(" ")[0] + " has: " + var.getMoney() + "$" + form.addCommas(bal.split(" ")[1]);
             sender.sendMessage(bal);
             time++;
             bal = balc.balTop(page, time);

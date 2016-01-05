@@ -24,7 +24,7 @@ public class CmdDelSubrankUser extends RankCmd {
         }
         subrank = rm.getSub(subrank);
         um.updateUserSubrank(uuid, subrank, true);
-        sender.sendMessage(var.getMessages() + "Removed " + var.getObj() + subrank + var.getMessages() + " from " + var.getObj() + form.plural(get.nameFromString(uuid.toString())) + var.getMessages() + " subranks.");
+        sender.sendMessage(var.getMessages() + "Removed " + var.getObj() + subrank + var.getMessages() + " from " + var.getObj() + form.ownerShip(get.nameFromString(uuid.toString())) + var.getMessages() + " subranks.");
         return true;
     }
 }

@@ -15,7 +15,7 @@ public class CmdDelPermSubrank extends RankCmd {
         String subrank = rm.getSub(args[0]);
         String node = args[1];
         rm.updateSubPerms(subrank, node, true);
-        sender.sendMessage(var.getMessages() + "Removed " + var.getObj() + node + var.getMessages() + " to " + var.getObj() + form.plural(form.capFirst(subrank)) + var.getMessages() + " permissions.");
+        sender.sendMessage(var.getMessages() + "Removed " + var.getObj() + node + var.getMessages() + " to " + var.getObj() + form.ownerShip(form.capFirst(subrank)) + var.getMessages() + " permissions.");
         return true;
     }
 }

@@ -1,6 +1,5 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.Economy.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -10,12 +9,9 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class CmdTpDim extends Cmd {
-    Formatter form = new Formatter();
-
     public boolean commandUse(CommandSender sender, String[] args) {
-        if (args.length != 7) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a player " +
-                    "a dimension to send them to an x coordinate a y coordinate a z coordinate and a yaw and pitch.");
+        if (args.length < 7) {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a player a dimension to send them to an x coordinate a y coordinate a z coordinate and a yaw and pitch.");
             return true;
         }
         UUID uuid = get.getID(args[0]);
@@ -49,13 +45,7 @@ public class CmdTpDim extends Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid pitch.");
             return true;
         }
-        int x = Integer.parseInt(args[2]);
-        int y = Integer.parseInt(args[3]);
-        int z = Integer.parseInt(args[4]);
-        int yaw = Integer.parseInt(args[5]);
-        int pitch = Integer.parseInt(args[6]);
-        Location loc = new Location(dim, x, y, z, yaw, pitch);
-        target.teleport(safe.getSafe(loc));
+        target.teleport(safe.getSafe(new Location(dim, Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]))));
         return true;
     }
 }

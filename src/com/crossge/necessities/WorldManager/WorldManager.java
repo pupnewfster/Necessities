@@ -8,9 +8,8 @@ import java.io.File;
 import java.util.HashMap;
 
 public class WorldManager {
-    private File configFileWM = new File("plugins/Necessities/WorldManager", "worlds.yml");
     private static HashMap<String,String> invSys = new HashMap<>();
-    private File configFile = new File("plugins/Necessities", "config.yml");
+    private File configFileWM = new File("plugins/Necessities/WorldManager", "worlds.yml"), configFile = new File("plugins/Necessities", "config.yml");
 
     public void initiate() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loading worlds...");
@@ -44,7 +43,7 @@ public class WorldManager {
     }
 
     public boolean multiple() {
-        return this.invSys.values().size() > 1;
+        return invSys.values().size() > 1;
     }
     
     public GameMode getGameMode(String world) {
@@ -162,9 +161,7 @@ public class WorldManager {
         configWM.set(l.getWorld().getName() + ".spawn.z", l.getBlockZ());
         try {
             configWM.save(configFileWM);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         l.getWorld().setSpawnLocation(l.getBlockX(), l.getBlockY(), l.getBlockZ());
     }
 
@@ -173,9 +170,7 @@ public class WorldManager {
         configWM.set(name + "." + setting, value);
         try {
             configWM.save(configFileWM);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void setSetting(String name, String setting, boolean value) {
@@ -183,9 +178,7 @@ public class WorldManager {
         configWM.set(name + "." + setting, value);
         try {
             configWM.save(configFileWM);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void createWorld(String name, World.Environment enviro, String generator, WorldType type) {
@@ -207,9 +200,7 @@ public class WorldManager {
         configWM.set(name + ".spawn.z", 0);
         try {
             configWM.save(configFileWM);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         WorldCreator creator = new WorldCreator(name);
         creator.environment(enviro);
         creator.type(type);
@@ -224,9 +215,7 @@ public class WorldManager {
         configWM.set(name, null);
         try {
             configWM.save(configFileWM);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public boolean worldUnloaded(String name) {

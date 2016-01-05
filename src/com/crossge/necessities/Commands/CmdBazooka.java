@@ -14,7 +14,7 @@ public class CmdBazooka extends Cmd {
             Player player = (Player) sender;
             ItemStack hand = player.getItemInHand();
             if (hand == null || !hand.getType().equals(Material.BOW)) {
-                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not holding an bow.");
+                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not holding a bow.");
                 return true;
             }
             ItemMeta handMeta = hand.getItemMeta();

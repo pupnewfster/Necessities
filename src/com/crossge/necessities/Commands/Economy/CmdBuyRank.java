@@ -1,16 +1,13 @@
 package com.crossge.necessities.Commands.Economy;
 
-import com.crossge.necessities.RankManager.RankManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CmdBuyRank extends EconomyCmd {
-    RankManager rm = new RankManager();
-
     public boolean commandUse(CommandSender sender, String[] args) {
         if (args.length != 1) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid rank to buy. View the ranks with /rankprices");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid rank to buy. View the buyable ranks with /rankprices");
             return true;
         }
         if (sender instanceof Player) {
@@ -35,7 +32,7 @@ public class CmdBuyRank extends EconomyCmd {
             um.updateUserRank(um.getUser(player.getUniqueId()), player.getUniqueId(), rm.getRank(form.capFirst(rankName)));
             Bukkit.broadcastMessage(var.getMessages() + player.getName() + " bought the rank " + var.getObj() + rankName.toLowerCase());
         } else
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot buy a rank you are already the highest rank.");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console may not buy ranks.");
         return true;
     }
 }

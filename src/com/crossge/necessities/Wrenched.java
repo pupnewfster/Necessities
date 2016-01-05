@@ -31,9 +31,7 @@ public class Wrenched {
         }
         try {
             wrenches.save(configFileWrench);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public boolean isWrenched(Block b) {

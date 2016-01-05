@@ -16,7 +16,7 @@ public class CmdBoots extends Cmd {
             if (hand.getType() != Material.AIR) {
                 inv.setBoots(hand);
                 inv.setItemInHand(boots);
-                p.sendMessage(var.getMessages() + "Boots equiped.");
+                p.sendMessage(var.getMessages() + "Boots equipped.");
             } else {
                 if (boots != null)
                     inv.setItemInHand(boots);

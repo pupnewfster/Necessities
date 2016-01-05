@@ -26,9 +26,7 @@ public class CmdFaq extends Cmd {
             if (!hasText)
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "No server faq set.");
             read.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         return true;
     }
 }

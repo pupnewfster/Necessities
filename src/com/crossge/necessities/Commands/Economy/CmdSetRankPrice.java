@@ -4,7 +4,7 @@ import org.bukkit.command.CommandSender;
 
 public class CmdSetRankPrice extends EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        if (args.length != 2) {
+        if (args.length < 2) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a rank and a price to sell that rank for.");
             return true;
         }

@@ -19,12 +19,11 @@ public class CmdDelHome extends Cmd {
                     String[] info = args[0].replaceAll("&", "").replaceAll("\\.", "").split(":");
                     String targetName = info[0];
                     UUID uuid = get.getID(targetName);
-                    if (uuid == null) {
+                    if (uuid == null)
                         uuid = get.getOfflineID(targetName);
-                        if (uuid == null) {
-                            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
-                            return true;
-                        }
+                    if (uuid == null) {
+                        sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
+                        return true;
                     }
                     User us = um.getUser(uuid);
                     if (info.length == 1 || !us.hasHome(info[1])) {
@@ -36,8 +35,7 @@ public class CmdDelHome extends Cmd {
                         return true;
                     }
                     us.delHome(info[1]);
-                    p.sendMessage(var.getMessages() + "Home " + var.getObj() + info[1] + var.getMessages() + " has been removed from " + var.getObj() + us.getName()
-                            + var.getMessages() + " list of homes.");
+                    p.sendMessage(var.getMessages() + "Home " + var.getObj() + info[1] + var.getMessages() + " has been removed from " + var.getObj() + us.getName() + var.getMessages() + " list of homes.");
                     return true;
                 }
                 name = args[0].replaceAll("&", "").replaceAll("\\.", "").replaceAll(":", "");

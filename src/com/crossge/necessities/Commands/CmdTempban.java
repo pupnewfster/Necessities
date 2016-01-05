@@ -56,8 +56,8 @@ public class CmdTempban extends Cmd {
             target.getPlayer().kickPlayer(reason);
         Date date = new Date(System.currentTimeMillis() + minutes * 60 * 1000);
         bans.addBan(theirName, reason, date, name);
-        Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + " for " + var.getObj() + minutes + var.getMessages() +
-                " " + plural(minutes) + (reason.equals("") ? "." : " for the reason " + var.getObj() + reason + var.getMessages() + "."));
+        Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + " for " + var.getObj() + minutes + var.getMessages() + " " + plural(minutes) +
+                (reason.equals("") ? "." : " for the reason " + var.getObj() + reason + var.getMessages() + "."));
         return true;
     }
 

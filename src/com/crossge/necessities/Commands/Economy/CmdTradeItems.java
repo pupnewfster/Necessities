@@ -11,9 +11,9 @@ import java.util.UUID;
 public class CmdTradeItems extends EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
-            if (args.length != 5) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you to enter the player you wish to trade with " +
-                        "the item you wish to trade an how much the item trading for and the amount of that item.");
+            if (args.length < 5) {
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you to enter the player you wish to trade with the item you wish to trade an how much the item " +
+                        "trading for and the amount of that item.");
                 return true;
             }
             Player player = (Player) sender;
@@ -45,17 +45,13 @@ public class CmdTradeItems extends EconomyCmd {
                 itemgetting = mat.idToName(Integer.parseInt(itemgetting));
                 try {
                     dataget = Short.parseShort(tempget.split(" ")[1]);
-                } catch (Exception e) {
-                    dataget = 0;
-                }
+                } catch (Exception e) { }
             }
             if (form.isLegal(itemoffering)) {
                 itemoffering = mat.idToName(Integer.parseInt(itemoffering));
                 try {
                     dataoff = Short.parseShort(tempoff.split(" ")[1]);
-                } catch (Exception e) {
-                    dataoff = 0;
-                }
+                } catch (Exception e) { }
             }
             PlayerInventory thereinventory = target.getInventory();
             PlayerInventory yourinventory = player.getInventory();
@@ -66,24 +62,20 @@ public class CmdTradeItems extends EconomyCmd {
                 return true;
             }
             if (!yourinventory.contains(Material.matchMaterial(itemoffering), Integer.parseInt(amountoffering))) {
-                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have that much " +
-                        mat.pluralize(mat.getName(itemoffering), Integer.parseInt(amountoffering)));
+                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have that much " + mat.pluralize(mat.getName(itemoffering), Integer.parseInt(amountoffering)));
                 return true;
             }
             if (!thereinventory.contains(Material.matchMaterial(itemgetting), Integer.parseInt(amountgetting))) {
-                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "They do not have that much " +
-                        mat.pluralize(mat.getName(itemgetting), Integer.parseInt(amountgetting)));
+                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "They do not have that much " + mat.pluralize(mat.getName(itemgetting), Integer.parseInt(amountgetting)));
                 return true;
             }
-            tr.createTrade(offertopname + " " + pname + " " + itemgetting + ":" + Short.toString(dataget) + " " + amountgetting + " " +
-                    itemoffering + ":" + Short.toString(dataoff) + " " + amountoffering);
+            tr.createTrade(offertopname + " " + pname + " " + itemgetting + ":" + Short.toString(dataget) + " " + amountgetting + " " + itemoffering + ":" + Short.toString(dataoff) + " " + amountoffering);
             itemgetting = mat.pluralize(mat.getName(itemgetting), Integer.parseInt(amountoffering));
             itemoffering = mat.pluralize(mat.getName(itemoffering), Integer.parseInt(amountgetting));
             player.sendMessage(var.getMessages() + "You have offered a trade to " + var.getObj() + offertopname);
-            target.sendMessage(var.getObj() + pname + " has offered to trade you " + var.getObj() + amountgetting + var.getMessages() + " of " + var.getObj() +
-                    itemgetting + var.getMessages() + " for " + var.getObj() + amountoffering + var.getMessages() + " of " + var.getObj() + itemoffering);
-            target.sendMessage(var.getMessages() + "Type /taccept " + var.getObj() + pname + var.getMessages() + " or /tdeny " + var.getObj() + pname +
-                    var.getMessages() + " to accept or deny their trade request");
+            target.sendMessage(var.getObj() + pname + " has offered to trade you " + var.getObj() + amountgetting + var.getMessages() + " of " + var.getObj() + itemgetting + var.getMessages() + " for " +
+                    var.getObj() + amountoffering + var.getMessages() + " of " + var.getObj() + itemoffering);
+            target.sendMessage(var.getMessages() + "Type /taccept " + var.getObj() + pname + var.getMessages() + " or /tdeny " + var.getObj() + pname + var.getMessages() + " to accept or deny their trade request");
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You don't have an inventory. Please log in to trade.");
         return true;

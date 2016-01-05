@@ -1,13 +1,10 @@
 package com.crossge.necessities.Commands.Economy;
 
-import com.crossge.necessities.RankManager.RankManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CmdRankPrices extends EconomyCmd {
-    RankManager rm = new RankManager();
-
     public boolean commandUse(CommandSender sender, String[] args) {
         int page = 0;
         if (args.length > 1) {
@@ -30,11 +27,8 @@ public class CmdRankPrices extends EconomyCmd {
         page = page - 1;
         price = rp.priceLists(page, time);
         String rank = "CONSOLE";
-
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            rank = um.getUser(player.getUniqueId()).getRank().getName();
-        }
+        if (sender instanceof Player)
+            rank = um.getUser(((Player) sender).getUniqueId()).getRank().getName();
         while (price != null) {
             price = formL(price.split(" ")[0], price.split(" ")[1], Integer.toString((page * 10) + time + 1) + ".", rank);
             sender.sendMessage(price);

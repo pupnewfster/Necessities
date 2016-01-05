@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 public class CmdPriceList extends EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         int page = 0;
-        if (args.length >= 1) {
+        if (args.length > 0) {
             if (!form.isLegal(args[0])) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid price page.");
                 return true;
@@ -26,10 +26,7 @@ public class CmdPriceList extends EconomyCmd {
         page = page - 1;
         price = pr.priceLists(page, time);
         while (price != null) {
-            price = formL(form.capFirst(mat.getName(mat.findItem(price.split(" ")[0]))),
-                    price.split(" ")[1],
-                    price.split(" ")[2],
-                    Integer.toString((page * 10) + time + 1) + ".");
+            price = formL(form.capFirst(mat.getName(mat.findItem(price.split(" ")[0]))), price.split(" ")[1], price.split(" ")[2], Integer.toString((page * 10) + time + 1) + ".");
             sender.sendMessage(price);
             time++;
             price = pr.priceLists(page, time);
@@ -39,8 +36,7 @@ public class CmdPriceList extends EconomyCmd {
 
     private String formL(String item, String buy, String sell, String numb) {
         item = mat.pluralize(item, 2);
-        String selling = "  sell price: ";
-        String buying = "  buy price: ";
+        String selling = "  sell price: ", buying = "  buy price: ";
         if (!numb.equalsIgnoreCase("10."))
             numb += " ";
         numb += " ";

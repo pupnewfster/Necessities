@@ -22,7 +22,7 @@ public class CmdWrench extends Cmd {
             player.getInventory().addItem(stick);
             player.sendMessage(var.getMessages() + "You now have a wrench.");
         } else
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not allowed wrenches they could be harmfull to you.");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not allowed wrenches they could be harmful to you.");
         return true;
     }
 }

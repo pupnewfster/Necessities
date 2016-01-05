@@ -1,5 +1,6 @@
 package com.crossge.necessities.Economy;
 
+import com.crossge.necessities.Formatter;
 import com.crossge.necessities.RankManager.Rank;
 import com.crossge.necessities.RankManager.RankManager;
 import org.bukkit.Bukkit;
@@ -26,8 +27,7 @@ public class CmdPrices {
     }
 
     public boolean realCommand(String cmd) {
-        YamlConfiguration configPrices = YamlConfiguration.loadConfiguration(configFilePrices);
-        return configPrices.contains("commands." + cmd.toUpperCase());
+        return YamlConfiguration.loadConfiguration(configFilePrices).contains("commands." + cmd.toUpperCase());
     }
 
     public String cost(String cmd) {
@@ -68,9 +68,7 @@ public class CmdPrices {
         configPrices.set("commands" + cmd, rank + " " + price);
         try {
             configPrices.save(configFilePrices);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         upList();
     }
 
@@ -81,9 +79,7 @@ public class CmdPrices {
             configPrices.set("commands." + cmd, null);
         try {
             configPrices.save(configFilePrices);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
         upList();
     }
 

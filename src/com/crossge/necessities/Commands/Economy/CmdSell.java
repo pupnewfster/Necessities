@@ -38,8 +38,7 @@ public class CmdSell extends EconomyCmd {
                         sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a the amount you want to sell.");
                         return true;
                     }
-                    amount = itemAmount(inventory, Material.matchMaterial(mat.findItem(itemName)), data,
-                            mat.isTool(new ItemStack(Material.matchMaterial(itemName), amount, data)));
+                    amount = itemAmount(inventory, Material.matchMaterial(mat.findItem(itemName)), data, mat.isTool(new ItemStack(Material.matchMaterial(itemName), amount, data)));
                 } else
                     amount = Integer.parseInt(args[1]);
             } else {
@@ -50,8 +49,7 @@ public class CmdSell extends EconomyCmd {
                         sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a the amount you want to sell.");
                         return true;
                     }
-                    amount = itemAmount(inventory, Material.matchMaterial(mat.findItem(itemName)), data,
-                            mat.isTool(new ItemStack(Material.matchMaterial(itemName), amount, data)));
+                    amount = itemAmount(inventory, Material.matchMaterial(mat.findItem(itemName)), data, mat.isTool(new ItemStack(Material.matchMaterial(itemName), amount, data)));
                 } else
                     amount = Integer.parseInt(args[0]);
             }
@@ -87,13 +85,11 @@ public class CmdSell extends EconomyCmd {
                             player.sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(cost)) + var.getMessages() + " was added to your account.");
                         } else {
                             itemName = mat.pluralize(mat.getName(itemName), amount);
-                            player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + Integer.toString(amount) + " " +
-                                    itemName + var.getMessages() + ".");
+                            player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + Integer.toString(amount) + " " + itemName + var.getMessages() + ".");
                         }
                     } else {
                         itemName = mat.pluralize(mat.getName(itemName), amount);
-                        player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + Integer.toString(amount) + " " + itemName +
-                                var.getMessages() + ".");
+                        player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + Integer.toString(amount) + " " + itemName + var.getMessages() + ".");
                     }
                 }
             }
@@ -108,8 +104,7 @@ public class CmdSell extends EconomyCmd {
             if (s == null)
                 continue;
             if (cAmount > 0 && s.getType().equals(matType) && s.getEnchantments().size() == 0 && s.getType().getMaxDurability() != 0) {
-                short maxDur = s.getType().getMaxDurability();
-                short dur = s.getDurability();
+                short maxDur = s.getType().getMaxDurability(), dur = s.getDurability();
                 cAmount = cAmount - 1;
                 double cost = baseCost * ((1.0 * maxDur - dur) / (maxDur * 2.0));//why does it not work if not also divided by two?
                 inv.removeItem(new ItemStack(matType, 1, s.getDurability()));

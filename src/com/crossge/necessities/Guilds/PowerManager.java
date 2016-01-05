@@ -38,7 +38,7 @@ public class PowerManager {
                     u.addPower();
                 }
             });
-            players.get(p).runTaskTimerAsynchronously(Necessities.getInstance(), 20*60, 20 * 60);//60 seconds or one minute
+            players.get(p).runTaskTimerAsynchronously(Necessities.getInstance(), 20 * 60, 20 * 60);//60 seconds or one minute
         }
     }
 

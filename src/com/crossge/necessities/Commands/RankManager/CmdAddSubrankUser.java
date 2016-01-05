@@ -24,7 +24,7 @@ public class CmdAddSubrankUser extends RankCmd {
         }
         subrank = rm.getSub(subrank);
         um.updateUserSubrank(uuid, subrank, false);
-        sender.sendMessage(var.getMessages() + "Added " + var.getObj() + subrank + var.getMessages() + " to " + var.getObj() + form.plural(get.nameFromString(uuid.toString())) + var.getMessages() + " subranks.");
+        sender.sendMessage(var.getMessages() + "Added " + var.getObj() + subrank + var.getMessages() + " to " + var.getObj() + form.ownerShip(get.nameFromString(uuid.toString())) + var.getMessages() + " subranks.");
         return true;
     }
 }

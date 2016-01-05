@@ -47,10 +47,7 @@ public class CmdWeather extends Cmd {
             dim.setWeatherDuration(1);
         else
             dim.setThundering(true);
-        if (thundering)
-            sender.sendMessage(var.getMessages() + "Set weather in " + var.getObj() + dim.getName() + var.getMessages() + " to stormy.");
-        else
-            sender.sendMessage(var.getMessages() + "Set weather in " + var.getObj() + dim.getName() + var.getMessages() + " to clear.");
+        sender.sendMessage(var.getMessages() + "Set weather in " + var.getObj() + dim.getName() + var.getMessages() + " to " + (thundering ? "stormy" : "clear") + ".");
         return true;
     }
 }

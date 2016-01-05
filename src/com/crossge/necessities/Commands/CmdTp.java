@@ -41,12 +41,9 @@ public class CmdTp extends Cmd {
         }
         Player targetTo = Bukkit.getPlayer(uuidTo);
         target.teleport(safe.getSafe(targetTo.getLocation()));
-        String name = "Console";
-        if (sender instanceof Player)
-            name = sender.getName();
+        String name = (sender instanceof Player ? sender.getName() : console.getName().replaceAll(":", ""));
         target.sendMessage(var.getObj() + name + var.getMessages() + " teleported you to " + targetTo.getName() + ".");
-        sender.sendMessage(var.getMessages() + "You teleported " + var.getObj() + target.getName() + var.getMessages() + " to " + var.getObj() +
-                targetTo.getName() + var.getMessages() + ".");
+        sender.sendMessage(var.getMessages() + "You teleported " + var.getObj() + target.getName() + var.getMessages() + " to " + var.getObj() + targetTo.getName() + var.getMessages() + ".");
         return true;
     }
 }

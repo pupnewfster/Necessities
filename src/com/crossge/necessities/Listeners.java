@@ -4,7 +4,6 @@ import com.crossge.necessities.Commands.CmdCommandSpy;
 import com.crossge.necessities.Commands.CmdHide;
 import com.crossge.necessities.Commands.CmdInvsee;
 import com.crossge.necessities.Economy.BalChecks;
-import com.crossge.necessities.Economy.Formatter;
 import com.crossge.necessities.Economy.Materials;
 import com.crossge.necessities.Economy.Signs;
 import com.crossge.necessities.Guilds.Guild;
@@ -45,10 +44,7 @@ import org.bukkit.util.Vector;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Listeners implements Listener {
     private File configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml"), configFileLogIn = new File("plugins/Necessities", "loginmessages.yml"),
@@ -82,10 +78,43 @@ public class Listeners implements Listener {
 
     public Listeners() {
         RankManager rm = new RankManager();
-        String rank = "";
-        if (!rm.getOrder().isEmpty())
-            rank = ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ");
-        JanetName = rank + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
+        JanetName = (!rm.getOrder().isEmpty() ? ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") : "") + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
+    }
+
+    private String corTime(String time) {
+        return time.length() == 1 ? "0" + time : time;
+    }
+
+    private String getDateAndTime(Date d) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(d);
+        String second = Integer.toString(c.get(Calendar.SECOND));
+        String minute = Integer.toString(c.get(Calendar.MINUTE));
+        String hour = Integer.toString(c.get(Calendar.HOUR_OF_DAY));
+        String day = Integer.toString(c.get(Calendar.DATE));
+        String month = Integer.toString(c.get(Calendar.MONTH) + 1);
+        String year = Integer.toString(c.get(Calendar.YEAR));
+        hour = corTime(hour);
+        minute = corTime(minute);
+        second = corTime(second);
+        return month + "/" + day + "/" + year + " at " + hour + ":" + minute + ":" + second;
+    }
+
+    @EventHandler
+    public void onLogin(PlayerLoginEvent e) {
+        if (e.getResult().equals(PlayerLoginEvent.Result.KICK_BANNED)) {
+            BanEntry banEntry = null;
+            if (Bukkit.getBanList(BanList.Type.NAME).isBanned(e.getPlayer().getName()))
+                banEntry = Bukkit.getBanList(BanList.Type.NAME).getBanEntry(e.getPlayer().getName());
+            else if (Bukkit.getBanList(BanList.Type.IP).isBanned(e.getAddress().toString().split("/")[1].split(":")[0]))
+                banEntry = Bukkit.getBanList(BanList.Type.IP).getBanEntry(e.getAddress().toString().split("/")[1].split(":")[0]);
+            if (banEntry == null)
+                return;
+            e.setKickMessage("You were " + ChatColor.DARK_RED + "" + ChatColor.BOLD + "BANNED" + ChatColor.RESET + " on " + getDateAndTime(banEntry.getCreated()) + " by " +
+                    banEntry.getSource() + ChatColor.RESET + ".\n" + (banEntry.getExpiration() == null ? "" : "Your ban will expire on " + getDateAndTime(banEntry.getExpiration()) + ".\n") +
+                    ChatColor.RESET + "Reason: " + banEntry.getReason() + ChatColor.RESET + "\nAppeal at smp.gamezgalaxy.com/ban");
+            e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
+        }
     }
 
     @EventHandler
@@ -102,18 +131,14 @@ public class Listeners implements Listener {
             configLogIn.set(uuid.toString(), "{RANK} {NAME}&r joined the game.");
             try {
                 configLogIn.save(configFileLogIn);
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
+            } catch (Exception er) { }
         }
         YamlConfiguration configLogOut = YamlConfiguration.loadConfiguration(configFileLogOut);
         if (!configLogOut.contains(uuid.toString())) {
             configLogOut.set(uuid.toString(), "{RANK} {NAME}&r Disconnected.");
             try {
                 configLogOut.save(configFileLogOut);
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
+            } catch (Exception er) { }
         }
         e.setJoinMessage((ChatColor.GREEN + " + " + var.getGuildMsgs() + ChatColor.translateAlternateColorCodes('&',
                 configLogIn.getString(uuid.toString()).replaceAll("\\{NAME\\}", p.getDisplayName()).replaceAll("\\{RANK\\}",
@@ -121,11 +146,8 @@ public class Listeners implements Listener {
         if (!get.hasJoined(uuid)) {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
             final String welcome = ChatColor.translateAlternateColorCodes('&', config.getString("Necessities.firstTime")).replaceAll("\\{NAME\\}", p.getName());
-
-            if (Necessities.isTracking()) {
+            if (Necessities.isTracking())
                 Necessities.trackAction(p, "NewLogin", p.getName());
-            }
-
             if (config.contains("Spawn")) {
                 World world = Bukkit.getWorld(config.getString("Spawn.world"));
                 double x = Double.parseDouble(config.getString("Spawn.x"));
@@ -210,9 +232,7 @@ public class Listeners implements Listener {
                             if (!line.equals(""))
                                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', line));
                         read.close();
-                    } catch (Exception er) {
-                        er.printStackTrace();
-                    }
+                    } catch (Exception er) { }
             }
         });
     }
@@ -276,11 +296,8 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void foodLevelChange(FoodLevelChangeEvent e) {
-        if (e.getEntity() instanceof Player) {
-            User u = um.getUser(e.getEntity().getUniqueId());
-            if (u.godmode())
-                e.setFoodLevel(20);
-        }
+        if (e.getEntity() instanceof Player && um.getUser(e.getEntity().getUniqueId()).godmode())
+            e.setFoodLevel(20);
     }
 
     @EventHandler
@@ -315,8 +332,7 @@ public class Listeners implements Listener {
             }
             Guild owner = gm.chunkOwner(to.getChunk());
             if (owner != gm.chunkOwner(from.getChunk()))
-                e.getPlayer().sendMessage(var.getGuildMsgs() + " ~ " + (owner == null ? var.getWild() + "Wilderness" :
-                        owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription()));
+                e.getPlayer().sendMessage(var.getGuildMsgs() + " ~ " + (owner == null ? var.getWild() + "Wilderness" : owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription()));
         }
     }
 
@@ -335,7 +351,6 @@ public class Listeners implements Listener {
             wrench.wrench(e.getBlock());
     }
 
-    @SuppressWarnings("deprecation")
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         //Guild check
@@ -675,15 +690,13 @@ public class Listeners implements Listener {
                 }
             }
         }
-        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (e.getClickedBlock().getType().equals(Material.CHEST) || e.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) &&
-                hide.isHidden(e.getPlayer())) {
+        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (e.getClickedBlock().getType().equals(Material.CHEST) || e.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) && hide.isHidden(e.getPlayer())) {
             e.setCancelled(true);
             u.setInvLoc(e.getClickedBlock().getLocation());
             e.getPlayer().openInventory(((InventoryHolder) e.getClickedBlock().getState()).getInventory());
         }
     }
 
-    @SuppressWarnings("deprecation")
     private ArrayList<String> getLore(Inventory inv) {
         ArrayList<String> lore = new ArrayList<>();
         HashMap<String, String> condensedLore = new HashMap<>();
@@ -708,8 +721,7 @@ public class Listeners implements Listener {
                     enchants = "n";
                 if (meta.equals(""))
                     meta = "n";
-                String info = inv.getItem(i).getAmount() + " " + mat.nameToId(inv.getItem(i).getType().toString()) + " " + inv.getItem(i).getDurability() + " "
-                        + enchants + " " + meta + disp;
+                String info = inv.getItem(i).getAmount() + " " + mat.nameToId(inv.getItem(i).getType().toString()) + " " + inv.getItem(i).getDurability() + " " + enchants + " " + meta + disp;
                 condensedLore.put(info, condensedLore.containsKey(info) ? condensedLore.get(info) + "," + i : Integer.toString(i));
             }
         }
@@ -740,18 +752,15 @@ public class Listeners implements Listener {
     		b.update(true);
     	}
         if (wrench.isWrenched(e.getBlock()))
-            e.setNewCurrent(((e.getBlock().getType().equals(Material.IRON_DOOR_BLOCK) || e.getBlock().getType().equals(Material.IRON_TRAPDOOR))
-            		&& e.getOldCurrent() == 0) ? 0 : 1);
+            e.setNewCurrent(((e.getBlock().getType().equals(Material.IRON_DOOR_BLOCK) || e.getBlock().getType().equals(Material.IRON_TRAPDOOR)) && e.getOldCurrent() == 0) ? 0 : 1);
     }
 
     @EventHandler
     public void onPVP(EntityDamageByEntityEvent e) {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
-            final Player p = (Player) e.getEntity();
-            final Player damager = (Player) e.getDamager();
-            User u = um.getUser(p.getUniqueId());
-            User d = um.getUser(damager.getUniqueId());
+            final Player p = (Player) e.getEntity(), damager = (Player) e.getDamager();
+            User u = um.getUser(p.getUniqueId()), d = um.getUser(damager.getUniqueId());
             if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && (gm.chunkOwner(p.getLocation().getChunk()) != null &&
                     !gm.chunkOwner(p.getLocation().getChunk()).canPVP()) ||
                     (gm.chunkOwner(damager.getLocation().getChunk()) != null && !gm.chunkOwner(damager.getLocation().getChunk()).canPVP()))
@@ -768,10 +777,8 @@ public class Listeners implements Listener {
                             acb.removeFromCombat(p);
                             acb.removeFromCombat(damager);
                         }
-                    }, 200);
-                } catch (Exception er) {
-                    er.printStackTrace();
-                }
+                    }, 10 * 20);
+                } catch (Exception er) { }
             }
         } else if (e.getDamager() instanceof Player && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
             Player damager = (Player) e.getDamager();
@@ -819,12 +826,8 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player) {
-            Player p = (Player) e.getEntity();
-            User u = um.getUser(p.getUniqueId());
-            if (u.godmode())
-                e.setCancelled(true);
-        }
+        if (e.getEntity() instanceof Player && um.getUser(e.getEntity().getUniqueId()).godmode())
+            e.setCancelled(true);
     }
 
     @EventHandler
@@ -854,8 +857,7 @@ public class Listeners implements Listener {
                                 temp.setShooter(shooter);
                             }
                         }, i);
-                    } catch (Exception er) {
-                    }
+                    } catch (Exception er) { }
             else if (e.getBow().getItemMeta().getLore().contains("Bazooka"))
                 for (int i = 0; i < 63; i++) {
                     Arrow temp = (Arrow) e.getEntity().getWorld().spawnEntity(l, EntityType.ARROW);
@@ -891,8 +893,14 @@ public class Listeners implements Listener {
         }
         YamlConfiguration configTitles = YamlConfiguration.loadConfiguration(configFileTitles);
         e.setFormat(ChatColor.translateAlternateColorCodes('&', config.getString("Necessities.ChatFormat")));
-        boolean isop = u.opChat();
-        if (isop) {
+        boolean isop = false;
+        if (u.slackChat()) {
+            e.setFormat(var.getMessages() + "To Slack - " + ChatColor.WHITE + e.getFormat());
+            e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
+        } else if (u.opChat()) {
+            isop = true;
             e.setFormat(var.getMessages() + "To Ops - " + ChatColor.WHITE + e.getFormat());
             e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
@@ -904,23 +912,14 @@ public class Listeners implements Listener {
             e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
             e.setMessage(e.getMessage().replaceFirst("#", ""));
-        } else if (u.slackChat()) {
-            e.setFormat(var.getMessages() + "To Slack - " + ChatColor.WHITE + e.getFormat());
-            e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
-            e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
-            e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
         } else if (u.guildChat()) {
             e.setFormat(var.getMessages() + "To Guild - " + ChatColor.WHITE + e.getFormat());
             e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
         }
-        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.getGuild() != null && u.getGuild().getRank(uuid) != null) {
-            String prefix = gm.getPrefix(u.getGuild().getRank(uuid));
-            String g = "{GCOLOR}" + prefix + u.getGuild().getName() + " ";
-            e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", g));
-        } else
-            e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
+        e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.getGuild() != null && u.getGuild().getRank(uuid) != null ?
+                "{GCOLOR}" + gm.getPrefix(u.getGuild().getRank(uuid)) + u.getGuild().getName() + " " : ""));
         String fullTitle = "";
         if (configTitles.contains(player.getUniqueId() + ".title")) {
             ChatColor brackets = ChatColor.getByChar(configTitles.getString(player.getUniqueId() + ".color"));
@@ -938,12 +937,8 @@ public class Listeners implements Listener {
         e.setFormat(e.getFormat().replaceAll("\\{RANK\\}", rank));
         final String message = bot.logChat(uuid, e.getMessage());
         e.setMessage(message);//Why did it not previously setMessage?
-        if (player.hasPermission("Necessities.colorchat")) {
-            if (player.hasPermission("Necessities.magicchat"))
-                e.setMessage(ChatColor.translateAlternateColorCodes('&', message));
-            else
-                e.setMessage(ChatColor.translateAlternateColorCodes('&', message.replaceAll("&k", "")));
-        }
+        if (player.hasPermission("Necessities.colorchat"))
+            e.setMessage(ChatColor.translateAlternateColorCodes('&', (player.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", ""))));
         if (u.isMuted())
             player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are muted.");
         else {
@@ -964,10 +959,9 @@ public class Listeners implements Listener {
                     else
                         recip.sendMessage(e.getFormat().replaceFirst("\\{GCOLOR\\}", u.getGuild().relation(r.getGuild()) + "").replaceAll("\\{MESSAGE\\}", "") + e.getMessage());
                 }
-            Bukkit.getConsoleSender().sendMessage(e.getFormat().replaceFirst("\\{GCOLOR\\}", var.getNeutral() + "").replaceAll("\\{MESSAGE\\}", "") +
-                    e.getMessage());
+            Bukkit.getConsoleSender().sendMessage(e.getFormat().replaceFirst("\\{GCOLOR\\}", var.getNeutral() + "").replaceAll("\\{MESSAGE\\}", "") + e.getMessage());
             if (u.slackChat())
-                slack.sendMessage(e.getFormat().replaceFirst("\\{GCOLOR\\}", var.getNeutral() + "").replaceAll("\\{MESSAGE\\}", "") + e.getMessage());
+                slack.sendMessage((e.getFormat().replaceFirst("\\{GCOLOR\\}", var.getNeutral() + "").replaceAll("\\{MESSAGE\\}", "") + e.getMessage()).replaceFirst("To Slack - ", ""));
         }
         e.setCancelled(true);
         if (config.contains("Necessities.AI") && config.getBoolean("Necessities.AI") && (!isop || message.startsWith("!")) && !u.guildChat())
@@ -991,24 +985,8 @@ public class Listeners implements Listener {
                 e.setDroppedExp(0);
             User u = um.getUser(player.getUniqueId());
             u.setLastPos(player.getLocation());
-            if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !player.hasPermission("Necessities.guilds.admin")/* && !player.getWorld().getName().equalsIgnoreCase("BattleGrounds")*/)
+            if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !player.hasPermission("Necessities.guilds.admin"))
                 u.removePower();
-            /*Player killer = player.getKiller();//TODO: better reward amount
-            if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && killer != null && killer != player &&
-                    !killer.hasPermission("Necessities.nopvpLoss") && !player.hasPermission("Necessities.nopvpLoss") &&
-                    killer.getWorld().getName().equalsIgnoreCase("BattleGrounds")) {
-                Double amount = Double.parseDouble(bal.bal(player.getUniqueId())) * 0.1;
-                amount = Double.parseDouble(form.roundTwoDecimals(amount));
-                player.sendMessage(var.getMessages() + "Your lost " + var.getMoney() + " $" + form.addCommas(form.roundTwoDecimals(amount)) + var.getMessages() +
-                        " to " + var.getObj() + killer.getDisplayName());
-                bal.removeMoney(player.getUniqueId(), amount);
-                killer.sendMessage(var.getMessages() + "Your looted " + var.getMoney() + " $" + form.addCommas(form.roundTwoDecimals(amount)) + var.getMessages() +
-                        " from " + var.getObj() + player.getDisplayName());
-                bal.addMoney(killer.getUniqueId(), amount);
-            }*/
-            /*if (e.getDeathMessage().contains("using"))
-                e.setDeathMessage(e.getDeathMessage().substring(0, e.getDeathMessage().indexOf("by ")) + "by " +
-                        e.getDeathMessage().substring(e.getDeathMessage().indexOf("[") + 1, e.getDeathMessage().length() - 1));*/
         }
     }
 
@@ -1069,9 +1047,7 @@ public class Listeners implements Listener {
                         u.respawnHat();
                     }
                 });
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
+            } catch (Exception er) { }
             if (!Necessities.getInstance().isProtocolLibLoaded())
                 for (User m : um.getUsers().values())
                     m.updateListName();
@@ -1084,8 +1060,7 @@ public class Listeners implements Listener {
                 h.move(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ(), to.getYaw() - from.getYaw(), to.getPitch() - from.getPitch());
             }
         }
-        if (!u.isJailed() && (e.getCause().equals(TeleportCause.COMMAND) || e.getCause().equals(TeleportCause.PLUGIN))/* &&
-                !e.getFrom().getWorld().getName().equals("BattleGrounds")*/)
+        if (!u.isJailed() && (e.getCause().equals(TeleportCause.COMMAND) || e.getCause().equals(TeleportCause.PLUGIN)))
             u.setLastPos(e.getFrom());
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.isClaiming()) {
             u.setClaiming(false);
@@ -1093,12 +1068,10 @@ public class Listeners implements Listener {
         }
         if (u.isJailed())
             e.setCancelled(true);
-        if (!e.isCancelled() && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") &&
-                !e.getFrom().getChunk().equals(e.getTo().getChunk())) {
+        if (!e.isCancelled() && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getFrom().getChunk().equals(e.getTo().getChunk())) {
             Guild owner = gm.chunkOwner(e.getTo().getChunk());
             if (owner != gm.chunkOwner(e.getFrom().getChunk()))
-                e.getPlayer().sendMessage(var.getGuildMsgs() + " ~ " + (owner == null ? var.getWild() + "Wilderness" :
-                    owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription()));
+                e.getPlayer().sendMessage(var.getGuildMsgs() + " ~ " + (owner == null ? var.getWild() + "Wilderness" : owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription()));
         }
     }
 
@@ -1164,7 +1137,7 @@ public class Listeners implements Listener {
     }
 
     @EventHandler
-    public void onRename(InventoryClickEvent e) {
+    public void onInventoryClick(InventoryClickEvent e) {
         int rawSlot = e.getRawSlot();
         final Inventory inv = e.getInventory();
         Player p = (Player) e.getWhoClicked();
@@ -1189,9 +1162,7 @@ public class Listeners implements Listener {
                                 inv.clear(0);
                             }
                         });
-                    } catch (Exception er) {
-                        er.printStackTrace();
-                    }
+                    } catch (Exception er) { }
                 }
             }
         }
@@ -1289,7 +1260,7 @@ public class Listeners implements Listener {
     }
 
     @EventHandler
-    public void onCreateSpawn(CreatureSpawnEvent e) {
+    public void onCreatureSpawn(CreatureSpawnEvent e) {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
             Guild g = gm.chunkOwner(e.getLocation().getChunk());

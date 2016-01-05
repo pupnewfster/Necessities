@@ -1,6 +1,5 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.Economy.Formatter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,8 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class CmdEnderChest extends Cmd {
-    Formatter form = new Formatter();
-
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
@@ -28,7 +25,7 @@ public class CmdEnderChest extends Cmd {
                 if (!p.hasPermission("Necessities.enderchestOthers"))
                     uuid = p.getUniqueId();
                 ender = Bukkit.getPlayer(uuid).getEnderChest();
-                p.sendMessage(var.getObj() + form.plural(Bukkit.getPlayer(uuid).getName()) + var.getMessages() + " enchest opened.");
+                p.sendMessage(var.getObj() + form.ownerShip(Bukkit.getPlayer(uuid).getName()) + var.getMessages() + " enchest opened.");
             }
             p.openInventory(ender);
         } else

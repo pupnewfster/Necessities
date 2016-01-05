@@ -22,25 +22,18 @@ public class CmdWarn extends Cmd {
             return true;
         }
         Player target = Bukkit.getPlayer(uuid);
-        String name = "Console";
-        if (sender instanceof Player) {
-            Player p = (Player) sender;
-            if (target.hasPermission("Necessities.antiPWarn")) {
-                p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You may not warn someone who has Necessities.antiPWarn.");
-                return true;
-            }
-            name = p.getName();
+        String name = (sender instanceof Player ? sender.getName() : console.getName().replaceAll(":", ""));
+        if (sender instanceof Player && target.hasPermission("Necessities.antiPWarn")) {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You may not warn someone who has Necessities.antiPWarn.");
+            return true;
         }
         String reason = "";
         for (int i = 1; i < args.length; i++)
             reason += args[i] + " ";
         reason = reason.trim();
-        if (sender instanceof Player && sender.hasPermission("Necessities.colorchat")) {
-            if (sender.hasPermission("Necessities.magicchat"))
-                reason = ChatColor.translateAlternateColorCodes('&', reason);
-            else
-                reason = ChatColor.translateAlternateColorCodes('&', reason.replaceAll("&k", ""));
-        } else if (!(sender instanceof Player))
+        if (sender instanceof Player && sender.hasPermission("Necessities.colorchat"))
+            reason = ChatColor.translateAlternateColorCodes('&', (sender.hasPermission("Necessities.magicchat") ? reason : reason.replaceAll("&k", "")));
+        else if (!(sender instanceof Player))
             reason = ChatColor.translateAlternateColorCodes('&', reason);
         warns.warn(target.getUniqueId(), reason, name);
         return true;

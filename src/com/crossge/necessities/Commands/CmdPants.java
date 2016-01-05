@@ -16,7 +16,7 @@ public class CmdPants extends Cmd {
             if (hand.getType() != Material.AIR) {
                 inv.setLeggings(hand);
                 inv.setItemInHand(pants);
-                p.sendMessage(var.getMessages() + "Pants equiped.");
+                p.sendMessage(var.getMessages() + "Pants equipped.");
             } else {
                 if (pants != null)
                     inv.setItemInHand(pants);

@@ -23,13 +23,10 @@ public class CmdTAccept extends EconomyCmd {
                 return true;
             }
             Player target = Bukkit.getPlayer(uuid);
-            String pname = player.getName();
-            String offerpname = target.getName();
+            String pname = player.getName(), offerpname = target.getName();
             if (tr.hasTrade(pname, offerpname)) {
                 String info = tr.acceptTrade(pname, offerpname);
-                String amount = info.split(" ")[1];
-                String price = info.split(" ")[2];
-                String toWhom = info.split(" ")[3];
+                String amount = info.split(" ")[1], price = info.split(" ")[2], toWhom = info.split(" ")[3];
                 short data = 0;
                 String temp = info.split(" ")[0].replaceAll(":", " ");
                 String item = temp.split(" ")[0];
@@ -39,9 +36,7 @@ public class CmdTAccept extends EconomyCmd {
                     item = mat.idToName(Integer.parseInt(item));
                     try {
                         data = Short.parseShort(temp.split(" ")[1]);
-                    } catch (Exception e) {
-                        data = 0;//Is this even needed?
-                    }
+                    } catch (Exception e) { }
                 }
                 if (!toWhom.equalsIgnoreCase(pname) && !toWhom.equalsIgnoreCase(offerpname)) {
                     short dataoff = 0;
@@ -50,21 +45,17 @@ public class CmdTAccept extends EconomyCmd {
                     if (form.isLegal(itemoffering))
                         try {
                             dataoff = Short.parseShort(temp2.split(" ")[1]);
-                        } catch (Exception e) {
-                            dataoff = 0;//Is this even needed?
-                        }
+                        } catch (Exception e) { }
                     PlayerInventory thereinventory = target.getInventory();
                     PlayerInventory yourinventory = player.getInventory();
                     ItemStack itemstack = new ItemStack(Material.matchMaterial(mat.findItem(item)), Integer.parseInt(amount), data);
                     ItemStack is = new ItemStack(Material.matchMaterial(mat.findItem(itemoffering)), Integer.parseInt(toWhom), dataoff);
                     if (!yourinventory.contains(itemstack)) {
-                        player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have that much " +
-                                mat.pluralize(item, Integer.parseInt(amount)));
+                        player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have that much " + mat.pluralize(item, Integer.parseInt(amount)));
                         return true;
                     }
                     if (!thereinventory.contains(is)) {
-                        player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "They do not have that much " +
-                                mat.pluralize(itemoffering, Integer.parseInt(toWhom)));
+                        player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "They do not have that much " + mat.pluralize(itemoffering, Integer.parseInt(toWhom)));
                         return true;
                     }
                     yourinventory.addItem(is);

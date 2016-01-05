@@ -1,6 +1,5 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.Economy.Formatter;
 import com.crossge.necessities.Economy.Materials;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,7 +11,6 @@ import java.util.UUID;
 
 public class CmdGive extends Cmd {
     Materials mat = new Materials();
-    Formatter form = new Formatter();
 
     public boolean commandUse(CommandSender sender, String[] args) {
         if (args.length < 2) {
@@ -35,8 +33,7 @@ public class CmdGive extends Cmd {
         }
         if (args.length == 2) {
             t.getInventory().addItem(new ItemStack(Material.getMaterial(itemName), 64));
-            sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + "64 " + mat.pluralize(form.capFirst(mat.getName(itemName)), 64) +
-                    " to " + t.getDisplayName() + var.getMessages() + ".");
+            sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + "64 " + mat.pluralize(form.capFirst(mat.getName(itemName)), 64) + " to " + t.getDisplayName() + var.getMessages() + ".");
             return true;
         }
         if (!form.isLegal(args[2])) {
@@ -48,8 +45,7 @@ public class CmdGive extends Cmd {
         if (args.length > 3 && form.isLegal(args[3]))
             data = Short.parseShort(args[3]);
         t.getInventory().addItem(new ItemStack(Material.getMaterial(itemName), amount, data));
-        sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.pluralize(form.capFirst(mat.getName(itemName)), amount) +
-                " to " + t.getDisplayName() + var.getMessages() + ".");
+        sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.pluralize(form.capFirst(mat.getName(itemName)), amount) + " to " + t.getDisplayName() + var.getMessages() + ".");
         return true;
     }
 }

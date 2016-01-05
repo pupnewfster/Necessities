@@ -23,22 +23,15 @@ public class CmdWho extends Cmd {
             if (!um.getUsers().isEmpty()) {
                 for (User u : um.getUsers().values())
                     if (!hide.isHidden(u.getPlayer())) {
-                        if (u.isAfk()) {
-                            if (online.containsKey(u.getRank()))
-                                online.put(u.getRank(), online.get(u.getRank()) + "[AFK]" + u.getPlayer().getDisplayName() + ", ");
-                            else
-                                online.put(u.getRank(), "[AFK]" + u.getPlayer().getDisplayName() + ", ");
-                        } else {
-                            if (online.containsKey(u.getRank()))
-                                online.put(u.getRank(), online.get(u.getRank()) + u.getPlayer().getDisplayName() + ", ");
-                            else
-                                online.put(u.getRank(), u.getPlayer().getDisplayName() + ", ");
-                        }
+                        if (u.isAfk())
+                            online.put(u.getRank(), online.containsKey(u.getRank()) ? online.get(u.getRank()) + "[AFK]" + u.getPlayer().getDisplayName() + ", " : "[AFK]" + u.getPlayer().getDisplayName() + ", ");
+                        else
+                            online.put(u.getRank(), online.containsKey(u.getRank()) ? online.get(u.getRank()) + u.getPlayer().getDisplayName() + ", " : u.getPlayer().getDisplayName() + ", ");
                         numbOnline++;
                     }
             }
-            sender.sendMessage(var.getMessages() + "There " + amount(numbOnline) + " " + var.getObj() + numbOnline + var.getMessages() + " out of a maximum " +
-                    var.getObj() + Bukkit.getMaxPlayers() + var.getMessages() + " players online.");
+            sender.sendMessage(var.getMessages() + "There " + amount(numbOnline) + " " + var.getObj() + numbOnline + var.getMessages() + " out of a maximum " + var.getObj() + Bukkit.getMaxPlayers() +
+                    var.getMessages() + " players online.");
             for (int i = rm.getOrder().size() - 1; i >= 0; i--) {
                 Rank r = rm.getRank(i);
                 if (online.containsKey(r))
@@ -54,27 +47,15 @@ public class CmdWho extends Cmd {
             online.put(rm.getRank(rm.getOrder().size() - 1), rm.getRank(rm.getOrder().size() - 1).getColor() + "Janet, ");
         if (!um.getUsers().isEmpty())
             for (User u : um.getUsers().values())
-                if (u.isAfk() && hide.isHidden(u.getPlayer())) {
-                    if (online.containsKey(u.getRank()))
-                        online.put(u.getRank(), online.get(u.getRank()) + "[AFK][HIDDEN]" + u.getPlayer().getDisplayName() + ", ");
-                    else
-                        online.put(u.getRank(), "[AFK][HIDDEN]" + u.getPlayer().getDisplayName() + ", ");
-                } else if (u.isAfk()) {
-                    if (online.containsKey(u.getRank()))
-                        online.put(u.getRank(), online.get(u.getRank()) + "[AFK]" + u.getPlayer().getDisplayName() + ", ");
-                    else
-                        online.put(u.getRank(), "[AFK]" + u.getPlayer().getDisplayName() + ", ");
-                } else if (hide.isHidden(u.getPlayer())) {
-                    if (online.containsKey(u.getRank()))
-                        online.put(u.getRank(), online.get(u.getRank()) + "[HIDDEN]" + u.getPlayer().getDisplayName() + ", ");
-                    else
-                        online.put(u.getRank(), "[HIDDEN]" + u.getPlayer().getDisplayName() + ", ");
-                } else {
-                    if (online.containsKey(u.getRank()))
-                        online.put(u.getRank(), online.get(u.getRank()) + u.getPlayer().getDisplayName() + ", ");
-                    else
-                        online.put(u.getRank(), u.getPlayer().getDisplayName() + ", ");
-                }
+                if (u.isAfk() && hide.isHidden(u.getPlayer()))
+                    online.put(u.getRank(), online.containsKey(u.getRank()) ? online.get(u.getRank()) + "[AFK][HIDDEN]" + u.getPlayer().getDisplayName() + ", " : "[AFK][HIDDEN]" +
+                            u.getPlayer().getDisplayName() + ", ");
+                else if (u.isAfk())
+                    online.put(u.getRank(), online.containsKey(u.getRank()) ? online.get(u.getRank()) + "[AFK]" + u.getPlayer().getDisplayName() + ", " : "[AFK]" + u.getPlayer().getDisplayName() + ", ");
+                else if (hide.isHidden(u.getPlayer()))
+                    online.put(u.getRank(), online.containsKey(u.getRank()) ? online.get(u.getRank()) + "[HIDDEN]" + u.getPlayer().getDisplayName() + ", " : "[HIDDEN]" + u.getPlayer().getDisplayName() + ", ");
+                else
+                    online.put(u.getRank(), online.containsKey(u.getRank()) ? online.get(u.getRank()) + u.getPlayer().getDisplayName() + ", " : u.getPlayer().getDisplayName() + ", ");
         for (int i = rm.getOrder().size() - 1; i >= 0; i--) {
             Rank r = rm.getRank(i);
             if (online.containsKey(r))

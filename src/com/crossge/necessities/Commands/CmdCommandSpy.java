@@ -50,9 +50,7 @@ public class CmdCommandSpy extends Cmd {
             configSpying.set(uuid.toString(), true);
         try {
             configSpying.save(configFileSpying);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { }
     }
 
     public void init() {

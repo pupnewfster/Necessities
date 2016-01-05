@@ -31,8 +31,7 @@ public class CmdSpawner extends Cmd {
                     return true;
                 }
                 spawner.setSpawnedType(spawnertype);
-                p.sendMessage(var.getMessages() + "Spawner type set to " + var.getObj() + spawner.getSpawnedType().toString().replaceAll("_", " ").toLowerCase() +
-                        var.getMessages() + ".");
+                p.sendMessage(var.getMessages() + "Spawner type set to " + var.getObj() + spawner.getSpawnedType().toString().replaceAll("_", " ").toLowerCase() + var.getMessages() + ".");
                 return true;
             }
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That block is not a spawner.");

@@ -16,7 +16,7 @@ public class CmdChest extends Cmd {
             if (hand.getType() != Material.AIR) {
                 inv.setChestplate(hand);
                 inv.setItemInHand(chestplate);
-                p.sendMessage(var.getMessages() + "Chestplate equiped.");
+                p.sendMessage(var.getMessages() + "Chestplate equipped.");
             } else {
                 if (chestplate != null)
                     inv.setItemInHand(chestplate);

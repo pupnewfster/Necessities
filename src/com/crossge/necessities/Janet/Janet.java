@@ -17,8 +17,8 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class Janet {
-    private static HashMap<UUID, Long[]> lastChat = new HashMap<>(), lastCmd = new HashMap<>();
     private static ArrayList<String> badwords = new ArrayList<>(), goodwords = new ArrayList<>(), ips = new ArrayList<>();
+    private static HashMap<UUID, Long[]> lastChat = new HashMap<>(), lastCmd = new HashMap<>();
     private File configFile = new File("plugins/Necessities", "config.yml");
     JanetWarn warns = new JanetWarn();
     JanetLog log = new JanetLog();
@@ -121,9 +121,7 @@ public class Janet {
     }
 
     private String caps(String message) {
-        if (internalCaps(message))
-            return message.toLowerCase();
-        return message;
+        return internalCaps(message) ? message.toLowerCase() : message;
     }
 
     public boolean internalCaps(String message) {
@@ -173,8 +171,8 @@ public class Janet {
     }
 
     private boolean check(String msg, String bad) {
-        return msg.length() * bad.length() / (bad.length() + 1.0) - bad.length() > 0.75 || msg.length() * 4.0 / 5 <= bad.length() ||
-                msg.replaceAll(bad, "").length() == 0 || msg.replaceAll(bad, "").length() >= msg.length() * 3.0 / 5;
+        return msg.length() * bad.length() / (bad.length() + 1.0) - bad.length() > 0.75 || msg.length() * 4.0 / 5 <= bad.length() || msg.replaceAll(bad, "").length() == 0 ||
+                msg.replaceAll(bad, "").length() >= msg.length() * 3.0 / 5;
     }
 
     private boolean isGood(String msg) {
@@ -327,8 +325,7 @@ public class Janet {
 
     private boolean validateIPAddress(String ipAddress) {
         try {
-            final Pattern ipAdd = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-                    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+            Pattern ipAdd = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
             return ipAdd.matcher(ipAddress).matches();
         } catch (Exception e) { }
         return false;
@@ -383,25 +380,33 @@ public class Janet {
             message = "Console:" + message.replaceFirst("say", "");
         else
             message = "Console issued command: " + message;
-        log.log(message);
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (config.contains("Necessities.log") && config.getBoolean("Necessities.log"))
+            log.log(message);
     }
 
     public void logIn(UUID uuid) {
-        log.log(" + " + playerInfo(Bukkit.getPlayer(uuid)) + " joined the game.");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (config.contains("Necessities.log") && config.getBoolean("Necessities.log"))
+            log.log(" + " + playerInfo(Bukkit.getPlayer(uuid)) + " joined the game.");
     }
 
     public void logDeath(UUID uuid, String cause) {
-        log.log(playerInfo(Bukkit.getPlayer(uuid)) + " " + cause);
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (config.contains("Necessities.log") && config.getBoolean("Necessities.log"))
+            log.log(playerInfo(Bukkit.getPlayer(uuid)) + " " + cause);
     }
 
     public void logOut(UUID uuid) {
         removePlayer(uuid);
-        log.log(" - " + playerInfo(Bukkit.getPlayer(uuid)) + " Disconnected.");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (config.contains("Necessities.log") && config.getBoolean("Necessities.log"))
+            log.log(" - " + playerInfo(Bukkit.getPlayer(uuid)) + " Disconnected.");
     }
 
     private String playerInfo(Player p) {
-        return p.getName() + " (" + p.getAddress().toString().split("/")[1].split(":")[0] + " [" + p.getWorld().getName() +
-                " " + p.getLocation().getBlockX() + "," + p.getLocation().getBlockY() + "," + p.getLocation().getBlockZ() + "])";
+        return p.getName() + " (" + p.getAddress().toString().split("/")[1].split(":")[0] + " [" + p.getWorld().getName() + " " + p.getLocation().getBlockX() + "," + p.getLocation().getBlockY() + "," +
+                p.getLocation().getBlockZ() + "])";
     }
 
     private void delayedWarn(final UUID uuid, final String reason) {

@@ -19,7 +19,7 @@ public class CmdAddPermissionUser extends RankCmd {
         }
         String node = args[1];
         um.updateUserPerms(uuid, node, false);
-        sender.sendMessage(var.getMessages() + "Added " + var.getObj() + node + var.getMessages() + " to " + var.getObj() + form.plural(get.nameFromString(uuid.toString())) + var.getMessages() + " permissions.");
+        sender.sendMessage(var.getMessages() + "Added " + var.getObj() + node + var.getMessages() + " to " + var.getObj() + form.ownerShip(get.nameFromString(uuid.toString())) + var.getMessages() + " permissions.");
         return true;
     }
 }

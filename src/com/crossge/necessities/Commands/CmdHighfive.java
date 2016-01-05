@@ -24,14 +24,9 @@ public class CmdHighfive extends Cmd {
             return true;
         }
         Player target = Bukkit.getPlayer(uuid);
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            target.sendMessage(var.getObj() + player.getName() + var.getMessages() + " just highfived you.");
-            Bukkit.broadcastMessage(var.getMessages() + player.getName() + " just highfived " + target.getName());
-        } else {
-            target.sendMessage(var.getObj() + console.getName().replaceAll(":", "") + var.getMessages() + " just highfived you.");
-            Bukkit.broadcastMessage(var.getMessages() + console.getName().replaceAll(":", "") + " just highfived " + var.getObj() + target.getName());
-        }
+        String name = ((sender instanceof Player) ? sender.getName() : console.getName().replaceAll(":", ""));
+        target.sendMessage(var.getObj() + name + var.getMessages() + " just highfived you.");
+        Bukkit.broadcastMessage(var.getMessages() + name + " just highfived " + target.getName());
         return true;
     }
 }

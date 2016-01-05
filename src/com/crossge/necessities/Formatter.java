@@ -1,4 +1,4 @@
-package com.crossge.necessities.Economy;
+package com.crossge.necessities;
 
 import java.text.DecimalFormat;
 
@@ -45,7 +45,7 @@ public class Formatter {
         return firstCapitalized;
     }
 
-    public String plural(String name) {
-        return name.endsWith("s") ? name + "'" : name + "'s";
+    public String ownerShip(String name) {
+        return (name.endsWith("s") || name.endsWith("S")) ? name + "'" : name + "'s";
     }
 }

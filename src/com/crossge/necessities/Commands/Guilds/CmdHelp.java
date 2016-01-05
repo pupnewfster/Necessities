@@ -1,6 +1,5 @@
 package com.crossge.necessities.Commands.Guilds;
 
-import com.crossge.necessities.Economy.Formatter;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -8,8 +7,6 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 
 public class CmdHelp extends GuildCmd {
-    Formatter form = new Formatter();
-
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
             if (!sender.hasPermission("Necessities.guilds.help")) {

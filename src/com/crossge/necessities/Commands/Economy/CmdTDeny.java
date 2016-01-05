@@ -9,7 +9,7 @@ import java.util.UUID;
 public class CmdTDeny extends EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
-            if (args.length != 1) {
+            if (args.length < 1) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter the player you want to deny the trade of.");
                 return true;
             }
@@ -20,8 +20,7 @@ public class CmdTDeny extends EconomyCmd {
                 return true;
             }
             Player target = Bukkit.getPlayer(uuid);
-            String pname = player.getName();
-            String offerpname = target.getName();
+            String pname = player.getName(), offerpname = target.getName();
             if (tr.hasTrade(pname, offerpname)) {
                 player.sendMessage(var.getMessages() + "You have denied the trade from " + var.getObj() + offerpname);
                 target.sendMessage(var.getMessages() + "Your trade to " + var.getObj() + pname + var.getMessages() + " has been denied");

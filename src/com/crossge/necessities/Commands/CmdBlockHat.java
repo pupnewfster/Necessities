@@ -16,7 +16,7 @@ public class CmdBlockHat extends Cmd {
             if (hand.getType() != Material.AIR) {
                 inv.setHelmet(hand);
                 inv.setItemInHand(hat);
-                p.sendMessage(var.getMessages() + "Hat equiped.");
+                p.sendMessage(var.getMessages() + "Hat equipped.");
             } else {
                 if (hat != null)
                     inv.setItemInHand(hat);

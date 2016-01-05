@@ -1,9 +1,7 @@
 package com.crossge.necessities.Commands;
 
 import com.crossge.necessities.Economy.BalChecks;
-import com.crossge.necessities.Economy.Formatter;
 import com.crossge.necessities.RankManager.User;
-import com.crossge.necessities.RankManager.UserManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -15,9 +13,7 @@ import java.util.UUID;
 
 public class CmdNick extends Cmd {
     private File configFile = new File("plugins/Necessities", "config.yml");
-    UserManager um = new UserManager();
     BalChecks balc = new BalChecks();
-    Formatter form = new Formatter();
 
     public boolean commandUse(CommandSender sender, String[] args) {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
@@ -44,15 +40,12 @@ public class CmdNick extends Cmd {
                         return true;
                     }
                     balc.removeMoney(p.getUniqueId(), 2000);
-                    p.sendMessage(var.getMoney() + "$2000.00" + var.getMessages() + " was removed from your acount.");
+                    p.sendMessage(var.getMoney() + "$2000.00" + var.getMessages() + " was removed from your account.");
                 }
                 if (uuid == null) {
                     User u = um.getUser(p.getUniqueId());
                     String nick = args[0];
-                    if (p.hasPermission("Necessities.magicchat"))
-                        nick = ChatColor.translateAlternateColorCodes('&', nick);
-                    else
-                        nick = ChatColor.translateAlternateColorCodes('&', nick.replaceAll("&k", ""));
+                    nick = ChatColor.translateAlternateColorCodes('&', (p.hasPermission("Necessities.magicchat") ? nick : nick.replaceAll("&k", "")));
                     u.setNick("~" + nick.trim() + "&r");
                     p.setDisplayName("~" + ChatColor.translateAlternateColorCodes('&', nick + "&r").trim());
                     p.sendMessage(var.getMessages() + "Nickname set to " + p.getDisplayName());
@@ -99,7 +92,7 @@ public class CmdNick extends Cmd {
                     return true;
                 }
                 balc.removeMoney(target.getUniqueId(), 2000);
-                target.sendMessage(var.getMoney() + "$2000.00" + var.getMessages() + " was removed from your acount.");
+                target.sendMessage(var.getMoney() + "$2000.00" + var.getMessages() + " was removed from your account.");
             }
             u.setNick("~" + args[1].trim() + "&r");
             target.setDisplayName("~" + ChatColor.translateAlternateColorCodes('&', args[1] + "&r").trim());

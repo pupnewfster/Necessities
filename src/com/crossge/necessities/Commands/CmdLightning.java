@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class CmdLightning extends Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        if (args.length >= 1) {
+        if (args.length > 0) {
             UUID uuid = get.getID(args[0]);
             if (uuid == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
