@@ -49,7 +49,8 @@ public class WarpManager {
         configWarps.set(name, null);
         try {
             configWarps.save(configFileWarps);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         warps.remove(name);
         lowerNames.remove(name.toLowerCase());
     }
@@ -64,7 +65,8 @@ public class WarpManager {
         configWarps.set(name + ".pitch", loc.getPitch());
         try {
             configWarps.save(configFileWarps);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         warps.put(name, new Warp(name));
         lowerNames.put(name.toLowerCase(), name);
     }

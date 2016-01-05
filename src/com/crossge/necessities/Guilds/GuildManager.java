@@ -43,14 +43,16 @@ public class GuildManager {
                 configProtected.set("flag.hostileSpawn", false);
                 configProtected.set("claims", Arrays.asList(""));
                 configProtected.save(configFileProtected);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
         if (!configFileGuilds.exists())
             try {
                 configFileGuilds.createNewFile();
                 YamlConfiguration configGuilds = YamlConfiguration.loadConfiguration(configFileGuilds);
                 configGuilds.set("guilds", Arrays.asList("protected"));
                 configGuilds.save(configFileGuilds);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
     }
 
     public void createGuild(String name, UUID uuid) {
@@ -66,7 +68,8 @@ public class GuildManager {
             configGuilds.save(configFileGuilds);
             if (!fileGuild.exists())
                 fileGuild.createNewFile();
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         guild.set("power", 0);
         guild.set("description", "Default description.");
         guild.set("leader", uuid.toString());
@@ -82,7 +85,8 @@ public class GuildManager {
         guild.set("claims", Arrays.asList(""));
         try {
             guild.save(fileGuild);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         guilds.put(name.toLowerCase(), new Guild(name));
     }
 
@@ -98,7 +102,8 @@ public class GuildManager {
         configGuilds.set("guilds", guildList);
         try {
             configGuilds.save(configFileGuilds);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         guilds.remove(oldName.toLowerCase());
         guilds.put(name.toLowerCase(), g);
     }
@@ -129,7 +134,8 @@ public class GuildManager {
         configGuilds.set("guilds", guildList);
         try {
             configGuilds.save(configFileGuilds);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     public String getPrefix(String rank) {

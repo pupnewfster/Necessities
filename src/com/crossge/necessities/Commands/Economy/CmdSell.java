@@ -26,7 +26,8 @@ public class CmdSell extends EconomyCmd {
                 itemName = temp.split(" ")[0];
                 try {
                     data = Short.parseShort(temp.split(" ")[1]);
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
                 if (form.isLegal(itemName))
                     itemName = mat.idToName(Integer.parseInt(itemName));
                 else if (itemName.equalsIgnoreCase("hand")) {

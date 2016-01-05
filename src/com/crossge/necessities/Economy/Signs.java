@@ -37,16 +37,16 @@ public class Signs {
     }
 
     public String itemName(Sign sign) {
-    	String itemName = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", "")).replaceAll(":", " ").split(" ")[0];
-    	if (form.isLegal(itemName))
+        String itemName = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", "")).replaceAll(":", " ").split(" ")[0];
+        if (form.isLegal(itemName))
             itemName = mat.idToName(Integer.parseInt(itemName));
         return mat.findItem(itemName.trim());
     }
-    
+
     public String itemLine(Sign sign) {
-    	String line = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", ""));
-    	String itemName = line.replaceAll(":", " ").split(" ")[0];
-    	if (form.isLegal(itemName))
+        String line = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", ""));
+        String itemName = line.replaceAll(":", " ").split(" ")[0];
+        if (form.isLegal(itemName))
             itemName = mat.idToName(Integer.parseInt(itemName));
         return mat.findItem(itemName.trim()) + (line.replaceAll(":", " ").split(" ").length > 1 ? ":" + line.replaceAll(":", " ").split(" ")[1] : "");
     }

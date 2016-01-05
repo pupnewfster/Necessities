@@ -45,13 +45,15 @@ public class CmdTradeItems extends EconomyCmd {
                 itemgetting = mat.idToName(Integer.parseInt(itemgetting));
                 try {
                     dataget = Short.parseShort(tempget.split(" ")[1]);
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
             }
             if (form.isLegal(itemoffering)) {
                 itemoffering = mat.idToName(Integer.parseInt(itemoffering));
                 try {
                     dataoff = Short.parseShort(tempoff.split(" ")[1]);
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
             }
             PlayerInventory thereinventory = target.getInventory();
             PlayerInventory yourinventory = player.getInventory();

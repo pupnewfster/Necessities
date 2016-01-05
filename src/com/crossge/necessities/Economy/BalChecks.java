@@ -48,8 +48,8 @@ public class BalChecks implements Economy {
         ArrayList<Double> balsort = new ArrayList<>();
         for (double doub : balances.values())
             balsort.add(doub);
-        if (balsort.size() <= page*10 + time)
-        	return null;
+        if (balsort.size() <= page * 10 + time)
+            return null;
         Collections.sort(balsort);
         Collections.reverse(balsort);
         page *= 10;
@@ -126,7 +126,8 @@ public class BalChecks implements Economy {
         configUsers.set(uuid.toString() + ".balance", val);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     public void removeMoney(UUID uuid, double amount) {
@@ -245,7 +246,8 @@ public class BalChecks implements Economy {
         } else
             return false;
     }
-//UNUSED METHODS BELOW
+
+    //UNUSED METHODS BELOW
     @Override
     public boolean hasAccount(String s, String s1) {
         return false;

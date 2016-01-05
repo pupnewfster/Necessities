@@ -70,7 +70,7 @@ public class Initialization {
         rm.setSubranks();
         rm.readRanks();
         sb.createScoreboard();
-        
+
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         //WorldManager
         if (config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager")) {
@@ -120,14 +120,16 @@ public class Initialization {
         if (!f.exists())
             try {
                 f.createNewFile();
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
     }
 
     private void addYML(File file) {
         if (!file.exists())
             try {
                 file.createNewFile();
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
     }
 
     private void createYaml() {
@@ -154,7 +156,8 @@ public class Initialization {
                 config.set("goodwords", Arrays.asList(""));
                 config.set("ips", Arrays.asList(""));
                 config.save(configFileCensors);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
         if (!configFile.exists())
             try {
                 configFile.createNewFile();
@@ -181,7 +184,8 @@ public class Initialization {
                 config.set("Necessities.ChannelID", "channelID");
                 config.set("Necessities.WebHook", "webHook");
                 config.save(configFile);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
         else {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
             if (!config.contains("Necessities.warns"))
@@ -228,7 +232,8 @@ public class Initialization {
                 config.set("Necessities.WebHook", "webHook");
             try {
                 config.save(configFile);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
         }
     }
 }

@@ -36,7 +36,8 @@ public class CmdTAccept extends EconomyCmd {
                     item = mat.idToName(Integer.parseInt(item));
                     try {
                         data = Short.parseShort(temp.split(" ")[1]);
-                    } catch (Exception e) { }
+                    } catch (Exception e) {
+                    }
                 }
                 if (!toWhom.equalsIgnoreCase(pname) && !toWhom.equalsIgnoreCase(offerpname)) {
                     short dataoff = 0;
@@ -45,7 +46,8 @@ public class CmdTAccept extends EconomyCmd {
                     if (form.isLegal(itemoffering))
                         try {
                             dataoff = Short.parseShort(temp2.split(" ")[1]);
-                        } catch (Exception e) { }
+                        } catch (Exception e) {
+                        }
                     PlayerInventory thereinventory = target.getInventory();
                     PlayerInventory yourinventory = player.getInventory();
                     ItemStack itemstack = new ItemStack(Material.matchMaterial(mat.findItem(item)), Integer.parseInt(amount), data);

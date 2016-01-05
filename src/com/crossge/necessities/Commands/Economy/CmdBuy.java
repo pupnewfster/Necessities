@@ -32,7 +32,8 @@ public class CmdBuy extends EconomyCmd {
                 amount = Integer.parseInt(args[1]);
                 try {
                     data = Short.parseShort(temp.split(" ")[1]);
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
                 if (form.isLegal(itemName))
                     itemName = mat.idToName(Integer.parseInt(itemName));
                 else if (itemName.equalsIgnoreCase("hand")) {

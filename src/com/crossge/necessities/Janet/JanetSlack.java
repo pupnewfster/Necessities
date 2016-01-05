@@ -92,7 +92,8 @@ public class JanetSlack {
             InputStream is = con.getInputStream();
             is.close();
             con.disconnect();
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
 
     }
 
@@ -124,7 +125,8 @@ public class JanetSlack {
                 if (i == 0)
                     latest = (String) message.get("ts");
             }
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         justLoaded = false;
     }
 
@@ -146,7 +148,8 @@ public class JanetSlack {
             in.close();
             JSONParser jsonParser = new JSONParser();
             userMap.put(id, new SlackUser((JSONObject) jsonParser.parse(response.toString())));
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         return userMap.get(id);
     }
 
@@ -158,7 +161,8 @@ public class JanetSlack {
             InputStream is = con.getInputStream();
             is.close();
             con.disconnect();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     private void connect() {
@@ -188,7 +192,8 @@ public class JanetSlack {
                 if (!userMap.containsKey(id))
                     userMap.put(id, new SlackUser(user));
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         sendPost("https://slack.com/api/users.setPresence?token=" + token + "&presence=auto&pretty=1");
         historyReader = new BukkitRunnable() {
             @Override
@@ -342,7 +347,7 @@ public class JanetSlack {
                         gamemode = "Spectator";
                     m += " - Gamemode: " + gamemode + "\n";
                     m += " - Banned: " + (p.isBanned() ? "true" : "false") + "\n";
-                    m += " - Visible: " + (hide.isHidden(p) ? "false" : "true") +"\n";
+                    m += " - Visible: " + (hide.isHidden(p) ? "false" : "true") + "\n";
                 } else
                     m += " - Banned: " + (Bukkit.getOfflinePlayer(u.getUUID()).isBanned() ? "true" : "false") + "\n";
             } else if (message.startsWith("!who")) {
@@ -464,7 +469,8 @@ public class JanetSlack {
                 int applePie = 0;
                 try {
                     applePie = Integer.parseInt(message.split(" ")[1]);
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
                 m += r.memeRandom(applePie) + "\n";
             } else if (message.startsWith("!kick ") && info.isAdmin()) {
                 message = message.replaceFirst("!kick ", "");
@@ -529,7 +535,7 @@ public class JanetSlack {
                 if (uuid == null)
                     uuid = get.getOfflineID(message.split(" ")[0]);
                 if (uuid == null) {
-                    sendMessage( "Error: Invalid player.");
+                    sendMessage("Error: Invalid player.");
                     return;
                 }
                 OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
@@ -648,9 +654,10 @@ public class JanetSlack {
                 } else {
                     boolean validIp = false;
                     try {
-                        Pattern ipAdd = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +"([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+                        Pattern ipAdd = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
                         validIp = ipAdd.matcher(message.split(" ")[0]).matches();
-                    } catch (Exception e) { }
+                    } catch (Exception e) {
+                    }
                     if (!validIp) {
                         sendMessage("Error: Invalid ip.");
                         return;
@@ -682,7 +689,8 @@ public class JanetSlack {
                 try {
                     Pattern ipAdd = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
                     validIp = ipAdd.matcher(message.split(" ")[0]).matches();
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
                 if (!validIp) {
                     sendMessage("Error: Invalid ip.");
                     return;

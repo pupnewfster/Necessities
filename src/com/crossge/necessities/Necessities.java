@@ -77,7 +77,8 @@ public class Necessities extends JavaPlugin {
             try {
                 this.protocolManager = ProtocolLibrary.getProtocolManager();
                 addPacketListener();
-            } catch (Exception e) {}//Not using protocollib
+            } catch (Exception e) {
+            }//Not using protocollib
         Initialization init = new Initialization();
         init.initiateFiles();
         getServer().getPluginManager().registerEvents(new Listeners(), this);
@@ -90,7 +91,7 @@ public class Necessities extends JavaPlugin {
 
     private boolean hookGoogle() {
         GoogleAnalyticsPlugin plugin;
-        if ((plugin = (GoogleAnalyticsPlugin)getServer().getPluginManager().getPlugin("GoogleAnalyticsPlugin")) == null)
+        if ((plugin = (GoogleAnalyticsPlugin) getServer().getPluginManager().getPlugin("GoogleAnalyticsPlugin")) == null)
             return false;
         googleAnalyticsTracker = plugin.getTracker();
         return true;
@@ -131,7 +132,7 @@ public class Necessities extends JavaPlugin {
                 } else if (type == PacketType.Play.Server.NAMED_SOUND_EFFECT) {
                     String soundEffectName = event.getPacket().getSpecificModifier(String.class).read(0);
                     if (soundEffectName.contains("chest")) {
-                        Block b = event.getPlayer().getWorld().getBlockAt(event.getPacket().getIntegers().read(0)/8, event.getPacket().getIntegers().read(1)/8, event.getPacket().getIntegers().read(2)/8);
+                        Block b = event.getPlayer().getWorld().getBlockAt(event.getPacket().getIntegers().read(0) / 8, event.getPacket().getIntegers().read(1) / 8, event.getPacket().getIntegers().read(2) / 8);
                         if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST) {
                             Block n = b.getRelative(BlockFace.NORTH);
                             Block e = b.getRelative(BlockFace.EAST);
@@ -166,7 +167,8 @@ public class Necessities extends JavaPlugin {
                 for (Player x : Bukkit.getOnlinePlayers())
                     if (!x.canSee(p) && !x.equals(p))
                         this.protocolManager.sendServerPacket(x, tabList);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
     }
 
     public void addPlayer(Player p) {
@@ -185,7 +187,8 @@ public class Necessities extends JavaPlugin {
                 for (Player x : Bukkit.getOnlinePlayers())
                     if (!x.hasPermission("Necessities.seehidden") && x.canSee(p) && !x.equals(p))
                         this.protocolManager.sendServerPacket(x, tabList);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
     }
 
     public void updateName(Player p) {
@@ -202,7 +205,8 @@ public class Necessities extends JavaPlugin {
                 infoAction.write(0, EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME);
                 for (Player x : Bukkit.getOnlinePlayers())
                     this.protocolManager.sendServerPacket(x, tabList);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
     }
 
     public void updateAll(Player x) {
@@ -220,7 +224,8 @@ public class Necessities extends JavaPlugin {
                 infoData.write(0, playerInfo);
                 infoAction.write(0, EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME);
                 this.protocolManager.sendServerPacket(x, tabList);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
     }
 
     public void addJanet(Player p) {
@@ -240,7 +245,8 @@ public class Necessities extends JavaPlugin {
                 infoData.write(0, playerInfo);
                 infoAction.write(0, EnumWrappers.PlayerInfoAction.ADD_PLAYER);
                 this.protocolManager.sendServerPacket(p, tabList);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
     }
 
     public void refreshJanet(Player p) {
@@ -260,7 +266,8 @@ public class Necessities extends JavaPlugin {
                 infoData.write(0, playerInfo);
                 infoAction.write(0, EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME);
                 this.protocolManager.sendServerPacket(p, tabList);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
     }
 
     public void addHeader(Player p) {
@@ -271,7 +278,8 @@ public class Necessities extends JavaPlugin {
                 chatStuff.write(0, WrappedChatComponent.fromText(ChatColor.GREEN + "GamezGalaxy"));
                 chatStuff.write(1, WrappedChatComponent.fromText(ChatColor.BLUE + "http://gamezgalaxy.com"));
                 this.protocolManager.sendServerPacket(p, tabList);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
     }
 
     private WrappedSignedProperty getSkin() {
@@ -291,7 +299,8 @@ public class Necessities extends JavaPlugin {
             }
             in.close();
             return new WrappedSignedProperty("textures", value, signature);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         return null;
     }
 
@@ -517,7 +526,7 @@ public class Necessities extends JavaPlugin {
             com = new CmdPay();
         else if (isEqual(name, "eco"))
             com = new CmdEco();
-       else if (isEqual(name, "price"))
+        else if (isEqual(name, "price"))
             com = new CmdPrice();
         else if (isEqual(name, "setprice"))
             com = new CmdSetPrice();

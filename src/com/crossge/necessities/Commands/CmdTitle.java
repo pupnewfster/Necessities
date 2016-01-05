@@ -38,7 +38,8 @@ public class CmdTitle extends Cmd {
             configTitles.set(target.getUniqueId() + ".title", null);
             try {
                 configTitles.save(configFileTitles);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
             sender.sendMessage(var.getMessages() + "Title removed for player " + var.getObj() + target.getName());
             return true;
         }
@@ -64,7 +65,8 @@ public class CmdTitle extends Cmd {
             configTitles.set(target.getUniqueId() + ".color", "r");
         try {
             configTitles.save(configFileTitles);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         sender.sendMessage(var.getMessages() + "Title set to " + title + var.getMessages() + " for player " + var.getObj() + target.getName());
         return true;
     }

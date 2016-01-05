@@ -145,7 +145,8 @@ public class CmdTime extends Cmd {
         try {
             Long.parseLong(toTest);
             return true;
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return false;
     }
 }

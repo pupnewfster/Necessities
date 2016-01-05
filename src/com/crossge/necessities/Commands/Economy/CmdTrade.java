@@ -41,7 +41,8 @@ public class CmdTrade extends EconomyCmd {
                 item = mat.idToName(Integer.parseInt(item));
                 try {
                     data = Short.parseShort(temp.split(" ")[1]);
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
             }
             price = form.roundTwoDecimals(Double.parseDouble(price));
             item = mat.findItem(item);

@@ -27,7 +27,8 @@ public class JanetAI {//TODO: Upgrade
                 int applePie = 0;
                 try {
                     applePie = Integer.parseInt(message.split(" ")[1]);
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
                 Bukkit.broadcastMessage(JanetName + r.memeRandom(applePie));
             } else if (message.toLowerCase().startsWith("!say "))
                 Bukkit.broadcastMessage(JanetName + message.replaceFirst("!say ", ""));

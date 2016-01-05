@@ -48,7 +48,8 @@ public class CmdHelp extends Cmd {
                                     plugins.add(var.getPlugCol() + p.getName() + ChatColor.WHITE + ": Plugin Help: /help " + p.getName().toLowerCase());
                             }
                         }
-                    } catch (Exception e) { }
+                    } catch (Exception e) {
+                    }
                 } else if (Bukkit.getPluginManager().getPlugin(search) == null) {
                     if (p.getName().contains(search))
                         plugins.add(var.getPlugCol() + p.getName() + ChatColor.WHITE + ": Plugin Help: /help " + p.getName().toLowerCase());
@@ -62,7 +63,8 @@ public class CmdHelp extends Cmd {
                                     commands.add(var.getMessages() + "Usage" + ChatColor.WHITE + ": " + pc.getUsage().replaceFirst("<command>", pc.getName()));
                             }
                         }
-                    } catch (Exception e) { }
+                    } catch (Exception e) {
+                    }
                 }
             }
             for (String plug : plugins)
@@ -129,7 +131,8 @@ public class CmdHelp extends Cmd {
                                 plugins.add(var.getPlugCol() + p.getName() + ChatColor.WHITE + ": Plugin Help: /help " + p.getName().toLowerCase());
                         }
                     }
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
             } else if (Bukkit.getPluginManager().getPlugin(search) == null) {
                 if (p.getName().contains(search))
                     plugins.add(var.getPlugCol() + p.getName() + ChatColor.WHITE + ": Plugin Help: /help " + p.getName().toLowerCase());
@@ -143,7 +146,8 @@ public class CmdHelp extends Cmd {
                                 commands.add(var.getMessages() + "Usage" + ChatColor.WHITE + ": " + pc.getUsage().replaceFirst("<command>", pc.getName()));
                         }
                     }
-                } catch (Exception e) { }
+                } catch (Exception e) {
+                }
             }
         }
         for (String plug : plugins)

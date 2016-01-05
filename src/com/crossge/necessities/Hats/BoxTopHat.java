@@ -41,7 +41,8 @@ public class BoxTopHat extends Hat {
                     move(0, 0, 0, yaw, 0);
                 }
             }, 1);//Wait a tick and reposition orientation
-        } catch (Exception er) { }
+        } catch (Exception er) {
+        }
     }
 
     @Override

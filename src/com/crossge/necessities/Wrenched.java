@@ -14,7 +14,7 @@ public class Wrenched {
     public void initiate() {
         YamlConfiguration wrenches = YamlConfiguration.loadConfiguration(configFileWrench);
         for (String key : wrenches.getKeys(false))
-        	if (!locs.contains(key.toLowerCase()))
+            if (!locs.contains(key.toLowerCase()))
                 locs.add(key.toLowerCase());
     }
 
@@ -31,11 +31,12 @@ public class Wrenched {
         }
         try {
             wrenches.save(configFileWrench);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     public boolean isWrenched(Block b) {
-    	Location l = b.getLocation();
+        Location l = b.getLocation();
         return locs.contains((l.getWorld().getName() + "," + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ()).toLowerCase());
     }
 }

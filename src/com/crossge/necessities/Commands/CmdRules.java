@@ -26,7 +26,8 @@ public class CmdRules extends Cmd {
             if (!hasText)
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "No rules set.");
             read.close();
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return true;
     }
 }	

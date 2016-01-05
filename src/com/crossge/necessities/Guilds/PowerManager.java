@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class PowerManager {
     private File configFile = new File("plugins/Necessities", "config.yml");
-    private static HashMap<Player,BukkitRunnable> players = new HashMap<>();
+    private static HashMap<Player, BukkitRunnable> players = new HashMap<>();
     UserManager um = new UserManager();
 
     public void initiate() {

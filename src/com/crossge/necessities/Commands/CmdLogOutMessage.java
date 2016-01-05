@@ -25,7 +25,8 @@ public class CmdLogOutMessage extends Cmd {
             configLogOut.set(p.getUniqueId().toString(), logoutmessage);
             try {
                 configLogOut.save(configFileLogOut);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
             p.sendMessage("Logout message set to: " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes('&',
                     logoutmessage.replaceAll("\\{NAME\\}", p.getDisplayName()).replaceAll("\\{RANK\\}",
                             um.getUser(p.getUniqueId()).getRank().getTitle())).replaceAll(ChatColor.RESET + "", ChatColor.YELLOW + ""));

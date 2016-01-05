@@ -26,7 +26,8 @@ public class CmdLogInMessage extends Cmd {
             configLogIn.set(p.getUniqueId().toString(), loginmessage);
             try {
                 configLogIn.save(configFileLogIn);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
             p.sendMessage("Login message set to: " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes('&',
                     loginmessage.replaceAll("\\{NAME\\}", p.getDisplayName()).replaceAll("\\{RANK\\}",
                             um.getUser(p.getUniqueId()).getRank().getTitle())).replaceAll(ChatColor.RESET + "", ChatColor.YELLOW + ""));

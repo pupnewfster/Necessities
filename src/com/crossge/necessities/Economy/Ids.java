@@ -767,6 +767,7 @@ public class Ids {
             configIds.set("DARK_OAK_DOOR", 431);
         try {
             configIds.save(configFileIds);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 }

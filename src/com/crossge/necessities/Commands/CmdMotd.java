@@ -26,7 +26,8 @@ public class CmdMotd extends Cmd {
             if (!hasText)
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "No server motd set.");
             read.close();
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return true;
     }
 }

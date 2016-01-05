@@ -310,7 +310,8 @@ public class Janet {
                         is.close();
                         if (validateIPAddress(u))
                             orig[i] = starIP(orig[i]);
-                    } catch (Exception e) { }
+                    } catch (Exception e) {
+                    }
             }
         }
         String censored = "";
@@ -327,7 +328,8 @@ public class Janet {
         try {
             Pattern ipAdd = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
             return ipAdd.matcher(ipAddress).matches();
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         return false;
     }
 

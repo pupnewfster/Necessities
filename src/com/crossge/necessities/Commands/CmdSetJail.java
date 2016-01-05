@@ -21,7 +21,8 @@ public class CmdSetJail extends Cmd {
             config.set("Jail.pitch", Float.toString(p.getLocation().getPitch()));
             try {
                 config.save(configFile);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
             p.sendMessage(var.getMessages() + "Jail set.");
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot set the jail.");

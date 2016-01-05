@@ -56,7 +56,8 @@ public class DonationReader {
             stmt.close();
             stmt2.close();
             conn.close();
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     public void init() {

@@ -69,8 +69,8 @@ public class CmdHide extends Cmd {
     public void playerJoined(Player p) {
         if (!p.hasPermission("Necessities.seehidden"))
             for (UUID uuid : hidden)
-            if (Bukkit.getPlayer(uuid) != null)
-                p.hidePlayer(Bukkit.getPlayer(uuid));
+                if (Bukkit.getPlayer(uuid) != null)
+                    p.hidePlayer(Bukkit.getPlayer(uuid));
     }
 
     public void playerLeft(Player p) {
@@ -101,7 +101,8 @@ public class CmdHide extends Cmd {
             configHiding.set(uuid.toString(), true);
         try {
             configHiding.save(configFileHiding);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     public void init() {

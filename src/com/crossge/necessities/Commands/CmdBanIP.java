@@ -47,7 +47,8 @@ public class CmdBanIP extends Cmd {
         try {
             Pattern ipAdd = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
             validIp = ipAdd.matcher(args[0]).matches();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         if (!validIp) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid ip.");
             return true;

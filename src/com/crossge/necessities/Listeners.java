@@ -131,14 +131,16 @@ public class Listeners implements Listener {
             configLogIn.set(uuid.toString(), "{RANK} {NAME}&r joined the game.");
             try {
                 configLogIn.save(configFileLogIn);
-            } catch (Exception er) { }
+            } catch (Exception er) {
+            }
         }
         YamlConfiguration configLogOut = YamlConfiguration.loadConfiguration(configFileLogOut);
         if (!configLogOut.contains(uuid.toString())) {
             configLogOut.set(uuid.toString(), "{RANK} {NAME}&r Disconnected.");
             try {
                 configLogOut.save(configFileLogOut);
-            } catch (Exception er) { }
+            } catch (Exception er) {
+            }
         }
         e.setJoinMessage((ChatColor.GREEN + " + " + var.getGuildMsgs() + ChatColor.translateAlternateColorCodes('&',
                 configLogIn.getString(uuid.toString()).replaceAll("\\{NAME\\}", p.getDisplayName()).replaceAll("\\{RANK\\}",
@@ -232,7 +234,8 @@ public class Listeners implements Listener {
                             if (!line.equals(""))
                                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', line));
                         read.close();
-                    } catch (Exception er) { }
+                    } catch (Exception er) {
+                    }
             }
         });
     }
@@ -557,23 +560,23 @@ public class Listeners implements Listener {
                 } else if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getItem() != null && e.getItem().hasItemMeta() && e.getItem().getItemMeta().hasLore() &&
                         e.getItem().getItemMeta().getLore().contains("Wrench")) {
                     Block b = e.getClickedBlock();
-                    if (b.getType().equals(Material.REDSTONE_LAMP_OFF)){//TODO: Add more things wrench works on
-                    	final Block up = b.getRelative(BlockFace.UP);
-                    	final Material type = up.getType();
-                    	final byte metadata = up.getData();
-                    	final byte raw = up.getState().getRawData();
-                    	final MaterialData data = up.getState().getData();
-                    	final ItemStack[] contents;
-                    	if (up.getState() instanceof InventoryHolder) {
-                    		InventoryHolder i = (InventoryHolder) up.getState();
-                    		contents = i.getInventory().getContents();
-                    		i.getInventory().clear();
-                    	} else
-                    		contents = null;
-                    	up.setType(Material.REDSTONE_BLOCK);
-                    	wrench.wrench(b);
-                    	e.setCancelled(true);
-                    	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                    if (b.getType().equals(Material.REDSTONE_LAMP_OFF)) {//TODO: Add more things wrench works on
+                        final Block up = b.getRelative(BlockFace.UP);
+                        final Material type = up.getType();
+                        final byte metadata = up.getData();
+                        final byte raw = up.getState().getRawData();
+                        final MaterialData data = up.getState().getData();
+                        final ItemStack[] contents;
+                        if (up.getState() instanceof InventoryHolder) {
+                            InventoryHolder i = (InventoryHolder) up.getState();
+                            contents = i.getInventory().getContents();
+                            i.getInventory().clear();
+                        } else
+                            contents = null;
+                        up.setType(Material.REDSTONE_BLOCK);
+                        wrench.wrench(b);
+                        e.setCancelled(true);
+                        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
                             @Override
                             public void run() {
                                 up.setType(type);
@@ -581,7 +584,7 @@ public class Listeners implements Listener {
                                 up.getState().setData(data);
                                 up.getState().setRawData(raw);
                                 if (up.getState() instanceof InventoryHolder)
-                            		((InventoryHolder) up.getState()).getInventory().setContents(contents);
+                                    ((InventoryHolder) up.getState()).getInventory().setContents(contents);
                             }
                         });
                     } else if (b.getType().equals(Material.REDSTONE_LAMP_ON)) {
@@ -746,11 +749,11 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onRedstone(BlockRedstoneEvent e) {
-    	if (e.getBlock().getState() instanceof CommandBlock) {
-    		CommandBlock b = (CommandBlock) e.getBlock().getState();
-    		b.setCommand(ChatColor.translateAlternateColorCodes('&', b.getCommand()));
-    		b.update(true);
-    	}
+        if (e.getBlock().getState() instanceof CommandBlock) {
+            CommandBlock b = (CommandBlock) e.getBlock().getState();
+            b.setCommand(ChatColor.translateAlternateColorCodes('&', b.getCommand()));
+            b.update(true);
+        }
         if (wrench.isWrenched(e.getBlock()))
             e.setNewCurrent(((e.getBlock().getType().equals(Material.IRON_DOOR_BLOCK) || e.getBlock().getType().equals(Material.IRON_TRAPDOOR)) && e.getOldCurrent() == 0) ? 0 : 1);
     }
@@ -778,7 +781,8 @@ public class Listeners implements Listener {
                             acb.removeFromCombat(damager);
                         }
                     }, 10 * 20);
-                } catch (Exception er) { }
+                } catch (Exception er) {
+                }
             }
         } else if (e.getDamager() instanceof Player && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
             Player damager = (Player) e.getDamager();
@@ -857,7 +861,8 @@ public class Listeners implements Listener {
                                 temp.setShooter(shooter);
                             }
                         }, i);
-                    } catch (Exception er) { }
+                    } catch (Exception er) {
+                    }
             else if (e.getBow().getItemMeta().getLore().contains("Bazooka"))
                 for (int i = 0; i < 63; i++) {
                     Arrow temp = (Arrow) e.getEntity().getWorld().spawnEntity(l, EntityType.ARROW);
@@ -881,7 +886,7 @@ public class Listeners implements Listener {
         Player player = e.getPlayer();
         final UUID uuid = player.getUniqueId();
         String m = e.getMessage();
-        if(m.endsWith(">") && ! m.equals(">")) {
+        if (m.endsWith(">") && !m.equals(">")) {
             String appended = u.getAppended() + " " + m.substring(0, m.length() - 1);
             u.setAppended(appended.trim());
             player.sendMessage(ChatColor.GREEN + "Message appended.");
@@ -1008,7 +1013,8 @@ public class Listeners implements Listener {
                 PluginCommand pc = null;
                 try {
                     pc = Bukkit.getPluginCommand(e.getMessage().split(" ")[0].replaceFirst("/", ""));
-                } catch (Exception er) {}//Invalid command
+                } catch (Exception er) {
+                }//Invalid command
                 if (pc != null && !pc.testPermissionSilent(player)) {
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have permission to perform this command.");
                     e.setCancelled(true);
@@ -1047,7 +1053,8 @@ public class Listeners implements Listener {
                         u.respawnHat();
                     }
                 });
-            } catch (Exception er) { }
+            } catch (Exception er) {
+            }
             if (!Necessities.getInstance().isProtocolLibLoaded())
                 for (User m : um.getUsers().values())
                     m.updateListName();
@@ -1162,7 +1169,8 @@ public class Listeners implements Listener {
                                 inv.clear(0);
                             }
                         });
-                    } catch (Exception er) { }
+                    } catch (Exception er) {
+                    }
                 }
             }
         }
@@ -1246,7 +1254,7 @@ public class Listeners implements Listener {
     }
 
     @EventHandler
-     public void onPickupItem(PlayerPickupItemEvent e) {
+    public void onPickupItem(PlayerPickupItemEvent e) {
         if (hide.isHidden(e.getPlayer()))
             e.setCancelled(true);
     }
@@ -1271,7 +1279,7 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onVehicleDamage(VehicleDamageEvent e) {
-        if(e.getAttacker() instanceof Player) {
+        if (e.getAttacker() instanceof Player) {
             Player player = (Player) e.getAttacker();
             User u = um.getUser(player.getUniqueId());
             YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);

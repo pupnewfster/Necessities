@@ -38,7 +38,7 @@ public class CmdPrices {
 
     public double getCost(String cmd) {
         String costPerUnit = cost(cmd.toUpperCase());
-        return costPerUnit == null ?  -1.00 : Double.parseDouble(costPerUnit);
+        return costPerUnit == null ? -1.00 : Double.parseDouble(costPerUnit);
     }
 
     public void upList() {
@@ -68,7 +68,8 @@ public class CmdPrices {
         configPrices.set("commands" + cmd, rank + " " + price);
         try {
             configPrices.save(configFilePrices);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         upList();
     }
 
@@ -79,7 +80,8 @@ public class CmdPrices {
             configPrices.set("commands." + cmd, null);
         try {
             configPrices.save(configFilePrices);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         upList();
     }
 

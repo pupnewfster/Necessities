@@ -94,7 +94,8 @@ public class UserManager {
         configUsers.set(player.getUniqueId().toString() + ".power", 0);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     public void updateUserRank(User u, UUID uuid, Rank r) {
@@ -104,7 +105,8 @@ public class UserManager {
         configUsers.set(uuid.toString() + ".rank", r.getName());
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         u.updateRank(r);
     }
 
@@ -131,7 +133,8 @@ public class UserManager {
         }
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     public void updateUserSubrank(UUID uuid, String name, boolean remove) {
@@ -150,7 +153,8 @@ public class UserManager {
         configUsers.set(uuid.toString() + ".subranks", subranks);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         if (players.containsKey(uuid))
             getUser(uuid).refreshPerms();
     }

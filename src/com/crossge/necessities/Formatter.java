@@ -7,7 +7,8 @@ public class Formatter {
         try {
             Double.parseDouble(input);
             return true;
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         return false;
     }
 
