@@ -950,7 +950,7 @@ public class Listeners implements Listener {
             if (!e.getRecipients().isEmpty()) {
                 ArrayList<Player> toRem = new ArrayList<>();
                 for (Player recip : e.getRecipients())
-                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (isop && !recip.hasPermission("Necessities.opBroadcast")) || (isop && !recip.hasPermission("Necessities.slack"))
+                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (isop && !recip.hasPermission("Necessities.opBroadcast")) || (u.slackChat() && !recip.hasPermission("Necessities.slack"))
                             || (u.guildChat() && u.getGuild() != null && u.getGuild() != um.getUser(recip.getUniqueId()).getGuild()))
                         toRem.add(recip);
                 for (Player recip : toRem)
