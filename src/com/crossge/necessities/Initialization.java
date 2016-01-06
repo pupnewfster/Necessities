@@ -89,7 +89,6 @@ public class Initialization {
         cs.init();
         hide.init();
         warns.initiate();
-        ai.initiate();
 
         //Guilds
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
@@ -107,6 +106,7 @@ public class Initialization {
         }
 
         slack.init();
+        ai.initiate();
     }
 
     private void dirCreate(String directory) {

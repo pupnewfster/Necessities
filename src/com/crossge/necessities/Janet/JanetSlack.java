@@ -363,8 +363,7 @@ public class JanetSlack {
                         else if (u.isAfk())
                             online.put(u.getRank(), online.containsKey(u.getRank()) ? online.get(u.getRank()) + "[AFK]" + u.getPlayer().getDisplayName() + ", " : "[AFK]" + u.getPlayer().getDisplayName() + ", ");
                         else if (hide.isHidden(u.getPlayer()))
-                            online.put(u.getRank(), online.containsKey(u.getRank()) ? online.get(u.getRank()) + "[HIDDEN]" + u.getPlayer().getDisplayName() + ", " :
-                                    "[HIDDEN]" + u.getPlayer().getDisplayName() + ", ");
+                            online.put(u.getRank(), online.containsKey(u.getRank()) ? online.get(u.getRank()) + "[HIDDEN]" + u.getPlayer().getDisplayName() + ", " : "[HIDDEN]" + u.getPlayer().getDisplayName() + ", ");
                         else
                             online.put(u.getRank(), online.containsKey(u.getRank()) ? online.get(u.getRank()) + u.getPlayer().getDisplayName() + ", " : u.getPlayer().getDisplayName() + ", ");
                 m += "There " + (numbOnline == 1 ? "is " : "are ") + numbOnline + " out of a maximum " + Bukkit.getMaxPlayers() + " players online.\n";
@@ -705,12 +704,12 @@ public class JanetSlack {
                 Bukkit.broadcastMessage(var.getMessages() + name + " unbanned " + theirIP + ".");
                 m += name + " unbanned " + theirIP + ".\n";
             } else {
-                Bukkit.broadcast(var.getMessages() + "To Slack - " + ChatColor.WHITE + name + ": " + message, "Necessities.slack");
+                Bukkit.broadcast(var.getMessages() + "From Slack - " + ChatColor.WHITE + name + ": " + message, "Necessities.slack");
                 return;
             }
             sendMessage(m);
         } else
-            Bukkit.broadcast(var.getMessages() + "To Slack - " + ChatColor.WHITE + name + ": " + message, "Necessities.slack");
+            Bukkit.broadcast(var.getMessages() + "From Slack - " + ChatColor.WHITE + name + ": " + message, "Necessities.slack");
     }
 
     private class SlackUser {

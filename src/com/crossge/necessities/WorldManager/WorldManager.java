@@ -54,6 +54,8 @@ public class WorldManager {
                 return GameMode.ADVENTURE;
             if (gamemode.equalsIgnoreCase("creative"))
                 return GameMode.CREATIVE;
+            if (gamemode.equalsIgnoreCase("spectator"))
+                return GameMode.SPECTATOR;
         }
         return GameMode.SURVIVAL;
     }
@@ -224,8 +226,7 @@ public class WorldManager {
     }
 
     public boolean worldUnloaded(String name) {
-        YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
-        return !worldExists(name) && configWM.contains(name);
+        return !worldExists(name) && YamlConfiguration.loadConfiguration(configFileWM).contains(name);
     }
 
     public boolean worldExists(String name) {
