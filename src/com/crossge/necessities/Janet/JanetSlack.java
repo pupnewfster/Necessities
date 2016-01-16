@@ -249,7 +249,6 @@ public class JanetSlack {
         } catch (Exception e) {
         }
         setUserChannels();
-        sendPost("https://slack.com/api/users.setPresence?token=" + token + "&presence=auto&pretty=1");
         historyReader = new BukkitRunnable() {
             @Override
             public void run() {
@@ -261,6 +260,7 @@ public class JanetSlack {
         keepAlive = new BukkitRunnable() {
             @Override
             public void run() {
+                sendPost("https://slack.com/api/users.setPresence?token=" + token + "&presence=auto&pretty=1");
                 sendPost("https://slack.com/api/users.setActive?token=" + token + "&pretty=1");
             }
         };
@@ -331,6 +331,7 @@ public class JanetSlack {
         temp.add("!slap <name> ~ Slaps <name> sky high.");
         temp.add("!mute <name> ~ Mutes and unmutes <name>.");
         temp.add("!showchat ~ Toggles showing the in game chat. (Only available in private messages)");
+        temp.add("!tps ~ Shows the ingame ticks per second, and memory usage.");
         helpLists.put(1, (ArrayList<String>) temp.clone());//Admin
         helpLists.put(2, (ArrayList<String>) temp.clone());//Owner
         helpLists.put(3, (ArrayList<String>) temp.clone());//Primary owner
@@ -807,6 +808,14 @@ public class JanetSlack {
                 bans.pardon(theirIP);
                 Bukkit.broadcastMessage(var.getMessages() + name + " unbanned " + theirIP + ".");
                 m += name + " unbanned " + theirIP + ".\n";
+            } else if (message.startsWith("!tps")) {
+                m += form.getTPS() + "\n";
+                int mb = 1024 * 1024;
+                Runtime runtime = Runtime.getRuntime();
+                m += "Max Memory: " + runtime.maxMemory() / mb + " mb.\n";
+                m += "Total Memory: " + runtime.totalMemory() / mb + " mb.\n";
+                m += "Free Memory: " + runtime.freeMemory() / mb + " mb.\n";
+                m += "Used Memory: " + (runtime.totalMemory() - runtime.freeMemory()) / mb + " mb.\n";
             } else if ((message.startsWith("!showchat") || message.startsWith("!togglechat") || message.startsWith("!showingamechat") || message.startsWith("!ingamechat")) && info.isAdmin()) {
                 if (!isPM)
                     m += "Error: You must pm me to be able to view in game chat.\n";

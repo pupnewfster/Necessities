@@ -1010,6 +1010,8 @@ public class Listeners implements Listener {
             u.setLastAction(System.currentTimeMillis());
             if (u.isAfk() && !message.startsWith("/afk") && !message.startsWith("/away"))
                 u.setAfk(false);
+            if (e.getMessage().startsWith("/tps"))
+                e.setMessage(e.getMessage().replaceFirst("tps", "necessities:tps"));
             YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
             if (config.contains("Necessities.customDeny") && config.getBoolean("Necessities.customDeny")) {
                 PluginCommand pc = null;
@@ -1032,6 +1034,8 @@ public class Listeners implements Listener {
         e.setCommand(ChatColor.translateAlternateColorCodes('&', e.getCommand()));
         spy.broadcast(console.getName().replaceAll(":", "") + ChatColor.AQUA, e.getCommand());
         bot.logConsole(e.getCommand());
+        if (e.getCommand().startsWith("tps"))
+            e.setCommand("necessities:" + e.getCommand());
     }
 
     @EventHandler

@@ -457,8 +457,6 @@ public class Necessities extends JavaPlugin {
             com = new CmdSpawnmob();
         else if (isEqual(name, "ignore"))
             com = new CmdIgnore();
-        else if (isEqual(name, "ignore"))
-            com = new CmdIgnore();
         else if (isEqual(name, "msg"))
             com = new CmdMsg();
         else if (isEqual(name, "reply"))
@@ -515,6 +513,8 @@ public class Necessities extends JavaPlugin {
             com = new CmdBazooka();
         else if (isEqual(name, "wrench"))
             com = new CmdWrench();
+        else if (isEqual(name, "tps"))
+            com = new CmdTps();
             //Economy
         else if (isEqual(name, "bal"))
             com = new CmdBalance();
