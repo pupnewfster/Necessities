@@ -816,6 +816,10 @@ public class JanetSlack {
                 m += "Total Memory: " + runtime.totalMemory() / mb + " mb.\n";
                 m += "Free Memory: " + runtime.freeMemory() / mb + " mb.\n";
                 m += "Used Memory: " + (runtime.totalMemory() - runtime.freeMemory()) / mb + " mb.\n";
+                for (World w : Bukkit.getWorlds()) {
+                    m += "World: " + w.getName() + "\n";
+                    m += "    Entities Loaded: " + w.getEntities().size() + "\n";
+                }
             } else if ((message.startsWith("!showchat") || message.startsWith("!togglechat") || message.startsWith("!showingamechat") || message.startsWith("!ingamechat")) && info.isAdmin()) {
                 if (!isPM)
                     m += "Error: You must pm me to be able to view in game chat.\n";
