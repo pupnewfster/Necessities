@@ -52,10 +52,13 @@ public class CmdTpaccept extends Cmd {
             tps.removeRequestFrom(p.getUniqueId(), uuid);
             target.sendMessage(var.getObj() + p.getName() + var.getMessages() + " accepted your teleport request");
             p.sendMessage(var.getMessages() + "Teleport request accepted.");
-            if (type.equals("toMe"))
+            if (type.equals("toMe")) {
+                u.setTpaing(true);
                 u.teleport(self);
-            else if (type.equals("toThem"))
+            } else if (type.equals("toThem")) {
+                self.setTpaing(true);
                 self.teleport(u);
+            }
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot teleport so are unable to get teleport requests.");
         return true;

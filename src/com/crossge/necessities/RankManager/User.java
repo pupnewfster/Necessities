@@ -30,7 +30,7 @@ import java.util.*;
 public class User {
     private File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml"), configFileUsers = new File("plugins/Necessities/RankManager", "users.yml"),
             configFile = new File("plugins/Necessities", "config.yml");
-    private boolean teleporting = false, jailed = false, opChat = false, afk = false, isbacking = false, god = false, muted = false, autoClaiming = false, guildChat = false, slackChat = false;
+    private boolean teleporting = false, jailed = false, opChat = false, afk = false, istpaing = false, god = false, muted = false, autoClaiming = false, guildChat = false, slackChat = false;
     private ArrayList<String> permissions = new ArrayList<>(), subranks = new ArrayList<>();
     private long lastAction = 0, lastAFK = 0, lastRequest = 0, login = 0;
     private int pastTotal = 0, lastActionTask = 0, afkTask = 0;
@@ -239,18 +239,38 @@ public class User {
     }
 
     public void teleport(final User toTpTo) {
-        Variables var = new Variables();
+        final YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        final Variables var = new Variables();
+        final BalChecks bal = new BalChecks();
         this.teleporting = true;
         if (this.rank.getTpDelay() == 0) {
+            if (isTpaing()) {
+                if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand")) {
+                    Formatter form = new Formatter();
+                    double price = Double.parseDouble(bal.bal(getUUID())) * .02;
+                    bal.removeMoney(getUUID(), price);
+                    getPlayer().sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() + " was removed from your account.");
+                }
+                setTpaing(false);
+            }
             getPlayer().teleport(toTpTo.getPlayer());
+            tpSuccess();
             return;
         }
-        this.bukkitPlayer.sendMessage(var.getMessages() + "Teleportation will begin in " + ChatColor.RED + this.rank.getTpDelay() + var.getMessages() +
-                " seconds, don't move.");
+        this.bukkitPlayer.sendMessage(var.getMessages() + "Teleportation will begin in " + ChatColor.RED + this.rank.getTpDelay() + var.getMessages() + " seconds, don't move.");
         Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
             @Override
             public void run() {
                 if (toTpTo.getPlayer() != null && getPlayer() != null && isTeleporting()) {
+                    if (isTpaing()) {
+                        if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand")) {
+                            Formatter form = new Formatter();
+                            double price = Double.parseDouble(bal.bal(getUUID())) * .02;
+                            bal.removeMoney(getUUID(), price);
+                            getPlayer().sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() + " was removed from your account.");
+                        }
+                        setTpaing(false);
+                    }
                     getPlayer().teleport(toTpTo.getPlayer());
                     tpSuccess();
                 }
@@ -261,7 +281,7 @@ public class User {
     public void cancelTp() {
         Variables var = new Variables();
         this.teleporting = false;
-        this.isbacking = false;
+        setTpaing(false);
         getPlayer().sendMessage(var.getMessages() + "Teleportation canceled.");
     }
 
@@ -272,38 +292,18 @@ public class User {
     }
 
     public void teleport(final Location l) {
-        final YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        final Variables var = new Variables();
-        final BalChecks bal = new BalChecks();
+        Variables var = new Variables();
+        this.teleporting = true;
         if (this.rank.getTpDelay() == 0) {
-            if (isBacking()) {
-                if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand")) {
-                    Formatter form = new Formatter();
-                    double price = Double.parseDouble(bal.bal(this.userUUID)) * .07;
-                    bal.removeMoney(this.userUUID, price);
-                    this.bukkitPlayer.sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() +
-                            " was removed from your acount.");
-                }
-                setBacking(false);
-            }
-            this.bukkitPlayer.teleport(l);
+            getPlayer().teleport(l);
+            tpSuccess();
             return;
         }
-        this.teleporting = true;
         this.bukkitPlayer.sendMessage(var.getMessages() + "Teleportation will begin in " + ChatColor.RED + this.rank.getTpDelay() + var.getMessages() + " seconds, don't move.");
         Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
             @Override
             public void run() {
                 if (getPlayer() != null && isTeleporting()) {
-                    if (isBacking()) {
-                        if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand")) {
-                            Formatter form = new Formatter();
-                            double price = Double.parseDouble(bal.bal(getUUID())) * .07;
-                            bal.removeMoney(getUUID(), price);
-                            getPlayer().sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() + " was removed from your acount.");
-                        }
-                        setBacking(false);
-                    }
                     getPlayer().teleport(l);
                     tpSuccess();
                 }
@@ -311,12 +311,12 @@ public class User {
         }, 20 * this.rank.getTpDelay());
     }
 
-    public boolean isBacking() {
-        return this.isbacking;
+    public boolean isTpaing() {
+        return this.istpaing;
     }
 
-    public void setBacking(boolean back) {
-        this.isbacking = back;
+    public void setTpaing(boolean tpaing) {
+        this.istpaing = tpaing;
     }
 
     public long getLastAction() {

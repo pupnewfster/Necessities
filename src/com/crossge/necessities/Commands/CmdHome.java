@@ -30,6 +30,10 @@ public class CmdHome extends Cmd {
                 return true;
             }
             if (args[0].contains(":") && p.hasPermission("Necessities.homeothers")) {
+                if (args[0].equals(":")) {
+                    p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a player.");
+                    return true;
+                }
                 String[] info = args[0].replaceAll("&", "").replaceAll("\\.", "").split(":");
                 String targetName = info[0];
                 UUID uuid = get.getID(targetName);
