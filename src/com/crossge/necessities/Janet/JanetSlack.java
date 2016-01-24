@@ -264,7 +264,7 @@ public class JanetSlack {
                 sendPost("https://slack.com/api/users.setActive?token=" + token + "&pretty=1");
             }
         };
-        keepAlive.runTaskTimerAsynchronously(Necessities.getInstance(), 0, 30 * 60 * 20);//Every thirty minutes force it to show that janet is still alive
+        keepAlive.runTaskTimerAsynchronously(Necessities.getInstance(), 0, 25 * 60 * 20);//Every 25 minutes force it to show that janet is still alive
         setHelp();
         sendMessage("Connected.");
         isConnected = true;
@@ -735,7 +735,7 @@ public class JanetSlack {
                 Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + " for " + var.getObj() + minutes + var.getMessages() +
                         " " + (minutes == 1 ? "minute" : "minutes") + (reason.equals("") ? "." : " for the reason " + var.getObj() + reason + var.getMessages() + "."));
                 m += name + " banned " + theirName + " for " + minutes + " " + (minutes == 1 ? "minute" : "minutes") + (reason.equals("") ? "." : " for the reason " + reason + ".") + "\n";
-            } else if (message.startsWith("!banip ") && info.isAdmin()) {//TODO
+            } else if (message.startsWith("!banip ") && info.isAdmin()) {
                 message = message.replaceFirst("!banip ", "");
                 if (message.split(" ").length == 0) {
                     sendMessage("Error: You must enter an ip to ban.", isPM, info);

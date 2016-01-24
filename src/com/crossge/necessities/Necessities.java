@@ -89,7 +89,7 @@ public class Necessities extends JavaPlugin {
         return getInstance().googleAnalyticsTracker;
     }
 
-    private IChatBaseComponent getDisplayName(String message) {
+    private IChatBaseComponent formatMessage(String message) {
         return IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
     }
 
@@ -103,7 +103,7 @@ public class Necessities extends JavaPlugin {
     public void addPlayer(Player p) {
         EntityPlayer ep = ((CraftPlayer) p).getHandle();
         User u = um.getUser(p.getUniqueId());
-        ep.listName = getDisplayName(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ") + p.getDisplayName());
+        ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ") + p.getDisplayName());
         PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ep);
         for (Player x : Bukkit.getOnlinePlayers())
             if (!x.hasPermission("Necessities.seehidden") && x.canSee(p) && !x.equals(p))
@@ -113,7 +113,7 @@ public class Necessities extends JavaPlugin {
     public void updateName(Player p) {
         EntityPlayer ep = ((CraftPlayer) p).getHandle();
         User u = um.getUser(p.getUniqueId());
-        ep.listName = getDisplayName(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ") + p.getDisplayName());
+        ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ") + p.getDisplayName());
         PacketPlayOutPlayerInfo tabList = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, ep);
         for (Player x : Bukkit.getOnlinePlayers())
             ((CraftPlayer)x).getHandle().playerConnection.sendPacket(tabList);
@@ -124,7 +124,7 @@ public class Necessities extends JavaPlugin {
         for (Player p : Bukkit.getOnlinePlayers()) {
             EntityPlayer ep = ((CraftPlayer) p).getHandle();
             User u = um.getUser(p.getUniqueId());
-            ep.listName = getDisplayName(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ") + p.getDisplayName());
+            ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ") + p.getDisplayName());
             players.add(ep);
         }
         ((CraftPlayer)x).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, players));
@@ -140,17 +140,17 @@ public class Necessities extends JavaPlugin {
         WorldServer world = server.getWorldServer(0);
         PlayerInteractManager manager = new PlayerInteractManager(world);
         EntityPlayer player = new EntityPlayer(server, world, janetProfile, manager);
-        player.listName = getDisplayName(ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") + "Janet");
+        player.listName = formatMessage(ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") + "Janet");
         PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, player);
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(info);
     }
 
     public void addHeader(Player p) {
-        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter(getDisplayName(ChatColor.GREEN + "GamezGalaxy"));
+        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter(formatMessage(ChatColor.GREEN + "GamezGalaxy"));
         try {
             Field field = packet.getClass().getDeclaredField("b");
             field.setAccessible(true);
-            field.set(packet, getDisplayName(ChatColor.BLUE + "http://gamezgalaxy.com"));
+            field.set(packet, formatMessage(ChatColor.BLUE + "http://gamezgalaxy.com"));
         } catch (Exception e) {
             e.printStackTrace();
         }
