@@ -207,9 +207,6 @@ public class Listeners implements Listener {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds"))
             power.addPlayer(p);
-        if (!Necessities.getInstance().isProtocolLibLoaded())
-            for (User m : um.getUsers().values())
-                m.updateListName();
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
             @Override
             public void run() {
@@ -222,7 +219,6 @@ public class Listeners implements Listener {
                 }
                 Necessities.getInstance().addHeader(p);
                 Necessities.getInstance().addJanet(p);
-                Necessities.getInstance().refreshJanet(p);
                 Necessities.getInstance().updateAll(p);
                 u.updateListName();
                 File f = new File("plugins/Necessities/motd.txt");
@@ -693,11 +689,8 @@ public class Listeners implements Listener {
                 }
             }
         }
-        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (e.getClickedBlock().getType().equals(Material.CHEST) || e.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) && hide.isHidden(e.getPlayer())) {
-            e.setCancelled(true);
-            u.setInvLoc(e.getClickedBlock().getLocation());
+        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (e.getClickedBlock().getType().equals(Material.CHEST) || e.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) && hide.isHidden(e.getPlayer()))
             e.getPlayer().openInventory(((InventoryHolder) e.getClickedBlock().getState()).getInventory());
-        }
     }
 
     private ArrayList<String> getLore(Inventory inv) {
@@ -1061,10 +1054,6 @@ public class Listeners implements Listener {
                 });
             } catch (Exception er) {
             }
-            if (!Necessities.getInstance().isProtocolLibLoaded())
-                for (User m : um.getUsers().values())
-                    m.updateListName();
-
         } else {
             Hat h = u.getHat();
             if (h != null) {
@@ -1252,8 +1241,6 @@ public class Listeners implements Listener {
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent e) {
         User u = um.getUser(e.getPlayer().getUniqueId());
-        if (e.getInventory() instanceof PlayerInventory)
-            u.setInvLoc(null);
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);

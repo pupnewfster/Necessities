@@ -2,36 +2,28 @@ package com.crossge.necessities;
 
 import com.TentacleLabs.GoogleAnalyticsPlugin.GoogleAnalyticsPlugin;
 import com.TentacleLabs.GoogleAnalyticsPlugin.Tracker;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.reflect.StructureModifier;
-import com.comphenix.protocol.wrappers.*;
 import com.crossge.necessities.Commands.*;
 import com.crossge.necessities.Commands.Economy.*;
 import com.crossge.necessities.Commands.Guilds.CmdGuild;
 import com.crossge.necessities.Commands.RankManager.*;
 import com.crossge.necessities.Commands.WorldManager.*;
-import com.crossge.necessities.Economy.BalChecks;
+import com.crossge.necessities.Economy.VaultEconomy;
 import com.crossge.necessities.Guilds.PowerManager;
 import com.crossge.necessities.Janet.Janet;
 import com.crossge.necessities.Janet.JanetSlack;
 import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import net.milkbowl.vault.economy.Economy;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,7 +31,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -48,20 +42,15 @@ public class Necessities extends JavaPlugin {
     private static Necessities INSTANCE;
     private final List<String> devs = Arrays.asList("pupnewfster", "Mod_Chris", "hypereddie10");
     private File configFile = new File("plugins/Necessities", "config.yml");
-    private ProtocolManager protocolManager = null;
     private Tracker googleAnalyticsTracker;
-    private WrappedSignedProperty skin;
     private UUID janetID;
+    private Property skin;
     DonationReader dr = new DonationReader();
     UserManager um = new UserManager();
     RankManager rm = new RankManager();
 
     public static Necessities getInstance() {
         return INSTANCE;
-    }
-
-    public boolean isProtocolLibLoaded() {
-        return getServer().getPluginManager().getPlugin("ProtocolLib") != null && this.protocolManager != null;
     }
 
     @Override
@@ -73,17 +62,12 @@ public class Necessities extends JavaPlugin {
             getLogger().warning("Could not hook into Google Analytics!");
 
         janetID = UUID.randomUUID();
-        if (getServer().getPluginManager().getPlugin("ProtocolLib") != null)
-            try {
-                this.protocolManager = ProtocolLibrary.getProtocolManager();
-                addPacketListener();
-            } catch (Exception e) {
-            }//Not using protocollib
         Initialization init = new Initialization();
         init.initiateFiles();
         getServer().getPluginManager().registerEvents(new Listeners(), this);
 
-        Bukkit.getServicesManager().register(Economy.class, new BalChecks(), Bukkit.getPluginManager().getPlugin("Vault"), ServicePriority.Normal);
+        if (Bukkit.getPluginManager().getPlugin("Vault") != null)
+            Bukkit.getServicesManager().register(Economy.class, new VaultEconomy(), Bukkit.getPluginManager().getPlugin("Vault"), ServicePriority.Normal);
 
         dr.init();
         getLogger().info("Necessities enabled.");
@@ -105,184 +89,75 @@ public class Necessities extends JavaPlugin {
         return getInstance().googleAnalyticsTracker;
     }
 
-    private void addPacketListener() {
-        final CmdHide hide = new CmdHide();
-        this.protocolManager.addPacketListener(new PacketAdapter(this, PacketType.Play.Server.BLOCK_ACTION, PacketType.Play.Server.NAMED_SOUND_EFFECT) {
-            @Override
-            public void onPacketSending(PacketEvent event) {
-                PacketType type = event.getPacketType();
-                if (type == PacketType.Play.Server.BLOCK_ACTION) {
-                    BlockPosition pos = event.getPacket().getBlockPositionModifier().read(0);
-                    Block b = event.getPlayer().getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ());
-                    if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST) {
-                        Block n = b.getRelative(BlockFace.NORTH);
-                        Block e = b.getRelative(BlockFace.EAST);
-                        Block s = b.getRelative(BlockFace.SOUTH);
-                        Block w = b.getRelative(BlockFace.WEST);
-                        for (User u : um.getUsers().values()) {
-                            Location loc = u.getInvLoc();
-                            if (loc != null && hide.isHidden(u.getPlayer()))
-                                if (b.getLocation().equals(loc) || (n.getLocation().equals(loc) && n.getType().equals(b.getType())) || (e.getLocation().equals(loc) && e.getType().equals(b.getType())) ||
-                                        (s.getLocation().equals(loc) && s.getType().equals(b.getType())) || (w.getLocation().equals(loc) && w.getType().equals(b.getType()))) {
-                                    event.setCancelled(true);
-                                    break;
-                                }
-                        }
-                    }
-                } else if (type == PacketType.Play.Server.NAMED_SOUND_EFFECT) {
-                    String soundEffectName = event.getPacket().getSpecificModifier(String.class).read(0);
-                    if (soundEffectName.contains("chest")) {
-                        Block b = event.getPlayer().getWorld().getBlockAt(event.getPacket().getIntegers().read(0) / 8, event.getPacket().getIntegers().read(1) / 8, event.getPacket().getIntegers().read(2) / 8);
-                        if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST) {
-                            Block n = b.getRelative(BlockFace.NORTH);
-                            Block e = b.getRelative(BlockFace.EAST);
-                            Block s = b.getRelative(BlockFace.SOUTH);
-                            Block w = b.getRelative(BlockFace.WEST);
-                            for (User u : um.getUsers().values()) {
-                                Location loc = u.getInvLoc();
-                                if (loc != null && hide.isHidden(u.getPlayer()))
-                                    if (b.getLocation().equals(loc) || (n.getLocation().equals(loc) && n.getType().equals(b.getType())) || (e.getLocation().equals(loc) && e.getType().equals(b.getType())) ||
-                                            (s.getLocation().equals(loc) && s.getType().equals(b.getType())) || (w.getLocation().equals(loc) && w.getType().equals(b.getType()))) {
-                                        event.setCancelled(true);
-                                        break;
-                                    }
-                            }
-                        }
-                    }
-                }
-            }
-        });
+    private IChatBaseComponent getDisplayName(String message) {
+        return IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
     }
 
     public void removePlayer(Player p) {
-        if (isProtocolLibLoaded())
-            try {
-                PacketContainer tabList = this.protocolManager.createPacket(PacketType.Play.Server.PLAYER_INFO, true);
-                StructureModifier<List<PlayerInfoData>> infoData = tabList.getPlayerInfoDataLists();
-                StructureModifier<EnumWrappers.PlayerInfoAction> infoAction = tabList.getPlayerInfoAction();
-                List<PlayerInfoData> playerInfo = infoData.read(0);
-                playerInfo.add(new PlayerInfoData(WrappedGameProfile.fromPlayer(p), 0, EnumWrappers.NativeGameMode.fromBukkit(p.getGameMode()), WrappedChatComponent.fromText(p.getName())));
-                infoData.write(0, playerInfo);
-                infoAction.write(0, EnumWrappers.PlayerInfoAction.REMOVE_PLAYER);
-                for (Player x : Bukkit.getOnlinePlayers())
-                    if (!x.canSee(p) && !x.equals(p))
-                        this.protocolManager.sendServerPacket(x, tabList);
-            } catch (Exception e) {
-            }
+        PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer) p).getHandle());
+        for (Player x : Bukkit.getOnlinePlayers())
+            if (!x.canSee(p) && !x.equals(p))
+                ((CraftPlayer) x).getHandle().playerConnection.sendPacket(info);
     }
 
     public void addPlayer(Player p) {
-        if (isProtocolLibLoaded())
-            try {
-                PacketContainer tabList = this.protocolManager.createPacket(PacketType.Play.Server.PLAYER_INFO, true);
-                StructureModifier<List<PlayerInfoData>> infoData = tabList.getPlayerInfoDataLists();
-                StructureModifier<EnumWrappers.PlayerInfoAction> infoAction = tabList.getPlayerInfoAction();
-                List<PlayerInfoData> playerInfo = infoData.read(0);
-                User u = um.getUser(p.getUniqueId());
-                playerInfo.add(new PlayerInfoData(WrappedGameProfile.fromPlayer(p), 0, EnumWrappers.NativeGameMode.fromBukkit(p.getGameMode()),
-                        WrappedChatComponent.fromText((u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ")) + p.getDisplayName())));
-
-                infoData.write(0, playerInfo);
-                infoAction.write(0, EnumWrappers.PlayerInfoAction.ADD_PLAYER);
-                for (Player x : Bukkit.getOnlinePlayers())
-                    if (!x.hasPermission("Necessities.seehidden") && x.canSee(p) && !x.equals(p))
-                        this.protocolManager.sendServerPacket(x, tabList);
-            } catch (Exception e) {
-            }
+        EntityPlayer ep = ((CraftPlayer) p).getHandle();
+        User u = um.getUser(p.getUniqueId());
+        ep.listName = getDisplayName(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ") + p.getDisplayName());
+        PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ep);
+        for (Player x : Bukkit.getOnlinePlayers())
+            if (!x.hasPermission("Necessities.seehidden") && x.canSee(p) && !x.equals(p))
+                ((CraftPlayer) x).getHandle().playerConnection.sendPacket(info);
     }
 
     public void updateName(Player p) {
-        if (isProtocolLibLoaded())
-            try {
-                PacketContainer tabList = this.protocolManager.createPacket(PacketType.Play.Server.PLAYER_INFO, true);
-                StructureModifier<List<PlayerInfoData>> infoData = tabList.getPlayerInfoDataLists();
-                StructureModifier<EnumWrappers.PlayerInfoAction> infoAction = tabList.getPlayerInfoAction();
-                List<PlayerInfoData> playerInfo = infoData.read(0);
-                User u = um.getUser(p.getUniqueId());
-                playerInfo.add(new PlayerInfoData(WrappedGameProfile.fromPlayer(p), 0, EnumWrappers.NativeGameMode.fromBukkit(p.getGameMode()),
-                        WrappedChatComponent.fromText((u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ")) + p.getDisplayName())));
-                infoData.write(0, playerInfo);
-                infoAction.write(0, EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME);
-                for (Player x : Bukkit.getOnlinePlayers())
-                    this.protocolManager.sendServerPacket(x, tabList);
-            } catch (Exception e) {
-            }
+        EntityPlayer ep = ((CraftPlayer) p).getHandle();
+        User u = um.getUser(p.getUniqueId());
+        ep.listName = getDisplayName(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ") + p.getDisplayName());
+        PacketPlayOutPlayerInfo tabList = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, ep);
+        for (Player x : Bukkit.getOnlinePlayers())
+            ((CraftPlayer)x).getHandle().playerConnection.sendPacket(tabList);
     }
 
     public void updateAll(Player x) {
-        if (isProtocolLibLoaded())
-            try {
-                PacketContainer tabList = this.protocolManager.createPacket(PacketType.Play.Server.PLAYER_INFO, true);
-                StructureModifier<List<PlayerInfoData>> infoData = tabList.getPlayerInfoDataLists();
-                StructureModifier<EnumWrappers.PlayerInfoAction> infoAction = tabList.getPlayerInfoAction();
-                List<PlayerInfoData> playerInfo = infoData.read(0);
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    User u = um.getUser(p.getUniqueId());
-                    playerInfo.add(new PlayerInfoData(WrappedGameProfile.fromPlayer(p), 0, EnumWrappers.NativeGameMode.fromBukkit(p.getGameMode()),
-                            WrappedChatComponent.fromText((u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ")) + p.getDisplayName())));
-                }
-                infoData.write(0, playerInfo);
-                infoAction.write(0, EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME);
-                this.protocolManager.sendServerPacket(x, tabList);
-            } catch (Exception e) {
-            }
+        ArrayList<EntityPlayer> players = new ArrayList<>();
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            EntityPlayer ep = ((CraftPlayer) p).getHandle();
+            User u = um.getUser(p.getUniqueId());
+            ep.listName = getDisplayName(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ") + p.getDisplayName());
+            players.add(ep);
+        }
+        ((CraftPlayer)x).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, players));
     }
 
     public void addJanet(Player p) {
-        if (isProtocolLibLoaded())
-            try {
-                PacketContainer tabList = this.protocolManager.createPacket(PacketType.Play.Server.PLAYER_INFO, true);
-                StructureModifier<List<PlayerInfoData>> infoData = tabList.getPlayerInfoDataLists();
-                StructureModifier<EnumWrappers.PlayerInfoAction> infoAction = tabList.getPlayerInfoAction();
-                List<PlayerInfoData> playerInfo = infoData.read(0);
-                WrappedGameProfile janetProfile = new WrappedGameProfile(janetID, "Janet");
-                if (this.skin == null)
-                    this.skin = getSkin();
-                if (this.skin != null)
-                    janetProfile.getProperties().put("textures", this.skin);
-                playerInfo.add(new PlayerInfoData(janetProfile, 0, EnumWrappers.NativeGameMode.CREATIVE,
-                        WrappedChatComponent.fromText(ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") + "Janet")));
-                infoData.write(0, playerInfo);
-                infoAction.write(0, EnumWrappers.PlayerInfoAction.ADD_PLAYER);
-                this.protocolManager.sendServerPacket(p, tabList);
-            } catch (Exception e) {
-            }
-    }
-
-    public void refreshJanet(Player p) {
-        if (isProtocolLibLoaded())
-            try {
-                PacketContainer tabList = this.protocolManager.createPacket(PacketType.Play.Server.PLAYER_INFO, true);
-                StructureModifier<List<PlayerInfoData>> infoData = tabList.getPlayerInfoDataLists();
-                StructureModifier<EnumWrappers.PlayerInfoAction> infoAction = tabList.getPlayerInfoAction();
-                List<PlayerInfoData> playerInfo = infoData.read(0);
-                WrappedGameProfile janetProfile = new WrappedGameProfile(janetID, "Janet");
-                if (this.skin == null)
-                    this.skin = getSkin();
-                if (this.skin != null)
-                    janetProfile.getProperties().put("textures", this.skin);
-                playerInfo.add(new PlayerInfoData(janetProfile, 0, EnumWrappers.NativeGameMode.CREATIVE,
-                        WrappedChatComponent.fromText(ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") + "Janet")));
-                infoData.write(0, playerInfo);
-                infoAction.write(0, EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME);
-                this.protocolManager.sendServerPacket(p, tabList);
-            } catch (Exception e) {
-            }
+        GameProfile janetProfile = new GameProfile(janetID, "Janet");
+        if (this.skin == null)
+            this.skin = getSkin();
+        if (this.skin != null)
+            janetProfile.getProperties().put("textures", this.skin);
+        MinecraftServer server = MinecraftServer.getServer();
+        WorldServer world = server.getWorldServer(0);
+        PlayerInteractManager manager = new PlayerInteractManager(world);
+        EntityPlayer player = new EntityPlayer(server, world, janetProfile, manager);
+        player.listName = getDisplayName(ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") + "Janet");
+        PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, player);
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(info);
     }
 
     public void addHeader(Player p) {
-        if (isProtocolLibLoaded())
-            try {
-                PacketContainer tabList = this.protocolManager.createPacket(PacketType.Play.Server.PLAYER_LIST_HEADER_FOOTER);
-                StructureModifier<WrappedChatComponent> chatStuff = tabList.getChatComponents();
-                chatStuff.write(0, WrappedChatComponent.fromText(ChatColor.GREEN + "GamezGalaxy"));
-                chatStuff.write(1, WrappedChatComponent.fromText(ChatColor.BLUE + "http://gamezgalaxy.com"));
-                this.protocolManager.sendServerPacket(p, tabList);
-            } catch (Exception e) {
-            }
+        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter(getDisplayName(ChatColor.GREEN + "GamezGalaxy"));
+        try {
+            Field field = packet.getClass().getDeclaredField("b");
+            field.setAccessible(true);
+            field.set(packet, getDisplayName(ChatColor.BLUE + "http://gamezgalaxy.com"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
     }
 
-    private WrappedSignedProperty getSkin() {
+    private Property getSkin() {
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://sessionserver.mojang.com/session/minecraft/profile/136f2ba62be3444ca2968ec597edb57e?unsigned=false").openConnection().getInputStream()));
             String value = "", signature = "";
@@ -298,7 +173,7 @@ public class Necessities extends JavaPlugin {
                     break;
             }
             in.close();
-            return new WrappedSignedProperty("textures", value, signature);
+            return new Property("textures", value, signature);
         } catch (Exception ignored) {
         }
         return null;

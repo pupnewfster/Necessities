@@ -178,6 +178,7 @@ public class Initialization {
                 config.set("Necessities.firstTime", "Welcome {NAME}!");
                 config.set("Necessities.firstItems", Arrays.asList(""));
                 config.set("Necessities.DonationPass", "password");
+                config.set("Necessities.DonationServer", 8);
                 config.set("Necessities.SlackToken", "token");
                 config.set("Necessities.SlackChanel", "channel");
                 config.set("Necessities.ChannelID", "channelID");
@@ -223,6 +224,8 @@ public class Initialization {
                 config.set("Necessities.customDeny", false);
             if (!config.contains("Necessities.DonationPass"))
                 config.set("Necessities.DonationPass", "password");
+            if (!config.contains("Necessities.DonationServer"))
+                config.set("Necessities.DonationServer", 8);
             if (!config.contains("Necessities.SlackToken"))
                 config.set("Necessities.SlackToken", "token");
             if (!config.contains("Necessities.SlackChanel"))

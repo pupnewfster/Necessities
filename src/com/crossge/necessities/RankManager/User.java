@@ -37,7 +37,7 @@ public class User {
     private HashMap<String, Location> homes = new HashMap<>();
     private String appended = "", nick = null, lastContact;
     private ArrayList<UUID> ignored = new ArrayList<>();
-    private Location lastPos, right, left, invLoc;
+    private Location lastPos, right, left;
     private PermissionAttachment attachment;
     private Player bukkitPlayer;
     private double power = 0.0;
@@ -463,19 +463,8 @@ public class User {
     public void updateListName() {
         if (this.bukkitPlayer == null)
             return;
-        if (Necessities.getInstance().isProtocolLibLoaded()) {
-            this.bukkitPlayer.setDisplayName(getRank().getColor() + (this.nick == null ? this.bukkitPlayer.getName() : this.nick));
-            Necessities.getInstance().updateName(this.bukkitPlayer);
-            return;
-        }
-        if (this.nick == null) {
-            if (!this.bukkitPlayer.getPlayerListName().equals(this.bukkitPlayer.getName()))
-                this.bukkitPlayer.setPlayerListName(getRank().getColor() + this.bukkitPlayer.getName());
-            return;
-        }
-        String tempNick = getRank().getColor() + this.nick.substring(0, this.nick.length() - 2);
-        if (tempNick.length() <= 16)
-            this.bukkitPlayer.setPlayerListName(tempNick);
+        this.bukkitPlayer.setDisplayName(getRank().getColor() + (this.nick == null ? this.bukkitPlayer.getName() : this.nick));
+        Necessities.getInstance().updateName(this.bukkitPlayer);
     }
 
     public boolean isMuted() {
@@ -778,17 +767,8 @@ public class User {
         this.guildChat = !this.guildChat;
     }
 
-    public void setInvLoc(Location loc) {
-        this.invLoc = loc;
-    }
-
-    public Location getInvLoc() {
-        return this.invLoc;
-    }
-
     public void removePower() {
-        //Disable power loss for GG
-        /*if (this.power - 2 < -20)
+        if (this.power - 2 < -20)
             this.power = -20;
         else
             this.power -= 2;
@@ -800,7 +780,7 @@ public class User {
             configUsers.save(configFileUsers);
         } catch (Exception e) { }
         if (this.guild != null)
-            this.guild.updatePower();*/
+            this.guild.updatePower();
     }
 
     public void addPower() {

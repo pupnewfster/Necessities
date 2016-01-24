@@ -308,14 +308,17 @@ public class JanetSlack {
     }
 
     private void setHelp() {
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         ArrayList<String> temp = new ArrayList<>();
         temp.add("!help <page> ~ View the help messages on <page>.");
         temp.add("!rank ~ Shows you what rank you have.");
         temp.add("!bans ~ Shows you the banlist.");
         temp.add("!whois <name> ~ View information about <name>.");
         temp.add("!who ~ View the online players.");
-        temp.add("!baltop <page> ~ View <page> of baltop.");
-        temp.add("!bal <name> ~ View <name>'s balance.");
+        if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy")) {
+            temp.add("!baltop <page> ~ View <page> of baltop.");
+            temp.add("!bal <name> ~ View <name>'s balance.");
+        }
         temp.add("!devs ~ View the devs.");
         temp.add("!warn <name> <reason> ~ Warn <name> for <reason>.");
         temp.add("!worlds ~ View the loaded worlds.");
@@ -334,6 +337,7 @@ public class JanetSlack {
         temp.add("!tps ~ Shows the ingame ticks per second, and memory usage.");
         temp.add("!reload ~ Reloads the server.");
         temp.add("!restart ~ Restarts the server.");
+        temp.add("!consolecmd <command> ~ Perform a command through the console.");
         helpLists.put(1, (ArrayList<String>) temp.clone());//Admin
         helpLists.put(2, (ArrayList<String>) temp.clone());//Owner
         helpLists.put(3, (ArrayList<String>) temp.clone());//Primary owner
@@ -345,6 +349,7 @@ public class JanetSlack {
             sendMessage("Error: You are restricted or ultra restricted", isPM, info);
             return;
         }
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         final String name = info.getName();
         if (message.startsWith("!")) {
             String m = "";
@@ -408,7 +413,6 @@ public class JanetSlack {
                     }
                 }
                 User u = um.getUser(uuid);
-                YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
                 m += "===== WhoIs: " + u.getName() + " =====\n";
                 if (u.getPlayer() != null)
                     m += " - Nick: " + u.getPlayer().getDisplayName() + "\n";
@@ -485,7 +489,7 @@ public class JanetSlack {
                 for (int i = 0; i < devs.size(); i++)
                     d += (i + 1 >= devs.size() ? "and " + devs.get(i) + "." : devs.get(i) + ", ");
                 m += d + "\n";
-            } else if (message.startsWith("!baltop") || message.startsWith("!moneytop") || message.startsWith("!balancetop")) {
+            } else if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && (message.startsWith("!baltop") || message.startsWith("!moneytop") || message.startsWith("!balancetop"))) {
                 int page = 0;
                 if (message.split(" ").length > 2) {
                     if (!form.isLegal(message.split(" ")[1])) {
@@ -512,7 +516,7 @@ public class JanetSlack {
                     time++;
                     bal = balc.balTop(page, time);
                 }
-            } else if (message.startsWith("!bal ") || message.startsWith("!balance ") || message.startsWith("!money ")) {
+            } else if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && (message.startsWith("!bal ") || message.startsWith("!balance ") || message.startsWith("!money "))) {
                 if (message.split(" ").length == 1) {
                     sendMessage("Error: You must enter a player to view info of.", isPM, info);
                     return;
@@ -837,6 +841,15 @@ public class JanetSlack {
                     @Override
                     public void run() {
                         Bukkit.spigot().restart();
+                    }
+                });
+                return;
+            } else if ((message.startsWith("!consolecmd") || message.startsWith("!ccmd") || message.startsWith("!consolecommand")) && info.isAdmin()) {//TODO Make it show the result to slack
+                final String command = message.replaceFirst(message.split(" ")[0], "").trim();
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+                    @Override
+                    public void run() {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
                     }
                 });
                 return;

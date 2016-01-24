@@ -50,17 +50,17 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.8.8</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>mkremins</groupId>
             <artifactId>fanciful</artifactId>
             <version>0.3.3-SNAPSHOT</version>
 			<scope>provided</scope>
         </dependency>
-		<dependency>
-			<groupId>com.comphenix.protocol</groupId>
-			<artifactId>ProtocolLib</artifactId>
-			<version>3.6.4</version>
-			<scope>provided</scope>
-		</dependency>
 		<dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
