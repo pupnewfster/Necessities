@@ -12,7 +12,7 @@ public class CmdSetPrice extends EconomyCmd {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (args.length == 2) {
-                String itemName = player.getItemInHand().getType().name();
+                String itemName = player.getInventory().getItemInMainHand().getType().name();
                 if (!form.isLegal(args[0]) && !args[0].equalsIgnoreCase("null")) {
                     sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a the price you want to set the item at.");
                     return true;

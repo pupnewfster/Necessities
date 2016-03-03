@@ -31,8 +31,8 @@ public class CmdSell extends EconomyCmd {
                 if (form.isLegal(itemName))
                     itemName = mat.idToName(Integer.parseInt(itemName));
                 else if (itemName.equalsIgnoreCase("hand")) {
-                    itemName = player.getItemInHand().getType().name();
-                    data = player.getItemInHand().getDurability();
+                    itemName = inventory.getItemInMainHand().getType().name();
+                    data = inventory.getItemInMainHand().getDurability();
                 }
                 if (!form.isLegal(args[1])) {
                     if (!args[1].equalsIgnoreCase("all")) {
@@ -43,8 +43,8 @@ public class CmdSell extends EconomyCmd {
                 } else
                     amount = Integer.parseInt(args[1]);
             } else {
-                itemName = player.getItemInHand().getType().name();
-                data = player.getItemInHand().getDurability();
+                itemName = inventory.getItemInMainHand().getType().name();
+                data = inventory.getItemInMainHand().getDurability();
                 if (!form.isLegal(args[0])) {
                     if (!args[0].equalsIgnoreCase("all")) {
                         sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a the amount you want to sell.");

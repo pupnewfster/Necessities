@@ -181,6 +181,12 @@ public class MaterialNames {
         configNames.set("RECORD_11", Arrays.asList("11", "MUSICDISC11", "MUSIC11", "C41811"));
         configNames.set("RECORD_12", Arrays.asList("WAIT", "MUSICDISCWAIT", "MUSICWAIT", "C418WAIT"));
         configNames.set("STONE_SLAB2", Arrays.asList("REDSANDSTONESLAB"));
+        configNames.set("END_BRICKS", Arrays.asList("ENDSTONEBRICKS", "ENDERSTONEBRICKS"));
+        configNames.set("CHORUS_FRUIT_POPPED", Arrays.asList("POPPEDCHORUSFRUIT"));
+        configNames.set("ELYTRA", Arrays.asList("WING"));
+        configNames.set("END_CRYSTAL", Arrays.asList("ENDERCRYSTAL"));
+        configNames.set("COMMAND_REPEATING", Arrays.asList("REPEATINGCOMMANDBLOCK", "COMMANDBLOCKREPEATING", "REPEATINGCOMMAND"));
+        configNames.set("COMMAND_CHAIN", Arrays.asList("CHAINCOMMANDBLOCK", "CHAINCOMMAND", "COMMANDBLOCKCHAIN"));
         try {
             configNames.save(configFileNames);
         } catch (Exception e) {
@@ -328,6 +334,12 @@ public class MaterialNames {
         configFriendlyNames.set("SEEDS", "SEED");
         configFriendlyNames.set("STONE_SLAB2", "RED SANDSTONE SLAB");
         configFriendlyNames.set("RED_SANDSTONE_STAIRS", "RED SANDSTONE STAIR");
+        configFriendlyNames.set("END_BRICKS", "END STONE BRICK");
+        configFriendlyNames.set("CHORUS_FRUIT_POPPED", "POPPED CHORUS FRUIT");
+        configFriendlyNames.set("COMMAND_REPEATING", "REPEATING COMMAND BLOCK");
+        configFriendlyNames.set("COMMAND_CHAIN", "CHAIN COMMAND BLOCK");
+        configFriendlyNames.set("BEETROOT_SEEDS", "BEETROOT SEED");
+        configFriendlyNames.set("PURPUR_STAIRS", "PURPUR STAIR");
         try {
             configFriendlyNames.save(configFileFriendlyNames);
         } catch (Exception e) {
@@ -356,7 +368,7 @@ public class MaterialNames {
         configPluralNames.set("SLAB", "SLABS");
         configPluralNames.set("BOOKSHELF", "BOOKSHELVES");
         configPluralNames.set("TORCH", "TORCHES");
-        configPluralNames.set("WOODSTAIR", "WOODSTAIRS");
+        configPluralNames.set("WOODSTAIR", "WOOD STAIRS");
         configPluralNames.set("CHEST", "CHESTS");
         configPluralNames.set("BLOCKOFDIAMOND", "BLOCKS OF DIAMOND");
         configPluralNames.set("CRAFTINGTABLE", "CRAFTING TABLES");
@@ -555,6 +567,23 @@ public class MaterialNames {
         configPluralNames.set("JUNGLEDOOR", "JUNGLE DOORS");
         configPluralNames.set("ACACIADOOR", "ACACIA DOORS");
         configPluralNames.set("DARKOAKDOOR", "DARK OAK DOORS");
+        configPluralNames.set("CHORUSFLOWER", "CHORUS FLOWERS");
+        configPluralNames.set("CHORUSPLANT", "CHORUS PLANTS");
+        configPluralNames.set("ENDGATEWAY", "END GATEWAYS");
+        configPluralNames.set("ENDROD", "END RODS");
+        configPluralNames.set("ENDSTONEBRICK", "END STONE BRICKS");
+        configPluralNames.set("GRASSPATH", "GRASS PATHS");
+        configPluralNames.set("PURPURBLOCK", "PURPUR BLOCKS");
+        configPluralNames.set("PURPURPILLAR", "PURPUR PILLARS");
+        configPluralNames.set("PURPURSTAIR", "PURPUR STAIRS");
+        configPluralNames.set("PURPURSLAB", "PURPUR SLABS");
+        configPluralNames.set("STRUCTUREBLOCK", "STRUCTURE BLOCKS");
+        configPluralNames.set("BEETROOTSEED", "BEETROOT SEEDS");
+        configPluralNames.set("ENDCRYSTAL", "END CRYSTALS");
+        configPluralNames.set("LINGERINGPOTION", "LINGERING POTIONS");
+        configPluralNames.set("SHIELD", "SHIELDS");
+        configPluralNames.set("SPECTRALARROW", "SPECTRAL ARROWS");
+        configPluralNames.set("TIPPEDARROW", "TIPPED ARROSW");
         try {
             configPluralNames.save(configFilePluralyNames);
         } catch (Exception e) {

@@ -10,16 +10,16 @@ public class CmdChest extends Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            ItemStack hand = p.getItemInHand();
             PlayerInventory inv = p.getInventory();
+            ItemStack hand = inv.getItemInMainHand();
             ItemStack chestplate = inv.getChestplate();
             if (hand.getType() != Material.AIR) {
                 inv.setChestplate(hand);
-                inv.setItemInHand(chestplate);
+                inv.setItemInMainHand(chestplate);
                 p.sendMessage(var.getMessages() + "Chestplate equipped.");
             } else {
                 if (chestplate != null)
-                    inv.setItemInHand(chestplate);
+                    inv.setItemInMainHand(chestplate);
                 inv.setChestplate(new ItemStack(Material.AIR));
                 p.sendMessage(var.getMessages() + "Chestplate removed.");
             }

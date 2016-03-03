@@ -1,6 +1,6 @@
 name: Necessities
 main: com.crossge.necessities.Necessities
-version: 2.7.0
+version: 2.8.0
 description: Adds the necessities a server needs
 authors: [Cross Gaming Development Team]
 softdepend: [Vault, GoogleAnalyticsPlugin]
@@ -11,6 +11,16 @@ commands:
       usage: /<command>
       permission: Necessities.tps
       aliases: [ntps, tickspersecond, ntickspersecond]
+   craft:
+      description: Crafts <item> from the items in your inventory.
+      usage: /<command> <item>
+      permission: Necessities.craft
+      aliases: [ncraft]
+   requestreview:
+      description: Requests a review for the plot you are at.
+      usage: /<command>
+      permission: Necessities.requestreview
+      aliases: [nrequestreview, requestbuildreview, nrequestbuildreview, buildreview, nbuildreview, rbr, nrbr, nrr, rr]
    craft:
       description: Crafts <item> from the items in your inventory.
       usage: /<command> <item>
@@ -766,6 +776,7 @@ permissions:
             Necessities.bracketOthers: true
             Necessities.unsafeEnchant: true
             Necessities.logoutmessage: true
+            Necessities.requestreview: true
             Necessities.unignoreable: true
             Necessities.spamcommands: true
             Necessities.canCombatLog: true
@@ -1074,6 +1085,9 @@ permissions:
         default: true
     Necessities.tpahere:
         description: Allows you to send teleport requests to players.
+        default: true
+    Necessities.requestreview:
+        description: Allows you to request a review of your latest build.
         default: true
     Necessities.tpaccept:
         description: Allows you to accept teleport requests.

@@ -12,7 +12,7 @@ public class CmdBazooka extends Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            ItemStack hand = player.getItemInHand();
+            ItemStack hand = player.getInventory().getItemInMainHand();
             if (hand == null || !hand.getType().equals(Material.BOW)) {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not holding a bow.");
                 return true;

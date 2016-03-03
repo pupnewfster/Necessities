@@ -245,7 +245,8 @@ public class User {
         this.teleporting = true;
         if (this.rank.getTpDelay() == 0) {
             if (isTpaing()) {
-                if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand")) {
+                if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand") && config.contains("Necessities.Creative") &&
+                        !config.getBoolean("Necessities.Creative")) {
                     Formatter form = new Formatter();
                     double price = Double.parseDouble(bal.bal(getUUID())) * .02;
                     bal.removeMoney(getUUID(), price);
@@ -263,7 +264,8 @@ public class User {
             public void run() {
                 if (toTpTo.getPlayer() != null && getPlayer() != null && isTeleporting()) {
                     if (isTpaing()) {
-                        if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand")) {
+                        if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand") && config.contains("Necessities.Creative") &&
+                                !config.getBoolean("Necessities.Creative")) {
                             Formatter form = new Formatter();
                             double price = Double.parseDouble(bal.bal(getUUID())) * .02;
                             bal.removeMoney(getUUID(), price);

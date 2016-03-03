@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,8 @@ public class CmdEnchant extends Cmd {
                 return true;
             }
             Player player = (Player) sender;
-            if (player.getInventory().getItemInHand() == null || player.getInventory().getItemInHand().getType().equals(Material.AIR)) {
+            ItemStack hand = player.getInventory().getItemInMainHand();
+            if (hand == null || hand.getType().equals(Material.AIR)) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You may not enchant air.");
                 return true;
             }
@@ -27,8 +29,8 @@ public class CmdEnchant extends Cmd {
                     return true;
                 }
                 int level = ench.getMaxLevel();
-                if (ench.canEnchantItem(player.getInventory().getItemInHand())) {
-                    player.getInventory().getItemInHand().addEnchantment(ench, level);
+                if (ench.canEnchantItem(hand)) {
+                    hand.addEnchantment(ench, level);
                     player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + " at level " + var.getObj() + Integer.toString(level) +
                             var.getMessages() + ".");
                     return true;
@@ -70,16 +72,16 @@ public class CmdEnchant extends Cmd {
                         player.sendMessage(var.getMessages() + "Added all enchantments at level " + var.getObj() + Integer.toString(level) + var.getMessages() + ".");
                     }
                     return true;
-                } else if (ench != null && ench.canEnchantItem(player.getInventory().getItemInHand()) || player.hasPermission("Necessities.unsafeEnchant")) {
+                } else if (ench != null && ench.canEnchantItem(hand) || player.hasPermission("Necessities.unsafeEnchant")) {
                     if (level == -1) {
-                        player.getInventory().getItemInHand().addUnsafeEnchantment(ench, ench.getMaxLevel());
+                        hand.addUnsafeEnchantment(ench, ench.getMaxLevel());
                         player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + " at max level.");
                     } else {
                         if (level == 0) {
-                            player.getInventory().getItemInHand().removeEnchantment(ench);
+                            hand.removeEnchantment(ench);
                             player.sendMessage(var.getMessages() + "Removed enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + ".");
                         } else {
-                            player.getInventory().getItemInHand().addUnsafeEnchantment(ench, level);
+                            hand.addUnsafeEnchantment(ench, level);
                             player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + " at level " + var.getObj() + Integer.toString(level) +
                                     var.getMessages() + ".");
                         }
@@ -94,12 +96,13 @@ public class CmdEnchant extends Cmd {
     }
 
     private void enchantAll(int level, Player player, boolean overide, boolean max) {
+        ItemStack hand = player.getInventory().getItemInMainHand();
         for (Enchantment e : Enchantment.values())
-            if (e.canEnchantItem(player.getInventory().getItemInHand())) {
+            if (e.canEnchantItem(hand)) {
                 if (overide && !max)
-                    player.getInventory().getItemInHand().addUnsafeEnchantment(e, level);
+                    hand.addUnsafeEnchantment(e, level);
                 else
-                    player.getInventory().getItemInHand().addEnchantment(e, e.getMaxLevel());
+                    hand.addEnchantment(e, e.getMaxLevel());
             }
     }
 
@@ -115,13 +118,13 @@ public class CmdEnchant extends Cmd {
                 if ("ALL".startsWith(search))
                     complete.add("ALL");
                 for (Enchantment e : Enchantment.values())
-                    if (e.canEnchantItem(p.getInventory().getItemInHand()) && e.getName().startsWith(search))
+                    if (e.canEnchantItem(p.getInventory().getItemInMainHand()) && e.getName().startsWith(search))
                         complete.add(e.getName());
             } else {
                 if ("MAX".startsWith(search))
                     complete.add("MAX");
                 for (Enchantment e : Enchantment.values())
-                    if (e.canEnchantItem(p.getInventory().getItemInHand()) && e.equals(Enchantment.getByName(enchantFinder(args[0]))) &&
+                    if (e.canEnchantItem(p.getInventory().getItemInMainHand()) && e.equals(Enchantment.getByName(enchantFinder(args[0]))) &&
                             Integer.toString(e.getMaxLevel()).startsWith(search))
                         for (int i = 0; i < e.getMaxLevel(); i++)
                             complete.add(Integer.toString(i + 1));
@@ -181,6 +184,10 @@ public class CmdEnchant extends Cmd {
                 return "LUCK";
             case "LURE":
                 return "LURE";
+            case "FROSTWALKER":
+                return "FROST_WALKER";
+            case "MENDING":
+                return "MENDING";
             default:
                 return enchant;
         }
@@ -234,6 +241,10 @@ public class CmdEnchant extends Cmd {
                 return "lure";
             case "LUCK":
                 return "luck";
+            case "FROST_WALKER":
+                return "frost walker";
+            case "MENDING":
+                return "mending";
             default:
                 return enchant.toLowerCase();
         }

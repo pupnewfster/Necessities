@@ -10,16 +10,16 @@ public class CmdBoots extends Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            ItemStack hand = p.getItemInHand();
             PlayerInventory inv = p.getInventory();
+            ItemStack hand = inv.getItemInMainHand();
             ItemStack boots = inv.getBoots();
             if (hand.getType() != Material.AIR) {
                 inv.setBoots(hand);
-                inv.setItemInHand(boots);
+                inv.setItemInMainHand(boots);
                 p.sendMessage(var.getMessages() + "Boots equipped.");
             } else {
                 if (boots != null)
-                    inv.setItemInHand(boots);
+                    inv.setItemInMainHand(boots);
                 inv.setBoots(new ItemStack(Material.AIR));
                 p.sendMessage(var.getMessages() + "Boots removed.");
             }

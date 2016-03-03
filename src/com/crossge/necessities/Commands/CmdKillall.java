@@ -189,6 +189,10 @@ public class CmdKillall extends Cmd {
             return EntityType.ITEM_FRAME;
         if (name.equals("armorstand"))
             return EntityType.ARMOR_STAND;
+        if (name.equals("shulker"))
+            return EntityType.SHULKER;
+        if (name.equals("shulkerbullet"))
+            return EntityType.SHULKER_BULLET;
         return null;
     }
 }

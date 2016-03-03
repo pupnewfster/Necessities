@@ -34,7 +34,7 @@ public class CmdNick extends Cmd {
                     p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Nicks have a maximum of 16 characters.");
                     return true;
                 }
-                if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free) {
+                if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free && config.contains("Necessities.Creative") && !config.getBoolean("Necessities.Creative")) {
                     if (balc.balance(p.getUniqueId()) < 2000) {
                         p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must have $2000 to change your nick.");
                         return true;
@@ -86,7 +86,7 @@ public class CmdNick extends Cmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Nicks have a maximum of 16 characters.");
                 return true;
             }
-            if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free) {
+            if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free && config.contains("Necessities.Creative") && !config.getBoolean("Necessities.Creative")) {
                 if (balc.balance(target.getUniqueId()) < 2000) {
                     sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must have $2000 to change your nick.");
                     return true;

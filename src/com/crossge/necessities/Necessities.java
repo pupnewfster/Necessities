@@ -3,6 +3,8 @@ package com.crossge.necessities;
 import com.TentacleLabs.GoogleAnalyticsPlugin.GoogleAnalyticsPlugin;
 import com.TentacleLabs.GoogleAnalyticsPlugin.Tracker;
 import com.crossge.necessities.Commands.*;
+import com.crossge.necessities.Commands.Creative.CmdRequestReview;
+import com.crossge.necessities.Commands.Creative.CreativeCmd;
 import com.crossge.necessities.Commands.Economy.*;
 import com.crossge.necessities.Commands.Guilds.CmdGuild;
 import com.crossge.necessities.Commands.RankManager.*;
@@ -17,13 +19,13 @@ import com.crossge.necessities.RankManager.UserManager;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.milkbowl.vault.economy.Economy;
-import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_9_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -146,11 +148,11 @@ public class Necessities extends JavaPlugin {
     }
 
     public void addHeader(Player p) {
-        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter(formatMessage(ChatColor.GREEN + "GamezGalaxy"));
+        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter(formatMessage(ChatColor.GREEN + "Galaxy Gaming"));
         try {
             Field field = packet.getClass().getDeclaredField("b");
             field.setAccessible(true);
-            field.set(packet, formatMessage(ChatColor.BLUE + "http://gamezgalaxy.com"));
+            field.set(packet, formatMessage(ChatColor.BLUE + "http://galaxygaming.gg"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -390,7 +392,7 @@ public class Necessities extends JavaPlugin {
             com = new CmdWrench();
         else if (isEqual(name, "tps"))
             com = new CmdTps();
-            //Economy
+        //Economy
         else if (isEqual(name, "bal"))
             com = new CmdBalance();
         else if (isEqual(name, "baltop"))
@@ -431,7 +433,7 @@ public class Necessities extends JavaPlugin {
             com = new CmdCmdPrices();
         else if (isEqual(name, "setcommandprice"))
             com = new CmdSetCmdPrice();
-            //RankManager
+        //RankManager
         else if (isEqual(name, "promote"))
             com = new CmdPromote();
         else if (isEqual(name, "demote"))
@@ -476,7 +478,7 @@ public class Necessities extends JavaPlugin {
             com = new CmdRankCmds();
         else if (isEqual(name, "reloadpermissions"))
             com = new CmdReloadPermissions();
-            //WorldManager
+        //WorldManager
         else if (isEqual(name, "createworld"))
             com = new CmdCreateWorld();
         else if (isEqual(name, "worldspawn"))
@@ -507,17 +509,22 @@ public class Necessities extends JavaPlugin {
             com = new CmdCreateWarp();
         else if (isEqual(name, "removewarp"))
             com = new CmdRemoveWarp();
-            //Guilds
+        //Guilds
         else if (isEqual(name, "guild"))
             com = new CmdGuild();
+        //Creative
+        else if (isEqual(name, "requestreview"))
+            com = new CmdRequestReview();
 
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (com instanceof WorldCmd && config.contains("Necessities.WorldManager") && !config.getBoolean("Necessities.WorldManager"))
-            com = new Cmd();
+            com = new DisabledCmd();
         else if (com instanceof CmdGuild && config.contains("Necessities.Guilds") && !config.getBoolean("Necessities.Guilds"))
-            com = new Cmd();
+            com = new DisabledCmd();
         else if (com instanceof EconomyCmd && config.contains("Necessities.Economy") && !config.getBoolean("Necessities.Economy"))
-            com = new Cmd();
+            com = new DisabledCmd();
+        else if (com instanceof CreativeCmd && config.contains("Necessities.Creative") && !config.getBoolean("Necessities.Creative"))
+            com = new DisabledCmd();
         return com;
     }
 

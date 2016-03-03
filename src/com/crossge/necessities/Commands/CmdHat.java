@@ -2,6 +2,7 @@ package com.crossge.necessities.Commands;
 
 import com.crossge.necessities.Hats.Hat;
 import com.crossge.necessities.Hats.HatType;
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ public class CmdHat extends Cmd {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid hat type.");
                 p.sendMessage(var.getMessages() + validTypes());
                 return true;
-            } else if (type.equals(HatType.Design) && !p.getName().equals("pupnewfster")) {
+            } else if (type.equals(HatType.Design) && !Necessities.getInstance().isDev(p.getName())) {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That is a hat for designing. You do not have access to it please choose another hat.");
                 p.sendMessage(var.getMessages() + validTypes());
                 return true;

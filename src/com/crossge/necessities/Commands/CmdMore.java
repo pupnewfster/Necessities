@@ -9,7 +9,7 @@ public class CmdMore extends Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            ItemStack hand = player.getItemInHand();
+            ItemStack hand = player.getInventory().getItemInMainHand();
             if (hand.getType() == Material.AIR)
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not holding an item.");
             else

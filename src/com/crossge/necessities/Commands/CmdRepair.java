@@ -14,7 +14,7 @@ public class CmdRepair extends Cmd {
             Player player = (Player) sender;
             short dur = 0;
             if (args.length == 0 || args[0].equalsIgnoreCase("hand")) {
-                ItemStack hand = player.getItemInHand();
+                ItemStack hand = player.getInventory().getItemInMainHand();
                 if (hand == null || hand.getData().getItemType().equals(Material.AIR)) {
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not holding an item.");
                     return true;

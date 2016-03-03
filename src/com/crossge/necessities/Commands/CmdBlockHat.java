@@ -10,16 +10,16 @@ public class CmdBlockHat extends Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            ItemStack hand = p.getItemInHand();
             PlayerInventory inv = p.getInventory();
+            ItemStack hand = inv.getItemInMainHand();
             ItemStack hat = inv.getHelmet();
             if (hand.getType() != Material.AIR) {
                 inv.setHelmet(hand);
-                inv.setItemInHand(hat);
+                inv.setItemInMainHand(hat);
                 p.sendMessage(var.getMessages() + "Hat equipped.");
             } else {
                 if (hat != null)
-                    inv.setItemInHand(hat);
+                    inv.setItemInMainHand(hat);
                 inv.setHelmet(new ItemStack(Material.AIR));
                 p.sendMessage(var.getMessages() + "Hat removed.");
             }

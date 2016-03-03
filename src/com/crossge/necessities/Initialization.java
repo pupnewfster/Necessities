@@ -79,7 +79,6 @@ public class Initialization {
             pm.initiate();
         }
 
-        console.initiate();
         get.initiate();
         ids.setIds();
         matNames.setIds();
@@ -165,6 +164,7 @@ public class Initialization {
                 config.set("Necessities.WorldManager", true);
                 config.set("Necessities.Guilds", true);
                 config.set("Necessities.Economy", true);
+                config.set("Necessities.Creative", false);
                 config.set("Necessities.warns", 3);
                 config.set("Necessities.caps", true);
                 config.set("Necessities.language", true);
@@ -212,6 +212,8 @@ public class Initialization {
                 config.set("Console.AliveStatus", "Alive");
             if (!config.contains("Necessities.WorldManager"))
                 config.set("Necessities.WorldManager", true);
+            if (!config.contains("Necessities.Creative"))
+                config.set("Necessities.Creative", false);
             if (!config.contains("Necessities.Guilds"))
                 config.set("Necessities.Guilds", true);
             if (!config.contains("Necessities.Economy"))

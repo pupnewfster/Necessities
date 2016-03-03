@@ -13,7 +13,7 @@ public class CmdPrice extends EconomyCmd {
         String oper = args[0];
         if (sender instanceof Player) {
             if (args.length == 1)
-                itemName = ((Player) sender).getItemInHand().getType().name();
+                itemName = ((Player) sender).getInventory().getItemInMainHand().getType().name();
         } else if (args.length < 2) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter the item you want to know the price of and whether to buy or sell.");
             return true;

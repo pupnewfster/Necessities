@@ -18,7 +18,7 @@ public class CmdRename extends Cmd {
         }
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            ItemStack hand = player.getItemInHand();
+            ItemStack hand = player.getInventory().getItemInMainHand();
             if (hand == null || hand.getType().equals(Material.AIR)) {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not holding an item.");
                 return true;

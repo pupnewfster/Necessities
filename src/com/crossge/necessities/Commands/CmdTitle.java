@@ -52,7 +52,7 @@ public class CmdTitle extends Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Titles have a maximum of 24 characters.");
             return true;
         }
-        if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free) {
+        if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free && config.contains("Necessities.Creative") && !config.getBoolean("Necessities.Creative")) {
             if (balc.balance(target.getUniqueId()) < 1000) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must have $1000 to change your title.");
                 return true;

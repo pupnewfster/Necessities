@@ -765,6 +765,59 @@ public class Ids {
             configIds.set("ACACIA_DOOR", 430);
         if (!configIds.contains("DARK_OAK_DOOR"))
             configIds.set("DARK_OAK_DOOR", 431);
+
+        if (!configIds.contains("CHORUS_FLOWER"))
+            configIds.set("CHORUS_FLOWER", 200);
+        if (!configIds.contains("CHORUS_PLANT"))
+            configIds.set("CHORUS_PLANT", 199);
+        if (!configIds.contains("END_GATEWAY"))
+            configIds.set("END_GATEWAY", 209);
+        if (!configIds.contains("END_ROD"))
+            configIds.set("END_ROD", 198);
+        if (!configIds.contains("END_BRICKS"))
+            configIds.set("END_BRICKS", 206);
+        if (!configIds.contains("GRASS_PATH"))
+            configIds.set("GRASS_PATH", 198);
+        if (!configIds.contains("PURPUR_BLOCK"))
+            configIds.set("PURPUR_BLOCK", 201);
+        if (!configIds.contains("PURPUR_PILLAR"))
+            configIds.set("PURPUR_PILLAR", 202);
+        if (!configIds.contains("PURPUR_STAIRS"))
+            configIds.set("PURPUR_STAIRS", 203);
+        if (!configIds.contains("PURPUR_DOUBLE_SLAB"))
+            configIds.set("PURPUR_DOUBLE_SLAB", 204);
+        if (!configIds.contains("PURPUR_SLAB"))
+            configIds.set("PURPUR_SLAB", 205);
+        if (!configIds.contains("STRUCTURE_BLOCK"))
+            configIds.set("STRUCTURE_BLOCK", 255);
+        if (!configIds.contains("BEETROOT"))
+            configIds.set("BEETROOT", 434);
+        if (!configIds.contains("BEETROOT_SEEDS"))
+            configIds.set("BEETROOT_SEEDS", 435);
+        if (!configIds.contains("BEETROOT_SOUP"))
+            configIds.set("BEETROOT_SOUP", 436);
+        if (!configIds.contains("CHORUS_FRUIT"))
+            configIds.set("CHORUS_FRUIT", 432);
+        if (!configIds.contains("CHORUS_FRUIT_POPPED"))
+            configIds.set("CHORUS_FRUIT_POPPED", 433);
+        if (!configIds.contains("DRAGONS_BREATH"))
+            configIds.set("DRAGONS_BREATH", 437);
+        if (!configIds.contains("ELYTRA"))
+            configIds.set("ELYTRA", 443);
+        if (!configIds.contains("END_CRYSTAL"))
+            configIds.set("END_CRYSTAL", 426);
+        if (!configIds.contains("LINGERING_POTION"))
+            configIds.set("LINGERING_POTION", 441);
+        if (!configIds.contains("SHIELD"))
+            configIds.set("SHIELD", 442);
+        if (!configIds.contains("SPECTRAL_ARROW"))
+            configIds.set("SPECTRAL_ARROW", 439);
+        if (!configIds.contains("TIPPED_ARROW"))
+            configIds.set("TIPPED_ARROW", 440);
+        if (!configIds.contains("COMMAND_REPEATING"))
+            configIds.set("COMMAND_REPEATING", 210);
+        if (!configIds.contains("COMMAND_CHAIN"))
+            configIds.set("COMMAND_CHAIN", 211);
         try {
             configIds.save(configFileIds);
         } catch (Exception e) {

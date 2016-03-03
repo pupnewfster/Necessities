@@ -37,16 +37,16 @@ public class CmdBuy extends EconomyCmd {
                 if (form.isLegal(itemName))
                     itemName = mat.idToName(Integer.parseInt(itemName));
                 else if (itemName.equalsIgnoreCase("hand")) {
-                    itemName = player.getItemInHand().getType().name();
-                    data = player.getItemInHand().getDurability();
+                    itemName = inventory.getItemInMainHand().getType().name();
+                    data = inventory.getItemInMainHand().getDurability();
                 }
             } else {
-                itemName = player.getItemInHand().getType().name();
+                itemName = inventory.getItemInMainHand().getType().name();
                 if (!form.isLegal(args[0])) {
                     sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid amount to buy.");
                     return true;
                 }
-                data = player.getItemInHand().getDurability();
+                data = inventory.getItemInMainHand().getDurability();
                 amount = Integer.parseInt(args[0]);
             }
             itemName = mat.findItem(itemName);

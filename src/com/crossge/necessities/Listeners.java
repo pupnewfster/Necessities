@@ -1268,7 +1268,7 @@ public class Listeners implements Listener {
             if (g != null && !g.canHostileSpawn() && e.getEntity() instanceof Monster)
                 e.setCancelled(true);
         }
-        if (!e.isCancelled() && config.contains("Necessities.MaxSingleTypeEntities")) {
+        if (!e.isCancelled() && config.contains("Necessities.MaxSingleTypeEntities") && !e.getEntityType().equals(EntityType.ARMOR_STAND)) {
             int max = config.getInt("Necessities.MaxSingleTypeEntities");
             int cur = 0;
             for (Entity t : e.getLocation().getChunk().getEntities())

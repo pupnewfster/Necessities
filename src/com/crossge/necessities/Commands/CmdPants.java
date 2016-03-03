@@ -10,16 +10,16 @@ public class CmdPants extends Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            ItemStack hand = p.getItemInHand();
             PlayerInventory inv = p.getInventory();
+            ItemStack hand = inv.getItemInMainHand();
             ItemStack pants = inv.getLeggings();
             if (hand.getType() != Material.AIR) {
                 inv.setLeggings(hand);
-                inv.setItemInHand(pants);
+                inv.setItemInMainHand(pants);
                 p.sendMessage(var.getMessages() + "Pants equipped.");
             } else {
                 if (pants != null)
-                    inv.setItemInHand(pants);
+                    inv.setItemInMainHand(pants);
                 inv.setLeggings(new ItemStack(Material.AIR));
                 p.sendMessage(var.getMessages() + "Pants removed.");
             }
