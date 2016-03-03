@@ -583,7 +583,7 @@ public class MaterialNames {
         configPluralNames.set("LINGERINGPOTION", "LINGERING POTIONS");
         configPluralNames.set("SHIELD", "SHIELDS");
         configPluralNames.set("SPECTRALARROW", "SPECTRAL ARROWS");
-        configPluralNames.set("TIPPEDARROW", "TIPPED ARROSW");
+        configPluralNames.set("TIPPEDARROW", "TIPPED ARROWS");
         try {
             configPluralNames.save(configFilePluralyNames);
         } catch (Exception e) {
