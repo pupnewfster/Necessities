@@ -40,19 +40,19 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.9-Snapshot</version>
+            <version>1.9-R0.1-Snapshot</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.9-Snapshot</version>
+            <version>1.9-R0.1-Snapshot</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.9-Snapshot</version>
+            <version>1.9-R0.1-Snapshot</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

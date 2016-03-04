@@ -29,7 +29,7 @@ public class JanetSlack {
     private static HashMap<String, SlackUser> userMap = new HashMap<>();
     private static HashMap<Integer, ArrayList<String>> helpLists = new HashMap<>();
     private static boolean justLoaded = true, isConnected = false, stopping = false;
-    private static String token, channel, channelID, hook, latestInChanel;
+    private static String token, channel, channelID, latestInChanel;
     private static JanetRandom r = new JanetRandom();
     private static BukkitRunnable historyReader, keepAlive;
     private static URL hookURL;
@@ -47,7 +47,7 @@ public class JanetSlack {
         token = config.contains("Necessities.SlackToken") ? config.getString("Necessities.SlackToken") : "token";
         channel = config.contains("Necessities.SlackChanel") ? config.getString("Necessities.SlackChanel") : "channel";
         channelID = config.contains("Necessities.ChannelID") ? config.getString("Necessities.ChannelID") : "channelID";
-        hook = config.contains("Necessities.WebHook") ? config.getString("Necessities.WebHook") : "webHook";
+        String hook = config.contains("Necessities.WebHook") ? config.getString("Necessities.WebHook") : "webHook";
         if (token.equals("token") || channel.equals("channel") || channelID.equals("channelID") || hook.equals("webHook"))
             return;
         try {

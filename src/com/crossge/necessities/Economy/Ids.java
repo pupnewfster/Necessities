@@ -818,6 +818,10 @@ public class Ids {
             configIds.set("COMMAND_REPEATING", 210);
         if (!configIds.contains("COMMAND_CHAIN"))
             configIds.set("COMMAND_CHAIN", 211);
+        if (!configIds.contains("FROSTED_ICE"))
+            configIds.set("FROSTED_ICE", 212);
+        if (!configIds.contains("BEETROOT_BLOCK"))
+            configIds.set("BEETROOT_BLOCK", 207);
         try {
             configIds.save(configFileIds);
         } catch (Exception e) {
