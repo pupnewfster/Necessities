@@ -56,13 +56,15 @@ public class GetUUID {
                     uuids.put(nameFromString(key).toLowerCase(), UUID.fromString(key));
             } else
                 invalidKeys.add(key);
-        if (invalidKeys.size() < 3) {
+        if (!invalidKeys.isEmpty() && invalidKeys.size() < 3) {
+            Bukkit.broadcast("Invalid keys found.", "Necessities.opBroadcast");
             for (String key : invalidKeys)
-                configUUIDs.set(key, null);
-            try {
+                //configUUIDs.set(key, null);
+                Bukkit.broadcast("Invalid key: " + key, "Necessities.opBroadcast");
+            /*try {
                 configUUIDs.save(configFileUUIDs);
             } catch (Exception e) {
-            }
+            }*/
         }
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "All stored UUIDs retrieved.");
     }

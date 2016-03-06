@@ -18,8 +18,12 @@ import com.crossge.necessities.WorldManager.PortalManager;
 import com.crossge.necessities.WorldManager.WorldManager;
 import org.bukkit.*;
 import org.bukkit.block.*;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_9_R1.boss.CraftBossBar;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -50,6 +54,7 @@ public class Listeners implements Listener {
     private File configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml"), configFileLogIn = new File("plugins/Necessities", "loginmessages.yml"),
             configFileTitles = new File("plugins/Necessities", "titles.yml"), configFile = new File("plugins/Necessities", "config.yml");
     private static String JanetName = "";
+    private static CraftBossBar welcomeBar;
     AntiCombatLog acb = new AntiCombatLog();
     CmdCommandSpy spy = new CmdCommandSpy();
     PowerManager power = new PowerManager();
@@ -79,6 +84,7 @@ public class Listeners implements Listener {
     public Listeners() {
         RankManager rm = new RankManager();
         JanetName = (!rm.getOrder().isEmpty() ? ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") : "") + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
+        welcomeBar = new CraftBossBar(ChatColor.GOLD + "Welcome to " + ChatColor.AQUA + "Galaxy Gaming", BarColor.GREEN, BarStyle.SOLID, new BarFlag[0]);
     }
 
     private String corTime(String time) {
@@ -234,6 +240,7 @@ public class Listeners implements Listener {
                     }
             }
         });
+        welcomeBar.addPlayer(p);
     }
 
     @EventHandler
@@ -262,6 +269,7 @@ public class Listeners implements Listener {
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds"))
             power.removePlayer(e.getPlayer());
+        welcomeBar.removePlayer(e.getPlayer());
     }
 
     @EventHandler
@@ -876,7 +884,7 @@ public class Listeners implements Listener {
         if (u.isAfk())
             u.setAfk(false);
         u.setLastAction(System.currentTimeMillis());
-        Player player = e.getPlayer();
+        final Player player = e.getPlayer();
         final UUID uuid = player.getUniqueId();
         String m = e.getMessage();
         if (m.endsWith(">") && !m.equals(">")) {
@@ -968,7 +976,7 @@ public class Listeners implements Listener {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    ai.parseMessage(uuid, message);
+                    ai.parseMessage(player.getName(), message, JanetAI.Source.Server, false, null);
                 }
             });
     }

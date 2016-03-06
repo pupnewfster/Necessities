@@ -4,6 +4,7 @@ import com.TentacleLabs.GoogleAnalyticsPlugin.GoogleAnalyticsPlugin;
 import com.TentacleLabs.GoogleAnalyticsPlugin.Tracker;
 import com.crossge.necessities.Commands.*;
 import com.crossge.necessities.Commands.Creative.CmdRequestReview;
+import com.crossge.necessities.Commands.Creative.CmdReviewList;
 import com.crossge.necessities.Commands.Creative.CreativeCmd;
 import com.crossge.necessities.Commands.Economy.*;
 import com.crossge.necessities.Commands.Guilds.CmdGuild;
@@ -148,11 +149,11 @@ public class Necessities extends JavaPlugin {
     }
 
     public void addHeader(Player p) {
-        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter(formatMessage(ChatColor.GREEN + "Galaxy Gaming"));
+        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter(formatMessage(ChatColor.AQUA + "Galaxy Gaming"));
         try {
             Field field = packet.getClass().getDeclaredField("b");
             field.setAccessible(true);
-            field.set(packet, formatMessage(ChatColor.BLUE + "http://galaxygaming.gg"));
+            field.set(packet, formatMessage(ChatColor.GREEN + "http://galaxygaming.gg"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -515,6 +516,8 @@ public class Necessities extends JavaPlugin {
         //Creative
         else if (isEqual(name, "requestreview"))
             com = new CmdRequestReview();
+        else if (isEqual(name, "reviewlist"))
+            com = new CmdReviewList();
 
         YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         if (com instanceof WorldCmd && config.contains("Necessities.WorldManager") && !config.getBoolean("Necessities.WorldManager"))

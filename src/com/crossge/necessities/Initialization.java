@@ -27,7 +27,8 @@ public class Initialization {
             configFileLogIn = new File("plugins/Necessities", "loginmessages.yml"), configFileWrench = new File("plugins/Necessities", "wrenched.yml"),
             configFileIds = new File("plugins/Necessities/Economy", "ids.yml"), configFileCensors = new File("plugins/Necessities", "censors.yml"),
             configFileSpying = new File("plugins/Necessities", "spying.yml"), configFileHiding = new File("plugins/Necessities", "hiding.yml"),
-            configFileTitles = new File("plugins/Necessities", "titles.yml"), configFile = new File("plugins/Necessities", "config.yml");
+            configFileTitles = new File("plugins/Necessities", "titles.yml"), configFile = new File("plugins/Necessities", "config.yml"),
+            configFileReviews = new File("plugins/Necessities/Creative", "reviews.yml");
     MaterialNames matNames = new MaterialNames();
     PowerManager power = new PowerManager();
     CmdCommandSpy cs = new CmdCommandSpy();
@@ -44,7 +45,7 @@ public class Initialization {
     RankPrices rp = new RankPrices();
     Wrenched wrench = new Wrenched();
     Materials mat = new Materials();
-    Console console = new Console();
+    Reviews rev =  new Reviews();
     CmdHide hide = new CmdHide();
     GetUUID get = new GetUUID();
     JanetAI ai = new JanetAI();
@@ -58,6 +59,7 @@ public class Initialization {
         dirCreate("plugins/Necessities/Economy");
         dirCreate("plugins/Necessities/RankManager");
         dirCreate("plugins/Necessities/WorldManager");
+        dirCreate("plugins/Necessities/Creative");
         dirCreate("plugins/Necessities/Guilds");
         fileCreate("plugins/Necessities/motd.txt");
         fileCreate("plugins/Necessities/rules.txt");
@@ -104,6 +106,7 @@ public class Initialization {
             cmdp.upList();//Command prices are disabled anyways atm
         }
 
+        rev.parseList();
         slack.init();
         ai.initiate();
     }
@@ -147,6 +150,7 @@ public class Initialization {
         addYML(configFileIds);
         addYML(configFileWM);
         addYML(configFilePM);
+        addYML(configFileReviews);
         if (!configFileCensors.exists())
             try {
                 configFileCensors.createNewFile();

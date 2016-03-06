@@ -21,6 +21,11 @@ commands:
       usage: /<command>
       permission: Necessities.requestreview
       aliases: [nrequestreview, requestbuildreview, nrequestbuildreview, buildreview, nbuildreview, rbr, nrbr, nrr, rr]
+   reviewlist:
+      description: Lists the players who have requested a review for their build
+      usage: /<command>
+      permission: Necessities.listreviews
+      aliases: [nreviewlist, listreviews, nlistreviews, rlist, listr, nlistr, nrlist]
    craft:
       description: Crafts <item> from the items in your inventory.
       usage: /<command> <item>
@@ -782,6 +787,7 @@ permissions:
             Necessities.canCombatLog: true
             Necessities.afkkickimune: true
             Necessities.loginmessage: true
+            Necessities.listreviews: true
             Necessities.titleOthers: true
             Necessities.opBroadcast: true
             Necessities.freeCommand: true
@@ -1637,4 +1643,7 @@ permissions:
         default: op
     Necessities.tps:
         description: Allows one to view the ticks per second.
+        default: op
+    Necessities.listreviews:
+        description: Shows you the list of people who have requested a review
         default: op
