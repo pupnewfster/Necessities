@@ -5,14 +5,13 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Teleports {
-    private static HashMap<UUID, ArrayList<String>> teleportRequests = new HashMap<>();
+    private final HashMap<UUID, ArrayList<String>> teleportRequests = new HashMap<>();
 
-    public void removeRequests(UUID uuid) {
+    void removeRequests(UUID uuid) {
         teleportRequests.remove(uuid);
-        if (teleportRequests != null)
-            for (UUID u : teleportRequests.keySet())
-                if (hasRequestFrom(u, uuid))
-                    removeRequestFrom(u, uuid);
+        for (UUID u : teleportRequests.keySet())
+            if (hasRequestFrom(u, uuid))
+                removeRequestFrom(u, uuid);
     }
 
     public void addRequest(UUID to, String from) {
@@ -22,7 +21,7 @@ public class Teleports {
             else if (teleportRequests.get(to).contains(from.split(" ")[0] + " toThem"))
                 teleportRequests.get(to).remove(from.split(" ")[0] + " toThem");
         } else
-            teleportRequests.put(to, new ArrayList<String>());
+            teleportRequests.put(to, new ArrayList<>());
         teleportRequests.get(to).add(from);
     }
 

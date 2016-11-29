@@ -1,6 +1,8 @@
 package com.crossge.necessities.Commands;
 
 import com.crossge.necessities.Economy.Materials;
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -12,11 +14,11 @@ import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.HashMap;
 
-public class CmdCraft extends Cmd {
-    Materials mat = new Materials();
-
+public class CmdCraft implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
+            Materials mat = Necessities.getInstance().getMaterials();
             Player p = (Player) sender;
             if (args.length == 0) {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter an item to craft.");

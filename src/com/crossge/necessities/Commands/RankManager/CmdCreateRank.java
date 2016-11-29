@@ -1,22 +1,27 @@
 package com.crossge.necessities.Commands.RankManager;
 
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.Rank;
+import com.crossge.necessities.RankManager.RankManager;
+import com.crossge.necessities.Utils;
+import com.crossge.necessities.Variables;
 import org.bukkit.command.CommandSender;
 
-public class CmdCreateRank extends RankCmd {
+public class CmdCreateRank implements RankCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (args.length < 3) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you to enter a rank to create the rank that comes before and the rank"
-                    + " that comes after.");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you to enter a rank to create the rank that comes before and the rank that comes after.");
             return true;
         }
-        if (rm.getRank(form.capFirst(args[0])) != null) {
+        RankManager rm = Necessities.getInstance().getRM();
+        if (rm.getRank(Utils.capFirst(args[0])) != null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That rank already exists.");
             return true;
         }
-        String rank = form.capFirst(args[0]);
-        Rank previous = rm.getRank(form.capFirst(args[1]));
-        Rank next = rm.getRank(form.capFirst(args[2]));
+        String rank = Utils.capFirst(args[0]);
+        Rank previous = rm.getRank(Utils.capFirst(args[1]));
+        Rank next = rm.getRank(Utils.capFirst(args[2]));
         if (!args[1].equalsIgnoreCase("null") && previous == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The rank you inputted as previous does not exists.");
             return true;
@@ -37,7 +42,7 @@ public class CmdCreateRank extends RankCmd {
         else if (previous != null && next != null && previous.getNext().equals(next))
             rm.addRank(rank, previous, next);//are consecutive
         else {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must put the new rank inbetween two consecutive ranks.");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must put the new rank in between two consecutive ranks.");
             return true;
         }
         sender.sendMessage(var.getObj() + rank + var.getMessages() + " created and added to list of ranks.");

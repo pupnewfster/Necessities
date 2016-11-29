@@ -1,20 +1,28 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.GetUUID;
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
+import com.crossge.necessities.RankManager.UserManager;
+import com.crossge.necessities.SafeLocation;
+import com.crossge.necessities.Variables;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CmdHome extends Cmd {
+public class CmdHome implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
+            UserManager um = Necessities.getInstance().getUM();
+            SafeLocation safe = Necessities.getInstance().getSafeLocations();
             User u = um.getUser(p.getUniqueId());
             String homes = u.getHomes();
-            int homecount = u.homeCount();
-            if (homecount == 0 || homes.equals("")) {
+            int homeCount = u.homeCount();
+            if (homeCount == 0 || homes.equals("")) {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have any homes.");
                 return true;
             }
@@ -36,6 +44,7 @@ public class CmdHome extends Cmd {
                 }
                 String[] info = args[0].replaceAll("&", "").replaceAll("\\.", "").split(":");
                 String targetName = info[0];
+                GetUUID get = Necessities.getInstance().getUUID();
                 UUID uuid = get.getID(targetName);
                 if (uuid == null) {
                     uuid = get.getOfflineID(targetName);

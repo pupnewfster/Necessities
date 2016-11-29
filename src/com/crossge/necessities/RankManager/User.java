@@ -3,13 +3,11 @@ package com.crossge.necessities.RankManager;
 import com.crossge.necessities.Commands.CmdHide;
 import com.crossge.necessities.Economy.BalChecks;
 import com.crossge.necessities.Economy.Materials;
-import com.crossge.necessities.Formatter;
 import com.crossge.necessities.Guilds.Guild;
-import com.crossge.necessities.Guilds.GuildManager;
 import com.crossge.necessities.Hats.Hat;
 import com.crossge.necessities.Hats.HatType;
 import com.crossge.necessities.Necessities;
-import com.crossge.necessities.ScoreBoards;
+import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
 import com.google.common.io.Files;
 import org.bukkit.Bukkit;
@@ -28,28 +26,29 @@ import java.io.IOException;
 import java.util.*;
 
 public class User {
-    private File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml"), configFileUsers = new File("plugins/Necessities/RankManager", "users.yml"),
-            configFile = new File("plugins/Necessities", "config.yml");
+    private final File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
+    private final File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
     private boolean teleporting = false, jailed = false, opChat = false, afk = false, istpaing = false, god = false, muted = false, autoClaiming = false, guildChat = false, slackChat = false;
-    private ArrayList<String> permissions = new ArrayList<>(), subranks = new ArrayList<>();
+    private final ArrayList<String> permissions = new ArrayList<>();
+    private final ArrayList<String> subranks = new ArrayList<>();
     private long lastAction = 0, lastAFK = 0, lastRequest = 0, login = 0;
     private int pastTotal = 0, lastActionTask = 0, afkTask = 0;
-    private HashMap<String, Location> homes = new HashMap<>();
+    private final HashMap<String, Location> homes = new HashMap<>();
     private String appended = "", nick = null, lastContact;
-    private ArrayList<UUID> ignored = new ArrayList<>();
+    private final ArrayList<UUID> ignored = new ArrayList<>();
     private Location lastPos, right, left;
     private PermissionAttachment attachment;
     private Player bukkitPlayer;
     private double power = 0.0;
     private Hat hat = null;
-    private UUID userUUID;
+    private final UUID userUUID;
     private Guild guild;
     private Rank rank;
 
     public User(Player p) {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        RankManager rm = new RankManager();
+        YamlConfiguration config = Necessities.getInstance().getConfig();
+        RankManager rm = Necessities.getInstance().getRM();
         this.bukkitPlayer = p;
         this.right = p.getLocation();
         this.left = p.getLocation();
@@ -68,10 +67,8 @@ public class User {
             this.muted = configUsers.getBoolean(getUUID().toString() + ".muted");
         if (configUsers.contains(getUUID().toString() + ".power"))
             this.power = configUsers.getDouble(getUUID().toString() + ".power");
-        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && configUsers.contains(getUUID().toString() + ".guild")) {
-            GuildManager gm = new GuildManager();
-            this.guild = gm.getGuild(configUsers.getString(getUUID().toString() + ".guild"));
-        }
+        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && configUsers.contains(getUUID().toString() + ".guild"))
+            this.guild = Necessities.getInstance().getGM().getGuild(configUsers.getString(getUUID().toString() + ".guild"));
         if (configUsers.contains(getUUID().toString() + ".timePlayed"))
             this.pastTotal = configUsers.getInt(getUUID().toString() + ".timePlayed");
         if (configUsers.contains(getUUID().toString() + ".hat"))
@@ -87,7 +84,7 @@ public class User {
         readIgnored();
         updateListName();
         Necessities.getInstance().updateAll(this.bukkitPlayer);
-        CmdHide hide = new CmdHide();
+        CmdHide hide = Necessities.getInstance().getHide();
         if (hide.isHidden(this.bukkitPlayer)) {
             this.opChat = true;
             hide.hidePlayer(this.bukkitPlayer);
@@ -97,8 +94,8 @@ public class User {
     public User(UUID uuid) {
         this.userUUID = uuid;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        RankManager rm = new RankManager();
+        YamlConfiguration config = Necessities.getInstance().getConfig();
+        RankManager rm = Necessities.getInstance().getRM();
         if (configUsers.contains(getUUID().toString() + ".rank"))
             this.rank = rm.getRank(configUsers.getString(getUUID().toString() + ".rank"));
         for (String subrank : configUsers.getStringList(uuid + ".subranks"))
@@ -113,23 +110,21 @@ public class User {
             this.nick = "~" + this.nick;
         if (configUsers.contains(getUUID().toString() + ".power"))
             this.power = configUsers.getDouble(getUUID().toString() + ".power");
-        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && configUsers.contains(getUUID().toString() + ".guild")) {
-            GuildManager gm = new GuildManager();
-            this.guild = gm.getGuild(configUsers.getString(getUUID().toString() + ".guild"));
-        }
+        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && configUsers.contains(getUUID().toString() + ".guild"))
+            this.guild = Necessities.getInstance().getGM().getGuild(configUsers.getString(getUUID().toString() + ".guild"));
         if (configUsers.contains(getUUID().toString() + ".timePlayed"))
             this.pastTotal = configUsers.getInt(getUUID().toString() + ".timePlayed");
         readHomes();
         readIgnored();
     }
 
-    public void updateTimePlayed() {
+    void updateTimePlayed() {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         if (this.login != 0) {
             configUsers.set(getUUID().toString() + ".timePlayed", (int) (this.pastTotal + (System.currentTimeMillis() - this.login) / 1000));
             try {
                 configUsers.save(configFileUsers);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         this.pastTotal = 0;
@@ -138,8 +133,7 @@ public class User {
 
     public void logOut() {
         updateTimePlayed();
-        ScoreBoards sb = new ScoreBoards();
-        sb.delPlayer(this);
+        Necessities.getInstance().getSBs().delPlayer(this);
         if (this.hat != null)
             this.hat.despawn();
         this.bukkitPlayer = null;
@@ -154,10 +148,10 @@ public class User {
                 if (!name.equals(""))
                     this.ignored.add(UUID.fromString(name));
         } else {
-            configUsers.set(getUUID().toString() + ".ignored", Arrays.asList(""));
+            configUsers.set(getUUID().toString() + ".ignored", Collections.singletonList(""));
             try {
                 configUsers.save(configFileUsers);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
     }
@@ -167,7 +161,7 @@ public class User {
     }
 
     public void ignore(UUID uuid) {
-        if (!this.ignored.contains(uuid)) {//this should already be checked but whatevs
+        if (!this.ignored.contains(uuid)) {//this should already be checked but whatever
             this.ignored.add(uuid);
             YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
             if (!configUsers.contains(getUUID().toString()))
@@ -179,13 +173,13 @@ public class User {
             configUsers.set(uuid.toString() + ".ignored", ign);
             try {
                 configUsers.save(configFileUsers);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
     }
 
     public void unignore(UUID uuid) {
-        if (this.ignored.contains(uuid)) {//this should already be checked but whatevs
+        if (this.ignored.contains(uuid)) {//this should already be checked but whatever
             this.ignored.remove(uuid);
             YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
             if (!configUsers.contains(getUUID().toString()))
@@ -197,7 +191,7 @@ public class User {
             configUsers.set(uuid.toString() + ".ignored", ign);
             try {
                 configUsers.save(configFileUsers);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
     }
@@ -210,7 +204,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".guild", null);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -230,7 +224,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".guild", g.getName());
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -239,18 +233,17 @@ public class User {
     }
 
     public void teleport(final User toTpTo) {
-        final YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        final Variables var = new Variables();
-        final BalChecks bal = new BalChecks();
+        final YamlConfiguration config = Necessities.getInstance().getConfig();
+        final Variables var = Necessities.getInstance().getVar();
+        final BalChecks bal = Necessities.getInstance().getBalChecks();
         this.teleporting = true;
         if (this.rank.getTpDelay() == 0) {
             if (isTpaing()) {
                 if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand") && config.contains("Necessities.Creative") &&
                         !config.getBoolean("Necessities.Creative")) {
-                    Formatter form = new Formatter();
                     double price = Double.parseDouble(bal.bal(getUUID())) * .02;
                     bal.removeMoney(getUUID(), price);
-                    getPlayer().sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() + " was removed from your account.");
+                    getPlayer().sendMessage(var.getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(price)) + var.getMessages() + " was removed from your account.");
                 }
                 setTpaing(false);
             }
@@ -259,61 +252,52 @@ public class User {
             return;
         }
         this.bukkitPlayer.sendMessage(var.getMessages() + "Teleportation will begin in " + ChatColor.RED + this.rank.getTpDelay() + var.getMessages() + " seconds, don't move.");
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                if (toTpTo.getPlayer() != null && getPlayer() != null && isTeleporting()) {
-                    if (isTpaing()) {
-                        if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand") && config.contains("Necessities.Creative") &&
-                                !config.getBoolean("Necessities.Creative")) {
-                            Formatter form = new Formatter();
-                            double price = Double.parseDouble(bal.bal(getUUID())) * .02;
-                            bal.removeMoney(getUUID(), price);
-                            getPlayer().sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)) + var.getMessages() + " was removed from your account.");
-                        }
-                        setTpaing(false);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
+            if (toTpTo.getPlayer() != null && getPlayer() != null && isTeleporting()) {
+                if (isTpaing()) {
+                    if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand") && config.contains("Necessities.Creative") &&
+                            !config.getBoolean("Necessities.Creative")) {
+                        double price = Double.parseDouble(bal.bal(getUUID())) * .02;
+                        bal.removeMoney(getUUID(), price);
+                        getPlayer().sendMessage(var.getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(price)) + var.getMessages() + " was removed from your account.");
                     }
-                    getPlayer().teleport(toTpTo.getPlayer());
-                    tpSuccess();
+                    setTpaing(false);
                 }
+                getPlayer().teleport(toTpTo.getPlayer());
+                tpSuccess();
             }
         }, 20 * this.rank.getTpDelay());
     }
 
     public void cancelTp() {
-        Variables var = new Variables();
         this.teleporting = false;
         setTpaing(false);
-        getPlayer().sendMessage(var.getMessages() + "Teleportation canceled.");
+        getPlayer().sendMessage(Necessities.getInstance().getVar().getMessages() + "Teleportation canceled.");
     }
 
-    public void tpSuccess() {
-        Variables var = new Variables();
+    private void tpSuccess() {
         this.teleporting = false;
-        getPlayer().sendMessage(var.getMessages() + "Teleportation successful.");
+        getPlayer().sendMessage(Necessities.getInstance().getVar().getMessages() + "Teleportation successful.");
     }
 
     public void teleport(final Location l) {
-        Variables var = new Variables();
         this.teleporting = true;
         if (this.rank.getTpDelay() == 0) {
             getPlayer().teleport(l);
             tpSuccess();
             return;
         }
+        Variables var = Necessities.getInstance().getVar();
         this.bukkitPlayer.sendMessage(var.getMessages() + "Teleportation will begin in " + ChatColor.RED + this.rank.getTpDelay() + var.getMessages() + " seconds, don't move.");
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                if (getPlayer() != null && isTeleporting()) {
-                    getPlayer().teleport(l);
-                    tpSuccess();
-                }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
+            if (getPlayer() != null && isTeleporting()) {
+                getPlayer().teleport(l);
+                tpSuccess();
             }
         }, 20 * this.rank.getTpDelay());
     }
 
-    public boolean isTpaing() {
+    private boolean isTpaing() {
         return this.istpaing;
     }
 
@@ -321,7 +305,7 @@ public class User {
         this.istpaing = tpaing;
     }
 
-    public long getLastAction() {
+    private long getLastAction() {
         return this.lastAction;
     }
 
@@ -330,15 +314,12 @@ public class User {
         int temp = this.lastActionTask;
         if (getPlayer() != null && getPlayer().hasPermission("Necessities.afk"))
             try {
-                this.lastActionTask = Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!isAfk() && getPlayer() != null && (System.currentTimeMillis() - getLastAction()) / 1000.0 >= 299.9)
-                            setAfk(true);
-                    }
+                this.lastActionTask = Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
+                    if (!isAfk() && getPlayer() != null && (System.currentTimeMillis() - getLastAction()) / 1000.0 >= 299.9)
+                        setAfk(true);
                 }, 20 * 300);
                 Bukkit.getScheduler().cancelTask(temp);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
     }
 
@@ -378,7 +359,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".rank", r.getName());
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         refreshPerms();
     }
@@ -396,7 +377,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".nick", message);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -417,7 +398,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".location.pitch", l.getPitch());
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -442,7 +423,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".hat", this.hat == null ? null : this.hat.getType().getName());
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -458,7 +439,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".jailed", jail);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -473,23 +454,23 @@ public class User {
         return this.muted;
     }
 
-    public void setMuted(boolean tomute) {
-        this.muted = tomute;
+    public void setMuted(boolean toMute) {
+        this.muted = toMute;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         if (!configUsers.contains(getUUID().toString()))
             return;
         configUsers.set(getUUID().toString() + ".muted", this.muted);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
-    public void setGod(boolean godmode) {
-        this.god = godmode;
+    public void setGod(boolean godMode) {
+        this.god = godMode;
     }
 
-    public boolean godmode() {
+    public boolean godMode() {
         return this.god;
     }
 
@@ -497,13 +478,12 @@ public class User {
         return this.afk;
     }
 
-    public void setAfk(boolean isafk) {
-        this.afk = isafk;
+    public void setAfk(boolean isAfk) {
+        this.afk = isAfk;
         if (getPlayer() != null) {
             this.bukkitPlayer.setSleepingIgnored(this.afk);
-            Variables var = new Variables();
-            CmdHide hide = new CmdHide();
-            if (hide.isHidden(this.bukkitPlayer))
+            Variables var = Necessities.getInstance().getVar();
+            if (Necessities.getInstance().getHide().isHidden(this.bukkitPlayer))
                 Bukkit.broadcast(var.getMessages() + "To Ops - " + var.getMe() + "*" + getRank().getColor() + getPlayer().getDisplayName() + var.getMe() + " is " + (isAfk() ? "now" : "no longer") + " AFK",
                         "Necessities.opBroadcast");
             else
@@ -512,25 +492,22 @@ public class User {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         if (!configUsers.contains(getUUID().toString()))
             return;
-        configUsers.set(getUUID().toString() + ".afk", isafk);
+        configUsers.set(getUUID().toString() + ".afk", isAfk);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         this.lastAFK = System.currentTimeMillis();
         if (!getPlayer().hasPermission("Necessities.afkkickimune")) {
             if (isAfk()) {
                 int temp = this.afkTask;
                 try {
-                    this.afkTask = Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isAfk() && getPlayer() != null && (System.currentTimeMillis() - getLastAFK()) / 1000.0 >= 299.9)
-                                bukkitPlayer.kickPlayer(ChatColor.RED + "AFK for too long!");
-                        }
+                    this.afkTask = Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
+                        if (isAfk() && getPlayer() != null && (System.currentTimeMillis() - getLastAFK()) / 1000.0 >= 299.9)
+                            bukkitPlayer.kickPlayer(ChatColor.RED + "AFK for too long!");
                     }, 20 * 300);
                     Bukkit.getScheduler().cancelTask(temp);
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
             } else
                 Bukkit.getScheduler().cancelTask(this.afkTask);
@@ -550,18 +527,15 @@ public class User {
     }
 
     public void givePerms() {
-        ScoreBoards sb = new ScoreBoards();
-        sb.addPlayer(this);
+        Necessities.getInstance().getSBs().addPlayer(this);
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
         this.attachment = this.bukkitPlayer.addAttachment(Necessities.getInstance());
-        for (String node : this.rank.getNodes())
-            setPerm(node);
+        this.rank.getNodes().forEach(this::setPerm);
         for (String subrank : configUsers.getStringList(getUUID().toString() + ".subranks")) {
             if (!subrank.equals("") && configSubranks.contains(subrank)) {
                 this.subranks.add(subrank);
-                for (String node : configSubranks.getStringList(subrank))
-                    setPerm(node);
+                configSubranks.getStringList(subrank).forEach(this::setPerm);
             }
         }
         for (String node : configUsers.getStringList(getUUID().toString() + ".permissions")) {
@@ -608,7 +582,7 @@ public class User {
             return;
         List<String> homelist = configUsers.getStringList(getUUID().toString() + ".homeslist");
         if (homelist.isEmpty()) {
-            configUsers.set(getUUID().toString() + ".homeslist", Arrays.asList(name));
+            configUsers.set(getUUID().toString() + ".homeslist", Collections.singletonList(name));
         } else {
             if (homelist.contains(""))
                 homelist.remove("");
@@ -624,7 +598,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".homes." + name + ".pitch", Float.toString(l.getPitch()));
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         this.homes.put(name, l);
     }
@@ -642,7 +616,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".homes." + name, null);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         this.homes.remove(name);
     }
@@ -651,9 +625,8 @@ public class User {
         if (this.homes.isEmpty())
             return "";
         String homeslist = "";
-        ArrayList<String> sortHomes = new ArrayList<String>();
-        for (String n : this.homes.keySet())
-            sortHomes.add(n);
+        ArrayList<String> sortHomes = new ArrayList<>();
+        this.homes.keySet().forEach(sortHomes::add);
         Collections.sort(sortHomes);
         for (String name : sortHomes)
             homeslist += name + ", ";
@@ -672,7 +645,7 @@ public class User {
         return this.homes.size();
     }
 
-    public void refreshPerms() {
+    void refreshPerms() {
         this.subranks.clear();
         this.permissions.clear();
         removePerms();
@@ -680,9 +653,8 @@ public class User {
         updateListName();
     }
 
-    public void removePerms() {
-        for (String p : this.attachment.getPermissions().keySet())
-            this.attachment.unsetPermission(p);
+    void removePerms() {
+        this.attachment.getPermissions().keySet().forEach(p -> this.attachment.unsetPermission(p));
     }
 
     public String getSubranks() {
@@ -703,11 +675,11 @@ public class User {
         return permlist.trim().substring(0, permlist.length() - 2);
     }
 
-    public void addPerm(String permission) {
+    void addPerm(String permission) {
         setPerm(permission);
     }
 
-    public void removePerm(String permission) {
+    void removePerm(String permission) {
         this.attachment.unsetPermission(permission);
         if (this.permissions.contains(permission))
             this.permissions.remove(permission);
@@ -780,7 +752,8 @@ public class User {
         configUsers.set(getUUID().toString() + ".power", this.power);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) { }
+        } catch (Exception ignored) {
+        }
         if (this.guild != null)
             this.guild.updatePower();
     }
@@ -798,7 +771,7 @@ public class User {
         configUsers.set(getUUID().toString() + ".power", this.power);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         if (this.guild != null)
             this.guild.updatePower();
@@ -807,7 +780,7 @@ public class User {
     public Location getLookingAt() {
         if (this.bukkitPlayer == null)
             return null;
-        Materials mat = new Materials();
+        Materials mat = Necessities.getInstance().getMaterials();
         Iterator<Block> itr = new BlockIterator(this.bukkitPlayer, 140);
         while (itr.hasNext()) {
             Block block = itr.next();
@@ -817,6 +790,7 @@ public class User {
         return null;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void saveInventory(String s, String from) {
         if (this.bukkitPlayer == null)
             return;
@@ -831,13 +805,13 @@ public class User {
         File f = new File("world/playerdata/" + this.bukkitPlayer.getUniqueId() + ".dat");
         try {
             Files.copy(f, new File(dirFrom, this.bukkitPlayer.getUniqueId() + ".dat"));
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
         File saved = new File(dir, this.bukkitPlayer.getUniqueId() + ".dat");
         if (saved.exists()) {//if exists transfer and load otherwise just set to the defaults of world and inv and enderchest and xp
             try {
                 Files.copy(saved, new File("world/playerdata/" + this.bukkitPlayer.getUniqueId() + ".dat"));
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
             this.bukkitPlayer.loadData();
             this.bukkitPlayer.setTicksLived(ticks);

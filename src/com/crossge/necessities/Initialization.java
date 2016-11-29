@@ -1,59 +1,16 @@
 package com.crossge.necessities;
 
-import com.crossge.necessities.Commands.CmdCommandSpy;
-import com.crossge.necessities.Commands.CmdHide;
-import com.crossge.necessities.Economy.*;
 import com.crossge.necessities.Guilds.GuildManager;
-import com.crossge.necessities.Guilds.PowerManager;
 import com.crossge.necessities.Hats.HatType;
-import com.crossge.necessities.Janet.Janet;
-import com.crossge.necessities.Janet.JanetAI;
-import com.crossge.necessities.Janet.JanetSlack;
-import com.crossge.necessities.Janet.JanetWarn;
 import com.crossge.necessities.RankManager.RankManager;
-import com.crossge.necessities.WorldManager.PortalManager;
-import com.crossge.necessities.WorldManager.WarpManager;
-import com.crossge.necessities.WorldManager.WorldManager;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.Collections;
 
-public class Initialization {
-    private File configFileFriendlyNames = new File("plugins/Necessities/Economy", "friendlynames.yml"), configFilePluralyNames = new File("plugins/Necessities/Economy", "pluralnames.yml"),
-            configFileWarps = new File("plugins/Necessities/WorldManager", "warps.yml"), configFilePM = new File("plugins/Necessities/WorldManager", "portals.yml"),
-            configFileUsers = new File("plugins/Necessities/RankManager", "users.yml"), configFileWM = new File("plugins/Necessities/WorldManager", "worlds.yml"),
-            configFilePrices = new File("plugins/Necessities/Economy", "prices.yml"), configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml"),
-            configFileLogIn = new File("plugins/Necessities", "loginmessages.yml"), configFileWrench = new File("plugins/Necessities", "wrenched.yml"),
-            configFileIds = new File("plugins/Necessities/Economy", "ids.yml"), configFileCensors = new File("plugins/Necessities", "censors.yml"),
-            configFileSpying = new File("plugins/Necessities", "spying.yml"), configFileHiding = new File("plugins/Necessities", "hiding.yml"),
-            configFileTitles = new File("plugins/Necessities", "titles.yml"), configFile = new File("plugins/Necessities", "config.yml"),
-            configFileReviews = new File("plugins/Necessities/Creative", "reviews.yml");
-    MaterialNames matNames = new MaterialNames();
-    PowerManager power = new PowerManager();
-    CmdCommandSpy cs = new CmdCommandSpy();
-    PortalManager pm = new PortalManager();
-    WarpManager warps = new WarpManager();
-    WorldManager wm = new WorldManager();
-    GuildManager gm = new GuildManager();
-    JanetSlack slack = new JanetSlack();
-    ScoreBoards sb = new ScoreBoards();
-    RankManager rm = new RankManager();
-    JanetWarn warns = new JanetWarn();
-    BalChecks balc = new BalChecks();
-    CmdPrices cmdp = new CmdPrices();
-    RankPrices rp = new RankPrices();
-    Wrenched wrench = new Wrenched();
-    Materials mat = new Materials();
-    Reviews rev =  new Reviews();
-    CmdHide hide = new CmdHide();
-    GetUUID get = new GetUUID();
-    JanetAI ai = new JanetAI();
-    Prices pr = new Prices();
-    Janet bot = new Janet();
-    Ids ids = new Ids();
-
-    public void initiateFiles() {
+class Initialization {
+    void initiateFiles() {
         dirCreate("plugins/Necessities");
         dirCreate("plugins/Necessities/Logs");
         dirCreate("plugins/Necessities/Economy");
@@ -64,107 +21,123 @@ public class Initialization {
         fileCreate("plugins/Necessities/motd.txt");
         fileCreate("plugins/Necessities/rules.txt");
         fileCreate("plugins/Necessities/faq.txt");
+        fileCreate("plugins/Necessities/announcements.txt");
+        File cwords = new File("plugins/Necessities", "customWords.txt");
+        if (!cwords.exists())
+            try {
+                cwords.createNewFile();
+                FileUtils.copyURLToFile(getClass().getResource("/customWords.txt"), cwords);
+            } catch (Exception ignored) {
+            }
         createYaml();
         HatType.mapHats();
 
         //RankManager
+        RankManager rm = Necessities.getInstance().getRM();
         rm.setRanks();
         rm.setSubranks();
         rm.readRanks();
-        sb.createScoreboard();
+        Necessities.getInstance().getSBs().createScoreboard();
 
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         //WorldManager
         if (config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager")) {
-            wm.initiate();
-            warps.initiate();
-            pm.initiate();
+            Necessities.getInstance().getWM().initiate();
+            Necessities.getInstance().getWarps().initiate();
+            Necessities.getInstance().getPM().initiate();
         }
 
-        get.initiate();
-        ids.setIds();
-        matNames.setIds();
-        mat.readIds();
-        bot.initiate();
-        wrench.initiate();
-        cs.init();
-        hide.init();
-        warns.initiate();
+        Necessities.getInstance().getUUID().initiate();
+        Necessities.getInstance().getIds().setIds();
+        Necessities.getInstance().getMaterialNames().setIds();
+        Necessities.getInstance().getMaterials().readIds();
+        Necessities.getInstance().getBot().initiate();
+        Necessities.getInstance().getWrench().initiate();
+        Necessities.getInstance().getSpy().init();
+        Necessities.getInstance().getHide().init();
+        Necessities.getInstance().getWarns().initiate();
 
         //Guilds
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
+            GuildManager gm = Necessities.getInstance().getGM();
             gm.createFiles();
             gm.initiate();
-            power.initiate();
+            Necessities.getInstance().getPower().initiate();
         }
 
         //Economy
         if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy")) {
-            pr.parseList();
-            balc.updateB();
-            rp.initiate();
-            cmdp.upList();//Command prices are disabled anyways atm
+            Necessities.getInstance().getPrices().parseList();
+            Necessities.getInstance().getBalChecks().updateB();
+            Necessities.getInstance().getRankPrices().initiate();
+            Necessities.getInstance().getCommandPrices().upList();//Command prices are disabled anyways atm
         }
 
-        rev.parseList();
-        slack.init();
-        ai.initiate();
+        Necessities.getInstance().getRev().parseList();
+        Necessities.getInstance().getNet().readCustom();
+        Necessities.getInstance().getSlack().init();
+        Necessities.getInstance().getAI().initiate();
+        Necessities.getInstance().getAnnouncer().init();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void dirCreate(String directory) {
         File d = new File(directory);
         if (!d.exists())
             d.mkdir();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void fileCreate(String file) {
         File f = new File(file);
         if (!f.exists())
             try {
                 f.createNewFile();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void addYML(File file) {
         if (!file.exists())
             try {
                 file.createNewFile();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void createYaml() {
-        addYML(configFileFriendlyNames);
-        addYML(configFilePluralyNames);
-        addYML(configFileLogOut);
-        addYML(configFileTitles);
-        addYML(configFileWrench);
-        addYML(configFilePrices);
-        addYML(configFileSpying);
-        addYML(configFileHiding);
-        addYML(configFileLogOut);
-        addYML(configFileWarps);
-        addYML(configFileLogIn);
-        addYML(configFileUsers);
-        addYML(configFileIds);
-        addYML(configFileWM);
-        addYML(configFilePM);
-        addYML(configFileReviews);
+        addYML(new File("plugins/Necessities/Economy", "friendlynames.yml"));
+        addYML(new File("plugins/Necessities/Economy", "pluralnames.yml"));
+        addYML(new File("plugins/Necessities", "logoutmessages.yml"));
+        addYML(new File("plugins/Necessities", "titles.yml"));
+        addYML(new File("plugins/Necessities", "wrenched.yml"));
+        addYML(new File("plugins/Necessities/Economy", "prices.yml"));
+        addYML(new File("plugins/Necessities", "spying.yml"));
+        addYML(new File("plugins/Necessities", "hiding.yml"));
+        addYML(new File("plugins/Necessities/WorldManager", "warps.yml"));
+        addYML(new File("plugins/Necessities", "loginmessages.yml"));
+        addYML(new File("plugins/Necessities/RankManager", "users.yml"));
+        addYML(new File("plugins/Necessities/Economy", "ids.yml"));
+        addYML(new File("plugins/Necessities/WorldManager", "worlds.yml"));
+        addYML(new File("plugins/Necessities/WorldManager", "portals.yml"));
+        addYML(new File("plugins/Necessities/Creative", "reviews.yml"));
+        File configFileCensors = new File("plugins/Necessities", "censors.yml");
         if (!configFileCensors.exists())
             try {
                 configFileCensors.createNewFile();
                 YamlConfiguration config = YamlConfiguration.loadConfiguration(configFileCensors);
-                config.set("badwords", Arrays.asList(""));
-                config.set("goodwords", Arrays.asList(""));
-                config.set("ips", Arrays.asList(""));
+                config.set("badwords", Collections.singletonList(""));
+                config.set("goodwords", Collections.singletonList(""));
+                config.set("ips", Collections.singletonList(""));
                 config.save(configFileCensors);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
-        if (!configFile.exists())
+        if (!Necessities.getInstance().getConfigFile().exists())
             try {
-                configFile.createNewFile();
-                YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+                Necessities.getInstance().getConfigFile().createNewFile();
+                YamlConfiguration config = Necessities.getInstance().getConfig();
                 config.set("Necessities.WorldManager", true);
                 config.set("Necessities.Guilds", true);
                 config.set("Necessities.Economy", true);
@@ -180,20 +153,19 @@ public class Initialization {
                 config.set("Necessities.customDeny", false);
                 config.set("Necessities.ChatFormat", "{WORLD} {GUILD} {TITLE} {RANK} {NAME}: {MESSAGE}");
                 config.set("Necessities.firstTime", "Welcome {NAME}!");
-                config.set("Necessities.firstItems", Arrays.asList(""));
+                config.set("Necessities.firstItems", Collections.singletonList(""));
                 config.set("Necessities.DonationPass", "password");
                 config.set("Necessities.DonationServer", 8);
                 config.set("Necessities.SlackToken", "token");
-                config.set("Necessities.SlackChanel", "channel");
-                config.set("Necessities.ChannelID", "channelID");
                 config.set("Necessities.WebHook", "webHook");
                 config.set("Necessities.MaxSingleTypeEntities", 100);
                 config.set("Console.AliveStatus", "Alive");
-                config.save(configFile);
-            } catch (Exception e) {
+                config.set("Announcements.frequency", 5);
+                config.save(Necessities.getInstance().getConfigFile());
+            } catch (Exception ignored) {
             }
         else {
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+            YamlConfiguration config = Necessities.getInstance().getConfig();
             if (!config.contains("Necessities.warns"))
                 config.set("Necessities.warns", 3);
             if (!config.contains("Necessities.caps"))
@@ -211,7 +183,7 @@ public class Initialization {
             if (!config.contains("Necessities.firstTime"))
                 config.set("Necessities.firstTime", "Welcome {NAME}!");
             if (!config.contains("Necessities.firstItems"))
-                config.set("Necessities.firstItems", Arrays.asList(""));
+                config.set("Necessities.firstItems", Collections.singletonList(""));
             if (!config.contains("Console.AliveStatus"))
                 config.set("Console.AliveStatus", "Alive");
             if (!config.contains("Necessities.WorldManager"))
@@ -234,17 +206,15 @@ public class Initialization {
                 config.set("Necessities.DonationServer", 8);
             if (!config.contains("Necessities.SlackToken"))
                 config.set("Necessities.SlackToken", "token");
-            if (!config.contains("Necessities.SlackChanel"))
-                config.set("Necessities.SlackChanel", "channel");
-            if (!config.contains("Necessities.ChannelID"))
-                config.set("Necessities.ChannelID", "channelID");
             if (!config.contains("Necessities.WebHook"))
                 config.set("Necessities.WebHook", "webHook");
             if (!config.contains("Necessities.MaxSingleTypeEntities"))
                 config.set("Necessities.MaxSingleTypeEntities", 100);
+            if (!config.contains("Announcements.frequency"))
+                config.set("Announcements.frequency", 5);
             try {
-                config.save(configFile);
-            } catch (Exception e) {
+                config.save(Necessities.getInstance().getConfigFile());
+            } catch (Exception ignored) {
             }
         }
     }

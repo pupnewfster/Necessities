@@ -1,34 +1,35 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
+import com.crossge.necessities.SafeLocation;
+import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
 import java.util.UUID;
 
-public class CmdJail extends Cmd {
-    private File configFile = new File("plugins/Necessities", "config.yml");
-
+public class CmdJail implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a player to jail.");
             return true;
         }
-        UUID uuid = get.getID(args[0]);
+        UUID uuid = Necessities.getInstance().getUUID().getID(args[0]);
         if (uuid == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;
         }
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         if (!config.contains("Jail")) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Jail not set.");
             return true;
         }
-        User u = um.getUser(uuid);
+        User u = Necessities.getInstance().getUM().getUser(uuid);
         if (!config.contains("Spawn") && u.getLastPos() == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Spawn not set.");
             return true;
@@ -38,6 +39,7 @@ public class CmdJail extends Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player cannot be jailed.");
             return true;
         }
+        SafeLocation safe = Necessities.getInstance().getSafeLocations();
         if (!u.isJailed()) {
             sender.sendMessage(var.getMessages() + "You jailed " + var.getObj() + u.getPlayer().getDisplayName() + var.getMessages() + ".");
             u.getPlayer().sendMessage(var.getDemote() + "You have been jailed.");

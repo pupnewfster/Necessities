@@ -1,5 +1,8 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
+import com.crossge.necessities.Variables;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -9,8 +12,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CmdEnchant extends Cmd {
+public class CmdEnchant implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             if (args.length == 0) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter an enchantment and a level to enchant it with.");
@@ -49,9 +53,7 @@ public class CmdEnchant extends Cmd {
                 }
                 int level = -1;
                 if (!args[1].equalsIgnoreCase("max")) {
-                    try {
-                        Integer.parseInt(args[1]);
-                    } catch (Exception e) {
+                    if (!Utils.legalInt(args[1])) {
                         sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid enchantment level.");
                         return true;
                     }
@@ -72,7 +74,7 @@ public class CmdEnchant extends Cmd {
                         player.sendMessage(var.getMessages() + "Added all enchantments at level " + var.getObj() + Integer.toString(level) + var.getMessages() + ".");
                     }
                     return true;
-                } else if (ench != null && ench.canEnchantItem(hand) || player.hasPermission("Necessities.unsafeEnchant")) {
+                } else if (ench != null && (ench.canEnchantItem(hand) || player.hasPermission("Necessities.unsafeEnchant"))) {
                     if (level == -1) {
                         hand.addUnsafeEnchantment(ench, ench.getMaxLevel());
                         player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + " at max level.");
@@ -95,11 +97,11 @@ public class CmdEnchant extends Cmd {
         return true;
     }
 
-    private void enchantAll(int level, Player player, boolean overide, boolean max) {
+    private void enchantAll(int level, Player player, boolean override, boolean max) {
         ItemStack hand = player.getInventory().getItemInMainHand();
         for (Enchantment e : Enchantment.values())
             if (e.canEnchantItem(hand)) {
-                if (overide && !max)
+                if (override && !max)
                     hand.addUnsafeEnchantment(e, level);
                 else
                     hand.addEnchantment(e, e.getMaxLevel());
@@ -133,7 +135,7 @@ public class CmdEnchant extends Cmd {
         return complete;
     }
 
-    private String enchantFinder(String enchant) {//TODO: Update with 1.9 enchantment
+    private String enchantFinder(String enchant) {
         enchant = enchant.toUpperCase();
         switch (enchant) {
             case "POWER":
@@ -188,6 +190,10 @@ public class CmdEnchant extends Cmd {
                 return "FROST_WALKER";
             case "MENDING":
                 return "MENDING";
+            case "CURSEOFBINDING":
+                return "BINDING_CURSE";
+            case "CURSEOFVANISHING":
+                return "VANISHING_CURSE";
             default:
                 return enchant;
         }
@@ -245,6 +251,10 @@ public class CmdEnchant extends Cmd {
                 return "frost walker";
             case "MENDING":
                 return "mending";
+            case "BINDINGCURSE":
+                return "curse of binding";
+            case "VANISHINGCURSE":
+                return "curse of vanishing";
             default:
                 return enchant.toLowerCase();
         }

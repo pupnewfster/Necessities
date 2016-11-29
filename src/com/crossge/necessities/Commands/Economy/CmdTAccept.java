@@ -1,5 +1,11 @@
 package com.crossge.necessities.Commands.Economy;
 
+import com.crossge.necessities.Economy.BalChecks;
+import com.crossge.necessities.Economy.Materials;
+import com.crossge.necessities.Economy.Trade;
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
+import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -9,100 +15,104 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.util.UUID;
 
-public class CmdTAccept extends EconomyCmd {
+public class CmdTAccept implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             if (args.length != 1) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter the player you want to accept the trade of.");
                 return true;
             }
             Player player = (Player) sender;
-            UUID uuid = get.getID(args[0]);
+            UUID uuid = Necessities.getInstance().getUUID().getID(args[0]);
             if (uuid == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
                 return true;
             }
             Player target = Bukkit.getPlayer(uuid);
-            String pname = player.getName(), offerpname = target.getName();
-            if (tr.hasTrade(pname, offerpname)) {
-                String info = tr.acceptTrade(pname, offerpname);
+            String pname = player.getName(), offerPname = target.getName();
+            Materials mat = Necessities.getInstance().getMaterials();
+            Trade tr = Necessities.getInstance().getTrades();
+            if (tr.hasTrade(pname, offerPname)) {
+                String info = tr.acceptTrade(pname, offerPname);
                 String amount = info.split(" ")[1], price = info.split(" ")[2], toWhom = info.split(" ")[3];
                 short data = 0;
                 String temp = info.split(" ")[0].replaceAll(":", " ");
                 String item = temp.split(" ")[0];
-                if (form.isLegal(price))
-                    price = form.roundTwoDecimals(Double.parseDouble(price));
-                if (form.isLegal(item)) {
+                if (Utils.legalDouble(price))
+                    price = Utils.roundTwoDecimals(Double.parseDouble(price));
+                if (Utils.legalInt(item)) {
                     item = mat.idToName(Integer.parseInt(item));
                     try {
                         data = Short.parseShort(temp.split(" ")[1]);
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
-                if (!toWhom.equalsIgnoreCase(pname) && !toWhom.equalsIgnoreCase(offerpname)) {
-                    short dataoff = 0;
+                if (!toWhom.equalsIgnoreCase(pname) && !toWhom.equalsIgnoreCase(offerPname)) {
+                    short dataOff = 0;
                     String temp2 = price.replaceAll(":", " ");
-                    String itemoffering = temp.split(" ")[0];
-                    if (form.isLegal(itemoffering))
+                    String itemOffering = temp.split(" ")[0];
+                    if (Utils.legalInt(itemOffering))
                         try {
-                            dataoff = Short.parseShort(temp2.split(" ")[1]);
-                        } catch (Exception e) {
+                            dataOff = Short.parseShort(temp2.split(" ")[1]);
+                        } catch (Exception ignored) {
                         }
-                    PlayerInventory thereinventory = target.getInventory();
-                    PlayerInventory yourinventory = player.getInventory();
+                    PlayerInventory theirInventory = target.getInventory();
+                    PlayerInventory yourInventory = player.getInventory();
                     ItemStack itemstack = new ItemStack(Material.matchMaterial(mat.findItem(item)), Integer.parseInt(amount), data);
-                    ItemStack is = new ItemStack(Material.matchMaterial(mat.findItem(itemoffering)), Integer.parseInt(toWhom), dataoff);
-                    if (!yourinventory.contains(itemstack)) {
+                    ItemStack is = new ItemStack(Material.matchMaterial(mat.findItem(itemOffering)), Integer.parseInt(toWhom), dataOff);
+                    if (!yourInventory.contains(itemstack)) {
                         player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have that much " + mat.pluralize(item, Integer.parseInt(amount)));
                         return true;
                     }
-                    if (!thereinventory.contains(is)) {
-                        player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "They do not have that much " + mat.pluralize(itemoffering, Integer.parseInt(toWhom)));
+                    if (!theirInventory.contains(is)) {
+                        player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "They do not have that much " + mat.pluralize(itemOffering, Integer.parseInt(toWhom)));
                         return true;
                     }
-                    yourinventory.addItem(is);
-                    yourinventory.removeItem(itemstack);
-                    thereinventory.addItem(itemstack);
-                    thereinventory.removeItem(is);
+                    yourInventory.addItem(is);
+                    yourInventory.removeItem(itemstack);
+                    theirInventory.addItem(itemstack);
+                    theirInventory.removeItem(is);
                 }
+                BalChecks balc = Necessities.getInstance().getBalChecks();
                 if (toWhom.equalsIgnoreCase(pname)) {
                     if (Double.parseDouble(balc.bal(target.getUniqueId())) - Double.parseDouble(price) < 0) {
-                        player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "They do not have " + var.getMoney() + "$" + form.addCommas(price));
+                        player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "They do not have " + var.getMoney() + "$" + Utils.addCommas(price));
                         return true;
                     }
-                    PlayerInventory thereinventory = target.getInventory();
-                    PlayerInventory yourinventory = player.getInventory();
+                    PlayerInventory theirInventory = target.getInventory();
+                    PlayerInventory yourInventory = player.getInventory();
                     ItemStack itemstack = new ItemStack(Material.matchMaterial(mat.findItem(item)), Integer.parseInt(amount), data);
-                    if (!yourinventory.contains(itemstack)) {
+                    if (!yourInventory.contains(itemstack)) {
                         player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have that much " + mat.pluralize(item, Integer.parseInt(amount)));
                         return true;
                     }
                     balc.removeMoney(target.getUniqueId(), Double.parseDouble(price));
                     balc.addMoney(player.getUniqueId(), Double.parseDouble(price));
-                    thereinventory.addItem(itemstack);
-                    yourinventory.removeItem(itemstack);
+                    theirInventory.addItem(itemstack);
+                    yourInventory.removeItem(itemstack);
                 }
-                if (toWhom.equalsIgnoreCase(offerpname)) {
+                if (toWhom.equalsIgnoreCase(offerPname)) {
                     if (Double.parseDouble(balc.bal(player.getUniqueId())) - Double.parseDouble(price) < 0) {
-                        player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getMoney() + "$" + form.addCommas(price));
+                        player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getMoney() + "$" + Utils.addCommas(price));
                         return true;
                     }
-                    PlayerInventory thereinventory = target.getInventory();
-                    PlayerInventory yourinventory = player.getInventory();
+                    PlayerInventory theirInventory = target.getInventory();
+                    PlayerInventory yourInventory = player.getInventory();
                     ItemStack itemstack = new ItemStack(Material.matchMaterial(mat.findItem(item)), Integer.parseInt(amount), data);
-                    if (!thereinventory.contains(itemstack)) {
+                    if (!theirInventory.contains(itemstack)) {
                         player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "They do not have that much " + mat.pluralize(item, Integer.parseInt(amount)));
                         return true;
                     }
                     balc.removeMoney(player.getUniqueId(), Double.parseDouble(price));
                     balc.addMoney(target.getUniqueId(), Double.parseDouble(price));
-                    yourinventory.addItem(itemstack);
-                    thereinventory.removeItem(itemstack);
+                    yourInventory.addItem(itemstack);
+                    theirInventory.removeItem(itemstack);
                 }
-                player.sendMessage(var.getMessages() + "You have accepted the trade from " + var.getObj() + offerpname);
+                player.sendMessage(var.getMessages() + "You have accepted the trade from " + var.getObj() + offerPname);
                 target.sendMessage(var.getMessages() + "Your trade to " + var.getObj() + pname + var.getMessages() + " has been accepted");
             } else
-                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have a trade offer from " + offerpname);
+                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have a trade offer from " + offerPname);
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You don't have an inventory. Please log in to trade.");
         return true;

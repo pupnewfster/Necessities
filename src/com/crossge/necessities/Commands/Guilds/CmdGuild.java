@@ -3,7 +3,7 @@ package com.crossge.necessities.Commands.Guilds;
 import com.crossge.necessities.Commands.Cmd;
 import org.bukkit.command.CommandSender;
 
-public class CmdGuild extends Cmd {
+public class CmdGuild implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         String subCmd = "help";
         String[] subArgs = new String[0];

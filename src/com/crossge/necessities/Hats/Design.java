@@ -5,10 +5,10 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 
-public class Design extends Hat {
-    public Design(Location loc) {
+class Design extends Hat {
+    Design(Location loc) {
         this.trueLoc = loc;
-        int turn = 5, turnV = 5;
+        int turn = 5;//, turnV = 5;
 
         double a, r = 0.5;
         for (int i = 0; i < 360 / turn; i++) {

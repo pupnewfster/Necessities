@@ -1,5 +1,6 @@
 package com.crossge.necessities.Economy;
 
+import com.crossge.necessities.Necessities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -7,12 +8,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.util.HashMap;
 
-public class Prices {
-    private File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
-    private static HashMap<String, Double> sellPrices = new HashMap<>();
-    private static HashMap<String, Double> buyPrices = new HashMap<>();
-    private static HashMap<String, String> price = new HashMap<>();
-    Materials mat = new Materials();//TODO: Ability to set price for damage values probs use a dash or something in storing datavalue
+public class Prices {//TODO: Ability to set price for damage values probably use a dash or something in storing data value
+    private final File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
+    private final HashMap<String, Double> sellPrices = new HashMap<>();
+    private final HashMap<String, Double> buyPrices = new HashMap<>();
+    private final HashMap<String, String> price = new HashMap<>();
 
     public String cost(String direction, String itemName) {
         itemName = itemName.toUpperCase().replaceAll("_", "");
@@ -31,7 +31,7 @@ public class Prices {
     public void setCost(String direction, String itemName, String amount) {
         YamlConfiguration configPrices = YamlConfiguration.loadConfiguration(configFilePrices);
         itemName = itemName.toUpperCase().replaceAll("_", "");
-        if (mat.findItem(itemName) == null)
+        if (Necessities.getInstance().getMaterials().findItem(itemName) == null)
             return;
         if (amount.equalsIgnoreCase("null")) {
             sellPrices.remove(itemName);
@@ -42,7 +42,7 @@ public class Prices {
         }
         try {
             configPrices.save(configFilePrices);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         if (buyPrices.containsKey(itemName) && sellPrices.containsKey(itemName))
             price.put(itemName, Double.toString(buyPrices.get(itemName)) + " " + Double.toString(sellPrices.get(itemName)));
@@ -59,19 +59,19 @@ public class Prices {
         YamlConfiguration configPrices = YamlConfiguration.loadConfiguration(configFilePrices);
         for (String key : configPrices.getKeys(true))
             if (key.startsWith("buy") && !key.equals("buy")) {
-                String tempkey = key.replaceFirst("buy.", "");
-                buyPrices.put(tempkey, configPrices.getDouble(key));
-                if (price.containsKey(tempkey))
-                    price.put(tempkey, Double.toString(buyPrices.get(tempkey)) + " " + price.get(tempkey).replaceAll("null ", ""));
+                String tempKey = key.replaceFirst("buy.", "");
+                buyPrices.put(tempKey, configPrices.getDouble(key));
+                if (price.containsKey(tempKey))
+                    price.put(tempKey, Double.toString(buyPrices.get(tempKey)) + " " + price.get(tempKey).replaceAll("null ", ""));
                 else
-                    price.put(tempkey, Double.toString(buyPrices.get(tempkey)) + " null");
+                    price.put(tempKey, Double.toString(buyPrices.get(tempKey)) + " null");
             } else if (key.startsWith("sell") && !key.equals("sell")) {
-                String tempkey = key.replaceFirst("sell.", "");
-                sellPrices.put(tempkey, configPrices.getDouble(key));
-                if (price.containsKey(tempkey))
-                    price.put(tempkey, price.get(tempkey).replaceAll("null", "") + Double.toString(sellPrices.get(tempkey)));
+                String tempKey = key.replaceFirst("sell.", "");
+                sellPrices.put(tempKey, configPrices.getDouble(key));
+                if (price.containsKey(tempKey))
+                    price.put(tempKey, price.get(tempKey).replaceAll("null", "") + Double.toString(sellPrices.get(tempKey)));
                 else
-                    price.put(tempkey, "null " + Double.toString(sellPrices.get(tempkey)));
+                    price.put(tempKey, "null " + Double.toString(sellPrices.get(tempKey)));
             }
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Item prices retrieved.");
     }

@@ -1,6 +1,7 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.Economy.Materials;
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Variables;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -8,10 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class CmdRename extends Cmd {
-    Materials mat = new Materials();
-
+public class CmdRename implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a name to rename your item to.");
             return true;
@@ -35,7 +35,8 @@ public class CmdRename extends Cmd {
             }
             handMeta.setDisplayName(name);
             hand.setItemMeta(handMeta);
-            player.sendMessage(var.getMessages() + "Successfully renamed your " + var.getObj() + mat.pluralize(hand.getType().name(), 1) + var.getMessages() + " to " + var.getObj() + name);
+            player.sendMessage(var.getMessages() + "Successfully renamed your " + var.getObj() + Necessities.getInstance().getMaterials().pluralize(hand.getType().name(), 1) + var.getMessages() + " to " +
+                    var.getObj() + name);
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You can not rename your items because you do not have any.");
         return true;

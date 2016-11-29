@@ -10,11 +10,12 @@ import java.io.File;
 import java.util.*;
 
 public class RankManager {
-    private File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml"), configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
-    private static HashMap<String, String> subranks = new HashMap<>();
-    private static HashMap<String, Rank> ranks = new HashMap<>();
-    private static ArrayList<String> names = new ArrayList<>();
-    private static ArrayList<Rank> order = new ArrayList<>();
+    private final File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml");
+    private final File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
+    private final HashMap<String, String> subranks = new HashMap<>();
+    private final HashMap<String, Rank> ranks = new HashMap<>();
+    private final ArrayList<String> names = new ArrayList<>();
+    private final ArrayList<Rank> order = new ArrayList<>();
 
     public void readRanks() {
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks), configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
@@ -42,15 +43,11 @@ public class RankManager {
         for (String subrank : configSubranks.getKeys(true))
             if (!subrank.equals("") && !configSubranks.getStringList(subrank).isEmpty())//If is an actual subrank not just base node in tree of a subrank
                 subranks.put(subrank.toLowerCase(), subrank);
-        UserManager um = new UserManager();
-        um.readUsers();
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Retrieving all permissions.");
-                updatePerms();
-                Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "All permissions retrieved.");
-            }
+        Necessities.getInstance().getUM().readUsers();
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Retrieving all permissions.");
+            updatePerms();
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "All permissions retrieved.");
         });
     }
 
@@ -70,7 +67,7 @@ public class RankManager {
     }
 
     public void reloadPermissions() {
-        UserManager um = new UserManager();
+        UserManager um = Necessities.getInstance().getUM();
         for (Rank r : getOrder()) {
             r.refreshPerms();
             um.refreshRankPerm(r);
@@ -108,7 +105,7 @@ public class RankManager {
     public void updateRankPerms(Rank r, String permission, boolean remove) {
         if (permission.equals(""))
             return;
-        UserManager um = new UserManager();
+        UserManager um = Necessities.getInstance().getUM();
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         List<String> perms = configRanks.getStringList(r.getName() + ".permissions");
         if (perms.contains(""))
@@ -128,7 +125,7 @@ public class RankManager {
         }
         try {
             configRanks.save(configFileRanks);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -137,7 +134,7 @@ public class RankManager {
             return;
         YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
-        UserManager um = new UserManager();
+        UserManager um = Necessities.getInstance().getUM();
         List<String> perms = configSubranks.getStringList(subrank);
         if (perms.contains(""))
             perms.remove("");
@@ -152,7 +149,7 @@ public class RankManager {
         }
         try {
             configSubranks.save(configFileSubranks);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         for (Rank r : order)
             if (configRanks.contains(r.getName()) && configRanks.getStringList(r.getName() + ".subranks").contains(subrank)) {
@@ -164,7 +161,6 @@ public class RankManager {
     public void updateRankSubrank(Rank r, String name, boolean remove) {
         if (name.equals(""))
             return;
-        UserManager um = new UserManager();
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         List<String> subranks = configRanks.getStringList(r.getName() + ".subranks");
         if (subranks.contains(""))
@@ -178,19 +174,19 @@ public class RankManager {
         configRanks.set(r.getName() + ".subranks", subranks);
         try {
             configRanks.save(configFileRanks);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         r.refreshPerms();
-        um.refreshRankPerm(r);
+        Necessities.getInstance().getUM().refreshRankPerm(r);
     }
 
     public void addRank(String name, Rank previous, Rank next) {
         if (name.equals(""))
             return;
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
-        configRanks.set(name, Arrays.asList(""));
-        configRanks.set(name + ".permissions", Arrays.asList(""));
-        configRanks.set(name + ".subranks", Arrays.asList(""));
+        configRanks.set(name, Collections.singletonList(""));
+        configRanks.set(name + ".permissions", Collections.singletonList(""));
+        configRanks.set(name + ".subranks", Collections.singletonList(""));
         configRanks.set(name + ".rankTitle", "[" + name + "]");
         if (previous != null)
             configRanks.set(name + ".previousRank", previous.getName());
@@ -200,7 +196,7 @@ public class RankManager {
         }
         try {
             configRanks.save(configFileRanks);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         if (previous == null) {
             ranks.put(name, new Rank(name));
@@ -217,7 +213,7 @@ public class RankManager {
     }
 
     public void removeRank(Rank rank) {
-        UserManager um = new UserManager();
+        UserManager um = Necessities.getInstance().getUM();
         Rank previous = rank.getPrevious();
         Rank next = rank.getNext();
         for (User u : um.getUsers().values())
@@ -240,7 +236,7 @@ public class RankManager {
         configRanks.set(rank.getName(), null);
         try {
             configRanks.save(configFileRanks);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         if (next != null)
             um.refreshRankPerm(next);
@@ -252,31 +248,30 @@ public class RankManager {
         if (name.equals(""))
             return;
         YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
-        configSubranks.set(name, Arrays.asList(""));
+        configSubranks.set(name, Collections.singletonList(""));
         subranks.put(name.toLowerCase(), name);
         try {
             configSubranks.save(configFileSubranks);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
     public void removeSubrank(String name) {
         if (name.equals(""))
             return;
-        UserManager um = new UserManager();
-        for (User u : um.getUsers().values())
-            um.updateUserSubrank(u.getUUID(), name, true);
-        for (Rank r : order)
-            updateRankSubrank(r, name, true);
+        UserManager um = Necessities.getInstance().getUM();
+        um.getUsers().values().forEach(u -> um.updateUserSubrank(u.getUUID(), name, true));
+        order.forEach(r -> updateRankSubrank(r, name, true));
         YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
         configSubranks.set(name, null);
         subranks.remove(name.toLowerCase());
         try {
             configSubranks.save(configFileSubranks);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void setSubranks() {
         if (!configFileSubranks.exists())
             try {
@@ -287,7 +282,7 @@ public class RankManager {
                 configSubranks.set("Necessities.Survivalist", Arrays.asList("Necessities.boots", "Necessities.chest", "Necessities.pants", "Necessities.hat"));
                 configSubranks.set("Necessities.Expert", Arrays.asList("Necessities.rename", "Necessities.colorchat", "Necessities.title", "Necessities.bracket"));
                 configSubranks.set("Necessities.Veteran", Arrays.asList("Necessities.nick", "Necessities.loginmessage", "Necessities.logoutmessage"));
-                configSubranks.set("Necessities.Master", Arrays.asList("Necessities.warn"));
+                configSubranks.set("Necessities.Master", Collections.singletonList("Necessities.warn"));
                 configSubranks.set("Necessities.Moderator", Arrays.asList("bukkit.command.ban", "bukkit.command.ban.player", "bukkit.command.banlist",
                         "bukkit.command.whitelist.list", "bukkit.command.ban.list", "Necessities.table", "Necessities.spamchat", "Necessities.spamcommands",
                         "bukkit.command.kick", "bukkit.command.unban", "bukkit.command.unban.player", "Necessities.economy.setSign", "Necessities.spy",
@@ -308,54 +303,55 @@ public class RankManager {
                 configSubranks.set("Necessities.Admin", Arrays.asList("*", "minecraft.command.gamerule", "bukkit.command.gamerule", "bukkit.command.whitelist.*",
                         "bukkit.broadcast.*"));
                 configSubranks.save(configFileSubranks);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void setRanks() {
         if (!configFileRanks.exists())
             try {
                 configFileRanks.createNewFile();
                 YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
-                configRanks.set("Guest.permissions", Arrays.asList(""));
-                configRanks.set("Guest.subranks", Arrays.asList("Necessities.Guest"));
+                configRanks.set("Guest.permissions", Collections.singletonList(""));
+                configRanks.set("Guest.subranks", Collections.singletonList("Necessities.Guest"));
                 configRanks.set("Guest.rankTitle", "&4[&8Guest&4]&7");
                 configRanks.set("Guest.maxHomes", 1);
                 configRanks.set("Guest.teleportDelay", 3);
-                configRanks.set("Novice.permissions", Arrays.asList(""));
-                configRanks.set("Novice.subranks", Arrays.asList("Necessities.Novice"));
+                configRanks.set("Novice.permissions", Collections.singletonList(""));
+                configRanks.set("Novice.subranks", Collections.singletonList("Necessities.Novice"));
                 configRanks.set("Novice.rankTitle", "&4[&3Novice&4]&9");
                 configRanks.set("Novice.previousRank", "Guest");
-                configRanks.set("Survivalist.permissions", Arrays.asList(""));
-                configRanks.set("Survivalist.subranks", Arrays.asList("Necessities.Survivalist"));
+                configRanks.set("Survivalist.permissions", Collections.singletonList(""));
+                configRanks.set("Survivalist.subranks", Collections.singletonList("Necessities.Survivalist"));
                 configRanks.set("Survivalist.rankTitle", "&4[&1Survivalist&4]&2");
                 configRanks.set("Survivalist.previousRank", "Novice");
-                configRanks.set("Expert.permissions", Arrays.asList(""));
-                configRanks.set("Expert.subranks", Arrays.asList("Necessities.Expert"));
+                configRanks.set("Expert.permissions", Collections.singletonList(""));
+                configRanks.set("Expert.subranks", Collections.singletonList("Necessities.Expert"));
                 configRanks.set("Expert.rankTitle", "&4[&0Expert&4]&f");
                 configRanks.set("Expert.previousRank", "Survivalist");
-                configRanks.set("Veteran.permissions", Arrays.asList(""));
-                configRanks.set("Veteran.subranks", Arrays.asList("Necessities.Veteran"));
+                configRanks.set("Veteran.permissions", Collections.singletonList(""));
+                configRanks.set("Veteran.subranks", Collections.singletonList("Necessities.Veteran"));
                 configRanks.set("Veteran.rankTitle", "&4[&5Veteran&4]&d");
                 configRanks.set("Veteran.previousRank", "Expert");
-                configRanks.set("Master.permissions", Arrays.asList(""));
-                configRanks.set("Master.subranks", Arrays.asList("Necessities.Master"));
+                configRanks.set("Master.permissions", Collections.singletonList(""));
+                configRanks.set("Master.subranks", Collections.singletonList("Necessities.Master"));
                 configRanks.set("Master.rankTitle", "&4[&6Master&4]&e");
                 configRanks.set("Master.previousRank", "Veteran");
-                configRanks.set("Moderator.permissions", Arrays.asList(""));
-                configRanks.set("Moderator.subranks", Arrays.asList("Necessities.Moderator"));
+                configRanks.set("Moderator.permissions", Collections.singletonList(""));
+                configRanks.set("Moderator.subranks", Collections.singletonList("Necessities.Moderator"));
                 configRanks.set("Moderator.rankTitle", "&4[&2Mod&4]&a");
                 configRanks.set("Moderator.previousRank", "Master");
-                configRanks.set("Operator.permissions", Arrays.asList(""));
-                configRanks.set("Operator.subranks", Arrays.asList("Necessities.Operator"));
+                configRanks.set("Operator.permissions", Collections.singletonList(""));
+                configRanks.set("Operator.subranks", Collections.singletonList("Necessities.Operator"));
                 configRanks.set("Operator.rankTitle", "&4[&1Op&4]&b");
                 configRanks.set("Operator.previousRank", "Moderator");
-                configRanks.set("Manager.permissions", Arrays.asList(""));
-                configRanks.set("Manager.subranks", Arrays.asList("Necessities.Manager"));
+                configRanks.set("Manager.permissions", Collections.singletonList(""));
+                configRanks.set("Manager.subranks", Collections.singletonList("Necessities.Manager"));
                 configRanks.set("Manager.rankTitle", "&4[&bManager&4]&6");
                 configRanks.set("Manager.previousRank", "Operator");
                 configRanks.save(configFileRanks);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
     }
 }

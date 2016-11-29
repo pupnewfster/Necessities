@@ -9,9 +9,9 @@ import java.io.File;
 import java.util.HashMap;
 
 public class PortalManager {//TODO: add a method to update the things when a world is unloaded or loaded
-    private static HashMap<String, Portal> portals = new HashMap<>();
-    private static HashMap<String, String> lowerNames = new HashMap<>();
-    private File configFilePM = new File("plugins/Necessities/WorldManager", "portals.yml");
+    private final HashMap<String, Portal> portals = new HashMap<>();
+    private final HashMap<String, String> lowerNames = new HashMap<>();
+    private final File configFilePM = new File("plugins/Necessities/WorldManager", "portals.yml");
 
     public void initiate() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loading portals...");
@@ -42,7 +42,7 @@ public class PortalManager {//TODO: add a method to update the things when a wor
         configPM.set(name, null);
         try {
             configPM.save(configFilePM);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         portals.remove(name);
         lowerNames.remove(name.toLowerCase());
@@ -60,7 +60,7 @@ public class PortalManager {//TODO: add a method to update the things when a wor
         configPM.set(name + ".location.z2", right.getBlockZ());
         try {
             configPM.save(configFilePM);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         portals.put(name, new Portal(name));
         lowerNames.put(name.toLowerCase(), name);

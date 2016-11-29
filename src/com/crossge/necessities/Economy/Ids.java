@@ -5,7 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 
 public class Ids {
-    private File configFileIds = new File("plugins/Necessities/Economy", "ids.yml");
+    private final File configFileIds = new File("plugins/Necessities/Economy", "ids.yml");
 
     public void setIds() {
         YamlConfiguration configIds = YamlConfiguration.loadConfiguration(configFileIds);
@@ -765,7 +765,6 @@ public class Ids {
             configIds.set("ACACIA_DOOR", 430);
         if (!configIds.contains("DARK_OAK_DOOR"))
             configIds.set("DARK_OAK_DOOR", 431);
-
         if (!configIds.contains("CHORUS_FLOWER"))
             configIds.set("CHORUS_FLOWER", 200);
         if (!configIds.contains("CHORUS_PLANT"))
@@ -822,9 +821,59 @@ public class Ids {
             configIds.set("FROSTED_ICE", 212);
         if (!configIds.contains("BEETROOT_BLOCK"))
             configIds.set("BEETROOT_BLOCK", 207);
+        if (!configIds.contains("MAGMA"))
+            configIds.set("MAGMA", 213);
+        if (!configIds.contains("NETHER_WART_BLOCK"))
+            configIds.set("NETHER_WART_BLOCK", 214);
+        if (!configIds.contains("RED_NETHER_BRICK"))
+            configIds.set("RED_NETHER_BRICK", 215);
+        if (!configIds.contains("BONE_BLOCK"))
+            configIds.set("BONE_BLOCK", 216);
+        if (!configIds.contains("STRUCTURE_VOID"))
+            configIds.set("STRUCTURE_VOID", 217);
+        if (!configIds.contains("STRUCTURE_BLOCK"))
+            configIds.set("STRUCTURE_BLOCK", 255);
+        if (!configIds.contains("OBSERVER"))
+            configIds.set("OBSERVER", 218);
+        if (!configIds.contains("SHULKER_SHELL"))
+            configIds.set("SHULKER_SHELL", 450);
+        if (!configIds.contains("TOTEM"))
+            configIds.set("TOTEM", 449);
+        if (!configIds.contains("WHITE_SHULKER_BOX"))
+            configIds.set("WHITE_SHULKER_BOX", 219);
+        if (!configIds.contains("ORANGE_SHULKER_BOX"))
+            configIds.set("ORANGE_SHULKER_BOX", 220);
+        if (!configIds.contains("MAGENTA_SHULKER_BOX"))
+            configIds.set("MAGENTA_SHULKER_BOX", 221);
+        if (!configIds.contains("LIGHT_BLUE_SHULKER_BOX"))
+            configIds.set("LIGHT_BLUE_SHULKER_BOX", 222);
+        if (!configIds.contains("YELLOW_SHULKER_BOX"))
+            configIds.set("YELLOW_SHULKER_BOX", 223);
+        if (!configIds.contains("LIME_SHULKER_BOX"))
+            configIds.set("LIME_SHULKER_BOX", 224);
+        if (!configIds.contains("PINK_SHULKER_BOX"))
+            configIds.set("PINK_SHULKER_BOX", 225);
+        if (!configIds.contains("GRAY_SHULKER_BOX"))
+            configIds.set("GRAY_SHULKER_BOX", 226);
+        if (!configIds.contains("SILVER_SHULKER_BOX"))
+            configIds.set("SILVER_SHULKER_BOX", 227);
+        if (!configIds.contains("CYAN_SHULKER_BOX"))
+            configIds.set("CYAN_SHULKER_BOX", 228);
+        if (!configIds.contains("PURPLE_SHULKER_BOX"))
+            configIds.set("PURPLE_SHULKER_BOX", 229);
+        if (!configIds.contains("BLUE_SHULKER_BOX"))
+            configIds.set("BLUE_SHULKER_BOX", 230);
+        if (!configIds.contains("BROWN_SHULKER_BOX"))
+            configIds.set("BROWN_SHULKER_BOX", 231);
+        if (!configIds.contains("GREEN_SHULKER_BOX"))
+            configIds.set("GREEN_SHULKER_BOX", 232);
+        if (!configIds.contains("RED_SHULKER_BOX"))
+            configIds.set("RED_SHULKER_BOX", 233);
+        if (!configIds.contains("BLACK_SHULKER_BOX"))
+            configIds.set("BLACK_SHULKER_BOX", 234);
         try {
             configIds.save(configFileIds);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 }

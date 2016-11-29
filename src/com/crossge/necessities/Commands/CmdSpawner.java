@@ -1,6 +1,8 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
+import com.crossge.necessities.Variables;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.CreatureSpawner;
@@ -8,11 +10,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-public class CmdSpawner extends Cmd {
+public class CmdSpawner implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            User u = um.getUser(p.getUniqueId());
+            User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
             Location l = u.getLookingAt();
             if (l == null) {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Block out of range.");
@@ -24,13 +27,13 @@ public class CmdSpawner extends Cmd {
                     p.sendMessage(var.getMessages() + "Spawner type is " + spawner.getSpawnedType().toString().replaceAll("_", " ").toLowerCase() + ".");
                     return true;
                 }
-                EntityType spawnertype = getType(args[0]);
-                if (spawnertype == null) {
+                EntityType spawnerType = getType(args[0]);
+                if (spawnerType == null) {
                     p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid mob type.");
                     p.sendMessage(var.getMessages() + "Valid mob types: " + ChatColor.WHITE + validTypes());
                     return true;
                 }
-                spawner.setSpawnedType(spawnertype);
+                spawner.setSpawnedType(spawnerType);
                 p.sendMessage(var.getMessages() + "Spawner type set to " + var.getObj() + spawner.getSpawnedType().toString().replaceAll("_", " ").toLowerCase() + var.getMessages() + ".");
                 return true;
             }

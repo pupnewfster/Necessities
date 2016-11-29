@@ -1,19 +1,22 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.GetUUID;
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CmdTp extends Cmd {
-    CmdHide hide = new CmdHide();
-
+public class CmdTp implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a player to teleport to.");
             return true;
         }
+        GetUUID get = Necessities.getInstance().getUUID();
         UUID uuid = get.getID(args[0]);
         if (uuid == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
@@ -22,7 +25,7 @@ public class CmdTp extends Cmd {
         Player target = Bukkit.getPlayer(uuid);
         if (sender instanceof Player && args.length == 1) {
             Player p = (Player) sender;
-            if (!p.hasPermission("Necessities.seehidden") && hide.isHidden(target)) {
+            if (!p.hasPermission("Necessities.seehidden") && Necessities.getInstance().getHide().isHidden(target)) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
                 return true;
             }
@@ -40,8 +43,8 @@ public class CmdTp extends Cmd {
             return true;
         }
         Player targetTo = Bukkit.getPlayer(uuidTo);
-        target.teleport(safe.getSafe(targetTo.getLocation()));
-        String name = (sender instanceof Player ? sender.getName() : console.getName().replaceAll(":", ""));
+        target.teleport(Necessities.getInstance().getSafeLocations().getSafe(targetTo.getLocation()));
+        String name = (sender instanceof Player ? sender.getName() : Necessities.getInstance().getConsole().getName().replaceAll(":", ""));
         target.sendMessage(var.getObj() + name + var.getMessages() + " teleported you to " + targetTo.getName() + ".");
         sender.sendMessage(var.getMessages() + "You teleported " + var.getObj() + target.getName() + var.getMessages() + " to " + var.getObj() + targetTo.getName() + var.getMessages() + ".");
         return true;

@@ -1,5 +1,6 @@
 package com.crossge.necessities.WorldManager;
 
+import com.crossge.necessities.Necessities;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -7,18 +8,18 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
-public class Portal {
+class Portal {
     private double x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;
     private boolean validPortal = false;
     private Warp destination;
     private World from, to;
-    private String name;
+    private final String name;
 
-    public Portal(String portalname) {
+    Portal(String portalName) {
         File configFilePM = new File("plugins/Necessities/WorldManager", "portals.yml");
         YamlConfiguration configPM = YamlConfiguration.loadConfiguration(configFilePM);
-        WarpManager warps = new WarpManager();
-        this.name = portalname;
+        WarpManager warps = Necessities.getInstance().getWarps();
+        this.name = portalName;
         if (configPM.contains(this.name + ".world"))
             this.from = Bukkit.getWorld(configPM.getString(this.name + ".world"));
         if (configPM.contains(this.name + ".destination")) {
@@ -48,19 +49,19 @@ public class Portal {
 
     private void fixCoordinates() {
         if (this.x1 > this.x2) {
-            double tempx = this.x1;
+            double tempX = this.x1;
             this.x1 = this.x2;
-            this.x2 = tempx;
+            this.x2 = tempX;
         }
         if (this.y1 > this.y2) {
-            double tempy = this.y1;
+            double tempY = this.y1;
             this.y1 = this.y2;
-            this.y2 = tempy;
+            this.y2 = tempY;
         }
         if (this.z1 > this.z2) {
-            double tempz = this.z1;
+            double tempZ = this.z1;
             this.z1 = this.z2;
-            this.z2 = tempz;
+            this.z2 = tempZ;
         }
         this.x1 -= 0.3;
         this.y1 -= 0.3;
@@ -74,7 +75,7 @@ public class Portal {
         return this.name;
     }
 
-    public World getWorldTo() {
+    World getWorldTo() {
         return this.to;
     }
 
@@ -86,11 +87,8 @@ public class Portal {
         return (this.destination != null && this.destination.hasDestination());
     }
 
-    public boolean isPortal(Location l) {
-        if ((this.to == null && !isWarp()) || this.from == null)
-            return false;
-        WorldManager wm = new WorldManager();
-        return this.validPortal && this.from.equals(l.getWorld()) && (isWarp() || wm.worldExists(this.to.getName())) && this.x1 <= l.getBlockX() &&
-                l.getBlockX() <= this.x2 && this.y1 <= l.getBlockY() && l.getBlockY() <= this.y2 && this.z1 <= l.getBlockZ() && l.getBlockZ() <= this.z2;
+    boolean isPortal(Location l) {
+        return !((this.to == null && !isWarp()) || this.from == null) && this.validPortal && this.from.equals(l.getWorld()) && (isWarp() || Necessities.getInstance().getWM().worldExists(this.to.getName())) &&
+                this.x1 <= l.getBlockX() && l.getBlockX() <= this.x2 && this.y1 <= l.getBlockY() && l.getBlockY() <= this.y2 && this.z1 <= l.getBlockZ() && l.getBlockZ() <= this.z2;
     }
 }

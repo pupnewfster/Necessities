@@ -1,14 +1,19 @@
 package com.crossge.necessities.Commands.Guilds;
 
+import com.crossge.necessities.GetUUID;
 import com.crossge.necessities.Guilds.Guild;
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
+import com.crossge.necessities.RankManager.UserManager;
+import com.crossge.necessities.Variables;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CmdEnemy extends GuildCmd {
+public class CmdEnemy implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.enemy")) {
@@ -19,7 +24,9 @@ public class CmdEnemy extends GuildCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Must enter a name for the guild you wish to become enemies with.");
                 return true;
             }
-            Guild g = gm.getGuild(args[0]);
+            Guild g = Necessities.getInstance().getGM().getGuild(args[0]);
+            GetUUID get = Necessities.getInstance().getUUID();
+            UserManager um = Necessities.getInstance().getUM();
             if (g == null) {
                 UUID uuid = get.getID(args[0]);
                 if (uuid == null)

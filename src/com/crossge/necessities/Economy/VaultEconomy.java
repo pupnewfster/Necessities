@@ -1,7 +1,7 @@
 package com.crossge.necessities.Economy;
 
-import com.crossge.necessities.Formatter;
-import com.crossge.necessities.GetUUID;
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.OfflinePlayer;
@@ -10,10 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class VaultEconomy implements Economy {
-    Formatter form = new Formatter();
-    BalChecks balc = new BalChecks();
-    GetUUID get = new GetUUID();
-
     @Override
     public boolean isEnabled() {
         return true;
@@ -36,7 +32,7 @@ public class VaultEconomy implements Economy {
 
     @Override
     public String format(double v) {
-        return form.roundTwoDecimals(v);
+        return Utils.roundTwoDecimals(v);
     }
 
     @Override
@@ -51,22 +47,22 @@ public class VaultEconomy implements Economy {
 
     @Override
     public boolean hasAccount(String s) {
-        return balc.doesPlayerExist(get.getOfflineID(s));
+        return Necessities.getInstance().getBalChecks().doesPlayerExist(Necessities.getInstance().getUUID().getOfflineID(s));
     }
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        return balc.doesPlayerExist(offlinePlayer.getUniqueId());
+        return Necessities.getInstance().getBalChecks().doesPlayerExist(offlinePlayer.getUniqueId());
     }
 
     @Override
     public double getBalance(String s) {
-        return balc.balance(get.getOfflineID(s));
+        return Necessities.getInstance().getBalChecks().balance(Necessities.getInstance().getUUID().getOfflineID(s));
     }
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        return balc.balance(offlinePlayer.getUniqueId());
+        return Necessities.getInstance().getBalChecks().balance(offlinePlayer.getUniqueId());
     }
 
     @Override
@@ -81,31 +77,32 @@ public class VaultEconomy implements Economy {
 
     @Override
     public EconomyResponse withdrawPlayer(String s, double v) {
-        balc.removeMoney(get.getOfflineID(s), v);
+        Necessities.getInstance().getBalChecks().removeMoney(Necessities.getInstance().getUUID().getOfflineID(s), v);
         return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
-        balc.removeMoney(offlinePlayer.getUniqueId(), v);
+        Necessities.getInstance().getBalChecks().removeMoney(offlinePlayer.getUniqueId(), v);
         return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse depositPlayer(String s, double v) {
-        balc.addMoney(get.getOfflineID(s), v);
+        Necessities.getInstance().getBalChecks().addMoney(Necessities.getInstance().getUUID().getOfflineID(s), v);
         return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
-        balc.addMoney(offlinePlayer.getUniqueId(), v);
+        Necessities.getInstance().getBalChecks().addMoney(offlinePlayer.getUniqueId(), v);
         return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public boolean createPlayerAccount(String s) {
-        UUID uuid = get.getOfflineID(s);
+        UUID uuid = Necessities.getInstance().getUUID().getOfflineID(s);
+        BalChecks balc = Necessities.getInstance().getBalChecks();
         if (!balc.doesPlayerExist(uuid)) {
             balc.addPlayerToList(uuid);
             return true;
@@ -116,6 +113,7 @@ public class VaultEconomy implements Economy {
     @Override
     public boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
         UUID uuid = offlinePlayer.getUniqueId();
+        BalChecks balc = Necessities.getInstance().getBalChecks();
         if (!balc.doesPlayerExist(uuid)) {
             balc.addPlayerToList(uuid);
             return true;

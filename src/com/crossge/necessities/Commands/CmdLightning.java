@@ -1,6 +1,8 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
+import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -8,10 +10,11 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CmdLightning extends Cmd {
+public class CmdLightning implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (args.length > 0) {
-            UUID uuid = get.getID(args[0]);
+            UUID uuid = Necessities.getInstance().getUUID().getID(args[0]);
             if (uuid == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
                 return true;
@@ -24,7 +27,7 @@ public class CmdLightning extends Cmd {
         }
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            User u = um.getUser(p.getUniqueId());
+            User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
             Location l = u.getLookingAt();
             if (l == null) {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Block out of range.");

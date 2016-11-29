@@ -1,13 +1,16 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Variables;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-public class CmdSkull extends Cmd {
+public class CmdSkull implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a player to get their head.");
             return true;

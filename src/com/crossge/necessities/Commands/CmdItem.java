@@ -1,15 +1,17 @@
 package com.crossge.necessities.Commands;
 
 import com.crossge.necessities.Economy.Materials;
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
+import com.crossge.necessities.Variables;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class CmdItem extends Cmd {
-    Materials mat = new Materials();
-
+public class CmdItem implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (args.length == 0) {
@@ -17,7 +19,8 @@ public class CmdItem extends Cmd {
                 return true;
             }
             String itemName = args[0];
-            if (form.isLegal(itemName))
+            Materials mat = Necessities.getInstance().getMaterials();
+            if (Utils.legalInt(itemName))
                 itemName = mat.idToName(Integer.parseInt(itemName));
             itemName = mat.findItem(itemName);
             if (itemName == null) {
@@ -26,10 +29,10 @@ public class CmdItem extends Cmd {
             }
             if (args.length == 1) {
                 p.getInventory().addItem(new ItemStack(Material.getMaterial(itemName), 64));
-                p.sendMessage(var.getMessages() + "Giving " + var.getObj() + "64 " + mat.pluralize(form.capFirst(mat.getName(itemName)), 64) + var.getMessages() + ".");
+                p.sendMessage(var.getMessages() + "Giving " + var.getObj() + "64 " + mat.pluralize(Utils.capFirst(mat.getName(itemName)), 64) + var.getMessages() + ".");
                 return true;
             }
-            if (!form.isLegal(args[1])) {
+            if (!Utils.legalInt(args[1])) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Illegal amount the amount must be numeric.");
                 return true;
             }
@@ -37,14 +40,14 @@ public class CmdItem extends Cmd {
             if (args.length == 2) {
 
                 p.getInventory().addItem(new ItemStack(Material.getMaterial(itemName), amount));
-                p.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.pluralize(form.capFirst(mat.getName(itemName)), amount) + var.getMessages() + ".");
+                p.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.pluralize(Utils.capFirst(mat.getName(itemName)), amount) + var.getMessages() + ".");
                 return true;
             }
             short data = 0;
-            if (form.isLegal(args[2]))
+            if (Utils.legalInt(args[2])) //Really a short
                 data = Short.parseShort(args[2]);
             p.getInventory().addItem(new ItemStack(Material.getMaterial(itemName), amount, data));
-            p.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.pluralize(form.capFirst(mat.getName(itemName)), amount) + var.getMessages() + ".");
+            p.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.pluralize(Utils.capFirst(mat.getName(itemName)), amount) + var.getMessages() + ".");
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command.");
         return true;

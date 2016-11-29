@@ -1,6 +1,7 @@
 package com.crossge.necessities.Guilds;
 
 import com.crossge.necessities.Commands.CmdHide;
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.UserManager;
 import com.crossge.necessities.Variables;
 import org.bukkit.*;
@@ -8,15 +9,20 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 public class Guild {
-    private File configFileGuild;
-    private ArrayList<String> allies = new ArrayList<>(), enemies = new ArrayList<>(), mods = new ArrayList<>(), members = new ArrayList<>(), claims = new ArrayList<>();
-    private ArrayList<Guild> allyInvites = new ArrayList<>(), neutralInvites = new ArrayList<>();
-    private ArrayList<UUID> invited = new ArrayList<>();
+    private final File configFileGuild;
+    private final ArrayList<String> allies = new ArrayList<>();
+    private final ArrayList<String> enemies = new ArrayList<>();
+    private final ArrayList<String> mods = new ArrayList<>();
+    private final ArrayList<String> members = new ArrayList<>();
+    private final ArrayList<String> claims = new ArrayList<>();
+    private final ArrayList<Guild> allyInvites = new ArrayList<>();
+    private final ArrayList<Guild> neutralInvites = new ArrayList<>();
+    private final ArrayList<UUID> invited = new ArrayList<>();
     private boolean pvp = true, permanent = false, explosions = true, interact = false, hostileSpawn = true;
     private String description = "", leader, name;
     private int totalMembers = 0;
@@ -57,32 +63,28 @@ public class Guild {
             if (mods.contains(""))
                 mods.remove("");
             if (!mods.isEmpty())
-                for (String mod : mods)
-                    this.mods.add(mod);
+                mods.forEach(this.mods::add);
         }
         if (configGuild.contains("members")) {
             List<String> members = configGuild.getStringList("members");
             if (members.contains(""))
                 members.remove("");
             if (!members.isEmpty())
-                for (String member : members)
-                    this.members.add(member);
+                members.forEach(this.members::add);
         }
         if (configGuild.contains("allies")) {
             List<String> allies = configGuild.getStringList("allies");
             if (allies.contains(""))
                 allies.remove("");
             if (!allies.isEmpty())
-                for (String ally : allies)
-                    this.allies.add(ally);
+                allies.forEach(this.allies::add);
         }
         if (configGuild.contains("enemies")) {
             List<String> enemies = configGuild.getStringList("enemies");
             if (enemies.contains(""))
                 enemies.remove("");
             if (!enemies.isEmpty())
-                for (String enemy : enemies)
-                    this.enemies.add(enemy);
+                enemies.forEach(this.enemies::add);
         }
         if (configGuild.contains("claims")) {
             List<String> claims = configGuild.getStringList("claims");
@@ -93,18 +95,18 @@ public class Guild {
                     if (claim.split(" ").length == 3 && Bukkit.getWorld(claim.split(" ")[0]) != null)
                         this.claims.add(claim);
         }
-        if (!this.leader.equals("") && !this.leader.equals("Janet"))
+        if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet"))
             this.totalMembers++;
         this.totalMembers += this.mods.size();
         this.totalMembers += this.members.size();
     }
 
     public void updatePower() {
-        UserManager um = new UserManager();
         if (this.power == -1)
             return;
         this.power = 0;
-        if (!this.leader.equals("") && !this.leader.equals("Janet"))
+        UserManager um = Necessities.getInstance().getUM();
+        if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet"))
             this.power += um.getUser(UUID.fromString(this.leader)).getPower();
         if (!this.mods.isEmpty())
             for (String id : this.mods)
@@ -116,7 +118,7 @@ public class Guild {
         configGuild.set("power", this.power);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -130,28 +132,22 @@ public class Guild {
         configGuild.set("flag.permanent", perm);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
     public void rename(String newName) {
-        UserManager um = new UserManager();
-        GuildManager gm = new GuildManager();
-        for (String enemy : this.enemies)
-            gm.getGuild(enemy).setNeutral(this);
-        for (String ally : this.allies)
-            gm.getGuild(ally).setNeutral(this);
+        GuildManager gm = Necessities.getInstance().getGM();
+        this.enemies.forEach(enemy -> gm.getGuild(enemy).setNeutral(this));
+        this.allies.forEach(ally -> gm.getGuild(ally).setNeutral(this));
         this.name = newName;
-        if (!this.leader.equals("") && !this.leader.equals("Janet"))
+        UserManager um = Necessities.getInstance().getUM();
+        if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet"))
             um.getUser(UUID.fromString(this.leader)).joinGuild(this);//Already is this but force updates the name
-        for (String id : this.mods)
-            um.getUser(UUID.fromString(id)).joinGuild(this);//Already is this but force updates the name
-        for (String id : this.members)
-            um.getUser(UUID.fromString(id)).joinGuild(this);//Already is this but force updates the name
-        for (String enemy : this.enemies)
-            gm.getGuild(enemy).addEnemy(this);
-        for (String ally : this.allies)
-            gm.getGuild(ally).addAlly(this);
+        this.mods.forEach(id -> um.getUser(UUID.fromString(id)).joinGuild(this));//Already is this but force updates the name
+        this.members.forEach(id -> um.getUser(UUID.fromString(id)).joinGuild(this));//Already is this but force updates the name
+        this.enemies.forEach(enemy -> gm.getGuild(enemy).addEnemy(this));
+        this.allies.forEach(ally -> gm.getGuild(ally).addAlly(this));
     }
 
     public boolean allowInteract() {
@@ -164,7 +160,7 @@ public class Guild {
         configGuild.set("flag.interact", allow);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -178,7 +174,7 @@ public class Guild {
         configGuild.set("flag.hostileSpawn", can);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -211,7 +207,7 @@ public class Guild {
         configGuild.set("leader", name);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -223,7 +219,7 @@ public class Guild {
         return this.name;
     }
 
-    public boolean claimed(Chunk c) {
+    boolean claimed(Chunk c) {
         return this.claims.contains(c.getWorld().getName() + " " + c.getX() + " " + c.getZ());
     }
 
@@ -237,7 +233,7 @@ public class Guild {
         configGuild.set("description", this.description);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -258,7 +254,7 @@ public class Guild {
         configGuild.set("home.pitch", Float.toString(l.getPitch()));
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -289,9 +285,9 @@ public class Guild {
     }
 
     public String onlineMembers(boolean countHidden) {
-        CmdHide hide = new CmdHide();
+        CmdHide hide = Necessities.getInstance().getHide();
         String member = "";
-        if (!this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) != null &&
+        if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) != null &&
                 (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(this.leader)))))
             member += Bukkit.getPlayer(UUID.fromString(this.leader)).getName() + ", ";
         if (!this.mods.isEmpty())
@@ -308,9 +304,9 @@ public class Guild {
     }
 
     public String offlineMember(boolean countHidden) {
-        CmdHide hide = new CmdHide();
+        CmdHide hide = Necessities.getInstance().getHide();
         String member = "";
-        if (!this.leader.equals("") && !this.leader.equals("Janet") && (Bukkit.getPlayer(UUID.fromString(this.leader)) == null ||
+        if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet") && (Bukkit.getPlayer(UUID.fromString(this.leader)) == null ||
                 (!countHidden && hide.isHidden(Bukkit.getPlayer(UUID.fromString(this.leader))))))
             member += Bukkit.getOfflinePlayer(UUID.fromString(this.leader)).getName() + ", ";
         if (!this.mods.isEmpty())
@@ -327,9 +323,9 @@ public class Guild {
     }
 
     public int getOnline(boolean countHidden) {
-        CmdHide hide = new CmdHide();
+        CmdHide hide = Necessities.getInstance().getHide();
         int online = 0;
-        if (!this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) != null &&
+        if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) != null &&
                 (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(this.leader)))))
             online++;
         if (!this.mods.isEmpty())
@@ -344,7 +340,7 @@ public class Guild {
     }
 
     public String getRank(UUID uuid) {
-        if (!this.leader.equals("Janet") && this.leader.equals(uuid.toString()))
+        if (this.leader != null && !this.leader.equals("Janet") && this.leader.equals(uuid.toString()))
             return "leader";
         if (this.mods.contains(uuid.toString()))
             return "mod";
@@ -354,7 +350,7 @@ public class Guild {
     }
 
     public ChatColor relation(Guild other) {
-        Variables var = new Variables();
+        Variables var = Necessities.getInstance().getVar();
         ChatColor col = var.getNeutral();
         if (other != null) {
             if (this.equals(other))
@@ -381,7 +377,7 @@ public class Guild {
         configGuild.set("home", null);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -398,7 +394,7 @@ public class Guild {
         configGuild.set("claims", chunkList);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -412,7 +408,7 @@ public class Guild {
         configGuild.set("claims", chunkList);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         if (this.home != null && this.home.getChunk().equals(c))
             delHome();
@@ -422,10 +418,10 @@ public class Guild {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         this.claims.clear();
         delHome();
-        configGuild.set("claims", Arrays.asList(""));
+        configGuild.set("claims", Collections.singletonList(""));
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -476,7 +472,7 @@ public class Guild {
         configGuild.set("enemies", enemyList);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -492,7 +488,7 @@ public class Guild {
         configGuild.set("allies", allyList);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -516,7 +512,7 @@ public class Guild {
         }
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         this.neutralInvites.remove(g);
     }
@@ -528,7 +524,7 @@ public class Guild {
     public void kick(UUID uuid) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         String name = uuid.toString();
-        if (this.leader.equalsIgnoreCase(name)) {
+        if (this.leader != null && this.leader.equalsIgnoreCase(name)) {
             this.leader = "";
             configGuild.set("leader", "");
         }
@@ -548,20 +544,18 @@ public class Guild {
                 memberList.add("");
             configGuild.set("members", memberList);
         }
-        UserManager um = new UserManager();
+        UserManager um = Necessities.getInstance().getUM();
         um.getUser(uuid).leaveGuild();
         if (this.totalMembers != 0)
             this.totalMembers--;
-        if (!this.permanent && getTotal() == 0) {
-            GuildManager gm = new GuildManager();
-            gm.disband(this);
-        }
+        if (!this.permanent && getTotal() == 0)
+            Necessities.getInstance().getGM().disband(this);
         if (this.power != -1)
             this.power -= um.getUser(uuid).getPower();
         configGuild.set("power", this.power);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -574,7 +568,7 @@ public class Guild {
         if (memberList.contains(""))
             memberList.remove("");
         configGuild.set("members", memberList);
-        UserManager um = new UserManager();
+        UserManager um = Necessities.getInstance().getUM();
         um.getUser(uuid).joinGuild(this);
         this.invited.remove(uuid);
         this.totalMembers++;
@@ -583,12 +577,12 @@ public class Guild {
         configGuild.set("power", this.power);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
     public void sendMods(String message) {
-        if (!this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) != null)
+        if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) != null)
             Bukkit.getPlayer(UUID.fromString(this.leader)).sendMessage(message);
         if (!this.mods.isEmpty())
             for (String id : this.mods)
@@ -602,7 +596,7 @@ public class Guild {
         configGuild.set("flag.explosions", exp);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -612,7 +606,7 @@ public class Guild {
         configGuild.set("flag.pvp", canPVP);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -622,7 +616,7 @@ public class Guild {
             configGuild.set("power", -1);
             try {
                 configGuild.save(this.configFileGuild);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         } else {
             this.power = 0;
@@ -630,14 +624,13 @@ public class Guild {
         }
     }
 
-    public void disband() {
-        UserManager um = new UserManager();
-        if (!this.leader.equalsIgnoreCase("Janet") && !this.leader.equalsIgnoreCase(""))
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    void disband() {
+        UserManager um = Necessities.getInstance().getUM();
+        if (this.leader != null && !this.leader.equalsIgnoreCase("Janet") && !this.leader.equalsIgnoreCase(""))
             um.getUser(UUID.fromString(this.leader)).leaveGuild();
-        for (String mod : this.mods)
-            um.getUser(UUID.fromString(mod)).leaveGuild();
-        for (String member : this.members)
-            um.getUser(UUID.fromString(member)).leaveGuild();
+        this.mods.forEach(mod -> um.getUser(UUID.fromString(mod)).leaveGuild());
+        this.members.forEach(member -> um.getUser(UUID.fromString(member)).leaveGuild());
         this.configFileGuild.delete();
     }
 
@@ -658,7 +651,7 @@ public class Guild {
         configGuild.set("members", memberList);
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -671,7 +664,7 @@ public class Guild {
         if (modList.contains(""))
             modList.remove("");
         configGuild.set("mods", modList);
-        if (this.leader.equalsIgnoreCase(name)) {
+        if (this.leader != null && this.leader.equalsIgnoreCase(name)) {
             this.leader = "";
             configGuild.set("leader", "");
         } else {
@@ -684,7 +677,7 @@ public class Guild {
         }
         try {
             configGuild.save(this.configFileGuild);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 }

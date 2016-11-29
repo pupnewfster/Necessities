@@ -1,18 +1,28 @@
 package com.crossge.necessities.Commands.Guilds;
 
+import com.crossge.necessities.GetUUID;
 import com.crossge.necessities.Guilds.Guild;
+import com.crossge.necessities.Guilds.GuildManager;
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
+import com.crossge.necessities.RankManager.UserManager;
+import com.crossge.necessities.Utils;
+import com.crossge.necessities.Variables;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CmdInfo extends GuildCmd {
+public class CmdInfo implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         Guild g = null;
+        Variables var = Necessities.getInstance().getVar();
+        UserManager um = Necessities.getInstance().getUM();
+        GuildManager gm = Necessities.getInstance().getGM();
         if (args.length != 0) {
             g = gm.getGuild(args[0]);
             if (g == null) {
+                GetUUID get = Necessities.getInstance().getUUID();
                 UUID uuid = get.getID(args[0]);
                 if (uuid == null)
                     uuid = get.getOfflineID(args[0]);
@@ -52,7 +62,7 @@ public class CmdInfo extends GuildCmd {
         sender.sendMessage(var.getMessages() + "Description: " + var.getGuildMsgs() + g.getDescription());
         if (g.isPermanent())
             sender.sendMessage(var.getMessages() + "This guild is permanent - remaining even with no players.");
-        sender.sendMessage(var.getMessages() + "Land / Power / Maxpower: " + var.getGuildMsgs() + g.getLand() + "/" + form.roundTwoDecimals(g.getPower()) + "/" + g.getMaxPower() + ".00");
+        sender.sendMessage(var.getMessages() + "Land / Power / Max power: " + var.getGuildMsgs() + g.getLand() + "/" + Utils.roundTwoDecimals(g.getPower()) + "/" + g.getMaxPower() + ".00");
         if (!g.getAllies().isEmpty()) {
             String allies = "";
             for (String ally : g.getAllies())

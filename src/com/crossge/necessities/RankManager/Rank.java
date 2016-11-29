@@ -1,5 +1,6 @@
 package com.crossge.necessities.RankManager;
 
+import com.crossge.necessities.Necessities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -9,8 +10,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class Rank {
-    private File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml"), configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
-    private ArrayList<String> permissions = new ArrayList<>();
+    private final File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml");
+    private final File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
+    private final ArrayList<String> permissions = new ArrayList<>();
     private String title = "", name = "";
     private int maxHomes = 1, tpdelay = 0;
     private Rank previous, next;
@@ -21,7 +23,7 @@ public class Rank {
         if (configRanks.contains(getName() + ".rankTitle"))
             this.title = configRanks.getString(getName() + ".rankTitle");
         if (configRanks.contains(getName() + ".previousRank")) {
-            RankManager rm = new RankManager();
+            RankManager rm = Necessities.getInstance().getRM();
             this.previous = rm.getRank(configRanks.getString(getName() + ".previousRank"));
             this.previous.setNext(this);
         }
@@ -44,7 +46,7 @@ public class Rank {
         this.next = r;
     }
 
-    public int getTpDelay() {
+    int getTpDelay() {
         return this.tpdelay;
     }
 
@@ -62,19 +64,19 @@ public class Rank {
             this.permissions.add(node);
     }
 
-    public void refreshPerms() {
+    void refreshPerms() {
         this.permissions.clear();
         setPerms();
         if (this.next != null)
             this.next.refreshPerms();
     }
 
-    public void addPerm(String permission) {
+    void addPerm(String permission) {
         this.permissions.add(permission);
         refreshPerms();
     }
 
-    public void removePerm(String permission) {
+    void removePerm(String permission) {
         this.permissions.remove(permission);
         refreshPerms();
     }
@@ -83,7 +85,7 @@ public class Rank {
         return this.maxHomes;
     }
 
-    public ArrayList<String> getNodes() {
+    ArrayList<String> getNodes() {
         return this.permissions;
     }
 
@@ -99,12 +101,12 @@ public class Rank {
         return this.previous;
     }
 
-    public void setPrevious(Rank r) {
+    void setPrevious(Rank r) {
         this.previous = r;
     }
 
     public String getColor() {
-        return ChatColor.translateAlternateColorCodes('&', this.title.split("\\]")[1]).trim();
+        return ChatColor.translateAlternateColorCodes('&', this.title.split("]")[1]).trim();
     }
 
     public String getCommands() {

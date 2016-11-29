@@ -1,17 +1,13 @@
 package com.crossge.necessities.Economy;
 
-import com.crossge.necessities.Formatter;
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 
 public class Signs {
-    Formatter form = new Formatter();
-    Materials mat = new Materials();
-    Variables var = new Variables();
-    Prices pr = new Prices();
-
     public boolean checkFormat(Sign sign) {
         if (sign.getLines()[0] == null || sign.getLines()[1] == null || sign.getLines()[2] == null)
             return false;
@@ -21,7 +17,7 @@ public class Signs {
             if (itemName == null)
                 return false;
             String amount = ChatColor.stripColor(sign.getLine(2).trim());
-            return form.isLegal(amount) && pr.getCost(operation, itemName, Integer.parseInt(amount)) != -1 && Integer.parseInt(amount) > 0;
+            return Utils.legalInt(amount) && Necessities.getInstance().getPrices().getCost(operation, itemName, Integer.parseInt(amount)) != -1 && Integer.parseInt(amount) > 0;
         }
         return false;
     }
@@ -36,9 +32,10 @@ public class Signs {
         sign.update();
     }
 
-    public String itemName(Sign sign) {
+    private String itemName(Sign sign) {
         String itemName = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", "")).replaceAll(":", " ").split(" ")[0];
-        if (form.isLegal(itemName))
+        Materials mat = Necessities.getInstance().getMaterials();
+        if (Utils.legalInt(itemName))
             itemName = mat.idToName(Integer.parseInt(itemName));
         return mat.findItem(itemName.trim());
     }
@@ -46,7 +43,8 @@ public class Signs {
     public String itemLine(Sign sign) {
         String line = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", ""));
         String itemName = line.replaceAll(":", " ").split(" ")[0];
-        if (form.isLegal(itemName))
+        Materials mat = Necessities.getInstance().getMaterials();
+        if (Utils.legalInt(itemName))
             itemName = mat.idToName(Integer.parseInt(itemName));
         return mat.findItem(itemName.trim()) + (line.replaceAll(":", " ").split(" ").length > 1 ? ":" + line.replaceAll(":", " ").split(" ")[1] : "");
     }
@@ -62,19 +60,21 @@ public class Signs {
     private void setPrice(Sign sign) {
         String operation = getOperation(sign.getLine(0).trim());
         String itemName = sign.getLine(1).trim().replaceAll(" ", "").replaceAll(":", " ").split(" ")[0];
-        if (form.isLegal(itemName))
+        Materials mat = Necessities.getInstance().getMaterials();
+        if (Utils.legalInt(itemName))
             itemName = mat.idToName(Integer.parseInt(itemName));
         itemName = mat.findItem(itemName);
         int amount = Integer.parseInt(sign.getLine(2).trim());
-        double price = pr.getCost(operation, itemName, amount);
-        sign.setLine(3, var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(price)));
+        double price = Necessities.getInstance().getPrices().getCost(operation, itemName, amount);
+        sign.setLine(3, Necessities.getInstance().getVar().getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(price)));
     }
 
     private void formatSign(Sign sign) {
         String operation = sign.getLine(0).trim();
-        operation = ChatColor.BLUE + "[" + form.capFirst(getOperation(operation)) + "]";
+        operation = ChatColor.BLUE + "[" + Utils.capFirst(getOperation(operation)) + "]";
         sign.setLine(0, operation);
-        sign.setLine(1, var.getMessages() + form.capFirst(sign.getLine(1).trim()));
+        Variables var = Necessities.getInstance().getVar();
+        sign.setLine(1, var.getMessages() + Utils.capFirst(sign.getLine(1).trim()));
         sign.setLine(2, var.getMessages() + sign.getLine(2).trim());
     }
 

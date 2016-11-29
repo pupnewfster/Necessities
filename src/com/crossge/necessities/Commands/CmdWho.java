@@ -1,8 +1,11 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.Rank;
+import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
+import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -10,11 +13,12 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
-public class CmdWho extends Cmd {
-    UserManager um = new UserManager();
-    CmdHide hide = new CmdHide();
-
+public class CmdWho implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
+        RankManager rm = Necessities.getInstance().getRM();
+        UserManager um = Necessities.getInstance().getUM();
+        CmdHide hide = Necessities.getInstance().getHide();
         if (sender instanceof Player && !sender.hasPermission("Necessities.seehidden")) {
             HashMap<Rank, String> online = new HashMap<>();
             int numbOnline = 1;

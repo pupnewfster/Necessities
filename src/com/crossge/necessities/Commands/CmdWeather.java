@@ -1,11 +1,14 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Variables;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CmdWeather extends Cmd {
+public class CmdWeather implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a world name and weather.");
             return true;
@@ -30,7 +33,7 @@ public class CmdWeather extends Cmd {
                 dim = p.getWorld();
         } else {
             if (args.length == 1) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a worldname and weather.");
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a world name and weather.");
                 return true;
             }
             dim = sender.getServer().getWorld(args[0]);

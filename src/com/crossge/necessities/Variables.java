@@ -2,72 +2,69 @@ package com.crossge.necessities;
 
 import org.bukkit.ChatColor;
 
+@SuppressWarnings("SameReturnValue")
 public class Variables {
-    private ChatColor messages = ChatColor.GOLD, me = ChatColor.DARK_PURPLE, money = ChatColor.AQUA, error = ChatColor.RED, errorMsg = ChatColor.DARK_RED, plugincolor = ChatColor.DARK_RED,
-            promoteMsg = ChatColor.GREEN, catalog = ChatColor.BLUE, demoteMsg = ChatColor.RED, objectMsg = ChatColor.RED, guildMsgs = ChatColor.YELLOW, guild = ChatColor.GREEN, ally = ChatColor.DARK_PURPLE,
-            enemy = ChatColor.RED, neutral = ChatColor.WHITE, wilderness = ChatColor.DARK_GREEN;
-
     public ChatColor getWild() {
-        return wilderness;
+        return ChatColor.DARK_GREEN;
     }
 
     public ChatColor getGuildMsgs() {
-        return guildMsgs;
+        return ChatColor.YELLOW;
     }
 
     public ChatColor getAlly() {
-        return ally;
+        return ChatColor.DARK_PURPLE;
     }
 
     public ChatColor getEnemy() {
-        return enemy;
+        return ChatColor.RED;
     }
 
     public ChatColor getNeutral() {
-        return neutral;
+        return ChatColor.WHITE;
     }
 
     public ChatColor getGuildCol() {
-        return guild;
+        return ChatColor.GREEN;
     }
 
     public ChatColor getMe() {
-        return me;
+        return ChatColor.DARK_PURPLE;
     }
 
     public ChatColor getObj() {
-        return objectMsg;
+        return ChatColor.RED;
     }
 
     public ChatColor getPlugCol() {
-        return plugincolor;
+        return ChatColor.DARK_RED;
     }
 
     public ChatColor getCatalog() {
-        return catalog;
+        return ChatColor.BLUE;
     }
 
     public ChatColor getDemote() {
-        return demoteMsg;
+        return ChatColor.RED;
     }
 
     public ChatColor getPromote() {
-        return promoteMsg;
+        return ChatColor.GREEN;
     }
 
     public ChatColor getMoney() {
-        return money;
+        return ChatColor.AQUA;
     }
 
     public ChatColor getMessages() {
-        return messages;
+        return ChatColor.GOLD;
     }
 
     public ChatColor getEr() {
-        return error;
+        return ChatColor.RED;
     }
 
     public ChatColor getErMsg() {
-        return errorMsg;
+        return ChatColor.DARK_RED;
     }
 }

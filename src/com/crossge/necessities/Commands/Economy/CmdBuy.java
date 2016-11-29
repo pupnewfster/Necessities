@@ -1,5 +1,11 @@
 package com.crossge.necessities.Commands.Economy;
 
+import com.crossge.necessities.Economy.BalChecks;
+import com.crossge.necessities.Economy.Materials;
+import com.crossge.necessities.Economy.Prices;
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
+import com.crossge.necessities.Variables;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -8,8 +14,9 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.util.HashMap;
 
-public class CmdBuy extends EconomyCmd {
+public class CmdBuy implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (args.length > 2 || args.length == 0) {
@@ -17,24 +24,26 @@ public class CmdBuy extends EconomyCmd {
                 return true;
             }
             PlayerInventory inventory = player.getInventory();
+            BalChecks balc = Necessities.getInstance().getBalChecks();
             String balance = balc.bal(player.getUniqueId());
-            double intbal = Double.parseDouble(balance);
+            double intBal = Double.parseDouble(balance);
             int amount;
             String itemName, temp;
             short data = 0;
+            Materials mat = Necessities.getInstance().getMaterials();
             if (args.length == 2) {
                 temp = args[0].replaceAll(":", " ");
                 itemName = temp.split(" ")[0];
-                if (!form.isLegal(args[1])) {
+                if (!Utils.legalInt(args[1])) {
                     sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid amount to buy.");
                     return true;
                 }
                 amount = Integer.parseInt(args[1]);
                 try {
                     data = Short.parseShort(temp.split(" ")[1]);
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
-                if (form.isLegal(itemName))
+                if (Utils.legalInt(itemName))
                     itemName = mat.idToName(Integer.parseInt(itemName));
                 else if (itemName.equalsIgnoreCase("hand")) {
                     itemName = inventory.getItemInMainHand().getType().name();
@@ -42,7 +51,7 @@ public class CmdBuy extends EconomyCmd {
                 }
             } else {
                 itemName = inventory.getItemInMainHand().getType().name();
-                if (!form.isLegal(args[0])) {
+                if (!Utils.legalInt(args[0])) {
                     sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid amount to buy.");
                     return true;
                 }
@@ -55,13 +64,14 @@ public class CmdBuy extends EconomyCmd {
                 return true;
             }
             itemName = itemName.toUpperCase();
+            Prices pr = Necessities.getInstance().getPrices();
             double cost = pr.getCost("buy", itemName, amount);
             if (cost == -1.00) {
-                itemName = form.capFirst(mat.getName(itemName));
+                itemName = Utils.capFirst(mat.getName(itemName));
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + mat.pluralize(itemName, 2) + " cannot be bought from the server.");
             } else {
-                if (intbal < cost) {
-                    player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You dont have enough money to buy that item.");
+                if (intBal < cost) {
+                    player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You don't have enough money to buy that item.");
                     return true;
                 }
                 if (Material.matchMaterial(itemName) == null) {
@@ -76,9 +86,9 @@ public class CmdBuy extends EconomyCmd {
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have enough inventory space to buy that much of that item, buying the amount you have inventory space for.");
                 }
                 balc.removeMoney(player.getUniqueId(), cost);
-                itemName = form.capFirst(mat.getName(itemName));
+                itemName = Utils.capFirst(mat.getName(itemName));
                 player.sendMessage(var.getMessages() + "You bought " + var.getObj() + Integer.toString(amount) + " " + mat.pluralize(itemName, amount) + var.getMessages() + ".");
-                player.sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(cost)) + var.getMessages() + " was removed from your acount.");
+                player.sendMessage(var.getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(cost)) + var.getMessages() + " was removed from your account.");
             }
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command");

@@ -1,27 +1,27 @@
 package com.crossge.necessities.Janet;
 
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.RankManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.UUID;
 
 public class JanetWarn {
-    private static HashMap<UUID, Integer> warnCount = new HashMap<>();
-    private static String JanetName = "";
-    private int warns = YamlConfiguration.loadConfiguration(new File("plugins/Necessities", "config.yml")).getInt("Necessities.warns");
-    JanetLog log = new JanetLog();
+    private final HashMap<UUID, Integer> warnCount = new HashMap<>();
+    private String JanetName = "";
+    private int warns;
+    private JanetLog log;
 
     public void initiate() {
-        RankManager rm = new RankManager();
+        RankManager rm = Necessities.getInstance().getRM();
         JanetName = (!rm.getOrder().isEmpty() ? ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") : "") + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
+        warns = Necessities.getInstance().getConfig().getInt("Necessities.warns");
+        log = Necessities.getInstance().getLog();
     }
 
-    public void removePlayer(UUID uuid) {
+    void removePlayer(UUID uuid) {
         warnCount.remove(uuid);
     }
 
@@ -75,7 +75,7 @@ public class JanetWarn {
     private void timesLeft(UUID uuid) {
         String left = Integer.toString(warns - warnCount.get(uuid));
         String plural = "times";
-        if (warns - warnCount.get(uuid) == 1)
+        if (this.warns - warnCount.get(uuid) == 1)
             plural = "time";
         Bukkit.getPlayer(uuid).sendMessage(JanetName + "Do it " + left + " more " + plural + " and you will be kicked.");
     }
@@ -152,8 +152,6 @@ public class JanetWarn {
 
     private void broadcast(String message, UUID uuid) {
         Bukkit.getConsoleSender().sendMessage(message);
-        for (Player p : Bukkit.getOnlinePlayers())
-            if (p.getUniqueId() != uuid)
-                p.sendMessage(message);
+        Bukkit.getOnlinePlayers().stream().filter(p -> p.getUniqueId() != uuid).forEach(p -> p.sendMessage(message));
     }
 }

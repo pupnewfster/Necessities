@@ -1,18 +1,17 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Variables;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-
-public class CmdSetJail extends Cmd {
-    private File configFile = new File("plugins/Necessities", "config.yml");
-
+public class CmdSetJail implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+            YamlConfiguration config = Necessities.getInstance().getConfig();
             config.set("Jail.world", p.getWorld().getName());
             config.set("Jail.x", Double.toString(p.getLocation().getX()));
             config.set("Jail.y", Double.toString(p.getLocation().getY()));
@@ -20,8 +19,8 @@ public class CmdSetJail extends Cmd {
             config.set("Jail.yaw", Float.toString(p.getLocation().getYaw()));
             config.set("Jail.pitch", Float.toString(p.getLocation().getPitch()));
             try {
-                config.save(configFile);
-            } catch (Exception e) {
+                config.save(Necessities.getInstance().getConfigFile());
+            } catch (Exception ignored) {
             }
             p.sendMessage(var.getMessages() + "Jail set.");
         } else

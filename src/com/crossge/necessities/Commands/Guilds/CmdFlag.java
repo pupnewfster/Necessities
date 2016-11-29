@@ -1,25 +1,28 @@
 package com.crossge.necessities.Commands.Guilds;
 
 import com.crossge.necessities.Guilds.Guild;
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
+import com.crossge.necessities.Variables;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CmdFlag extends GuildCmd {
+public class CmdFlag implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         Guild g = null;
         Guild other = null;
         if (args.length != 0)
-            g = gm.getGuild(args[0]);
+            g = Necessities.getInstance().getGM().getGuild(args[0]);
         String bool = "";
         String opper = "";
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.flag")) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You have not have permission to use /guild flag.");
                 return true;
             }
-            User u = um.getUser(p.getUniqueId());
+            User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
             if (args.length == 0) {
                 g = u.getGuild();
                 other = u.getGuild();

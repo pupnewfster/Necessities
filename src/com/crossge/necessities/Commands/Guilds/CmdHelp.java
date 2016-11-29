@@ -1,13 +1,17 @@
 package com.crossge.necessities.Commands.Guilds;
 
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
+import com.crossge.necessities.Variables;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class CmdHelp extends GuildCmd {
+public class CmdHelp implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             if (!sender.hasPermission("Necessities.guilds.help")) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You have not have permission to use /guild help.");
@@ -15,7 +19,7 @@ public class CmdHelp extends GuildCmd {
             }
         }
         int page = 0;
-        if (args.length != 0 && !form.isLegal(args[0])) {
+        if (args.length != 0 && !Utils.legalInt(args[0])) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid help page.");
             return true;
         }
@@ -29,12 +33,12 @@ public class CmdHelp extends GuildCmd {
         setHelp(helpList, sender);
         if (helpList.size() % 10 != 0)
             rounder = 1;
-        int totalpages = (helpList.size() / 10) + rounder;
-        if (page > totalpages) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer.toString(totalpages));
+        int totalPages = (helpList.size() / 10) + rounder;
+        if (page > totalPages) {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer.toString(totalPages));
             return true;
         }
-        sender.sendMessage(var.getMessages() + "Guild help [" + Integer.toString(page) + "/" + Integer.toString(totalpages) + "]");
+        sender.sendMessage(var.getMessages() + "Guild help [" + Integer.toString(page) + "/" + Integer.toString(totalPages) + "]");
         page = page - 1;
         String message = getLine(page, time, helpList);
         while (message != null) {
@@ -42,7 +46,7 @@ public class CmdHelp extends GuildCmd {
             time++;
             message = getLine(page, time, helpList);
         }
-        if (page + 1 < totalpages)
+        if (page + 1 < totalPages)
             sender.sendMessage(var.getMessages() + "Type " + var.getObj() + "/guild help " + Integer.toString(page + 2) + var.getMessages() + " to read the next page.");
         return true;
     }
@@ -55,6 +59,7 @@ public class CmdHelp extends GuildCmd {
     }
 
     private void setHelp(ArrayList<String> helpList, CommandSender sender) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (p.hasPermission("Necessities.guilds.list"))

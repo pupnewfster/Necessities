@@ -1,6 +1,8 @@
 package com.crossge.necessities.Commands;
 
 import com.crossge.necessities.Economy.BalChecks;
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -10,17 +12,16 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.util.UUID;
 
-public class CmdTitle extends Cmd {
-    private File configFileTitles = new File("plugins/Necessities", "titles.yml");
-    private File configFile = new File("plugins/Necessities", "config.yml");
-    BalChecks balc = new BalChecks();
+public class CmdTitle implements Cmd {
+    private final File configFileTitles = new File("plugins/Necessities", "titles.yml");
 
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a title.");
             return true;
         }
-        UUID uuid = get.getID(args[0]);
+        UUID uuid = Necessities.getInstance().getUUID().getID(args[0]);
         if (uuid == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;
@@ -38,7 +39,7 @@ public class CmdTitle extends Cmd {
             configTitles.set(target.getUniqueId() + ".title", null);
             try {
                 configTitles.save(configFileTitles);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
             sender.sendMessage(var.getMessages() + "Title removed for player " + var.getObj() + target.getName());
             return true;
@@ -46,26 +47,27 @@ public class CmdTitle extends Cmd {
         String title = "";
         for (String arg : args)
             title += arg + " ";
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         title = title.replaceFirst(args[0], "").trim();
         if (ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', title + "&r")).length() > 24) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Titles have a maximum of 24 characters.");
             return true;
         }
         if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free && config.contains("Necessities.Creative") && !config.getBoolean("Necessities.Creative")) {
+            BalChecks balc = Necessities.getInstance().getBalChecks();
             if (balc.balance(target.getUniqueId()) < 1000) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must have $1000 to change your title.");
                 return true;
             }
             balc.removeMoney(target.getUniqueId(), 1000);
-            target.sendMessage(var.getMoney() + "$1000.00" + var.getMessages() + " was removed from your acount.");
+            target.sendMessage(var.getMoney() + "$1000.00" + var.getMessages() + " was removed from your account.");
         }
         configTitles.set(target.getUniqueId() + ".title", title);
         if (configTitles.get(target.getUniqueId() + ".color") == null)
             configTitles.set(target.getUniqueId() + ".color", "r");
         try {
             configTitles.save(configFileTitles);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         sender.sendMessage(var.getMessages() + "Title set to " + title + var.getMessages() + " for player " + var.getObj() + target.getName());
         return true;

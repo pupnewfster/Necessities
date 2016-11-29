@@ -1,6 +1,10 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.GetUUID;
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
+import com.crossge.necessities.RankManager.UserManager;
+import com.crossge.necessities.Variables;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -8,16 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CmdDelHome extends Cmd {
+public class CmdDelHome implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
+            UserManager um = Necessities.getInstance().getUM();
             User u = um.getUser(p.getUniqueId());
             String name = "home";
             if (args.length > 0) {
                 if (args[0].contains(":") && p.hasPermission("Necessities.homeothers")) {
                     String[] info = args[0].replaceAll("&", "").replaceAll("\\.", "").split(":");
                     String targetName = info[0];
+                    GetUUID get = Necessities.getInstance().getUUID();
                     UUID uuid = get.getID(targetName);
                     if (uuid == null)
                         uuid = get.getOfflineID(targetName);
@@ -30,7 +37,7 @@ public class CmdDelHome extends Cmd {
                         p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "They do not have a home under that name.");
                         return true;
                     }
-                    if (rm.hasRank(us.getRank(), u.getRank())) {
+                    if (Necessities.getInstance().getRM().hasRank(us.getRank(), u.getRank())) {
                         p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You can not delete same rank or higher homes.");
                         return true;
                     }
@@ -57,7 +64,7 @@ public class CmdDelHome extends Cmd {
         if (args.length == 1)
             search = args[0];
         if (sender instanceof Player) {
-            User u = um.getUser(((Player) sender).getUniqueId());
+            User u = Necessities.getInstance().getUM().getUser(((Player) sender).getUniqueId());
             for (String home : u.getHomes().split(", "))
                 if (home.startsWith(search))
                     complete.add(home);

@@ -1,10 +1,13 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Variables;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CmdWorkbench extends Cmd {
+public class CmdWorkbench implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             ((Player) sender).openWorkbench(null, true);
             sender.sendMessage(var.getMessages() + "Workbench opened.");

@@ -1,17 +1,14 @@
 package com.crossge.necessities.Janet;
 
+import com.crossge.necessities.Necessities;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-
 public class JanetRename {
-    private File configFile = new File("plugins/Necessities", "config.yml");
-    Janet bot = new Janet();
-
     public String parseRename(String message, Player p) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         String censored = message;
+        Janet bot = Necessities.getInstance().getBot();
         if (config.getBoolean("Necessities.language") && !p.hasPermission("Necessities.language"))
             censored = bot.internalLang(censored);
         if (config.getBoolean("Necessities.advertise") && !p.hasPermission("Necessities.advertise"))

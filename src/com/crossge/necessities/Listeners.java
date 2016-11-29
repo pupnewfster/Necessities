@@ -1,29 +1,25 @@
 package com.crossge.necessities;
 
-import com.crossge.necessities.Commands.CmdCommandSpy;
 import com.crossge.necessities.Commands.CmdHide;
-import com.crossge.necessities.Commands.CmdInvsee;
 import com.crossge.necessities.Economy.BalChecks;
 import com.crossge.necessities.Economy.Materials;
 import com.crossge.necessities.Economy.Signs;
 import com.crossge.necessities.Guilds.Guild;
 import com.crossge.necessities.Guilds.GuildManager;
-import com.crossge.necessities.Guilds.PowerManager;
 import com.crossge.necessities.Hats.Hat;
-import com.crossge.necessities.Janet.*;
+import com.crossge.necessities.Janet.JanetAI;
+import com.crossge.necessities.Janet.JanetBooks;
 import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
-import com.crossge.necessities.WorldManager.PortalManager;
 import com.crossge.necessities.WorldManager.WorldManager;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_9_R1.boss.CraftBossBar;
+import org.bukkit.craftbukkit.v1_11_R1.boss.CraftBossBar;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -43,6 +39,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Diode;
 import org.bukkit.material.MaterialData;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.io.BufferedReader;
@@ -50,41 +47,18 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.*;
 
-public class Listeners implements Listener {
-    private File configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml"), configFileLogIn = new File("plugins/Necessities", "loginmessages.yml"),
-            configFileTitles = new File("plugins/Necessities", "titles.yml"), configFile = new File("plugins/Necessities", "config.yml");
+@SuppressWarnings("unused")
+class Listeners implements Listener {
+    private final File configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml");
+    private final File configFileLogIn = new File("plugins/Necessities", "loginmessages.yml");
+    private final File configFileTitles = new File("plugins/Necessities", "titles.yml");
     private static String JanetName = "";
     private static CraftBossBar welcomeBar;
-    AntiCombatLog acb = new AntiCombatLog();
-    CmdCommandSpy spy = new CmdCommandSpy();
-    PowerManager power = new PowerManager();
-    SafeLocation safe = new SafeLocation();
-    PortalManager pm = new PortalManager();
-    JanetRename rename = new JanetRename();
-    WorldManager wm = new WorldManager();
-    GuildManager gm = new GuildManager();
-    JanetSigns signs = new JanetSigns();
-    JanetBooks books = new JanetBooks();
-    JanetSlack slack = new JanetSlack();
-    CmdInvsee invsee = new CmdInvsee();
-    UserManager um = new UserManager();
-    Wrenched wrench = new Wrenched();
-    BalChecks balc = new BalChecks();
-    Formatter form = new Formatter();
-    Signs economySigns = new Signs();
-    Console console = new Console();
-    Materials mat = new Materials();
-    Variables var = new Variables();
-    Teleports tps = new Teleports();
-    CmdHide hide = new CmdHide();
-    GetUUID get = new GetUUID();
-    JanetAI ai = new JanetAI();
-    Janet bot = new Janet();
 
-    public Listeners() {
-        RankManager rm = new RankManager();
+    Listeners() {
+        RankManager rm = Necessities.getInstance().getRM();
         JanetName = (!rm.getOrder().isEmpty() ? ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") : "") + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
-        welcomeBar = new CraftBossBar(ChatColor.GOLD + "Welcome to " + ChatColor.AQUA + "Galaxy Gaming", BarColor.GREEN, BarStyle.SOLID, new BarFlag[0]);
+        welcomeBar = new CraftBossBar(ChatColor.GOLD + "Welcome to " + ChatColor.AQUA + "Galaxy Gaming", BarColor.GREEN, BarStyle.SOLID);
     }
 
     private String corTime(String time) {
@@ -118,7 +92,7 @@ public class Listeners implements Listener {
                 return;
             e.setKickMessage("You were " + ChatColor.DARK_RED + "" + ChatColor.BOLD + "BANNED" + ChatColor.RESET + " on " + getDateAndTime(banEntry.getCreated()) + " by " +
                     banEntry.getSource() + ChatColor.RESET + ".\n" + (banEntry.getExpiration() == null ? "" : "Your ban will expire on " + getDateAndTime(banEntry.getExpiration()) + ".\n") +
-                    ChatColor.RESET + "Reason: " + banEntry.getReason() + ChatColor.RESET + "\nAppeal at smp.gamezgalaxy.com/ban");
+                    ChatColor.RESET + "Reason: " + banEntry.getReason() + ChatColor.RESET + "\nAppeal at galaxygaming.gg");
             e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
         }
     }
@@ -126,6 +100,7 @@ public class Listeners implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         final Player p = e.getPlayer();
+        UserManager um = Necessities.getInstance().getUM();
         um.addUser(p);
         um.forceParseUser(p);
         final User u = um.getUser(p.getUniqueId());
@@ -137,7 +112,7 @@ public class Listeners implements Listener {
             configLogIn.set(uuid.toString(), "{RANK} {NAME}&r joined the game.");
             try {
                 configLogIn.save(configFileLogIn);
-            } catch (Exception er) {
+            } catch (Exception ignored) {
             }
         }
         YamlConfiguration configLogOut = YamlConfiguration.loadConfiguration(configFileLogOut);
@@ -145,17 +120,20 @@ public class Listeners implements Listener {
             configLogOut.set(uuid.toString(), "{RANK} {NAME}&r Disconnected.");
             try {
                 configLogOut.save(configFileLogOut);
-            } catch (Exception er) {
+            } catch (Exception ignored) {
             }
         }
+        Variables var = Necessities.getInstance().getVar();
         e.setJoinMessage((ChatColor.GREEN + " + " + var.getGuildMsgs() + ChatColor.translateAlternateColorCodes('&',
-                configLogIn.getString(uuid.toString()).replaceAll("\\{NAME\\}", p.getDisplayName()).replaceAll("\\{RANK\\}",
+                configLogIn.getString(uuid.toString()).replaceAll("\\{NAME}", p.getDisplayName()).replaceAll("\\{RANK}",
                         um.getUser(p.getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET + "", var.getGuildMsgs() + ""));
+        GetUUID get = Necessities.getInstance().getUUID();
+        CmdHide hide = Necessities.getInstance().getHide();
         if (!get.hasJoined(uuid)) {
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-            final String welcome = ChatColor.translateAlternateColorCodes('&', config.getString("Necessities.firstTime")).replaceAll("\\{NAME\\}", p.getName());
+            YamlConfiguration config = Necessities.getInstance().getConfig();
+            final String welcome = ChatColor.translateAlternateColorCodes('&', config.getString("Necessities.firstTime")).replaceAll("\\{NAME}", p.getName());
             if (Necessities.isTracking())
-                Necessities.trackAction(p, "NewLogin", p.getName());
+                Necessities.trackAction(p, p.getName());
             if (config.contains("Spawn")) {
                 World world = Bukkit.getWorld(config.getString("Spawn.world"));
                 double x = Double.parseDouble(config.getString("Spawn.x"));
@@ -170,6 +148,7 @@ public class Listeners implements Listener {
                 items.remove("");
             if (!items.isEmpty()) {
                 PlayerInventory i = p.getInventory();
+                Materials mat = Necessities.getInstance().getMaterials();
                 for (String item : items)
                     if (item.contains(" ")) {
                         String name = item.split(" ")[0];
@@ -181,28 +160,23 @@ public class Listeners implements Listener {
                     }
             }
             get.addUUID(uuid);
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    Bukkit.broadcastMessage(welcome);
-                    Bukkit.broadcastMessage(JanetName + "Welcome to GamezGalaxy! Enjoy your stay.");
-                }
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
+                Bukkit.broadcastMessage(welcome);
+                Bukkit.broadcastMessage(JanetName + "Welcome to Galaxy Gaming! Enjoy your stay.");
             });
         } else {
             final boolean hidden = hide.isHidden(e.getPlayer());
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    if (hidden)
-                        Bukkit.broadcast(var.getMessages() + "To Ops - " + JanetName + "Welcome back.", "Necessities.opBroadcast");
-                    else
-                        Bukkit.broadcastMessage(JanetName + "Welcome back.");
-                }
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
+                if (hidden)
+                    Bukkit.broadcast(var.getMessages() + "To Ops - " + JanetName + "Welcome back.", "Necessities.opBroadcast");
+                else
+                    Bukkit.broadcastMessage(JanetName + "Welcome back.");
             });
         }
+        BalChecks balc = Necessities.getInstance().getBalChecks();
         if (!balc.doesPlayerExist(uuid))
             balc.addPlayerToList(uuid);
-        bot.logIn(uuid);
+        Necessities.getInstance().getBot().logIn(uuid);
         hide.playerJoined(p);
         u.setLastAction(System.currentTimeMillis());
         if (hide.isHidden(e.getPlayer())) {
@@ -210,35 +184,32 @@ public class Listeners implements Listener {
             e.setJoinMessage(null);
             hide.hidePlayer(e.getPlayer());
         }
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds"))
-            power.addPlayer(p);
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                if (!p.hasPermission("Necessities.ignoreGameMode"))
-                    p.setGameMode(wm.getGameMode(p.getWorld().getName()));
-                if (p.hasPermission("Necessities.fly") && safe.wouldFall(p.getLocation())) {
-                    p.setAllowFlight(true);
-                    p.setFlying(true);
-                    p.sendMessage(var.getMessages() + "Fly enabled.");
-                }
-                Necessities.getInstance().addHeader(p);
-                Necessities.getInstance().addJanet(p);
-                Necessities.getInstance().updateAll(p);
-                u.updateListName();
-                File f = new File("plugins/Necessities/motd.txt");
-                if (f.exists())
-                    try {
-                        BufferedReader read = new BufferedReader(new FileReader(f));
-                        String line;
-                        while ((line = read.readLine()) != null)
-                            if (!line.equals(""))
-                                p.sendMessage(ChatColor.translateAlternateColorCodes('&', line));
-                        read.close();
-                    } catch (Exception er) {
-                    }
+            Necessities.getInstance().getPower().addPlayer(p);
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
+            if (!p.hasPermission("Necessities.ignoreGameMode"))
+                p.setGameMode(Necessities.getInstance().getWM().getGameMode(p.getWorld().getName()));
+            if (p.hasPermission("Necessities.fly") && Necessities.getInstance().getSafeLocations().wouldFall(p.getLocation())) {
+                p.setAllowFlight(true);
+                p.setFlying(true);
+                p.sendMessage(var.getMessages() + "Fly enabled.");
             }
+            Necessities.getInstance().addHeader(p);
+            Necessities.getInstance().addJanet(p);
+            Necessities.getInstance().updateAll(p);
+            u.updateListName();
+            File f = new File("plugins/Necessities/motd.txt");
+            if (f.exists())
+                try {
+                    BufferedReader read = new BufferedReader(new FileReader(f));
+                    String line;
+                    while ((line = read.readLine()) != null)
+                        if (!line.equals(""))
+                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', line));
+                    read.close();
+                } catch (Exception ignored) {
+                }
         });
         welcomeBar.addPlayer(p);
     }
@@ -246,11 +217,14 @@ public class Listeners implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         UUID uuid = e.getPlayer().getUniqueId();
+        UserManager um = Necessities.getInstance().getUM();
         YamlConfiguration configLogOut = YamlConfiguration.loadConfiguration(configFileLogOut);
+        Variables var = Necessities.getInstance().getVar();
         e.setQuitMessage((ChatColor.RED + " - " + var.getGuildMsgs() + ChatColor.translateAlternateColorCodes('&',
-                configLogOut.getString(uuid.toString()).replaceAll("\\{NAME\\}", e.getPlayer().getDisplayName()).replaceAll("\\{RANK\\}",
+                configLogOut.getString(uuid.toString()).replaceAll("\\{NAME}", e.getPlayer().getDisplayName()).replaceAll("\\{RANK}",
                         um.getUser(e.getPlayer().getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET + "", var.getGuildMsgs() + ""));
         User u = um.getUser(e.getPlayer().getUniqueId());
+        CmdHide hide = Necessities.getInstance().getHide();
         if (hide.isHidden(e.getPlayer())) {
             Bukkit.broadcast(var.getMessages() + "To Ops -" + e.getQuitMessage(), "Necessities.opBroadcast");
             e.setQuitMessage(null);
@@ -258,23 +232,23 @@ public class Listeners implements Listener {
         if (u.isAfk())
             u.setAfk(false);
         u.logOut();
-        bot.logOut(uuid);
+        Necessities.getInstance().getBot().logOut(uuid);
         um.removeUser(uuid);
-        if (acb.contains(e.getPlayer())) {
+        if (Necessities.getInstance().getACB().contains(e.getPlayer())) {
             e.getPlayer().setHealth(0);
             Bukkit.broadcastMessage(var.getMessages() + e.getPlayer().getName() + " combat logged.");
         }
         hide.playerLeft(e.getPlayer());
-        tps.removeRequests(uuid);
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        Necessities.getInstance().getTeleports().removeRequests(uuid);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds"))
-            power.removePlayer(e.getPlayer());
+            Necessities.getInstance().getPower().removePlayer(e.getPlayer());
         welcomeBar.removePlayer(e.getPlayer());
     }
 
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent e) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Spawn")) {
             if (e.getPlayer().getBedSpawnLocation() == null) {
                 World world = Bukkit.getWorld(config.getString("Spawn.world"));
@@ -285,31 +259,29 @@ public class Listeners implements Listener {
                 float pitch = Float.parseFloat(config.getString("Spawn.pitch"));
                 e.setRespawnLocation(new Location(world, x, y, z, yaw, pitch));
             } else
-                e.setRespawnLocation(safe.getSafe(e.getPlayer().getBedSpawnLocation()));
+                e.setRespawnLocation(Necessities.getInstance().getSafeLocations().getSafe(e.getPlayer().getBedSpawnLocation()));
         }
-        final User u = um.getUser(e.getPlayer().getUniqueId());
+        final User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
+        WorldManager wm = Necessities.getInstance().getWM();
         final String s = wm.getSysPath(e.getRespawnLocation().getWorld().getName()), from = wm.getSysPath(e.getPlayer().getWorld().getName());
         if (u.isAfk())
             u.setAfk(false);
         u.setLastAction(System.currentTimeMillis());
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                if (!from.equals(s))
-                    u.saveInventory(s, from);
-            }
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
+            if (!from.equals(s))
+                u.saveInventory(s, from);
         });
     }
 
     @EventHandler
     public void foodLevelChange(FoodLevelChangeEvent e) {
-        if (e.getEntity() instanceof Player && um.getUser(e.getEntity().getUniqueId()).godmode())
+        if (e.getEntity() instanceof Player && Necessities.getInstance().getUM().getUser(e.getEntity().getUniqueId()).godMode())
             e.setFoodLevel(20);
     }
 
     @EventHandler
     public void onPlayerMove(final PlayerMoveEvent e) {
-        User u = um.getUser(e.getPlayer().getUniqueId());
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
         Location from = e.getFrom();
         Location to = e.getTo();
         boolean locationChanged = Math.abs(from.getX() - to.getX()) > 0.1 || Math.abs(from.getY() - to.getY()) > 0.1 || Math.abs(from.getZ() - to.getZ()) > 0.1;
@@ -322,50 +294,52 @@ public class Listeners implements Listener {
             u.setAfk(false);
         if (locationChanged)
             u.setLastAction(System.currentTimeMillis());
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager") && locationChanged) {
-            Location destination = pm.portalDestination(to);
+            Location destination = Necessities.getInstance().getPM().portalDestination(to);
             if (destination != null)
                 e.getPlayer().teleport(destination);
         }
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !from.getChunk().equals(to.getChunk())) {
             if (u.isClaiming()) {
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-                    @Override
-                    public void run() {
-                        e.getPlayer().performCommand("guild claim");
-                    }
-                });
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> e.getPlayer().performCommand("guild claim"));
             }
+            GuildManager gm = Necessities.getInstance().getGM();
             Guild owner = gm.chunkOwner(to.getChunk());
-            if (owner != gm.chunkOwner(from.getChunk()))
+            if (owner != gm.chunkOwner(from.getChunk())) {
+                Variables var = Necessities.getInstance().getVar();
                 e.getPlayer().sendMessage(var.getGuildMsgs() + " ~ " + (owner == null ? var.getWild() + "Wilderness" : owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription()));
+            }
         }
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
-        User u = um.getUser(e.getPlayer().getUniqueId());
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
-            Guild owner = gm.chunkOwner(e.getBlock().getChunk());
+            Guild owner = Necessities.getInstance().getGM().chunkOwner(e.getBlock().getChunk());
             if (owner != null && u.getGuild() != owner) {
+                Variables var = Necessities.getInstance().getVar();
                 e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
                 e.setCancelled(true);
             }
         }
+        Wrenched wrench = Necessities.getInstance().getWrench();
         if (wrench.isWrenched(e.getBlock()))
             wrench.wrench(e.getBlock());
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         //Guild check
-        User u = um.getUser(e.getPlayer().getUniqueId());
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
-            Guild owner = gm.chunkOwner(e.getBlock().getChunk());
+            Guild owner = Necessities.getInstance().getGM().chunkOwner(e.getBlock().getChunk());
             if (owner != null && u.getGuild() != owner) {
+                Variables var = Necessities.getInstance().getVar();
                 e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
                 e.setCancelled(true);
             }
@@ -390,7 +364,7 @@ public class Listeners implements Listener {
             for (String s : meta.getLore())
                 if (s.split(" ").length == 6 || s.split(" ").length == 7) {
                     int amount = Integer.parseInt(s.split(" ")[1]);
-                    Material type = Material.matchMaterial(mat.idToName(Integer.parseInt(s.split(" ")[2])));
+                    Material type = Material.matchMaterial(Necessities.getInstance().getMaterials().idToName(Integer.parseInt(s.split(" ")[2])));
                     short data = Short.parseShort(s.split(" ")[3]);
                     ItemStack i = new ItemStack(type, amount, data);
                     for (String en : s.split(" ")[4].split(","))
@@ -458,12 +432,15 @@ public class Listeners implements Listener {
     @SuppressWarnings("deprecation")
     @EventHandler
     public void onPlayerClick(PlayerInteractEvent e) {
-        User u = um.getUser(e.getPlayer().getUniqueId());
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
         if (u.isAfk())
             u.setAfk(false);
+        CmdHide hide = Necessities.getInstance().getHide();
         if (hide.isHidden(u.getPlayer()) && e.getAction().equals(Action.PHYSICAL))//cancel crop breaking when hidden
             e.setCancelled(true);
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
+        Variables var = Necessities.getInstance().getVar();
+        GuildManager gm = Necessities.getInstance().getGM();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
             if ((e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && ((e.getItem() != null && !e.getItem().getType().isEdible()/*.isBlock()*/) ||
                     e.getClickedBlock().getState() instanceof InventoryHolder || e.getClickedBlock().getType().equals(Material.WOODEN_DOOR) ||
@@ -541,6 +518,7 @@ public class Listeners implements Listener {
                 }
             }
         }
+        Wrenched wrench = Necessities.getInstance().getWrench();
         if (e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (e.getAction() == Action.LEFT_CLICK_BLOCK)
                 u.setLeft(e.getClickedBlock().getLocation());
@@ -554,6 +532,7 @@ public class Listeners implements Listener {
                     e.getPlayer().sendMessage(var.getMessages() + "Bed spawn set.");
                 }
                 u.setLastAction(System.currentTimeMillis());
+                Signs economySigns = Necessities.getInstance().getEconomySigns();
                 Sign sign = economySigns.sign(e.getClickedBlock().getLocation());
                 if (sign != null && e.getAction() == Action.LEFT_CLICK_BLOCK && economySigns.checkFormat(sign)) {
                     String operation = economySigns.operation(sign);
@@ -580,16 +559,13 @@ public class Listeners implements Listener {
                         up.setType(Material.REDSTONE_BLOCK);
                         wrench.wrench(b);
                         e.setCancelled(true);
-                        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-                            @Override
-                            public void run() {
-                                up.setType(type);
-                                up.setData(metadata);
-                                up.getState().setData(data);
-                                up.getState().setRawData(raw);
-                                if (up.getState() instanceof InventoryHolder)
-                                    ((InventoryHolder) up.getState()).getInventory().setContents(contents);
-                            }
+                        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
+                            up.setType(type);
+                            up.setData(metadata);
+                            up.getState().setData(data);
+                            up.getState().setRawData(raw);
+                            if (up.getState() instanceof InventoryHolder)
+                                ((InventoryHolder) up.getState()).getInventory().setContents(contents);
                         });
                     } else if (b.getType().equals(Material.REDSTONE_LAMP_ON)) {
                         wrench.wrench(b);
@@ -647,8 +623,7 @@ public class Listeners implements Listener {
                             if (inv != null) {
                                 meta.setLore(getLore(inv));
                                 contents.setItemMeta(meta);
-                                for (HumanEntity ent : inv.getViewers())
-                                    ent.closeInventory();
+                                inv.getViewers().forEach(HumanEntity::closeInventory);
                                 inv.clear();
                             } else if (b.getType().equals(Material.MOB_SPAWNER)) {
                                 CreatureSpawner cs = (CreatureSpawner) b.getState();
@@ -701,6 +676,7 @@ public class Listeners implements Listener {
             e.getPlayer().openInventory(((InventoryHolder) e.getClickedBlock().getState()).getInventory());
     }
 
+    @SuppressWarnings("deprecation")
     private ArrayList<String> getLore(Inventory inv) {
         ArrayList<String> lore = new ArrayList<>();
         HashMap<String, String> condensedLore = new HashMap<>();
@@ -725,7 +701,7 @@ public class Listeners implements Listener {
                     enchants = "n";
                 if (meta.equals(""))
                     meta = "n";
-                String info = inv.getItem(i).getAmount() + " " + mat.nameToId(inv.getItem(i).getType().toString()) + " " + inv.getItem(i).getDurability() + " " + enchants + " " + meta + disp;
+                String info = inv.getItem(i).getAmount() + " " + Necessities.getInstance().getMaterials().nameToId(inv.getItem(i).getType().toString()) + " " + inv.getItem(i).getDurability() + " " + enchants + " " + meta + disp;
                 condensedLore.put(info, condensedLore.containsKey(info) ? condensedLore.get(info) + "," + i : Integer.toString(i));
             }
         }
@@ -755,13 +731,15 @@ public class Listeners implements Listener {
             b.setCommand(ChatColor.translateAlternateColorCodes('&', b.getCommand()));
             b.update(true);
         }
-        if (wrench.isWrenched(e.getBlock()))
+        if (Necessities.getInstance().getWrench().isWrenched(e.getBlock()))
             e.setNewCurrent(((e.getBlock().getType().equals(Material.IRON_DOOR_BLOCK) || e.getBlock().getType().equals(Material.IRON_TRAPDOOR)) && e.getOldCurrent() == 0) ? 0 : 1);
     }
 
     @EventHandler
     public void onPVP(EntityDamageByEntityEvent e) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
+        UserManager um = Necessities.getInstance().getUM();
+        GuildManager gm = Necessities.getInstance().getGM();
         if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
             final Player p = (Player) e.getEntity(), damager = (Player) e.getDamager();
             User u = um.getUser(p.getUniqueId()), d = um.getUser(damager.getUniqueId());
@@ -769,20 +747,18 @@ public class Listeners implements Listener {
                     !gm.chunkOwner(p.getLocation().getChunk()).canPVP()) ||
                     (gm.chunkOwner(damager.getLocation().getChunk()) != null && !gm.chunkOwner(damager.getLocation().getChunk()).canPVP()))
                 e.setCancelled(true);
-            else if (p.getWorld().getPVP() && !u.godmode() && !d.godmode() && ((config.contains("Necessities.Guilds") && !config.getBoolean("Necessities.Guilds")) ||
+            else if (p.getWorld().getPVP() && !u.godMode() && !d.godMode() && ((config.contains("Necessities.Guilds") && !config.getBoolean("Necessities.Guilds")) ||
                     (u.getGuild() == null || d.getGuild() == null || u.getGuild().equals(d.getGuild()) ||
                             u.getGuild().isAlly(d.getGuild())) && (gm.chunkOwner(p.getLocation().getChunk()) == null || gm.chunkOwner(p.getLocation().getChunk()).canPVP()) &&
                             (gm.chunkOwner(damager.getLocation().getChunk()) == null || gm.chunkOwner(damager.getLocation().getChunk()).canPVP()))) {
+                AntiCombatLog acb = Necessities.getInstance().getACB();
                 acb.addToCombat(p, damager);
                 try {
-                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-                        @Override
-                        public void run() {
-                            acb.removeFromCombat(p);
-                            acb.removeFromCombat(damager);
-                        }
+                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
+                        acb.removeFromCombat(p);
+                        acb.removeFromCombat(damager);
                     }, 10 * 20);
-                } catch (Exception er) {
+                } catch (Exception ignored) {
                 }
             }
         } else if (e.getDamager() instanceof Player && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
@@ -790,6 +766,7 @@ public class Listeners implements Listener {
             Guild owner = gm.chunkOwner(e.getEntity().getLocation().getChunk());
             User u = um.getUser(damager.getUniqueId());
             if ((e.getEntity() instanceof ItemFrame || e.getEntity() instanceof Painting) && !damager.hasPermission("Necessities.guilds.admin") && owner != null && u.getGuild() != owner) {
+                Variables var = Necessities.getInstance().getVar();
                 u.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
                 e.setCancelled(true);
             } else if (owner != null && !owner.canHostileSpawn() && !damager.hasPermission("Necessities.guilds.admin"))
@@ -799,12 +776,13 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractAtEntityEvent e) {
-        User u = um.getUser(e.getPlayer().getUniqueId());
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         if (e.getRightClicked() instanceof ItemFrame && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") &&
                 !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
-            Guild owner = gm.chunkOwner(e.getRightClicked().getLocation().getChunk());
+            Guild owner = Necessities.getInstance().getGM().chunkOwner(e.getRightClicked().getLocation().getChunk());
             if (owner != null && u.getGuild() != owner) {
+                Variables var = Necessities.getInstance().getVar();
                 u.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
                 ItemFrame frame = (ItemFrame) e.getRightClicked();
                 frame.setRotation(frame.getRotation().rotateCounterClockwise());
@@ -817,11 +795,12 @@ public class Listeners implements Listener {
     public void onHangingBreak(HangingBreakByEntityEvent e) {
         if (e.getRemover() != null && e.getRemover() instanceof Player) {
             Player p = (Player) e.getRemover();
-            User u = um.getUser(p.getUniqueId());
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+            User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
+            YamlConfiguration config = Necessities.getInstance().getConfig();
             if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !p.hasPermission("Necessities.guilds.admin")) {
-                Guild owner = gm.chunkOwner(e.getEntity().getLocation().getChunk());
+                Guild owner = Necessities.getInstance().getGM().chunkOwner(e.getEntity().getLocation().getChunk());
                 if (owner != null && u.getGuild() != owner) {
+                    Variables var = Necessities.getInstance().getVar();
                     u.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
                     e.setCancelled(true);
                 }
@@ -831,7 +810,7 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player && um.getUser(e.getEntity().getUniqueId()).godmode())
+        if (e.getEntity() instanceof Player && Necessities.getInstance().getUM().getUser(e.getEntity().getUniqueId()).godMode())
             e.setCancelled(true);
     }
 
@@ -850,19 +829,16 @@ public class Listeners implements Listener {
             if (e.getBow().getItemMeta().getLore().contains("Machine gun"))
                 for (int i = 0; i < 63; i++)
                     try {
-                        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-                            @Override
-                            public void run() {
-                                Arrow temp = (Arrow) e.getEntity().getWorld().spawnEntity(l, EntityType.ARROW);
-                                temp.setCritical(isCrit);
-                                temp.setFireTicks(fire);
-                                temp.setKnockbackStrength(knockback);
-                                temp.setTicksLived(100);
-                                temp.setVelocity(v);
-                                temp.setShooter(shooter);
-                            }
+                        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
+                            Arrow temp = (Arrow) e.getEntity().getWorld().spawnEntity(l, EntityType.ARROW);
+                            temp.setCritical(isCrit);
+                            temp.setFireTicks(fire);
+                            temp.setKnockbackStrength(knockback);
+                            temp.setTicksLived(100);
+                            temp.setVelocity(v);
+                            temp.setShooter(shooter);
                         }, i);
-                    } catch (Exception er) {
+                    } catch (Exception ignored) {
                     }
             else if (e.getBow().getItemMeta().getLore().contains("Bazooka"))
                 for (int i = 0; i < 63; i++) {
@@ -879,7 +855,8 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
+        UserManager um = Necessities.getInstance().getUM();
         User u = um.getUser(e.getPlayer().getUniqueId());
         if (u.isAfk())
             u.setAfk(false);
@@ -899,33 +876,34 @@ public class Listeners implements Listener {
         }
         YamlConfiguration configTitles = YamlConfiguration.loadConfiguration(configFileTitles);
         e.setFormat(ChatColor.translateAlternateColorCodes('&', config.getString("Necessities.ChatFormat")));
-        boolean isop = false;
+        boolean isOp = false;
+        Variables var = Necessities.getInstance().getVar();
         if (u.slackChat()) {
             e.setFormat(var.getMessages() + "To Slack - " + ChatColor.WHITE + e.getFormat());
-            e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
-            e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
-            e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{WORLD} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{GUILD} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{TITLE} ", ""));
         } else if (u.opChat()) {
-            isop = true;
+            isOp = true;
             e.setFormat(var.getMessages() + "To Ops - " + ChatColor.WHITE + e.getFormat());
-            e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
-            e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
-            e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{WORLD} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{GUILD} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{TITLE} ", ""));
         } else if (player.hasPermission("Necessities.opBroadcast") && e.getMessage().startsWith("#")) {
-            isop = true;
+            isOp = true;
             e.setFormat(var.getMessages() + "To Ops - " + ChatColor.WHITE + e.getFormat());
-            e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
-            e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
-            e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{WORLD} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{GUILD} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{TITLE} ", ""));
             e.setMessage(e.getMessage().replaceFirst("#", ""));
         } else if (u.guildChat()) {
             e.setFormat(var.getMessages() + "To Guild - " + ChatColor.WHITE + e.getFormat());
-            e.setFormat(e.getFormat().replaceAll("\\{WORLD\\} ", ""));
-            e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", ""));
-            e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{WORLD} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{GUILD} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{TITLE} ", ""));
         }
-        e.setFormat(e.getFormat().replaceAll("\\{GUILD\\} ", config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.getGuild() != null && u.getGuild().getRank(uuid) != null ?
-                "{GCOLOR}" + gm.getPrefix(u.getGuild().getRank(uuid)) + u.getGuild().getName() + " " : ""));
+        e.setFormat(e.getFormat().replaceAll("\\{GUILD} ", config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.getGuild() != null && u.getGuild().getRank(uuid) != null ?
+                "{GCOLOR}" + Necessities.getInstance().getGM().getPrefix(u.getGuild().getRank(uuid)) + u.getGuild().getName() + " " : ""));
         String fullTitle = "";
         if (configTitles.contains(player.getUniqueId() + ".title")) {
             ChatColor brackets = ChatColor.getByChar(configTitles.getString(player.getUniqueId() + ".color"));
@@ -933,15 +911,15 @@ public class Listeners implements Listener {
             title = ChatColor.translateAlternateColorCodes('&', title);
             fullTitle = ChatColor.RESET + "" + brackets + "[" + ChatColor.RESET + title + ChatColor.RESET + "" + brackets + "] " + ChatColor.RESET;
         }
-        e.setFormat(e.getFormat().replaceAll("\\{TITLE\\} ", fullTitle));
-        e.setFormat(e.getFormat().replaceAll("\\{NAME\\}", player.getDisplayName()));
+        e.setFormat(e.getFormat().replaceAll("\\{TITLE} ", fullTitle));
+        e.setFormat(e.getFormat().replaceAll("\\{NAME}", player.getDisplayName()));
         String world = player.getWorld().getName();
         if (world.contains("_"))
-            world = form.capFirst(world.replaceAll("world_", "").replaceAll("_", " ")).replaceAll(" ", "_");
-        e.setFormat(e.getFormat().replaceAll("\\{WORLD\\}", world));
+            world = Utils.capFirst(world.replaceAll("world_", "").replaceAll("_", " ")).replaceAll(" ", "_");
+        e.setFormat(e.getFormat().replaceAll("\\{WORLD}", world));
         String rank = ChatColor.translateAlternateColorCodes('&', um.getUser(uuid).getRank().getTitle());
-        e.setFormat(e.getFormat().replaceAll("\\{RANK\\}", rank));
-        final String message = bot.logChat(uuid, e.getMessage());
+        e.setFormat(e.getFormat().replaceAll("\\{RANK}", rank));
+        final String message = Necessities.getInstance().getBot().logChat(uuid, e.getMessage());
         e.setMessage(message);//Why did it not previously setMessage?
         if (player.hasPermission("Necessities.colorchat"))
             e.setMessage(ChatColor.translateAlternateColorCodes('&', (player.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", ""))));
@@ -951,47 +929,49 @@ public class Listeners implements Listener {
             if (!e.getRecipients().isEmpty()) {
                 ArrayList<Player> toRem = new ArrayList<>();
                 for (Player recip : e.getRecipients())
-                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (isop && !recip.hasPermission("Necessities.opBroadcast")) || (u.slackChat() && !recip.hasPermission("Necessities.slack"))
+                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (isOp && !recip.hasPermission("Necessities.opBroadcast")) || (u.slackChat() && !recip.hasPermission("Necessities.slack"))
                             || (u.guildChat() && u.getGuild() != null && u.getGuild() != um.getUser(recip.getUniqueId()).getGuild()))
                         toRem.add(recip);
-                for (Player recip : toRem)
-                    e.getRecipients().remove(recip);
+                toRem.forEach(recip -> e.getRecipients().remove(recip));
             }
             if (!e.getRecipients().isEmpty())
                 for (Player recip : e.getRecipients()) {
                     User r = um.getUser(recip.getUniqueId());
                     if (u.getGuild() == null || u.getGuild().getRank(uuid) == null || (config.contains("Necessities.Guilds") && !config.getBoolean("Necessities.Guilds")))
-                        recip.sendMessage(e.getFormat().replaceFirst("\\{GCOLOR\\}", "").replaceAll("\\{MESSAGE\\}", "") + e.getMessage());
+                        recip.sendMessage(e.getFormat().replaceFirst("\\{GCOLOR}", "").replaceAll("\\{MESSAGE}", "") + e.getMessage());
                     else
-                        recip.sendMessage(e.getFormat().replaceFirst("\\{GCOLOR\\}", u.getGuild().relation(r.getGuild()) + "").replaceAll("\\{MESSAGE\\}", "") + e.getMessage());
+                        recip.sendMessage(e.getFormat().replaceFirst("\\{GCOLOR}", u.getGuild().relation(r.getGuild()) + "").replaceAll("\\{MESSAGE}", "") + e.getMessage());
                 }
-            Bukkit.getConsoleSender().sendMessage(e.getFormat().replaceFirst("\\{GCOLOR\\}", var.getNeutral() + "").replaceAll("\\{MESSAGE\\}", "") + e.getMessage());
+            Bukkit.getConsoleSender().sendMessage(e.getFormat().replaceFirst("\\{GCOLOR}", var.getNeutral() + "").replaceAll("\\{MESSAGE}", "") + e.getMessage());
             if (u.slackChat())
-                slack.sendMessage((e.getFormat().replaceFirst("\\{GCOLOR\\}", var.getNeutral() + "").replaceAll("\\{MESSAGE\\}", "") + e.getMessage()).replaceFirst("To Slack - ", ""));
+                Necessities.getInstance().getSlack().sendMessage((e.getFormat().replaceFirst("\\{GCOLOR}", var.getNeutral() + "").replaceAll("\\{MESSAGE}", "") + e.getMessage()).replaceFirst("To Slack - ", ""));
             else if (!u.guildChat())
-                slack.handleIngameChat((e.getFormat().replaceFirst("\\{GCOLOR\\}", var.getNeutral() + "").replaceAll("\\{MESSAGE\\}", "") + e.getMessage()));
+                Necessities.getInstance().getSlack().handleInGameChat((e.getFormat().replaceFirst("\\{GCOLOR}", var.getNeutral() + "").replaceAll("\\{MESSAGE}", "") + e.getMessage()));
         }
         e.setCancelled(true);
-        if (config.contains("Necessities.AI") && config.getBoolean("Necessities.AI") && (!isop || message.startsWith("!")) && !u.guildChat())
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
+        if (config.contains("Necessities.AI") && config.getBoolean("Necessities.AI") && (!isOp || message.startsWith("!")) && !u.guildChat()) {
+            final String pname = player.getName();
+            BukkitRunnable aiTask = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    ai.parseMessage(player.getName(), message, JanetAI.Source.Server, false, null);
+                    Necessities.getInstance().getAI().parseMessage(pname, message, JanetAI.Source.Server, false, null);
                 }
-            });
+            };
+            aiTask.runTaskLaterAsynchronously(Necessities.getInstance(), 1);
+        }
     }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         Player player = e.getEntity().getPlayer();
         if (player != null) {
-            bot.logDeath(player.getUniqueId(), e.getDeathMessage());
+            Necessities.getInstance().getBot().logDeath(player.getUniqueId(), e.getDeathMessage());
             e.setKeepLevel(player.hasPermission("Necessities.keepxp"));
             e.setKeepInventory(player.hasPermission("Necessities.keepitems"));
             if (player.hasPermission("Necessities.keepxp"))
                 e.setDroppedExp(0);
-            User u = um.getUser(player.getUniqueId());
+            User u = Necessities.getInstance().getUM().getUser(player.getUniqueId());
             u.setLastPos(player.getLocation());
             if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !player.hasPermission("Necessities.guilds.admin"))
                 u.removePower();
@@ -1001,26 +981,27 @@ public class Listeners implements Listener {
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent e) {
         Player player = e.getPlayer();
-        User u = um.getUser(e.getPlayer().getUniqueId());
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
         if (u.isJailed())
             e.setCancelled(true);
         if (!e.isCancelled() && !e.getMessage().contains("login") && !e.getMessage().contains("register")) {
-            spy.broadcast(player.getName(), e.getMessage());
-            String message = bot.logCom(player.getUniqueId(), e.getMessage());
+            Necessities.getInstance().getSpy().broadcast(player.getName(), e.getMessage());
+            String message = Necessities.getInstance().getBot().logCom(player.getUniqueId(), e.getMessage());
             e.setMessage(message);
             u.setLastAction(System.currentTimeMillis());
             if (u.isAfk() && !message.startsWith("/afk") && !message.startsWith("/away"))
                 u.setAfk(false);
             if (e.getMessage().startsWith("/tps"))
                 e.setMessage(e.getMessage().replaceFirst("tps", "necessities:tps"));
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+            YamlConfiguration config = Necessities.getInstance().getConfig();
             if (config.contains("Necessities.customDeny") && config.getBoolean("Necessities.customDeny")) {
                 PluginCommand pc = null;
                 try {
                     pc = Bukkit.getPluginCommand(e.getMessage().split(" ")[0].replaceFirst("/", ""));
-                } catch (Exception er) {
+                } catch (Exception ignored) {
                 }//Invalid command
                 if (pc != null && !pc.testPermissionSilent(player)) {
+                    Variables var = Necessities.getInstance().getVar();
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have permission to perform this command.");
                     e.setCancelled(true);
                 }
@@ -1030,20 +1011,22 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onCommand(ServerCommandEvent e) {
+        Console console = Necessities.getInstance().getConsole();
         if (console.chatToggled() && !e.getCommand().equalsIgnoreCase("togglechat") && !e.getCommand().equalsIgnoreCase("tc"))
             e.setCommand("say " + e.getCommand());
         e.setCommand(ChatColor.translateAlternateColorCodes('&', e.getCommand()));
-        spy.broadcast(console.getName().replaceAll(":", "") + ChatColor.AQUA, e.getCommand());
-        bot.logConsole(e.getCommand());
+        Necessities.getInstance().getSpy().broadcast(console.getName().replaceAll(":", "") + ChatColor.AQUA, e.getCommand());
+        Necessities.getInstance().getBot().logConsole(e.getCommand());
         if (e.getCommand().startsWith("tps"))
             e.setCommand("necessities:" + e.getCommand());
     }
 
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent e) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        final User u = um.getUser(e.getPlayer().getUniqueId());
+        YamlConfiguration config = Necessities.getInstance().getConfig();
+        final User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
         if (!e.getFrom().getWorld().equals(e.getTo().getWorld())) {
+            WorldManager wm = Necessities.getInstance().getWM();
             if (wm.multiple()) {
                 String s = wm.getSysPath(e.getTo().getWorld().getName()), from = wm.getSysPath(e.getFrom().getWorld().getName());
                 if (!from.equals(s)) {
@@ -1054,13 +1037,8 @@ public class Listeners implements Listener {
             if (!e.getPlayer().hasPermission("Necessities.ignoreGameMode"))
                 e.getPlayer().setGameMode(wm.getGameMode(e.getTo().getWorld().getName()));//sets gamemode of player to world they teleported to
             try {
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-                    @Override
-                    public void run() {
-                        u.respawnHat();
-                    }
-                });
-            } catch (Exception er) {
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), u::respawnHat);
+            } catch (Exception ignored) {
             }
         } else {
             Hat h = u.getHat();
@@ -1072,6 +1050,7 @@ public class Listeners implements Listener {
         }
         if (!u.isJailed() && (e.getCause().equals(TeleportCause.COMMAND) || e.getCause().equals(TeleportCause.PLUGIN)))
             u.setLastPos(e.getFrom());
+        Variables var = Necessities.getInstance().getVar();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.isClaiming()) {
             u.setClaiming(false);
             e.getPlayer().sendMessage(var.getMessages() + "No longer automatically claiming land.");
@@ -1079,6 +1058,7 @@ public class Listeners implements Listener {
         if (u.isJailed())
             e.setCancelled(true);
         if (!e.isCancelled() && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getFrom().getChunk().equals(e.getTo().getChunk())) {
+            GuildManager gm = Necessities.getInstance().getGM();
             Guild owner = gm.chunkOwner(e.getTo().getChunk());
             if (owner != gm.chunkOwner(e.getFrom().getChunk()))
                 e.getPlayer().sendMessage(var.getGuildMsgs() + " ~ " + (owner == null ? var.getWild() + "Wilderness" : owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription()));
@@ -1087,9 +1067,10 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onExplosion(EntityExplodeEvent e) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
             ArrayList<Integer> indexes = new ArrayList<>();
+            GuildManager gm = Necessities.getInstance().getGM();
             for (int i = 0; i < e.blockList().size(); i++) {
                 Guild g = gm.chunkOwner(e.blockList().get(i).getChunk());
                 if (g != null && (!g.canExplode() || e.getEntity() instanceof Creeper))
@@ -1102,7 +1083,7 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onSignCreate(SignChangeEvent e) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         String line0 = e.getLine(0);
         String line1 = e.getLine(1);
         String line2 = e.getLine(2);
@@ -1115,7 +1096,8 @@ public class Listeners implements Listener {
             sign.setLine(2, line2);
             sign.setLine(3, line3);
             sign.update();
-            signs.censorSign(sign, e.getPlayer());
+            Necessities.getInstance().getSigns().censorSign(sign, e.getPlayer());
+            Signs economySigns = Necessities.getInstance().getEconomySigns();
             if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && economySigns.checkFormat(sign)) {
                 if (e.getPlayer().hasPermission("Necessities.economy.setSign"))
                     economySigns.setSign(sign);
@@ -1128,7 +1110,7 @@ public class Listeners implements Listener {
                 }
             }
         }
-        User u = um.getUser(e.getPlayer().getUniqueId());
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
@@ -1137,10 +1119,11 @@ public class Listeners implements Listener {
     @EventHandler
     public void onBookWrite(PlayerEditBookEvent e) {
         BookMeta book = e.getNewBookMeta();
+        JanetBooks books = Necessities.getInstance().getBooks();
         if (e.isSigning())
             book.setTitle(books.newTitle(book.getTitle(), e.getPlayer()));
         e.setNewBookMeta(books.newMeta(book, e.getPlayer()));
-        User u = um.getUser(e.getPlayer().getUniqueId());
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
@@ -1152,8 +1135,7 @@ public class Listeners implements Listener {
         final Inventory inv = e.getInventory();
         Player p = (Player) e.getWhoClicked();
         if (inv instanceof PlayerInventory) {
-            PlayerInventory pinv = (PlayerInventory) inv;
-            Player target = invsee.getFromInv(pinv);
+            Player target = Necessities.getInstance().getInvsee().getFromInv((PlayerInventory) inv);
             if (target != null && target.hasPermission("Necessities.invseeonly"))
                 e.setCancelled(true);
         } else if (inv instanceof AnvilInventory && rawSlot == e.getView().convertSlot(rawSlot) && rawSlot == 2) {
@@ -1161,23 +1143,20 @@ public class Listeners implements Listener {
             if (item != null) {
                 ItemMeta meta = item.getItemMeta();
                 if (meta != null && meta.hasDisplayName()) {
-                    meta.setDisplayName(rename.parseRename(meta.getDisplayName(), p));
+                    meta.setDisplayName(Necessities.getInstance().getRename().parseRename(meta.getDisplayName(), p));
                     item.setItemMeta(meta);
                     e.setCurrentItem(item);
                     try {
-                        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), new Runnable() {
-                            @Override
-                            public void run() {//removes the client side bug of item showing as still there
-                                inv.setItem(0, new ItemStack(Material.STONE));
-                                inv.clear(0);
-                            }
+                        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {//removes the client side bug of item showing as still there
+                            inv.setItem(0, new ItemStack(Material.STONE));
+                            inv.clear(0);
                         });
-                    } catch (Exception er) {
+                    } catch (Exception ignored) {
                     }
                 }
             }
         }
-        User u = um.getUser(p.getUniqueId());
+        User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
@@ -1185,7 +1164,7 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onFish(PlayerFishEvent e) {
-        User u = um.getUser(e.getPlayer().getUniqueId());
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
@@ -1193,7 +1172,7 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onSneak(PlayerToggleSneakEvent e) {
-        User u = um.getUser(e.getPlayer().getUniqueId());
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
@@ -1208,7 +1187,7 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onSprint(PlayerToggleSprintEvent e) {
-        User u = um.getUser(e.getPlayer().getUniqueId());
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
@@ -1216,7 +1195,7 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onDropItem(PlayerDropItemEvent e) {
-        User u = um.getUser(e.getPlayer().getUniqueId());
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
@@ -1224,7 +1203,7 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onTabComplete(PlayerChatTabCompleteEvent e) {
-        User u = um.getUser(e.getPlayer().getUniqueId());
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
@@ -1239,8 +1218,8 @@ public class Listeners implements Listener {
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
         if (e.getInventory() instanceof PlayerInventory)
-            invsee.closeInv((PlayerInventory) e.getInventory());
-        User u = um.getUser(e.getPlayer().getUniqueId());
+            Necessities.getInstance().getInvsee().closeInv((PlayerInventory) e.getInventory());
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
@@ -1248,7 +1227,7 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent e) {
-        User u = um.getUser(e.getPlayer().getUniqueId());
+        User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())
             u.setAfk(false);
@@ -1256,13 +1235,13 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onPickupItem(PlayerPickupItemEvent e) {
-        if (hide.isHidden(e.getPlayer()))
+        if (Necessities.getInstance().getHide().isHidden(e.getPlayer()))
             e.setCancelled(true);
     }
 
     @EventHandler
     public void onEntityTarget(EntityTargetEvent e) {
-        if (e.getTarget() instanceof Player && e.getReason().equals(EntityTargetEvent.TargetReason.CLOSEST_PLAYER) && hide.isHidden((Player) e.getTarget())) {
+        if (e.getTarget() instanceof Player && e.getReason().equals(EntityTargetEvent.TargetReason.CLOSEST_PLAYER) && Necessities.getInstance().getHide().isHidden((Player) e.getTarget())) {
             e.setCancelled(true);
             e.setTarget(null);
         }
@@ -1270,9 +1249,9 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent e) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
-            Guild g = gm.chunkOwner(e.getLocation().getChunk());
+            Guild g = Necessities.getInstance().getGM().chunkOwner(e.getLocation().getChunk());
             if (g != null && !g.canHostileSpawn() && e.getEntity() instanceof Monster)
                 e.setCancelled(true);
         }
@@ -1291,10 +1270,10 @@ public class Listeners implements Listener {
     public void onVehicleDamage(VehicleDamageEvent e) {
         if (e.getAttacker() instanceof Player) {
             Player player = (Player) e.getAttacker();
-            User u = um.getUser(player.getUniqueId());
-            YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+            User u = Necessities.getInstance().getUM().getUser(player.getUniqueId());
+            YamlConfiguration config = Necessities.getInstance().getConfig();
             if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !player.hasPermission("Necessities.guilds.admin")) {
-                Guild g = gm.chunkOwner(e.getVehicle().getLocation().getChunk());
+                Guild g = Necessities.getInstance().getGM().chunkOwner(e.getVehicle().getLocation().getChunk());
                 if (g != null && u.getGuild() != g)
                     e.setCancelled(true);
             }
@@ -1303,11 +1282,12 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onArmorStandChange(PlayerArmorStandManipulateEvent e) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
-            Guild owner = gm.chunkOwner(e.getRightClicked().getLocation().getChunk());
-            User u = um.getUser(e.getPlayer().getUniqueId());
+            Guild owner = Necessities.getInstance().getGM().chunkOwner(e.getRightClicked().getLocation().getChunk());
+            User u = Necessities.getInstance().getUM().getUser(e.getPlayer().getUniqueId());
             if (owner != null && u.getGuild() != owner) {
+                Variables var = Necessities.getInstance().getVar();
                 e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
                 e.setCancelled(true);
             }

@@ -1,8 +1,9 @@
 package com.crossge.necessities.Economy;
 
-import com.crossge.necessities.Formatter;
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.Rank;
 import com.crossge.necessities.RankManager.RankManager;
+import com.crossge.necessities.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,10 +12,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class CmdPrices {
-    private File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
-    private static ArrayList<String> co = new ArrayList<>();
-    RankManager rm = new RankManager();
-    Formatter form = new Formatter();
+    private final File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
+    private ArrayList<String> co = new ArrayList<>();
 
     public boolean canBuy(String cmd, String rank) {
         YamlConfiguration configPrices = YamlConfiguration.loadConfiguration(configFilePrices);
@@ -23,14 +22,15 @@ public class CmdPrices {
         if (!configPrices.contains("commands." + cmd))
             return false;
         String price = configPrices.getString("commands." + cmd);
-        return rm.hasRank(rm.getRank(form.capFirst(rank)), rm.getRank(form.capFirst(price.split(" ")[0])));
+        RankManager rm = Necessities.getInstance().getRM();
+        return rm.hasRank(rm.getRank(Utils.capFirst(rank)), rm.getRank(Utils.capFirst(price.split(" ")[0])));
     }
 
     public boolean realCommand(String cmd) {
         return YamlConfiguration.loadConfiguration(configFilePrices).contains("commands." + cmd.toUpperCase());
     }
 
-    public String cost(String cmd) {
+    private String cost(String cmd) {
         YamlConfiguration configPrices = YamlConfiguration.loadConfiguration(configFilePrices);
         cmd = cmd.toUpperCase();
         return !configPrices.contains("commands." + cmd) ? null : configPrices.getString("commands." + cmd).split(" ")[1];
@@ -54,7 +54,7 @@ public class CmdPrices {
 
     private void ordList() {
         ArrayList<String> temp = new ArrayList<>();
-        for (Rank r : rm.getOrder())
+        for (Rank r : Necessities.getInstance().getRM().getOrder())
             for (String cmd : co)
                 if (r.getName().toUpperCase().equals(cmd.split(" ")[1]))
                     temp.add(cmd);
@@ -68,7 +68,7 @@ public class CmdPrices {
         configPrices.set("commands" + cmd, rank + " " + price);
         try {
             configPrices.save(configFilePrices);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         upList();
     }
@@ -80,7 +80,7 @@ public class CmdPrices {
             configPrices.set("commands." + cmd, null);
         try {
             configPrices.save(configFilePrices);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         upList();
     }

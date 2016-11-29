@@ -1,13 +1,16 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CmdExt extends Cmd {
+public class CmdExt implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (args.length == 0) {
@@ -19,7 +22,7 @@ public class CmdExt extends Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console is not on fire. At least it shouldn't be...");
             return true;
         }
-        UUID uuid = get.getID(args[0]);
+        UUID uuid = Necessities.getInstance().getUUID().getID(args[0]);
         if (uuid == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;

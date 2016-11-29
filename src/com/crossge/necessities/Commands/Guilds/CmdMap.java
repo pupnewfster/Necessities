@@ -1,7 +1,10 @@
 package com.crossge.necessities.Commands.Guilds;
 
 import com.crossge.necessities.Guilds.Guild;
+import com.crossge.necessities.Guilds.GuildManager;
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
+import com.crossge.necessities.Variables;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.command.CommandSender;
@@ -10,14 +13,16 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CmdMap extends GuildCmd {
+public class CmdMap implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.map")) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You have not have permission to use /guild map.");
                 return true;
             }
+            GuildManager gm = Necessities.getInstance().getGM();
             Chunk c = p.getLocation().getChunk();
             String up = up(p.getLocation().getYaw());
             ArrayList<Chunk> chunks = new ArrayList<>();
@@ -66,7 +71,7 @@ public class CmdMap extends GuildCmd {
                             symbols.put(g, "*");//TODO: perhaps add more symbols and stuff but this will do for now
                     }
                 }
-            User u = um.getUser(p.getUniqueId());
+            User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
             Guild owner = gm.chunkOwner(c);
             String name = "(" + c.getX() + "," + c.getZ() + ") ";
             if (owner != null) {
@@ -126,7 +131,7 @@ public class CmdMap extends GuildCmd {
         else if (157.5 <= rotation && rotation < 202.5 || 202.5 <= rotation && rotation < 247.5)
             return "E";
         else if (247.5 <= rotation && rotation < 292.5 || 292.5 <= rotation && rotation < 337.5)
-            return var.getObj() + "S";
+            return Necessities.getInstance().getVar().getObj() + "S";
         return "W";
     }
 
@@ -135,28 +140,31 @@ public class CmdMap extends GuildCmd {
             return "W";
         else if (up.equals("E"))
             return "N";
-        else if (up.equals(var.getObj() + "S"))
+        else if (up.equals(Necessities.getInstance().getVar().getObj() + "S"))
             return "E";
-        return var.getObj() + "S";
+        return Necessities.getInstance().getVar().getObj() + "S";
     }
 
     private String right(String up) {
         if (up.equals("N"))
             return "E";
         else if (up.equals("E"))
-            return var.getObj() + "S";
-        else if (up.equals(var.getObj() + "S"))
+            return Necessities.getInstance().getVar().getObj() + "S";
+        else if (up.equals(Necessities.getInstance().getVar().getObj() + "S"))
             return "W";
         return "N";
     }
 
     private String down(String up) {
-        if (up.equals("N"))
-            return var.getObj() + "S";
-        else if (up.equals("E"))
-            return "W";
-        else if (up.equals("W"))
-            return "E";
-        return "N";
+        switch (up) {
+            case "N":
+                return Necessities.getInstance().getVar().getObj() + "S";
+            case "E":
+                return "W";
+            case "W":
+                return "E";
+            default:
+                return "N";
+        }
     }
 }

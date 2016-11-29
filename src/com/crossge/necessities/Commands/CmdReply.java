@@ -1,6 +1,10 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Console;
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
+import com.crossge.necessities.RankManager.UserManager;
+import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -8,12 +12,15 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class CmdReply extends Cmd {
+public class CmdReply implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a reply to send.");
             return true;
         }
+        Console console = Necessities.getInstance().getConsole();
+        UserManager um = Necessities.getInstance().getUM();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             User self = um.getUser(p.getUniqueId());

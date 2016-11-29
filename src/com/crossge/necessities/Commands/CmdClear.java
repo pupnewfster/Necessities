@@ -1,15 +1,17 @@
 package com.crossge.necessities.Commands;
 
 import com.crossge.necessities.Economy.Materials;
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
+import com.crossge.necessities.Variables;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class CmdClear extends Cmd {
-    Materials mat = new Materials();
-
+public class CmdClear implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (args.length == 0) {
@@ -18,7 +20,8 @@ public class CmdClear extends Cmd {
                 return true;
             }
             String itemName = args[0];
-            if (form.isLegal(itemName))
+            Materials mat = Necessities.getInstance().getMaterials();
+            if (Utils.legalInt(itemName))
                 itemName = mat.idToName(Integer.parseInt(itemName));
             itemName = mat.findItem(itemName);
             if (itemName == null) {
@@ -36,10 +39,10 @@ public class CmdClear extends Cmd {
                         amount += i.getAmount();
                 }
                 p.getInventory().remove(new ItemStack(Material.getMaterial(itemName)));
-                p.sendMessage(var.getMessages() + "Removed " + var.getObj() + amount + " " + mat.pluralize(form.capFirst(mat.getName(itemName)), amount) + var.getMessages() + " from your inventory.");
+                p.sendMessage(var.getMessages() + "Removed " + var.getObj() + amount + " " + mat.pluralize(Utils.capFirst(mat.getName(itemName)), amount) + var.getMessages() + " from your inventory.");
                 return true;
             }
-            if (!form.isLegal(args[1])) {
+            if (!Utils.legalInt(args[1])) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Illegal amount the amount must be numeric.");
                 return true;
             }
@@ -50,18 +53,18 @@ public class CmdClear extends Cmd {
                     return true;
                 }
                 p.getInventory().remove(new ItemStack(Material.getMaterial(itemName), amount));
-                p.sendMessage(var.getMessages() + "Removed " + var.getObj() + amount + " " + mat.pluralize(form.capFirst(mat.getName(itemName)), amount) + var.getMessages() + " from your inventory.");
+                p.sendMessage(var.getMessages() + "Removed " + var.getObj() + amount + " " + mat.pluralize(Utils.capFirst(mat.getName(itemName)), amount) + var.getMessages() + " from your inventory.");
                 return true;
             }
             short data = 0;
-            if (form.isLegal(args[2]))
+            if (Utils.legalInt(args[2])) //Really is a short
                 data = Short.parseShort(args[2]);
             if (!p.getInventory().contains(new ItemStack(Material.getMaterial(itemName), amount, data))) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + amount + var.getMessages() + " of that item.");
                 return true;
             }
             p.getInventory().remove(new ItemStack(Material.getMaterial(itemName), amount, data));
-            p.sendMessage(var.getMessages() + "Removed " + var.getObj() + amount + " " + mat.pluralize(form.capFirst(mat.getName(itemName)), amount) + var.getMessages() + " from your inventory.");
+            p.sendMessage(var.getMessages() + "Removed " + var.getObj() + amount + " " + mat.pluralize(Utils.capFirst(mat.getName(itemName)), amount) + var.getMessages() + " from your inventory.");
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command.");
         return true;

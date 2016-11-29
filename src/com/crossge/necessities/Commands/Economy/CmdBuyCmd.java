@@ -1,12 +1,19 @@
 package com.crossge.necessities.Commands.Economy;
 
+import com.crossge.necessities.Economy.BalChecks;
+import com.crossge.necessities.Economy.CmdPrices;
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.RankManager.UserManager;
+import com.crossge.necessities.Utils;
+import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CmdBuyCmd extends EconomyCmd {
+public class CmdBuyCmd implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (args.length != 1) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a command to buy.");
             return true;
@@ -15,13 +22,15 @@ public class CmdBuyCmd extends EconomyCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "This command is temporarily disabled as we work on transitioning to per use paying.");
             return true;
         }
+        UserManager um = Necessities.getInstance().getUM();
+        CmdPrices cmdp = Necessities.getInstance().getCommandPrices();
         if (sender instanceof Player) {
+            BalChecks balc = Necessities.getInstance().getBalChecks();
             Player player = (Player) sender;
-            String cmd = form.capFirst(args[0]);
+            String cmd = Utils.capFirst(args[0]);
             double cost = cmdp.getCost(cmd);
-            double balan = Double.parseDouble(balc.bal(player.getUniqueId()));
             String rank = um.getUser(player.getUniqueId()).getRank().getName().toUpperCase();
-            if (balan < cost) {
+            if (Double.parseDouble(balc.bal(player.getUniqueId())) < cost) {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Not enough money.");
                 return true;
             }
@@ -35,7 +44,7 @@ public class CmdBuyCmd extends EconomyCmd {
             }
             Command com = player.getServer().getPluginCommand(cmd);
             if (com == null) {
-                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The command " + var.getObj() + cmd + var.getMessages() + " is a nonexistant or built in command. Contact an admin if it exists.");
+                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The command " + var.getObj() + cmd + var.getMessages() + " is a nonexistent or built in command. Contact an admin if it exists.");
                 return true;
             }
             String permNode = com.getPermission();

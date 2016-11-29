@@ -1,5 +1,6 @@
 package com.crossge.necessities.WorldManager;
 
+import com.crossge.necessities.Necessities;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -8,8 +9,8 @@ import java.io.File;
 import java.util.HashMap;
 
 public class WorldManager {
-    private static HashMap<String, String> invSys = new HashMap<>();
-    private File configFileWM = new File("plugins/Necessities/WorldManager", "worlds.yml"), configFile = new File("plugins/Necessities", "config.yml");
+    private final HashMap<String, String> invSys = new HashMap<>();
+    private final File configFileWM = new File("plugins/Necessities/WorldManager", "worlds.yml");
 
     public void initiate() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loading worlds...");
@@ -18,7 +19,7 @@ public class WorldManager {
             if (!worldExists(world) && (new File(world + "/level.dat")).exists()) {
                 WorldCreator creator = new WorldCreator(world);
                 if (configWM.contains(world + ".environment"))
-                    creator.environment(getEnviroment(configWM.getString(world + ".environment")));
+                    creator.environment(getEnvironment(configWM.getString(world + ".environment")));
                 if (configWM.contains(world + ".type"))
                     creator.type(getType(configWM.getString(world + ".type")));
                 if (configWM.contains(world + ".structures"))
@@ -101,10 +102,10 @@ public class WorldManager {
         return Difficulty.PEACEFUL;
     }
 
-    public World.Environment getEnviroment(String enviroment) {
-        if (enviroment.equalsIgnoreCase("nether"))
+    public World.Environment getEnvironment(String environment) {
+        if (environment.equalsIgnoreCase("nether"))
             return World.Environment.NETHER;
-        if (enviroment.equalsIgnoreCase("the_end"))
+        if (environment.equalsIgnoreCase("the_end"))
             return World.Environment.THE_END;
         return World.Environment.NORMAL;
     }
@@ -120,7 +121,7 @@ public class WorldManager {
     }
 
     public void unloadWorld(String name) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         Location spawn = null;
         if (config.contains("Spawn")) {
             World world = Bukkit.getWorld(config.getString("Spawn.world"));
@@ -142,7 +143,7 @@ public class WorldManager {
         if (!worldExists(name) && (new File(name + "/level.dat")).exists()) {
             WorldCreator creator = new WorldCreator(name);
             if (configWM.contains(name + ".environment"))
-                creator.environment(getEnviroment(configWM.getString(name + ".environment")));
+                creator.environment(getEnvironment(configWM.getString(name + ".environment")));
             if (configWM.contains(name + ".type"))
                 creator.type(getType(configWM.getString(name + ".type")));
             if (configWM.contains(name + ".structures"))
@@ -163,7 +164,7 @@ public class WorldManager {
         configWM.set(l.getWorld().getName() + ".spawn.z", l.getBlockZ());
         try {
             configWM.save(configFileWM);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         l.getWorld().setSpawnLocation(l.getBlockX(), l.getBlockY(), l.getBlockZ());
     }
@@ -173,7 +174,7 @@ public class WorldManager {
         configWM.set(name + "." + setting, value);
         try {
             configWM.save(configFileWM);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -182,15 +183,15 @@ public class WorldManager {
         configWM.set(name + "." + setting, value);
         try {
             configWM.save(configFileWM);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
-    public void createWorld(String name, World.Environment enviro, String generator, WorldType type) {
+    public void createWorld(String name, World.Environment environment, String generator, WorldType type) {
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
         configWM.set(name + ".difficulty", "EASY");
         configWM.set(name + ".gamemode", "SURVIVAL");
-        configWM.set(name + ".environment", enviro.toString());
+        configWM.set(name + ".environment", environment.toString());
         if (generator != null)
             configWM.set(name + ".generator", generator);
         configWM.set(name + ".type", type.getName().toUpperCase());
@@ -205,10 +206,10 @@ public class WorldManager {
         configWM.set(name + ".spawn.z", 0);
         try {
             configWM.save(configFileWM);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         WorldCreator creator = new WorldCreator(name);
-        creator.environment(enviro);
+        creator.environment(environment);
         creator.type(type);
         creator.generateStructures(true);
         creator.generator(generator);
@@ -221,7 +222,7 @@ public class WorldManager {
         configWM.set(name, null);
         try {
             configWM.save(configFileWM);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 

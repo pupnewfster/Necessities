@@ -1,21 +1,21 @@
 package com.crossge.necessities.Economy;
 
-import com.crossge.necessities.Formatter;
-import com.crossge.necessities.GetUUID;
 import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class BalChecks {
-    private File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
-    private static HashMap<UUID, Double> balances = new HashMap<>();
-    Formatter form = new Formatter();
-    GetUUID get = new GetUUID();
+    private final File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
+    private final HashMap<UUID, Double> balances = new HashMap<>();
 
     public void updateB() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Retrieving all balances.");
@@ -32,7 +32,7 @@ public class BalChecks {
     }
 
     public String bal(UUID uuid) {
-        return !balances.containsKey(uuid) ? null : form.roundTwoDecimals(balances.get(uuid));
+        return !balances.containsKey(uuid) ? null : Utils.roundTwoDecimals(balances.get(uuid));
     }
 
     public double balance(UUID uuid) {
@@ -41,10 +41,9 @@ public class BalChecks {
 
     public String balTop(int page, int time) {//TODO: Make baltop more efficient
         if (balances.size() < time + page + 1 || time == 10)
-            return null;//Check before hand because this means you dont have to sort if it not valid
+            return null;//Check before hand because this means you don't have to sort if it not valid
         ArrayList<Double> balsort = new ArrayList<>();
-        for (double doub : balances.values())
-            balsort.add(doub);
+        balances.values().forEach(balsort::add);
         if (balsort.size() <= page * 10 + time)
             return null;
         Collections.sort(balsort);
@@ -57,7 +56,7 @@ public class BalChecks {
         String balSpot = baltopCords(balsort.get(page + time), occurrence);
         if (balSpot == null)
             return null;
-        return get.nameFromString(balSpot) + " " + form.roundTwoDecimals(balances.get(UUID.fromString(balSpot)));
+        return Necessities.getInstance().getUUID().nameFromString(balSpot) + " " + Utils.roundTwoDecimals(balances.get(UUID.fromString(balSpot)));
     }
 
     private String baltopCords(double money, int occurrence) {
@@ -87,7 +86,8 @@ public class BalChecks {
         setMoney(uuid, "500.0");
     }
 
-    public void trackAllBals() throws IOException {
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void trackAllBals() throws IOException {
         if (!Necessities.isTracking())
             return;
         File check = new File("plugins/Necessities", "track.yml");
@@ -99,7 +99,7 @@ public class BalChecks {
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Pushing Economy data.");
             for (UUID id : balances.keySet()) {
                 Double money = balances.get(id);
-                Necessities.trackActionWithValue(id, "Economy", money, money);
+                Necessities.trackActionWithValue(id, money, money);
             }
             configTracker.set("economy.init", true);
             configTracker.save(check);
@@ -107,23 +107,22 @@ public class BalChecks {
     }
 
     public void setMoney(UUID uuid, String amount) {
-        YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
-        if (!form.isLegal(amount))
+        if (!Utils.legalDouble(amount))
             return;
-
+        YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         double val = Double.parseDouble(amount);
         if (Necessities.isTracking()) {
             if (balances.containsKey(uuid)) {
                 double old = balances.get(uuid);
                 double change = val - old;
-                Necessities.trackActionWithValue(uuid, "Economy", change, change);
+                Necessities.trackActionWithValue(uuid, change, change);
             }
         }
         balances.put(uuid, val);
         configUsers.set(uuid.toString() + ".balance", val);
         try {
             configUsers.save(configFileUsers);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 

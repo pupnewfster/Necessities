@@ -1,19 +1,23 @@
 package com.crossge.necessities.Commands.WorldManager;
 
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Variables;
+import com.crossge.necessities.WorldManager.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 
-public class CmdModifyWorld extends WorldCmd {
+public class CmdModifyWorld implements WorldCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (args.length < 3) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a worldname a setting to modify and a value to change the "
-                    + "setting to.");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a world name a setting to modify and a value to change the setting to.");
             sender.sendMessage(var.getMessages() + "Valid settings are: " + ChatColor.WHITE + "difficulty, gamemode, structures, pvp, animals, and monsters.");
             return true;
         }
+        WorldManager wm = Necessities.getInstance().getWM();
         if (!wm.worldExists(args[0])) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That world does not exist.");
             return true;

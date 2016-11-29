@@ -5,30 +5,30 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 
 public class AntiCombatLog {
-    public static HashMap<Player, Long> inCombat = new HashMap<>();
-    Variables var = new Variables();
+    private final HashMap<Player, Long> inCombat = new HashMap<>();
 
-    public void addToCombat(Player p, Player other) {
+    void addToCombat(Player p, Player other) {
         if (p.hasPermission("Necessities.canCombatLog") || other.hasPermission("Necessities.canCombatLog"))
             return;
         long time = System.currentTimeMillis();
-        if (!inCombat.containsKey(p))
+        Variables var = Necessities.getInstance().getVar();
+        if (!this.inCombat.containsKey(p))
             p.sendMessage(var.getMessages() + "You are now in combat.");
-        if (!inCombat.containsKey(other))
+        if (!this.inCombat.containsKey(other))
             other.sendMessage(var.getMessages() + "You are now in combat.");
-        inCombat.put(p, time);
-        inCombat.put(other, time);
+        this.inCombat.put(p, time);
+        this.inCombat.put(other, time);
     }
 
     public boolean contains(Player p) {
-        return inCombat.containsKey(p);
+        return this.inCombat.containsKey(p);
     }
 
-    public void removeFromCombat(Player p) {
+    void removeFromCombat(Player p) {
         long time = System.currentTimeMillis();
-        if (inCombat.containsKey(p) && (time - inCombat.get(p)) / 1000.0 >= 9) {
-            inCombat.remove(p);
-            p.sendMessage(var.getMessages() + "You are no longer in combat.");
+        if (this.inCombat.containsKey(p) && (time - this.inCombat.get(p)) / 1000.0 >= 9) {
+            this.inCombat.remove(p);
+            p.sendMessage(Necessities.getInstance().getVar().getMessages() + "You are no longer in combat.");
         }
     }
 }

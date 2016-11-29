@@ -11,9 +11,9 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class WarpManager {
-    private File configFileWarps = new File("plugins/Necessities/WorldManager", "warps.yml");
-    private static HashMap<String, String> lowerNames = new HashMap<>();
-    private static HashMap<String, Warp> warps = new HashMap<>();
+    private final File configFileWarps = new File("plugins/Necessities/WorldManager", "warps.yml");
+    private final HashMap<String, String> lowerNames = new HashMap<>();
+    private final HashMap<String, Warp> warps = new HashMap<>();
 
     public void initiate() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loading warps...");
@@ -34,14 +34,13 @@ public class WarpManager {
     }
 
     public String getWarps() {
-        ArrayList<String> ws = new ArrayList<String>();
-        for (String w : warps.keySet())
-            ws.add(w);
+        ArrayList<String> ws = new ArrayList<>();
+        warps.keySet().forEach(ws::add);
         Collections.sort(ws);
-        String wrps = "";
+        String warps = "";
         for (String w : ws)
-            wrps += w + ", ";
-        return wrps.equals("") ? "" : wrps.trim().substring(0, wrps.length() - 2);
+            warps += w + ", ";
+        return warps.equals("") ? "" : warps.trim().substring(0, warps.length() - 2);
     }
 
     public void remove(String name) {
@@ -49,7 +48,7 @@ public class WarpManager {
         configWarps.set(name, null);
         try {
             configWarps.save(configFileWarps);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         warps.remove(name);
         lowerNames.remove(name.toLowerCase());
@@ -65,7 +64,7 @@ public class WarpManager {
         configWarps.set(name + ".pitch", loc.getPitch());
         try {
             configWarps.save(configFileWarps);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         warps.put(name, new Warp(name));
         lowerNames.put(name.toLowerCase(), name);

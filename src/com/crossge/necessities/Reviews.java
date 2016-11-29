@@ -8,10 +8,10 @@ import java.io.File;
 import java.util.HashMap;
 
 public class Reviews {
-    private File configFileReviews = new File("plugins/Necessities/Creative", "reviews.yml");
-    private static HashMap<String, String> reviews = new HashMap<>();
+    private final File configFileReviews = new File("plugins/Necessities/Creative", "reviews.yml");
+    private final HashMap<String, String> reviews = new HashMap<>();
 
-    public void parseList() {
+    void parseList() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Retrieving stored review requests.");
         YamlConfiguration configReviews = YamlConfiguration.loadConfiguration(configFileReviews);
         //What other information is needed

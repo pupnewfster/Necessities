@@ -1,30 +1,28 @@
 package com.crossge.necessities.Commands.RankManager;
 
-import com.crossge.necessities.Commands.CmdHide;
-import com.crossge.necessities.Economy.BalChecks;
+import com.crossge.necessities.GetUUID;
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
+import com.crossge.necessities.Utils;
+import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.util.Calendar;
 import java.util.UUID;
 
-public class CmdWhois extends RankCmd {
-    private File configFile = new File("plugins/Necessities", "config.yml");
-    BalChecks bal = new BalChecks();
-    CmdHide hide = new CmdHide();
-
+public class CmdWhois implements RankCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a player to view info of.");
             return true;
         }
+        GetUUID get = Necessities.getInstance().getUUID();
         UUID uuid = get.getID(args[0]);
         if (uuid == null)
             uuid = get.getOfflineID(args[0]);
@@ -32,8 +30,7 @@ public class CmdWhois extends RankCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
             return true;
         }
-        User u = um.getUser(uuid);
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        User u = Necessities.getInstance().getUM().getUser(uuid);
         sender.sendMessage(var.getMessages() + "===== WhoIs: " + var.getObj() + u.getName() + var.getMessages() + " =====");
         if (u.getPlayer() != null)
             sender.sendMessage(var.getMessages() + " - Nick: " + ChatColor.RESET + u.getPlayer().getDisplayName());
@@ -65,15 +62,13 @@ public class CmdWhois extends RankCmd {
             Player p = u.getPlayer();
             sender.sendMessage(var.getMessages() + " - Health: " + ChatColor.RESET + (int) p.getHealth() + "/" + (int) p.getMaxHealth());
             sender.sendMessage(var.getMessages() + " - Hunger: " + ChatColor.RESET + p.getFoodLevel() + "/20 (+" + (int) p.getSaturation() + " saturation)");
-            sender.sendMessage(var.getMessages() + " - Exp: " + ChatColor.RESET + form.addCommas(p.getTotalExperience()) + " (Level " + p.getLevel() + ")");
+            sender.sendMessage(var.getMessages() + " - Exp: " + ChatColor.RESET + Utils.addCommas(p.getTotalExperience()) + " (Level " + p.getLevel() + ")");
             String location = "(" + p.getWorld().getName() + ", " + p.getLocation().getBlockX() + ", " + p.getLocation().getBlockY() + ", " + p.getLocation().getBlockZ() + ")";
             sender.sendMessage(var.getMessages() + " - Location: " + ChatColor.RESET + location);
         }
-        if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy"))
-            sender.sendMessage(var.getMessages() + " - Money: " + ChatColor.RESET + "$" + form.addCommas(bal.bal(uuid)));
         if (u.getPlayer() != null) {
             Player p = u.getPlayer();
-            sender.sendMessage(var.getMessages() + " - IP Adress: " + ChatColor.RESET + p.getAddress().toString().split("/")[1].split(":")[0]);
+            sender.sendMessage(var.getMessages() + " - IP Address: " + ChatColor.RESET + p.getAddress().toString().split("/")[1].split(":")[0]);
             String gamemode = "Survival";
             if (p.getGameMode().equals(GameMode.ADVENTURE))
                 gamemode = "Adventure";
@@ -83,11 +78,10 @@ public class CmdWhois extends RankCmd {
                 gamemode = "Spectator";
             sender.sendMessage(var.getMessages() + " - Gamemode: " + ChatColor.RESET + gamemode);
         }
-        sender.sendMessage(var.getMessages() + " - God mode: " + (u.godmode() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
         if (u.getPlayer() != null) {
             Player p = u.getPlayer();
             sender.sendMessage(var.getMessages() + " - Banned: " + (p.isBanned() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
-            sender.sendMessage(var.getMessages() + " - Visible: " + (hide.isHidden(p) ? ChatColor.DARK_RED + "false" : ChatColor.GREEN + "true"));
+            sender.sendMessage(var.getMessages() + " - Visible: " + (Necessities.getInstance().getHide().isHidden(p) ? ChatColor.DARK_RED + "false" : ChatColor.GREEN + "true"));
             sender.sendMessage(var.getMessages() + " - OP: " + (p.isOp() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
             sender.sendMessage(var.getMessages() + " - Fly mode: " + (p.isFlying() ? ChatColor.GREEN + "true " + ChatColor.RESET + " (flying)" : ChatColor.DARK_RED + "false" + ChatColor.RESET + " (not flying)"));
         } else {
@@ -95,8 +89,6 @@ public class CmdWhois extends RankCmd {
             sender.sendMessage(var.getMessages() + " - Banned: " + (p.isBanned() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
             sender.sendMessage(var.getMessages() + " - OP: " + (p.isOp() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
         }
-        sender.sendMessage(var.getMessages() + " - AFK: " + (u.isAfk() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
-        sender.sendMessage(var.getMessages() + " - Jailed: " + (u.isJailed() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
         sender.sendMessage(var.getMessages() + " - Muted: " + (u.isMuted() ? ChatColor.GREEN + "true" : ChatColor.DARK_RED + "false"));
         return true;
     }

@@ -1,17 +1,14 @@
 package com.crossge.necessities.Janet;
 
+import com.crossge.necessities.Necessities;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.BookMeta;
 
-import java.io.File;
-
 public class JanetBooks {
-    private File configFile = new File("plugins/Necessities", "config.yml");
-    Janet bot = new Janet();
-
     public String newTitle(String title, Player p) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
+        Janet bot = Necessities.getInstance().getBot();
         String censored = title.trim();
         if (config.getBoolean("Necessities.language") && !p.hasPermission("Necessities.language"))
             censored = bot.internalLang(censored);
@@ -27,8 +24,9 @@ public class JanetBooks {
     }
 
     private String censor(String page, Player p) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         String censored = page;
+        Janet bot = Necessities.getInstance().getBot();
         if (config.getBoolean("Necessities.language") && !p.hasPermission("Necessities.language")) {
             String tempCensor = "";
             String[] lines = censored.split("\n");

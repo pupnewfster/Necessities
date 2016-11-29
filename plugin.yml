@@ -1,11 +1,16 @@
 name: Necessities
 main: com.crossge.necessities.Necessities
-version: 2.8.0
+version: 3.0.0
 description: Adds the necessities a server needs
 authors: [Cross Gaming Development Team]
 softdepend: [Vault, GoogleAnalyticsPlugin]
 
 commands:
+   reloadannouncer:
+      description: Reloads the announcer.
+      usage: /<command>
+      permission: Necessities.reloadannouncer
+      aliases: [nreloadannouncer, rannouncer, nrannouncer, ra, nra, reloadtips, nreloadtips, rtips, nrtips]
    tps:
       description: Shows the ticks per second and memory usage.
       usage: /<command>
@@ -777,6 +782,7 @@ permissions:
         children:
             Necessities.infiniteDurability: true
             Necessities.enderchestOthers: true
+            Necessities.reloadannouncer: true
             Necessities.ignoreGameMode: true
             Necessities.bracketOthers: true
             Necessities.unsafeEnchant: true
@@ -1646,4 +1652,7 @@ permissions:
         default: op
     Necessities.listreviews:
         description: Shows you the list of people who have requested a review
+        default: op
+    Necessities.reloadannouncer:
+        description: Allows you to reload the announcer.
         default: op

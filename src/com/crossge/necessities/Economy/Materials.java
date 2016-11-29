@@ -1,6 +1,6 @@
 package com.crossge.necessities.Economy;
 
-import com.crossge.necessities.Formatter;
+import com.crossge.necessities.Utils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -10,17 +10,20 @@ import java.io.File;
 import java.util.HashMap;
 
 public class Materials {
-    private File configFileNames = new File("plugins/Necessities/Economy", "itemnames.yml"), configFileIds = new File("plugins/Necessities/Economy", "ids.yml"),
-            configFileFriendlyNames = new File("plugins/Necessities/Economy", "friendlynames.yml"), configFilePluralyNames = new File("plugins/Necessities/Economy", "pluralnames.yml");
-    private static HashMap<String, String> friendlyNames = new HashMap<>(), customNames = new HashMap<>(), plural = new HashMap<>();
-    private static HashMap<Integer, String> idsToNames = new HashMap<>();
-    Formatter form = new Formatter();
+    private final File configFileNames = new File("plugins/Necessities/Economy", "itemnames.yml");
+    private final File configFileIds = new File("plugins/Necessities/Economy", "ids.yml");
+    private final File configFileFriendlyNames = new File("plugins/Necessities/Economy", "friendlynames.yml");
+    private final File configFilePluralNames = new File("plugins/Necessities/Economy", "pluralnames.yml");
+    private final HashMap<String, String> friendlyNames = new HashMap<>();
+    private final HashMap<String, String> customNames = new HashMap<>();
+    private final HashMap<String, String> plural = new HashMap<>();
+    private final HashMap<Integer, String> idsToNames = new HashMap<>();
 
     public void readIds() {
         YamlConfiguration configNames = YamlConfiguration.loadConfiguration(configFileNames);
         YamlConfiguration configIds = YamlConfiguration.loadConfiguration(configFileIds);
         YamlConfiguration configFriendlyNames = YamlConfiguration.loadConfiguration(configFileFriendlyNames);
-        YamlConfiguration configPluralNames = YamlConfiguration.loadConfiguration(configFilePluralyNames);
+        YamlConfiguration configPluralNames = YamlConfiguration.loadConfiguration(configFilePluralNames);
         for (String key : configIds.getKeys(false))
             idsToNames.put(configIds.getInt(key), key);
         for (String key : configNames.getKeys(false))
@@ -34,9 +37,9 @@ public class Materials {
 
     public String pluralize(String name, int amount) {
         if (amount != 1) {
-            String tempname = name.toUpperCase().replaceAll(" ", "");
-            if (plural.containsKey(tempname))
-                return form.capFirst(plural.get(tempname));
+            String tempName = name.toUpperCase().replaceAll(" ", "");
+            if (plural.containsKey(tempName))
+                return Utils.capFirst(plural.get(tempName));
         }
         return name;
     }

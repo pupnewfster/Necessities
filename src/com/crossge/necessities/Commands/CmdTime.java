@@ -1,11 +1,15 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
+import com.crossge.necessities.Variables;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CmdTime extends Cmd {
+public class CmdTime implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a world name and time.");
             return true;
@@ -31,13 +35,13 @@ public class CmdTime extends Cmd {
                     dim.setTime(23000);
                 else if (args[0].equalsIgnoreCase("dusk"))
                     dim.setTime(13000);
-                else if (validTick(args[0]))
+                else if (Utils.legalLong(args[0]))
                     dim.setTime(Long.parseLong(args[0]));
             }
             if (args.length == 2) {
                 dim = p.getWorld();
                 if (args[0].equalsIgnoreCase("add")) {
-                    if (validTick(args[1]))
+                    if (Utils.legalLong(args[1]))
                         dim.setTime(dim.getTime() + Long.parseLong(args[1]));
                 } else if (args[0].equalsIgnoreCase("set")) {
                     if (args[1].equalsIgnoreCase("day") || args[1].equalsIgnoreCase("noon"))
@@ -48,7 +52,7 @@ public class CmdTime extends Cmd {
                         dim.setTime(23000);
                     else if (args[1].equalsIgnoreCase("dusk"))
                         dim.setTime(13000);
-                    else if (validTick(args[1]))
+                    else if (Utils.legalLong(args[1]))
                         dim.setTime(Long.parseLong(args[1]));
                 } else if (args[0].equalsIgnoreCase("day") || args[1].equalsIgnoreCase("noon"))
                     dim.setTime(6000);
@@ -58,13 +62,13 @@ public class CmdTime extends Cmd {
                     dim.setTime(23000);
                 else if (args[0].equalsIgnoreCase("dusk"))
                     dim.setTime(13000);
-                else if (validTick(args[0]))
+                else if (Utils.legalLong(args[0]))
                     dim.setTime(Long.parseLong(args[0]));
             } else {
                 if (dim == null) {
                     dim = p.getWorld();
                     if (args[1].equalsIgnoreCase("add")) {
-                        if (validTick(args[2]))
+                        if (Utils.legalLong(args[2]))
                             dim.setTime(dim.getTime() + Long.parseLong(args[2]));
                     } else if (args[1].equalsIgnoreCase("set")) {
                         if (args[2].equalsIgnoreCase("day") || args[2].equalsIgnoreCase("noon"))
@@ -75,7 +79,7 @@ public class CmdTime extends Cmd {
                             dim.setTime(23000);
                         else if (args[2].equalsIgnoreCase("dusk"))
                             dim.setTime(13000);
-                        else if (validTick(args[2]))
+                        else if (Utils.legalLong(args[2]))
                             dim.setTime(Long.parseLong(args[2]));
                     } else if (args[1].equalsIgnoreCase("day") || args[1].equalsIgnoreCase("noon"))
                         dim.setTime(6000);
@@ -85,13 +89,13 @@ public class CmdTime extends Cmd {
                         dim.setTime(23000);
                     else if (args[1].equalsIgnoreCase("dusk"))
                         dim.setTime(13000);
-                    else if (validTick(args[1]))
+                    else if (Utils.legalLong(args[1]))
                         dim.setTime(Long.parseLong(args[1]));
                 }
             }
         } else {
             if (args.length == 1) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a worldname and time.");
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a world name and time.");
                 return true;
             }
             dim = sender.getServer().getWorld(args[0]);
@@ -108,11 +112,11 @@ public class CmdTime extends Cmd {
                     dim.setTime(23000);
                 else if (args[1].equalsIgnoreCase("dusk"))
                     dim.setTime(13000);
-                else if (validTick(args[1]))
+                else if (Utils.legalLong(args[1]))
                     dim.setTime(Long.parseLong(args[1]));
             } else {
                 if (args[1].equalsIgnoreCase("add")) {
-                    if (validTick(args[2]))
+                    if (Utils.legalLong(args[2]))
                         dim.setTime(dim.getTime() + Long.parseLong(args[2]));
                 } else if (args[1].equalsIgnoreCase("set")) {
                     if (args[2].equalsIgnoreCase("day") || args[2].equalsIgnoreCase("noon"))
@@ -123,7 +127,7 @@ public class CmdTime extends Cmd {
                         dim.setTime(23000);
                     else if (args[2].equalsIgnoreCase("dusk"))
                         dim.setTime(13000);
-                    else if (validTick(args[2]))
+                    else if (Utils.legalLong(args[2]))
                         dim.setTime(Long.parseLong(args[2]));
                 } else if (args[1].equalsIgnoreCase("day") || args[1].equalsIgnoreCase("noon"))
                     dim.setTime(6000);
@@ -133,20 +137,11 @@ public class CmdTime extends Cmd {
                     dim.setTime(23000);
                 else if (args[1].equalsIgnoreCase("dusk"))
                     dim.setTime(13000);
-                else if (validTick(args[1]))
+                else if (Utils.legalLong(args[1]))
                     dim.setTime(Long.parseLong(args[1]));
             }
         }
         sender.sendMessage(var.getMessages() + "The time was set to " + var.getObj() + dim.getTime() + var.getMessages() + " ticks in " + var.getObj() + dim.getName() + var.getMessages() + ".");
         return true;
-    }
-
-    private boolean validTick(String toTest) {
-        try {
-            Long.parseLong(toTest);
-            return true;
-        } catch (Exception e) {
-        }
-        return false;
     }
 }

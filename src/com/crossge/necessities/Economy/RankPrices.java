@@ -1,7 +1,7 @@
 package com.crossge.necessities.Economy;
 
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.Rank;
-import com.crossge.necessities.RankManager.RankManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -10,9 +10,8 @@ import java.io.File;
 import java.util.HashMap;
 
 public class RankPrices {
-    private File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
-    private static HashMap<String, Double> rankPrices = new HashMap<>();
-    RankManager rm = new RankManager();
+    private final File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
+    private final HashMap<String, Double> rankPrices = new HashMap<>();
 
     public void initiate() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Retrieving all rank prices.");
@@ -28,7 +27,7 @@ public class RankPrices {
         return rankPrices.containsKey(rankName);
     }
 
-    public String cost(String rankName) {
+    private String cost(String rankName) {
         rankName = rankName.toUpperCase();
         return !rankPrices.containsKey(rankName) ? null : Double.toString(rankPrices.get(rankName));
     }
@@ -46,7 +45,7 @@ public class RankPrices {
         configPrices.set("ranks." + rankName, null);
         try {
             configPrices.save(configFilePrices);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -57,7 +56,7 @@ public class RankPrices {
         configPrices.set("ranks." + rankName, Double.parseDouble(amount));
         try {
             configPrices.save(configFilePrices);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -69,7 +68,7 @@ public class RankPrices {
         page *= 10;
         if (rankPrices.size() < time + page + 1 || time == 10)
             return null;
-        Rank r = rm.getRank(page + time + 1);
+        Rank r = Necessities.getInstance().getRM().getRank(page + time + 1);
         return r == null ? null : r.getName() + " " + rankPrices.get(r.getName().toUpperCase());
     }
 }

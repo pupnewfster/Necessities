@@ -1,5 +1,9 @@
 package com.crossge.necessities.Commands.Economy;
 
+import com.crossge.necessities.Economy.Materials;
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
+import com.crossge.necessities.Variables;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -8,8 +12,9 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.util.UUID;
 
-public class CmdSell extends EconomyCmd {
+public class CmdSell implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (args.length > 2 || args.length == 0) {
@@ -21,20 +26,21 @@ public class CmdSell extends EconomyCmd {
             String itemName;
             String temp;
             short data = 0;
+            Materials mat = Necessities.getInstance().getMaterials();
             if (args.length == 2) {
                 temp = args[0].replaceAll(":", " ");
                 itemName = temp.split(" ")[0];
                 try {
                     data = Short.parseShort(temp.split(" ")[1]);
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
-                if (form.isLegal(itemName))
+                if (Utils.legalInt(itemName))
                     itemName = mat.idToName(Integer.parseInt(itemName));
                 else if (itemName.equalsIgnoreCase("hand")) {
                     itemName = inventory.getItemInMainHand().getType().name();
                     data = inventory.getItemInMainHand().getDurability();
                 }
-                if (!form.isLegal(args[1])) {
+                if (!Utils.legalInt(args[1])) {
                     if (!args[1].equalsIgnoreCase("all")) {
                         sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a the amount you want to sell.");
                         return true;
@@ -45,7 +51,7 @@ public class CmdSell extends EconomyCmd {
             } else {
                 itemName = inventory.getItemInMainHand().getType().name();
                 data = inventory.getItemInMainHand().getDurability();
-                if (!form.isLegal(args[0])) {
+                if (!Utils.legalInt(args[0])) {
                     if (!args[0].equalsIgnoreCase("all")) {
                         sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a the amount you want to sell.");
                         return true;
@@ -59,9 +65,9 @@ public class CmdSell extends EconomyCmd {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist");
                 return true;
             }
-            double cost = pr.getCost("sell", itemName, amount);
+            double cost = Necessities.getInstance().getPrices().getCost("sell", itemName, amount);
             if (cost == -1.00) {
-                itemName = form.capFirst(mat.getName(itemName));
+                itemName = Utils.capFirst(mat.getName(itemName));
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + mat.pluralize(itemName, 2) + " cannot be sold to the server.");
             } else {
                 if (Material.matchMaterial(itemName) == null) {
@@ -72,18 +78,18 @@ public class CmdSell extends EconomyCmd {
                 if (inventory.containsAtLeast(new ItemStack(Material.matchMaterial(itemName), 1, data), amount)) {
                     if (mat.isTool(itemstack) && itemstack.getType().getMaxDurability() != 0)
                         cost = cost * (1.0 * itemstack.getType().getMaxDurability() - itemstack.getDurability()) / itemstack.getType().getMaxDurability();
-                    balc.addMoney(player.getUniqueId(), cost);
+                    Necessities.getInstance().getBalChecks().addMoney(player.getUniqueId(), cost);
                     inventory.removeItem(itemstack);
-                    itemName = form.capFirst(mat.getName(itemName));
+                    itemName = Utils.capFirst(mat.getName(itemName));
                     player.sendMessage(var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + " " + itemName + var.getMessages() + ".");
-                    player.sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(cost)) + var.getMessages() + " was added to your account.");
+                    player.sendMessage(var.getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(cost)) + var.getMessages() + " was added to your account.");
                 } else {
                     if (inventory.contains(Material.matchMaterial(itemName), amount) && mat.isTool(itemstack)) {
                         cost = sell(inventory, amount, Material.matchMaterial(itemName), player.getUniqueId(), cost);
                         if (cost != -1.00) {
                             itemName = mat.pluralize(mat.getName(itemName), amount);
                             player.sendMessage(var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + " " + itemName + var.getMessages() + ".");
-                            player.sendMessage(var.getMoney() + "$" + form.addCommas(form.roundTwoDecimals(cost)) + var.getMessages() + " was added to your account.");
+                            player.sendMessage(var.getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(cost)) + var.getMessages() + " was added to your account.");
                         } else {
                             itemName = mat.pluralize(mat.getName(itemName), amount);
                             player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + Integer.toString(amount) + " " + itemName + var.getMessages() + ".");
@@ -109,7 +115,7 @@ public class CmdSell extends EconomyCmd {
                 cAmount = cAmount - 1;
                 double cost = baseCost * ((1.0 * maxDur - dur) / (maxDur * 2.0));//why does it not work if not also divided by two?
                 inv.removeItem(new ItemStack(matType, 1, s.getDurability()));
-                balc.addMoney(uuid, cost);
+                Necessities.getInstance().getBalChecks().addMoney(uuid, cost);
                 totalCost += cost;
             }
             if (cAmount == 0)

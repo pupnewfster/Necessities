@@ -1,13 +1,16 @@
 package com.crossge.necessities.Commands;
 
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Variables;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-public class CmdKillall extends Cmd {
+public class CmdKillall implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (args.length == 0) {
@@ -18,7 +21,10 @@ public class CmdKillall extends Cmd {
                             t.getType().equals(EntityType.GIANT) || t.getType().equals(EntityType.MAGMA_CUBE) || t.getType().equals(EntityType.PIG_ZOMBIE) ||
                             t.getType().equals(EntityType.SILVERFISH) || t.getType().equals(EntityType.SKELETON) || t.getType().equals(EntityType.SLIME) ||
                             t.getType().equals(EntityType.SPIDER) || t.getType().equals(EntityType.WITCH) || t.getType().equals(EntityType.WITHER) ||
-                            t.getType().equals(EntityType.ZOMBIE) || t.getType().equals(EntityType.GUARDIAN) || t.getType().equals(EntityType.ENDERMITE)) {
+                            t.getType().equals(EntityType.ZOMBIE) || t.getType().equals(EntityType.GUARDIAN) || t.getType().equals(EntityType.ENDERMITE) ||
+                            t.getType().equals(EntityType.SHULKER) || t.getType().equals(EntityType.SHULKER_BULLET) || t.getType().equals(EntityType.HUSK) ||
+                            t.getType().equals(EntityType.STRAY) || t.getType().equals(EntityType.VINDICATOR) || t.getType().equals(EntityType.EVOKER) ||
+                            t.getType().equals(EntityType.VEX)) {
                         t.remove();
                         i++;
                     }
@@ -40,7 +46,10 @@ public class CmdKillall extends Cmd {
                             t.getType().equals(EntityType.SPIDER) || t.getType().equals(EntityType.SQUID) || t.getType().equals(EntityType.VILLAGER) ||
                             t.getType().equals(EntityType.WITCH) || t.getType().equals(EntityType.WITHER) || t.getType().equals(EntityType.WOLF) ||
                             t.getType().equals(EntityType.ZOMBIE) || t.getType().equals(EntityType.GUARDIAN) || t.getType().equals(EntityType.ENDERMITE) ||
-                            t.getType().equals(EntityType.RABBIT)) {
+                            t.getType().equals(EntityType.RABBIT) || t.getType().equals(EntityType.POLAR_BEAR) || t.getType().equals(EntityType.SHULKER) ||
+                            t.getType().equals(EntityType.SHULKER_BULLET) || t.getType().equals(EntityType.HUSK) || t.getType().equals(EntityType.STRAY) ||
+                            t.getType().equals(EntityType.VINDICATOR) || t.getType().equals(EntityType.EVOKER) || t.getType().equals(EntityType.VEX) ||
+                            t.getType().equals(EntityType.LLAMA)) {
                         t.remove();
                         i++;
                     }
@@ -57,7 +66,10 @@ public class CmdKillall extends Cmd {
                             t.getType().equals(EntityType.GIANT) || t.getType().equals(EntityType.MAGMA_CUBE) || t.getType().equals(EntityType.PIG_ZOMBIE) ||
                             t.getType().equals(EntityType.SILVERFISH) || t.getType().equals(EntityType.SKELETON) || t.getType().equals(EntityType.SLIME) ||
                             t.getType().equals(EntityType.SPIDER) || t.getType().equals(EntityType.WITCH) || t.getType().equals(EntityType.WITHER) ||
-                            t.getType().equals(EntityType.ZOMBIE) || t.getType().equals(EntityType.GUARDIAN) || t.getType().equals(EntityType.ENDERMITE)) {
+                            t.getType().equals(EntityType.ZOMBIE) || t.getType().equals(EntityType.GUARDIAN) || t.getType().equals(EntityType.ENDERMITE) ||
+                            t.getType().equals(EntityType.SHULKER) || t.getType().equals(EntityType.SHULKER_BULLET) || t.getType().equals(EntityType.HUSK) ||
+                            t.getType().equals(EntityType.STRAY) || t.getType().equals(EntityType.VINDICATOR) || t.getType().equals(EntityType.EVOKER) ||
+                            t.getType().equals(EntityType.VEX)) {
                         t.remove();
                         i++;
                     }
@@ -68,7 +80,7 @@ public class CmdKillall extends Cmd {
                             t.getType().equals(EntityType.IRON_GOLEM) || t.getType().equals(EntityType.MUSHROOM_COW) || t.getType().equals(EntityType.OCELOT) ||
                             t.getType().equals(EntityType.PIG) || t.getType().equals(EntityType.SHEEP) || t.getType().equals(EntityType.SNOWMAN) ||
                             t.getType().equals(EntityType.SQUID) || t.getType().equals(EntityType.VILLAGER) || t.getType().equals(EntityType.WOLF) ||
-                            t.getType().equals(EntityType.RABBIT)) {
+                            t.getType().equals(EntityType.RABBIT) || t.getType().equals(EntityType.POLAR_BEAR) || t.getType().equals(EntityType.LLAMA)) {
                         t.remove();
                         i++;
                     }
@@ -85,7 +97,9 @@ public class CmdKillall extends Cmd {
                             t.getType().equals(EntityType.SPIDER) || t.getType().equals(EntityType.SQUID) || t.getType().equals(EntityType.VILLAGER) ||
                             t.getType().equals(EntityType.WITCH) || t.getType().equals(EntityType.WITHER) || t.getType().equals(EntityType.WOLF) ||
                             t.getType().equals(EntityType.ZOMBIE) || t.getType().equals(EntityType.GUARDIAN) || t.getType().equals(EntityType.ENDERMITE) ||
-                            t.getType().equals(EntityType.RABBIT)) {
+                            t.getType().equals(EntityType.RABBIT) || t.getType().equals(EntityType.POLAR_BEAR) || t.getType().equals(EntityType.HUSK) ||
+                            t.getType().equals(EntityType.STRAY) || t.getType().equals(EntityType.VINDICATOR) || t.getType().equals(EntityType.EVOKER) ||
+                            t.getType().equals(EntityType.VEX)) {
                         t.remove();
                         i++;
                     }
@@ -193,6 +207,16 @@ public class CmdKillall extends Cmd {
             return EntityType.SHULKER;
         if (name.equals("shulkerbullet"))
             return EntityType.SHULKER_BULLET;
+        if (name.equals("polarbear"))
+            return EntityType.POLAR_BEAR;
+        if (name.equals("vindicator"))
+            return EntityType.VINDICATOR;
+        if (name.equals("evoker"))
+            return EntityType.EVOKER;
+        if (name.equals("vex"))
+            return EntityType.VEX;
+        if (name.equals("llama"))
+            return EntityType.LLAMA;
         return null;
     }
 }

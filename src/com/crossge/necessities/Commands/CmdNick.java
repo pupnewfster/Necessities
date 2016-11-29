@@ -1,23 +1,25 @@
 package com.crossge.necessities.Commands;
 
 import com.crossge.necessities.Economy.BalChecks;
+import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
+import com.crossge.necessities.RankManager.UserManager;
+import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.util.UUID;
 
-public class CmdNick extends Cmd {
-    private File configFile = new File("plugins/Necessities", "config.yml");
-    BalChecks balc = new BalChecks();
-
+public class CmdNick implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
+        Variables var = Necessities.getInstance().getVar();
         boolean free = !(sender instanceof Player);
+        UserManager um = Necessities.getInstance().getUM();
+        BalChecks balc = Necessities.getInstance().getBalChecks();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             free = p.hasPermission("Necessities.freeCommand");
@@ -28,7 +30,7 @@ public class CmdNick extends Cmd {
                 p.sendMessage(var.getMessages() + "Nickname removed.");
                 return true;
             } else if (args.length == 1) {
-                UUID uuid = get.getID(args[0]);
+                UUID uuid = Necessities.getInstance().getUUID().getID(args[0]);
                 if (ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', args[0] + "&r")).trim().length() > 16 ||
                         ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', args[0] + "&r")).trim().length() < 1) {
                     p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Nicks have a maximum of 16 characters.");
@@ -65,7 +67,7 @@ public class CmdNick extends Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot have a nickname.");
             return true;
         }
-        UUID uuid = get.getID(args[0]);
+        UUID uuid = Necessities.getInstance().getUUID().getID(args[0]);
         if (uuid == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;

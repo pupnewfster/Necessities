@@ -6,7 +6,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 public class SafeLocation {
-    public boolean wouldFall(Location l) {
+    boolean wouldFall(Location l) {
         double x = l.getX(), y = l.getY(), z = l.getZ();
         l.setY(l.getY() - 1);
         boolean temp = false;

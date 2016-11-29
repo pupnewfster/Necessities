@@ -1,10 +1,15 @@
 package com.crossge.necessities.Commands.Economy;
 
+import com.crossge.necessities.Economy.Materials;
+import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
+import com.crossge.necessities.Variables;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CmdPrice extends EconomyCmd {
+public class CmdPrice implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
+        Variables var = Necessities.getInstance().getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter the item you want to know the price of and whether to buy or sell.");
             return true;
@@ -20,7 +25,8 @@ public class CmdPrice extends EconomyCmd {
         }
         if (args.length > 1)
             oper = args[1];
-        if (form.isLegal(itemName))
+        Materials mat = Necessities.getInstance().getMaterials();
+        if (Utils.legalInt(itemName))
             itemName = mat.idToName(Integer.parseInt(itemName));
         itemName = mat.findItem(itemName);
         if (itemName == null) {
@@ -34,8 +40,8 @@ public class CmdPrice extends EconomyCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input either buy or sell");
             return true;
         }
-        String cost = pr.cost(file, itemName);
-        itemName = form.capFirst(mat.getName(itemName));
+        String cost = Necessities.getInstance().getPrices().cost(file, itemName);
+        itemName = Utils.capFirst(mat.getName(itemName));
         if (cost == null || cost.equalsIgnoreCase("null")) {
             if (oper.equalsIgnoreCase("buy"))
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + mat.pluralize(itemName, 2) + " cannot be bought from the server");
@@ -44,9 +50,9 @@ public class CmdPrice extends EconomyCmd {
             return true;
         }
         if (oper.equalsIgnoreCase("buy"))
-            sender.sendMessage(var.getObj() + mat.pluralize(itemName, 2) + var.getMessages() + " can be bought for " + var.getMoney() + "$" + form.addCommas(cost));
+            sender.sendMessage(var.getObj() + mat.pluralize(itemName, 2) + var.getMessages() + " can be bought for " + var.getMoney() + "$" + Utils.addCommas(cost));
         else
-            sender.sendMessage(var.getObj() + mat.pluralize(itemName, 2) + var.getMessages() + " can be sold for " + var.getMoney() + "$" + form.addCommas(cost));
+            sender.sendMessage(var.getObj() + mat.pluralize(itemName, 2) + var.getMessages() + " can be sold for " + var.getMoney() + "$" + Utils.addCommas(cost));
         return true;
     }
 }

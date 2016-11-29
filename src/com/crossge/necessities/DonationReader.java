@@ -8,18 +8,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.File;
 import java.sql.*;
 import java.util.UUID;
 
-public class DonationReader {
+class DonationReader {
     private BukkitRunnable current;
     private String pass;
     private int server;
-    RankManager rm = new RankManager();
-    UserManager um = new UserManager();
-    Variables var = new Variables();
-    GetUUID get = new GetUUID();
 
     private void check() {
         try {
@@ -39,13 +34,15 @@ public class DonationReader {
                             break;
                         }
                     }
-                    if (uuid != null && get.hasJoined(uuid)) {
+                    if (uuid != null && Necessities.getInstance().getUUID().hasJoined(uuid)) {
+                        UserManager um = Necessities.getInstance().getUM();
+                        RankManager rm = Necessities.getInstance().getRM();
                         User u = um.getUser(uuid);
                         String subrank = "Necessities.Donator" + rs.getInt("package");
                         if (rm.validSubrank(subrank.toLowerCase()))
                             continue;
                         um.updateUserSubrank(uuid, rm.getSub(subrank), false);
-                        Bukkit.broadcastMessage(u.getDispName() + var.getMessages() + " just donated.");
+                        Bukkit.broadcastMessage(u.getDispName() + Necessities.getInstance().getVar() + " just donated.");
                         PreparedStatement stmt3 = conn.prepareStatement("UPDATE actions SET delivered =" + 1 + " WHERE id = " + rs.getInt("id"));
                         stmt3.executeUpdate();
                         stmt3.close();
@@ -57,7 +54,7 @@ public class DonationReader {
             stmt.close();
             stmt2.close();
             conn.close();
-        } catch (Exception e) {
+        } catch (Exception ignore) {
         }
     }
 
@@ -69,8 +66,7 @@ public class DonationReader {
                 check();
             }
         };
-        File configFile = new File("plugins/Necessities", "config.yml");
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         this.pass = config.getString("Necessities.DonationPass");
         this.server = config.getInt("Necessities.DonationServer");
         this.current.runTaskTimerAsynchronously(Necessities.getInstance(), 0, 20 * 60);

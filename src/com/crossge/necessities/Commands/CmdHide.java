@@ -3,6 +3,8 @@ package com.crossge.necessities.Commands;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;
+import com.crossge.necessities.RankManager.UserManager;
+import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -12,14 +14,17 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-public class CmdHide extends Cmd {
-    private static ArrayList<UUID> hidden = new ArrayList<>();
-    private File configFileHiding = new File("plugins/Necessities", "hiding.yml");
-    private File configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml");
-    private File configFileLogIn = new File("plugins/Necessities", "loginmessages.yml");
+public class CmdHide implements Cmd {
+    private final ArrayList<UUID> hidden = new ArrayList<>();
+    private final File configFileHiding = new File("plugins/Necessities", "hiding.yml");
+    private final File configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml");
+    private final File configFileLogIn = new File("plugins/Necessities", "loginmessages.yml");
 
     public boolean commandUse(CommandSender sender, String[] args) {
+        UserManager um = Necessities.getInstance().getUM();
+        Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             User u = um.getUser(p.getUniqueId());
@@ -27,13 +32,13 @@ public class CmdHide extends Cmd {
                 unhidePlayer(p);
                 YamlConfiguration configLogIn = YamlConfiguration.loadConfiguration(configFileLogIn);
                 Bukkit.broadcastMessage((ChatColor.GREEN + " + " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes('&',
-                        configLogIn.getString(p.getUniqueId().toString()).replaceAll("\\{NAME\\}", p.getDisplayName()).replaceAll("\\{RANK\\}",
+                        configLogIn.getString(p.getUniqueId().toString()).replaceAll("\\{NAME}", p.getDisplayName()).replaceAll("\\{RANK}",
                                 um.getUser(p.getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET + "", ChatColor.YELLOW + ""));
                 hidden.remove(p.getUniqueId());
                 p.sendMessage(var.getMessages() + "You are now visible.");
                 Bukkit.broadcast(var.getMessages() + "To Ops - " + var.getObj() + p.getDisplayName() + var.getMessages() + " - is now " + ChatColor.DARK_GRAY + "visible" + var.getMessages() + ".",
                         "Necessities.opBroadcast");
-                RankManager rm = new RankManager();
+                RankManager rm = Necessities.getInstance().getRM();
                 String rank = "";
                 if (!rm.getOrder().isEmpty())
                     rank = ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ");
@@ -46,7 +51,7 @@ public class CmdHide extends Cmd {
                 hidePlayer(p);
                 YamlConfiguration configLogOut = YamlConfiguration.loadConfiguration(configFileLogOut);
                 Bukkit.broadcastMessage((ChatColor.RED + " - " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes('&',
-                        configLogOut.getString(p.getUniqueId().toString()).replaceAll("\\{NAME\\}", p.getDisplayName()).replaceAll("\\{RANK\\}",
+                        configLogOut.getString(p.getUniqueId().toString()).replaceAll("\\{NAME}", p.getDisplayName()).replaceAll("\\{RANK}",
                                 um.getUser(p.getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET + "", ChatColor.YELLOW + ""));
                 hidden.add(p.getUniqueId());
                 p.sendMessage(var.getMessages() + "You are now hidden.");
@@ -68,46 +73,35 @@ public class CmdHide extends Cmd {
 
     public void playerJoined(Player p) {
         if (!p.hasPermission("Necessities.seehidden"))
-            for (UUID uuid : hidden)
-                if (Bukkit.getPlayer(uuid) != null)
-                    p.hidePlayer(Bukkit.getPlayer(uuid));
+            hidden.stream().filter(uuid -> Bukkit.getPlayer(uuid) != null).forEach(uuid -> p.hidePlayer(Bukkit.getPlayer(uuid)));
     }
 
     public void playerLeft(Player p) {
-        for (UUID uuid : hidden)
-            if (Bukkit.getPlayer(uuid) != null)
-                p.showPlayer(Bukkit.getPlayer(uuid));
+        hidden.stream().filter(uuid -> Bukkit.getPlayer(uuid) != null).forEach(uuid -> p.showPlayer(Bukkit.getPlayer(uuid)));
     }
 
     public void hidePlayer(Player p) {
-        for (Player x : Bukkit.getOnlinePlayers())
-            if (!x.equals(p) && x.canSee(p) && !x.hasPermission("Necessities.seehidden"))
-                x.hidePlayer(p);
+        Bukkit.getOnlinePlayers().stream().filter(x -> !x.equals(p) && x.canSee(p) && !x.hasPermission("Necessities.seehidden")).forEach(x -> x.hidePlayer(p));
         Necessities.getInstance().removePlayer(p);
     }
 
     private void unhidePlayer(Player p) {
-        for (Player x : Bukkit.getOnlinePlayers())
-            if (!x.equals(p) && !x.canSee(p))
-                x.showPlayer(p);
+        Bukkit.getOnlinePlayers().stream().filter(x -> !x.equals(p) && !x.canSee(p)).forEach(x -> x.showPlayer(p));
         Necessities.getInstance().addPlayer(p);
     }
 
     public void unload() {
         YamlConfiguration configHiding = YamlConfiguration.loadConfiguration(configFileHiding);
-        for (String key : configHiding.getKeys(false))
-            configHiding.set(key, null);
-        for (UUID uuid : hidden)
-            configHiding.set(uuid.toString(), true);
+        configHiding.getKeys(false).forEach(key -> configHiding.set(key, null));
+        hidden.forEach(uuid -> configHiding.set(uuid.toString(), true));
         try {
             configHiding.save(configFileHiding);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
     public void init() {
         YamlConfiguration configSpying = YamlConfiguration.loadConfiguration(configFileHiding);
-        for (String key : configSpying.getKeys(false))
-            hidden.add(UUID.fromString(key));
+        hidden.addAll(configSpying.getKeys(false).stream().map(UUID::fromString).collect(Collectors.toList()));
     }
 }

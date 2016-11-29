@@ -1,15 +1,11 @@
 package com.crossge.necessities.Janet;
 
+import com.crossge.necessities.Necessities;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-
 public class JanetSigns {
-    private File configFile = new File("plugins/Necessities", "config.yml");
-    Janet bot = new Janet();
-
     public void censorSign(Sign s, Player p) {
         String line0 = "", line1 = "", line2 = "", line3 = "";
         if (s.getLine(0) != null)
@@ -20,7 +16,8 @@ public class JanetSigns {
             line2 = s.getLine(2).trim();
         if (s.getLine(3) != null)
             line3 = s.getLine(3).trim();
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
+        Janet bot = Necessities.getInstance().getBot();
         if (config.getBoolean("Necessities.language") && !p.hasPermission("Necessities.language")) {
             line0 = bot.internalLang(line0);
             line1 = bot.internalLang(line1);

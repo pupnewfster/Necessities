@@ -10,26 +10,33 @@ import com.crossge.necessities.Commands.Economy.*;
 import com.crossge.necessities.Commands.Guilds.CmdGuild;
 import com.crossge.necessities.Commands.RankManager.*;
 import com.crossge.necessities.Commands.WorldManager.*;
-import com.crossge.necessities.Economy.VaultEconomy;
+import com.crossge.necessities.Economy.*;
+import com.crossge.necessities.Guilds.GuildManager;
 import com.crossge.necessities.Guilds.PowerManager;
-import com.crossge.necessities.Janet.Janet;
-import com.crossge.necessities.Janet.JanetSlack;
+import com.crossge.necessities.Janet.*;
 import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
+import com.crossge.necessities.WorldManager.PortalManager;
+import com.crossge.necessities.WorldManager.WarpManager;
+import com.crossge.necessities.WorldManager.WorldManager;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.milkbowl.vault.economy.Economy;
-import net.minecraft.server.v1_9_R1.*;
+import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.json.simple.JsonArray;
+import org.json.simple.JsonObject;
+import org.json.simple.Jsoner;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -44,13 +51,49 @@ import java.util.UUID;
 public class Necessities extends JavaPlugin {
     private static Necessities INSTANCE;
     private final List<String> devs = Arrays.asList("pupnewfster", "Mod_Chris", "hypereddie10");
-    private File configFile = new File("plugins/Necessities", "config.yml");
+    private final File configFile = new File("plugins/Necessities", "config.yml");
     private Tracker googleAnalyticsTracker;
-    private UUID janetID;
-    private Property skin;
-    DonationReader dr = new DonationReader();
-    UserManager um = new UserManager();
-    RankManager rm = new RankManager();
+    private PacketPlayOutPlayerInfo janetInfo;
+    //private DonationReader dr = new DonationReader();
+    private CmdCommandSpy spy = new CmdCommandSpy();
+    private CmdInvsee invsee = new CmdInvsee();
+    private PortalManager pm = new PortalManager();
+    private WarpManager warps = new WarpManager();
+    private WorldManager wm = new WorldManager();
+    private UserManager um = new UserManager();
+    private RankManager rm = new RankManager();
+    private ScoreBoards sb = new ScoreBoards();
+    private JanetWarn warns = new JanetWarn();
+    private Console console = new Console();
+    private Variables var = new Variables();
+    private Teleports tps = new Teleports();
+    private JanetLog log = new JanetLog();
+    private CmdHide hide = new CmdHide();
+    private GetUUID get = new GetUUID();
+    private Janet bot = new Janet();
+    private JanetNet net = new JanetNet();
+    private JanetAI ai = new JanetAI();
+    private JanetSlack slack = new JanetSlack();
+    private Reviews rev = new Reviews();
+    private Materials mat = new Materials();
+    private MaterialNames materialNames = new MaterialNames();
+    private Ids ids = new Ids();
+    private BalChecks balc = new BalChecks();
+    private Prices pr = new Prices();
+    private RankPrices rp = new RankPrices();
+    private CmdPrices cmdp = new CmdPrices();
+    private Trade tr = new Trade();
+    private SafeLocation safe = new SafeLocation();
+    private GuildManager gm = new GuildManager();
+    private PowerManager power = new PowerManager();
+    private Signs economySigns = new Signs();
+    private JanetSigns signs = new JanetSigns();
+    private Wrenched wrench = new Wrenched();
+    private AntiCombatLog acb = new AntiCombatLog();
+    private JanetRename rename = new JanetRename();
+    private JanetBooks books = new JanetBooks();
+    private Announcer announcer = new Announcer();
+    private final DisabledCmd disabled = new DisabledCmd();
 
     public static Necessities getInstance() {
         return INSTANCE;
@@ -64,7 +107,6 @@ public class Necessities extends JavaPlugin {
         if (!hookGoogle())
             getLogger().warning("Could not hook into Google Analytics!");
 
-        janetID = UUID.randomUUID();
         Initialization init = new Initialization();
         init.initiateFiles();
         getServer().getPluginManager().registerEvents(new Listeners(), this);
@@ -72,8 +114,16 @@ public class Necessities extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("Vault") != null)
             Bukkit.getServicesManager().register(Economy.class, new VaultEconomy(), Bukkit.getPluginManager().getPlugin("Vault"), ServicePriority.Normal);
 
-        dr.init();
+        //dr.init();
         getLogger().info("Necessities enabled.");
+        GameProfile janetProfile = new GameProfile(UUID.randomUUID(), "Janet");
+        janetProfile.getProperties().put("textures", getSkin());
+        MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
+        WorldServer world = server.getWorldServer(0);
+        PlayerInteractManager manager = new PlayerInteractManager(world);
+        EntityPlayer player = new EntityPlayer(server, world, janetProfile, manager);
+        player.listName = formatMessage(ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") + "Janet");
+        this.janetInfo = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, player);
     }
 
     private boolean hookGoogle() {
@@ -88,7 +138,7 @@ public class Necessities extends JavaPlugin {
         return getTracker() != null;
     }
 
-    public static Tracker getTracker() {
+    private static Tracker getTracker() {
         return getInstance().googleAnalyticsTracker;
     }
 
@@ -118,8 +168,7 @@ public class Necessities extends JavaPlugin {
         User u = um.getUser(p.getUniqueId());
         ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ") + p.getDisplayName());
         PacketPlayOutPlayerInfo tabList = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, ep);
-        for (Player x : Bukkit.getOnlinePlayers())
-            ((CraftPlayer)x).getHandle().playerConnection.sendPacket(tabList);
+        Bukkit.getOnlinePlayers().forEach(x -> ((CraftPlayer) x).getHandle().playerConnection.sendPacket(tabList));
     }
 
     public void updateAll(Player x) {
@@ -130,25 +179,14 @@ public class Necessities extends JavaPlugin {
             ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ") + p.getDisplayName());
             players.add(ep);
         }
-        ((CraftPlayer)x).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, players));
+        ((CraftPlayer) x).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, players));
     }
 
-    public void addJanet(Player p) {
-        GameProfile janetProfile = new GameProfile(janetID, "Janet");
-        if (this.skin == null)
-            this.skin = getSkin();
-        if (this.skin != null)
-            janetProfile.getProperties().put("textures", this.skin);
-        MinecraftServer server = MinecraftServer.getServer();
-        WorldServer world = server.getWorldServer(0);
-        PlayerInteractManager manager = new PlayerInteractManager(world);
-        EntityPlayer player = new EntityPlayer(server, world, janetProfile, manager);
-        player.listName = formatMessage(ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") + "Janet");
-        PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, player);
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(info);
+    void addJanet(Player p) {
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(this.janetInfo);
     }
 
-    public void addHeader(Player p) {
+    void addHeader(Player p) {
         PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter(formatMessage(ChatColor.AQUA + "Galaxy Gaming"));
         try {
             Field field = packet.getClass().getDeclaredField("b");
@@ -157,25 +195,20 @@ public class Necessities extends JavaPlugin {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ((CraftPlayer)p).getHandle().playerConnection.sendPacket(packet);
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
     }
 
     private Property getSkin() {
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://sessionserver.mojang.com/session/minecraft/profile/136f2ba62be3444ca2968ec597edb57e?unsigned=false").openConnection().getInputStream()));
-            String value = "", signature = "";
-            int count = 0;
-            for (char c : in.readLine().toCharArray()) {
-                if (c == '"')
-                    count++;
-                else if (count == 17)
-                    value += c;
-                else if (count == 21)
-                    signature += c;
-                if (count > 21)
-                    break;
-            }
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+            while ((inputLine = in.readLine()) != null)
+                response.append(inputLine);
             in.close();
+            JsonObject json = Jsoner.deserialize(response.toString(), new JsonObject());
+            JsonObject jo = (JsonObject) ((JsonArray) json.get("properties")).get(0);
+            String signature = jo.getString("signature"), value = jo.getString("value");
             return new Property("textures", value, signature);
         } catch (Exception ignored) {
         }
@@ -191,24 +224,28 @@ public class Necessities extends JavaPlugin {
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args) {
-        return getCmd(cmd.getName()).commandUse(sender, args);
+        Cmd c = getCmd(cmd.getName());
+        return c != null && c.commandUse(sender, args);
     }
 
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
         if (sender == null || cmd == null)
             return null;
-        List<String> tab = getCmd(cmd.getName()).tabComplete(sender, args);
+        Cmd c = getCmd(cmd.getName());
+        if (c == null)
+            return null;
+        List<String> tab = c.tabComplete(sender, args);
         if (tab == null || tab.isEmpty())
             return null;
         return tab;
     }
 
-    private boolean isEqual(String command, String tocheck) {
-        return command.equalsIgnoreCase(tocheck);
+    private boolean isEqual(String command, String toCheck) {
+        return command.equalsIgnoreCase(toCheck);
     }
 
     private Cmd getCmd(String name) {
-        Cmd com = new Cmd();
+        Cmd com = null;
         if (isEqual(name, "slap"))
             com = new CmdSlap();
         else if (isEqual(name, "warn"))
@@ -240,7 +277,7 @@ public class Necessities extends JavaPlugin {
         else if (isEqual(name, "workbench"))
             com = new CmdWorkbench();
         else if (isEqual(name, "hide"))
-            com = new CmdHide();
+            com = this.hide;
         else if (isEqual(name, "rename"))
             com = new CmdRename();
         else if (isEqual(name, "title"))
@@ -252,7 +289,7 @@ public class Necessities extends JavaPlugin {
         else if (isEqual(name, "bracketcolor"))
             com = new CmdBracketColor();
         else if (isEqual(name, "commandspy"))
-            com = new CmdCommandSpy();
+            com = this.spy;
         else if (isEqual(name, "setspawn"))
             com = new CmdSetspawn();
         else if (isEqual(name, "spawn"))
@@ -290,7 +327,7 @@ public class Necessities extends JavaPlugin {
         else if (isEqual(name, "enderchest"))
             com = new CmdEnderChest();
         else if (isEqual(name, "invsee"))
-            com = new CmdInvsee();
+            com = this.invsee;
         else if (isEqual(name, "slack"))
             com = new CmdSlack();
         else if (isEqual(name, "requestmod"))
@@ -393,7 +430,9 @@ public class Necessities extends JavaPlugin {
             com = new CmdWrench();
         else if (isEqual(name, "tps"))
             com = new CmdTps();
-        //Economy
+        else if (isEqual(name, "reloadannouncer"))
+            com = new CmdReloadAnnouncer();
+            //Economy
         else if (isEqual(name, "bal"))
             com = new CmdBalance();
         else if (isEqual(name, "baltop"))
@@ -429,12 +468,12 @@ public class Necessities extends JavaPlugin {
         else if (isEqual(name, "buyrank"))
             com = new CmdBuyRank();
         else if (isEqual(name, "l2m"))
-            com = new Cmdl2m();
+            com = new CmdL2M();
         else if (isEqual(name, "commandprices"))
             com = new CmdCmdPrices();
         else if (isEqual(name, "setcommandprice"))
             com = new CmdSetCmdPrice();
-        //RankManager
+            //RankManager
         else if (isEqual(name, "promote"))
             com = new CmdPromote();
         else if (isEqual(name, "demote"))
@@ -479,7 +518,7 @@ public class Necessities extends JavaPlugin {
             com = new CmdRankCmds();
         else if (isEqual(name, "reloadpermissions"))
             com = new CmdReloadPermissions();
-        //WorldManager
+            //WorldManager
         else if (isEqual(name, "createworld"))
             com = new CmdCreateWorld();
         else if (isEqual(name, "worldspawn"))
@@ -510,41 +549,40 @@ public class Necessities extends JavaPlugin {
             com = new CmdCreateWarp();
         else if (isEqual(name, "removewarp"))
             com = new CmdRemoveWarp();
-        //Guilds
+            //Guilds
         else if (isEqual(name, "guild"))
             com = new CmdGuild();
-        //Creative
+            //Creative
         else if (isEqual(name, "requestreview"))
             com = new CmdRequestReview();
         else if (isEqual(name, "reviewlist"))
             com = new CmdReviewList();
 
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        if (com == null)
+            return null;
+
+        YamlConfiguration config = getConfig();
         if (com instanceof WorldCmd && config.contains("Necessities.WorldManager") && !config.getBoolean("Necessities.WorldManager"))
-            com = new DisabledCmd();
+            com = this.disabled;
         else if (com instanceof CmdGuild && config.contains("Necessities.Guilds") && !config.getBoolean("Necessities.Guilds"))
-            com = new DisabledCmd();
+            com = this.disabled;
         else if (com instanceof EconomyCmd && config.contains("Necessities.Economy") && !config.getBoolean("Necessities.Economy"))
-            com = new DisabledCmd();
+            com = this.disabled;
         else if (com instanceof CreativeCmd && config.contains("Necessities.Creative") && !config.getBoolean("Necessities.Creative"))
-            com = new DisabledCmd();
+            com = this.disabled;
         return com;
     }
 
     @Override
     public void onDisable() {
-        CmdCommandSpy cs = new CmdCommandSpy();
-        PowerManager power = new PowerManager();
-        JanetSlack slack = new JanetSlack();
-        CmdHide hide = new CmdHide();
-        Janet bot = new Janet();
-        power.unload();
-        um.unload();
-        cs.unload();
-        hide.unload();
-        slack.disconnect();
-        bot.unload();
-        dr.disconnect();
+        this.power.unload();
+        this.um.unload();
+        this.spy.unload();
+        this.hide.unload();
+        this.slack.disconnect();
+        this.bot.unload();
+        this.announcer.exit();
+        //dr.disconnect();
         getLogger().info("Necessities disabled.");
     }
 
@@ -565,15 +603,15 @@ public class Necessities extends JavaPlugin {
         getTracker().TrackAction(clientName, clientId, ip, clientId, action, label.toString());
     }
 
-    public static void trackAction(Player p, String action, Object label) {
+    static void trackAction(Player p, Object label) {
         String clientId = p.getName(), ip = (p.getAddress() != null ? p.getAddress().toString().substring(1) : "0.0.0.0");
         boolean usesPluginChannel = p.getListeningPluginChannels().size() != 0;
         String clientVersion = Bukkit.getVersion().substring("git-Bukkit".length());
         String clientName = "Minecraft " + clientVersion.substring(0, clientVersion.indexOf("-")) + (usesPluginChannel ? " [Supports Plugin Channels]" : "");
-        getTracker().TrackAction(clientName, clientId, ip, clientId, action, label.toString());
+        getTracker().TrackAction(clientName, clientId, ip, clientId, "NewLogin", label.toString());
     }
 
-    public static void trackActionWithValue(UUID uuid, String action, Object label, Object value) {
+    public static void trackActionWithValue(UUID uuid, Object label, Object value) {
         boolean usesPluginChannel = false;
         String clientId, ip;
         Player p = Bukkit.getPlayer(uuid);
@@ -587,14 +625,178 @@ public class Necessities extends JavaPlugin {
         }
         String clientVersion = Bukkit.getVersion().substring("git-Bukkit".length());
         String clientName = "Minecraft " + clientVersion.substring(0, clientVersion.indexOf("-")) + (usesPluginChannel ? " [Supports Plugin Channels]" : "");
-        getTracker().TrackActionWithValue(clientName, clientId, ip, clientId, action, label.toString(), value.toString());
+        getTracker().TrackActionWithValue(clientName, clientId, ip, clientId, "Economy", label.toString(), value.toString());
     }
 
-    public static void trackActionWithValue(Player p, String action, Object label, Object value) {
+    public static void trackActionWithValue(Player p, Object label, Object value) {
         String clientId = p.getName(), ip = (p.getAddress() != null ? p.getAddress().toString().substring(1) : "0.0.0.0");
         boolean usesPluginChannel = p.getListeningPluginChannels().size() != 0;
         String clientVersion = Bukkit.getVersion().substring("git-Bukkit".length());
         String clientName = "Minecraft " + clientVersion.substring(0, clientVersion.indexOf("-")) + (usesPluginChannel ? " [Supports Plugin Channels]" : "");
-        getTracker().TrackActionWithValue(clientName, clientId, ip, clientId, action, label.toString(), value.toString());
+        getTracker().TrackActionWithValue(clientName, clientId, ip, clientId, "ConvertLevel", label.toString(), value.toString());
+    }
+
+    public UserManager getUM() {
+        return this.um == null ? this.um = new UserManager() : this.um;
+    }
+
+    public JanetNet getNet() {
+        return this.net == null ? this.net = new JanetNet() : this.net;
+    }
+
+    CmdCommandSpy getSpy() {
+        return this.spy == null ? this.spy = new CmdCommandSpy() : this.spy;
+    }
+
+    public RankManager getRM() {
+        return this.rm == null ? this.rm = new RankManager() : this.rm;
+    }
+
+    public PortalManager getPM() {
+        return this.pm == null ? this.pm = new PortalManager() : this.pm;
+    }
+
+    public JanetSlack getSlack() {
+        return this.slack == null ? this.slack = new JanetSlack() : this.slack;
+    }
+
+    public Console getConsole() {
+        return this.console == null ? this.console = new Console() : this.console;
+    }
+
+    public Variables getVar() {
+        return this.var == null ? this.var = new Variables() : this.var;
+    }
+
+    public Teleports getTPs() {
+        return this.tps == null ? this.tps = new Teleports() : this.tps;
+    }
+
+    public JanetWarn getWarns() {
+        return this.warns == null ? this.warns = new JanetWarn() : this.warns;
+    }
+
+    public ScoreBoards getSBs() {
+        return this.sb == null ? this.sb = new ScoreBoards() : this.sb;
+    }
+
+    public CmdHide getHide() {
+        return this.hide == null ? this.hide = new CmdHide() : this.hide;
+    }
+
+    public JanetAI getAI() {
+        return this.ai == null ? this.ai = new JanetAI() : this.ai;
+    }
+
+    public Janet getBot() {
+        return this.bot == null ? this.bot = new Janet() : this.bot;
+    }
+
+    public GetUUID getUUID() {
+        return this.get == null ? this.get = new GetUUID() : this.get;
+    }
+
+    public WarpManager getWarps() {
+        return this.warps == null ? this.warps = new WarpManager() : this.warps;
+    }
+
+    public WorldManager getWM() {
+        return this.wm == null ? this.wm = new WorldManager() : this.wm;
+    }
+
+    public GuildManager getGM() {
+        return this.gm == null ? this.gm = new GuildManager() : this.gm;
+    }
+
+    public Teleports getTeleports() {
+        return this.tps == null ? this.tps = new Teleports() : this.tps;
+    }
+
+    CmdInvsee getInvsee() {
+        return this.invsee == null ? this.invsee = new CmdInvsee() : this.invsee;
+    }
+
+    JanetBooks getBooks() {
+        return this.books == null ? this.books = new JanetBooks() : this.books;
+    }
+
+    public JanetRename getRename() {
+        return this.rename == null ? this.rename = new JanetRename() : this.rename;
+    }
+
+    public Reviews getRev() {
+        return this.rev == null ? this.rev = new Reviews() : this.rev;
+    }
+
+    Ids getIds() {
+        return this.ids == null ? this.ids = new Ids() : this.ids;
+    }
+
+    MaterialNames getMaterialNames() {
+        return this.materialNames == null ? this.materialNames = new MaterialNames() : this.materialNames;
+    }
+
+    Signs getEconomySigns() {
+        return this.economySigns == null ? this.economySigns = new Signs() : this.economySigns;
+    }
+
+    JanetSigns getSigns() {
+        return this.signs == null ? this.signs = new JanetSigns() : this.signs;
+    }
+
+    Wrenched getWrench() {
+        return this.wrench == null ? this.wrench = new Wrenched() : this.wrench;
+    }
+
+    AntiCombatLog getACB() {
+        return this.acb == null ? this.acb = new AntiCombatLog() : this.acb;
+    }
+
+    public PowerManager getPower() {
+        return this.power == null ? this.power = new PowerManager() : this.power;
+    }
+
+    public SafeLocation getSafeLocations() {
+        return this.safe == null ? this.safe = new SafeLocation() : this.safe;
+    }
+
+    public JanetLog getLog() {
+        return this.log == null ? this.log = new JanetLog() : this.log;
+    }
+
+    public BalChecks getBalChecks() {
+        return this.balc == null ? this.balc = new BalChecks() : this.balc;
+    }
+
+    public CmdPrices getCommandPrices() {
+        return this.cmdp == null ? this.cmdp = new CmdPrices() : this.cmdp;
+    }
+
+    public RankPrices getRankPrices() {
+        return this.rp == null ? this.rp = new RankPrices() : this.rp;
+    }
+
+    public Trade getTrades() {
+        return this.tr == null ? this.tr = new Trade() : this.tr;
+    }
+
+    public Prices getPrices() {
+        return this.pr == null ? this.pr = new Prices() : this.pr;
+    }
+
+    public Materials getMaterials() {
+        return this.mat == null ? this.mat = new Materials() : this.mat;
+    }
+
+    public Announcer getAnnouncer() {
+        return this.announcer == null ? this.announcer = new Announcer() : this.announcer;
+    }
+
+    public File getConfigFile() {
+        return this.configFile;
+    }
+
+    public YamlConfiguration getConfig() {
+        return YamlConfiguration.loadConfiguration(getConfigFile());
     }
 }

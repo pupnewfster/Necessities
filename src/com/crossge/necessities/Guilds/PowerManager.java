@@ -2,36 +2,30 @@ package com.crossge.necessities.Guilds;
 
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
-import com.crossge.necessities.RankManager.UserManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.File;
 import java.util.HashMap;
 
 public class PowerManager {
-    private File configFile = new File("plugins/Necessities", "config.yml");
-    private static HashMap<Player, BukkitRunnable> players = new HashMap<>();
-    UserManager um = new UserManager();
+    private final HashMap<Player, BukkitRunnable> players = new HashMap<>();
 
     public void initiate() {
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+        YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds"))
-            for (Player p : Bukkit.getOnlinePlayers())
-                addPlayer(p);
+            Bukkit.getOnlinePlayers().forEach(this::addPlayer);
     }
 
     public void unload() {
         if (!players.isEmpty())
-            for (Player p : Bukkit.getOnlinePlayers())
-                removePlayer(p);
+            Bukkit.getOnlinePlayers().forEach(this::removePlayer);
     }
 
     public void addPlayer(Player p) {
         if (!players.keySet().contains(p)) {
-            final User u = um.getUser(p.getUniqueId());
+            final User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
             players.put(p, new BukkitRunnable() {
                 @Override
                 public void run() {
