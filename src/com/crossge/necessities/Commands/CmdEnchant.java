@@ -194,6 +194,8 @@ public class CmdEnchant implements Cmd {
                 return "BINDING_CURSE";
             case "CURSEOFVANISHING":
                 return "VANISHING_CURSE";
+            case "SWEEPINGEDGE":
+                return "SWEEPING_EDGE";
             default:
                 return enchant;
         }
@@ -251,10 +253,12 @@ public class CmdEnchant implements Cmd {
                 return "frost walker";
             case "MENDING":
                 return "mending";
-            case "BINDINGCURSE":
+            case "BINDING_CURSE":
                 return "curse of binding";
-            case "VANISHINGCURSE":
+            case "VANISHING_CURSE":
                 return "curse of vanishing";
+            case "SWEEPING_EDGE":
+                return "sweeping edge";
             default:
                 return enchant.toLowerCase();
         }

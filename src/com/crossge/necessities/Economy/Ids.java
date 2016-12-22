@@ -871,6 +871,8 @@ public class Ids {
             configIds.set("RED_SHULKER_BOX", 233);
         if (!configIds.contains("BLACK_SHULKER_BOX"))
             configIds.set("BLACK_SHULKER_BOX", 234);
+        if (!configIds.contains("IRON_NUGGET"))
+            configIds.set("IRON_NUGGET", 452);
         try {
             configIds.save(configFileIds);
         } catch (Exception ignored) {

@@ -527,6 +527,7 @@ public class MaterialNames {
         configPluralNames.set("BLAZEROD", "BLAZE RODS");
         configPluralNames.set("GHASTTEAR", "GHAST TEARS");
         configPluralNames.set("GOLDNUGGET", "GOLD NUGGETS");
+        configPluralNames.set("IRONNUGGET", "IRON NUGGETS");
         configPluralNames.set("NETHERWART", "NETHER WARTS");
         configPluralNames.set("GLASSBOTTLE", "GLASS BOTTLES");
         configPluralNames.set("SPIDEREYE", "SPIDER EYES");

@@ -75,14 +75,25 @@ public class UserManager {
 
     public void addUser(Player player) {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
-        if (configUsers.contains(player.getUniqueId().toString()))
-            return;
         RankManager rm = Necessities.getInstance().getRM();
-        configUsers.set(player.getUniqueId().toString() + ".rank", rm.getRank(0).getName());
-        configUsers.set(player.getUniqueId().toString() + ".permissions", Collections.singletonList(""));
-        configUsers.set(player.getUniqueId().toString() + ".subranks", Collections.singletonList(""));
-        configUsers.set(player.getUniqueId().toString() + ".balance", 0.0);
-        configUsers.set(player.getUniqueId().toString() + ".power", 0);
+        if (configUsers.contains(player.getUniqueId().toString())) {
+            if (!configUsers.contains(player.getUniqueId().toString() + ".rank"))
+                configUsers.set(player.getUniqueId().toString() + ".rank", rm.getRank(0).getName());
+            if (!configUsers.contains(player.getUniqueId().toString() + ".permissions"))
+                configUsers.set(player.getUniqueId().toString() + ".permissions", Collections.singletonList(""));
+            if (!configUsers.contains(player.getUniqueId().toString() + ".subranks"))
+                configUsers.set(player.getUniqueId().toString() + ".subranks", Collections.singletonList(""));
+            if (!configUsers.contains(player.getUniqueId().toString() + ".balance"))
+                configUsers.set(player.getUniqueId().toString() + ".balance", 0.0);
+            if (!configUsers.contains(player.getUniqueId().toString() + ".power"))
+                configUsers.set(player.getUniqueId().toString() + ".power", 0);
+        } else {
+            configUsers.set(player.getUniqueId().toString() + ".rank", rm.getRank(0).getName());
+            configUsers.set(player.getUniqueId().toString() + ".permissions", Collections.singletonList(""));
+            configUsers.set(player.getUniqueId().toString() + ".subranks", Collections.singletonList(""));
+            configUsers.set(player.getUniqueId().toString() + ".balance", 0.0);
+            configUsers.set(player.getUniqueId().toString() + ".power", 0);
+        }
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
