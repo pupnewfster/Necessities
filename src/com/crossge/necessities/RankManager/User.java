@@ -638,7 +638,7 @@ public class User {
     }
 
     public Location getHome(String name) {
-        return this.homes.get(name);
+        return this.homes.get(name.toLowerCase().trim());
     }
 
     public int homeCount() {
