@@ -1,0 +1,14 @@
+<settings>
+  <servers>
+    <server>
+      <id>ssh-repository</id>
+      <username>ssh-username-here</username>
+      <privateKey>/path/to/your/private/key</privateKey> <!-- not needed if using pageant -->
+      <configuration>
+        <sshExecutable>plink</sshExecutable>
+        <scpExecutable>pscp</scpExecutable>
+        <sshArgs>other arguments you may need</sshArgs>
+      </configuration>
+    </server>
+  </servers>
+</settings>
