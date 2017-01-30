@@ -39,4 +39,8 @@ public class CmdKick implements Cmd {
         target.kickPlayer(reason);
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

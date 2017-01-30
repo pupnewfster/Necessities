@@ -44,4 +44,8 @@ public class CmdTpdeny implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot teleport so are unable to get teleport requests.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

@@ -40,4 +40,8 @@ public class CmdUnban implements Cmd {
         Bukkit.broadcastMessage(var.getMessages() + name + " unbanned " + theirName + ".");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

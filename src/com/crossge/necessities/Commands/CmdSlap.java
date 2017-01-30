@@ -27,4 +27,8 @@ public class CmdSlap implements Cmd {
         Bukkit.broadcastMessage(var.getMessages() + target.getName() + " was slapped sky high by " + (sender instanceof Player ? sender.getName() : Necessities.getInstance().getConsole().getName().replaceAll(":", "")));
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

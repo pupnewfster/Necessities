@@ -56,4 +56,8 @@ public class CmdCommandSpy implements Cmd {
         YamlConfiguration configSpying = YamlConfiguration.loadConfiguration(configFileSpying);
         this.spying.addAll(configSpying.getKeys(false).stream().map(UUID::fromString).collect(Collectors.toList()));
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

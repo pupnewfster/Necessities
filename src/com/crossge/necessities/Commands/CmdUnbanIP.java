@@ -37,4 +37,8 @@ public class CmdUnbanIP implements Cmd {
         Bukkit.broadcastMessage(var.getMessages() + name + " unbanned " + theirIP + ".");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

@@ -107,4 +107,8 @@ public class CmdBracketColor implements Cmd {
         }
         return complete;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

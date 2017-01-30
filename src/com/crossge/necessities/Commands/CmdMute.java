@@ -30,4 +30,8 @@ public class CmdMute implements Cmd {
         u.setMuted(!u.isMuted());
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

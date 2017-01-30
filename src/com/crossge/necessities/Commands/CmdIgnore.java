@@ -47,4 +47,8 @@ public class CmdIgnore implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot ignore anyone if you feel strongly about it try muting them.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

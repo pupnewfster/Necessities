@@ -8,4 +8,8 @@ public class CmdPlayers implements EconomyCmd {
         sender.sendMessage(Necessities.getInstance().getVar().getMessages() + Necessities.getInstance().getBalChecks().players() + " players have joined the server.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

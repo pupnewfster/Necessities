@@ -30,4 +30,8 @@ public class CmdSetRankPrice implements EconomyCmd {
         sender.sendMessage(var.getMessages() + "Added " + var.getObj() + rankName + var.getMessages() + " at the price of " + var.getMoney() + "$" + cost);
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.Collections;
 
 class Initialization {
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     void initiateFiles() {
         dirCreate("plugins/Necessities");
         dirCreate("plugins/Necessities/Logs");
@@ -142,6 +143,7 @@ class Initialization {
                 config.set("Necessities.Guilds", true);
                 config.set("Necessities.Economy", true);
                 config.set("Necessities.Creative", false);
+                config.set("Necessities.Paintball", false);
                 config.set("Necessities.warns", 3);
                 config.set("Necessities.caps", true);
                 config.set("Necessities.language", true);
@@ -190,6 +192,8 @@ class Initialization {
                 config.set("Necessities.WorldManager", true);
             if (!config.contains("Necessities.Creative"))
                 config.set("Necessities.Creative", false);
+            if (!config.contains("Necessities.Paintball"))
+                config.set("Necessities.Paintball", false);
             if (!config.contains("Necessities.Guilds"))
                 config.set("Necessities.Guilds", true);
             if (!config.contains("Necessities.Economy"))

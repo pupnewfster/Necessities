@@ -104,4 +104,8 @@ public class CmdHide implements Cmd {
         YamlConfiguration configSpying = YamlConfiguration.loadConfiguration(configFileHiding);
         hidden.addAll(configSpying.getKeys(false).stream().map(UUID::fromString).collect(Collectors.toList()));
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

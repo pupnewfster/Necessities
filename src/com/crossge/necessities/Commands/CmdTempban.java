@@ -69,4 +69,8 @@ public class CmdTempban implements Cmd {
     private String plural(int amount) {
         return amount == 1 ? "minute" : "minutes";
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

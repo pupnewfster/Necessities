@@ -63,4 +63,8 @@ public class CmdRankPrices implements EconomyCmd {
         }
         return price;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

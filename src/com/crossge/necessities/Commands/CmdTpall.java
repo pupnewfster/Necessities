@@ -21,4 +21,8 @@ public class CmdTpall implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to teleport everyone to yourself.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

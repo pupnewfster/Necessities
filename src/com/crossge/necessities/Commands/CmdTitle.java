@@ -72,4 +72,8 @@ public class CmdTitle implements Cmd {
         sender.sendMessage(var.getMessages() + "Title set to " + title + var.getMessages() + " for player " + var.getObj() + target.getName());
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

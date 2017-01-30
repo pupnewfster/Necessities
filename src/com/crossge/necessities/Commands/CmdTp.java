@@ -49,4 +49,8 @@ public class CmdTp implements Cmd {
         sender.sendMessage(var.getMessages() + "You teleported " + var.getObj() + target.getName() + var.getMessages() + " to " + var.getObj() + targetTo.getName() + var.getMessages() + ".");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

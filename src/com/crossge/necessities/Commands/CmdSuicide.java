@@ -18,4 +18,8 @@ public class CmdSuicide implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot suicide you would kill the server.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

@@ -93,4 +93,8 @@ public class CmdBanIP implements Cmd {
                     complete.add(p.getName());
         return complete;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

@@ -219,4 +219,8 @@ public class CmdKillall implements Cmd {
             return EntityType.LLAMA;
         return null;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

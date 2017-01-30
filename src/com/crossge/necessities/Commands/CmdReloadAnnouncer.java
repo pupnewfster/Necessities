@@ -13,4 +13,8 @@ public class CmdReloadAnnouncer implements Cmd {
         sender.sendMessage(var.getMessages() + "Announcer reloaded.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

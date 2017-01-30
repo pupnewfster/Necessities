@@ -144,4 +144,8 @@ public class CmdTime implements Cmd {
         sender.sendMessage(var.getMessages() + "The time was set to " + var.getObj() + dim.getTime() + var.getMessages() + " ticks in " + var.getObj() + dim.getName() + var.getMessages() + ".");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

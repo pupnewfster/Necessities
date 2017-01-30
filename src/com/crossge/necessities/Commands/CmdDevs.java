@@ -17,4 +17,8 @@ public class CmdDevs implements Cmd {
         sender.sendMessage(d);
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

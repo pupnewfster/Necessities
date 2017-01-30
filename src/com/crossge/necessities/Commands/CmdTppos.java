@@ -51,4 +51,8 @@ public class CmdTppos implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to teleport to a location.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

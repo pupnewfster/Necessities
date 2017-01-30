@@ -58,4 +58,8 @@ public class CmdPay implements EconomyCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command or use cce");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

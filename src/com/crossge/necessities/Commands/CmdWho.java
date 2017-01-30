@@ -71,4 +71,8 @@ public class CmdWho implements Cmd {
     private String amount(int a) {
         return a == 1 ? "is" : "are";
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

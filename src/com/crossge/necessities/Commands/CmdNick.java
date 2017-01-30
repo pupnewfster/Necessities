@@ -103,4 +103,8 @@ public class CmdNick implements Cmd {
         }
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

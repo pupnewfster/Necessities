@@ -32,4 +32,8 @@ public class CmdHighfive implements Cmd {
         Bukkit.broadcastMessage(var.getMessages() + name + " just highfived " + target.getName());
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

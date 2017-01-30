@@ -39,4 +39,8 @@ public class CmdLogInMessage implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console does not have a login message.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

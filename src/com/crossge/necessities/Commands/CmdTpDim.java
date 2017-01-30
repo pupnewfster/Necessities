@@ -53,4 +53,8 @@ public class CmdTpDim implements Cmd {
                 Integer.parseInt(args[6]))));
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

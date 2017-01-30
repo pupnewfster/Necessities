@@ -38,4 +38,8 @@ public class CmdMe implements Cmd {
         }
         Bukkit.getConsoleSender().sendMessage(var.getMe() + "*" + sender.getRank().getColor() + sender.getPlayer().getDisplayName() + var.getMe() + " " + msg);
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

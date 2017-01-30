@@ -66,4 +66,8 @@ public class CmdBalance implements EconomyCmd {
                     complete.add(p.getName());
         return complete;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

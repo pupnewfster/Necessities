@@ -53,4 +53,8 @@ public class CmdTpa implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot teleport so are unable to request to teleport to someone.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

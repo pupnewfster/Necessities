@@ -57,4 +57,8 @@ public class CmdOpChat implements Cmd {
         Bukkit.broadcast(Necessities.getInstance().getVar().getMessages() + "To Ops - " + Necessities.getInstance().getConsole().getName() + ChatColor.WHITE + " " +
                 ChatColor.translateAlternateColorCodes('&', message.trim()), "Necessities.opBroadcast");
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

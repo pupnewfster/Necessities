@@ -24,4 +24,8 @@ public class CmdSay implements Cmd {
         Bukkit.broadcastMessage((sender instanceof Player ? "" : Necessities.getInstance().getConsole().getName() + ChatColor.WHITE + " ") + ChatColor.translateAlternateColorCodes('&', message.trim()));
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

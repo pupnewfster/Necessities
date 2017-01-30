@@ -31,4 +31,8 @@ public class CmdFaq implements Cmd {
         }
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

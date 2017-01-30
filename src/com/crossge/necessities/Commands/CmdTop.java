@@ -22,4 +22,8 @@ public class CmdTop implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot use /top soz.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

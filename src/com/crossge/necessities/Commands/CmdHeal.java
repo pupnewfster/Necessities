@@ -44,4 +44,8 @@ public class CmdHeal implements Cmd {
         sender.sendMessage(var.getMessages() + "Healed player: " + var.getObj() + target.getDisplayName());
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

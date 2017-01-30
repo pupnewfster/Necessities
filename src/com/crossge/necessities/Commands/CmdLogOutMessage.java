@@ -39,4 +39,8 @@ public class CmdLogOutMessage implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console does not have a logout message.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

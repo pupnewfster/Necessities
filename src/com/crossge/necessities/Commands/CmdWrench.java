@@ -28,4 +28,8 @@ public class CmdWrench implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not allowed wrenches they could be harmful to you.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

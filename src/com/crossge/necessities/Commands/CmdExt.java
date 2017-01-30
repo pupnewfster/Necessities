@@ -38,4 +38,8 @@ public class CmdExt implements Cmd {
         sender.sendMessage(var.getMessages() + "Extinguished player: " + var.getObj() + target.getDisplayName());
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

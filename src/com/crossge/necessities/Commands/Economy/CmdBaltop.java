@@ -39,4 +39,8 @@ public class CmdBaltop implements EconomyCmd {
         }
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

@@ -19,4 +19,8 @@ public class CmdRagequit implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot ragequit you would kill the server.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

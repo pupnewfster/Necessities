@@ -38,4 +38,8 @@ public class CmdWarn implements Cmd {
         Necessities.getInstance().getWarns().warn(target.getUniqueId(), reason, name);
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

@@ -38,4 +38,8 @@ public class CmdRequestMod implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not need a moderator.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

@@ -53,4 +53,8 @@ public class CmdWeather implements Cmd {
         sender.sendMessage(var.getMessages() + "Set weather in " + var.getObj() + dim.getName() + var.getMessages() + " to " + (thundering ? "stormy" : "clear") + ".");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

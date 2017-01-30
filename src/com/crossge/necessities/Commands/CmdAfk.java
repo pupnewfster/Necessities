@@ -18,4 +18,8 @@ public class CmdAfk implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot go afk.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

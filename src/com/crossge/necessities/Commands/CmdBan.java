@@ -69,4 +69,8 @@ public class CmdBan implements Cmd {
                     complete.add(p.getName());
         return complete;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

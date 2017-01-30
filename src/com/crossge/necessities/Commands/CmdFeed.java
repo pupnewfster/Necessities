@@ -40,4 +40,8 @@ public class CmdFeed implements Cmd {
         sender.sendMessage(var.getMessages() + "Satisfied player: " + var.getObj() + target.getDisplayName());
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

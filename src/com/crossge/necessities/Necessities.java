@@ -562,7 +562,9 @@ public class Necessities extends JavaPlugin {
             return null;
 
         YamlConfiguration config = getConfig();
-        if (com instanceof WorldCmd && config.contains("Necessities.WorldManager") && !config.getBoolean("Necessities.WorldManager"))
+        if (!com.isPaintballEnabled() && config.contains("Necessities.Paintball") && config.getBoolean("Necessities.Paintball"))
+            com = this.disabled;
+        else if (com instanceof WorldCmd && config.contains("Necessities.WorldManager") && !config.getBoolean("Necessities.WorldManager"))
             com = this.disabled;
         else if (com instanceof CmdGuild && config.contains("Necessities.Guilds") && !config.getBoolean("Necessities.Guilds"))
             com = this.disabled;
@@ -571,6 +573,11 @@ public class Necessities extends JavaPlugin {
         else if (com instanceof CreativeCmd && config.contains("Necessities.Creative") && !config.getBoolean("Necessities.Creative"))
             com = this.disabled;
         return com;
+    }
+
+    public boolean isCommandEnabled(String cmd) {
+        Cmd c = getCmd(cmd);
+        return c != null && !c.equals(this.disabled);
     }
 
     @Override

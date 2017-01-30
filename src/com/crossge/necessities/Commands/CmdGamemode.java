@@ -44,4 +44,8 @@ public class CmdGamemode implements Cmd {
             return GameMode.SPECTATOR;
         return GameMode.SURVIVAL;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

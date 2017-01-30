@@ -36,4 +36,8 @@ public class CmdImp implements Cmd {
         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', message.trim()));
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

@@ -39,4 +39,8 @@ public class CmdJump implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot jump because you do not have a body.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

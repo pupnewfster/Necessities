@@ -51,4 +51,8 @@ public class CmdFly implements Cmd {
         }
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

@@ -27,4 +27,8 @@ public class CmdSetspawn implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot set the spawn.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

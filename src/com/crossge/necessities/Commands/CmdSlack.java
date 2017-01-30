@@ -58,4 +58,8 @@ public class CmdSlack implements Cmd {
         Bukkit.broadcast(send, "Necessities.slack");
         Necessities.getInstance().getSlack().sendMessage(cName + " " + ChatColor.translateAlternateColorCodes('&', message.trim()));
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }

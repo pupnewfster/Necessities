@@ -34,4 +34,8 @@ public class CmdTphere implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to teleport someone to yourself.");
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }
