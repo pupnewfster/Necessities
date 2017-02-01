@@ -2,6 +2,8 @@ package com.crossge.necessities.Economy;
 
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.Utils;
+import net.nyvaria.googleanalytics.hit.EventHit;
+import net.nyvaria.openanalytics.bukkit.client.Client;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -98,8 +100,10 @@ public class BalChecks {
         if (!didSend) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Pushing Economy data.");
             for (UUID id : balances.keySet()) {
-                Double money = balances.get(id);
-                Necessities.trackActionWithValue(id, money, money);
+                double money = balances.get(id);
+                EventHit hit = new EventHit(new Client(Bukkit.getOfflinePlayer(id)), "Economy", "Economy");
+                hit.event_value = (int) money; //TODO Possibly multiply by 100 to not loose accuracy
+                Necessities.trackAction(hit);
             }
             configTracker.set("economy.init", true);
             configTracker.save(check);
@@ -115,7 +119,9 @@ public class BalChecks {
             if (balances.containsKey(uuid)) {
                 double old = balances.get(uuid);
                 double change = val - old;
-                Necessities.trackActionWithValue(uuid, change, change);
+                EventHit hit = new EventHit(new Client(Bukkit.getOfflinePlayer(uuid)), "Economy", "Economy");
+                hit.event_value = (int) change;//TODO Possibly multiply by 100 to not loose accuracy
+                Necessities.trackAction(hit);
             }
         }
         balances.put(uuid, val);
