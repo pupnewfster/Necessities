@@ -129,7 +129,7 @@ public class Necessities extends JavaPlugin {
 
     private boolean hookGoogle() {
         OpenAnalytics plugin;
-        if ((plugin = (OpenAnalytics) getServer().getPluginManager().getPlugin("GoogleAnalyticsPlugin")) == null)
+        if ((plugin = (OpenAnalytics) getServer().getPluginManager().getPlugin("OpenAnalytics")) == null)
             return false;
         googleAnalyticsTracker = plugin.getTracker();
         return true;
