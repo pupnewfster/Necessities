@@ -696,7 +696,7 @@ public class Ids {
         if (!configIds.contains("RECORD_12"))
             configIds.set("RECORD_12", 2267);
         if (!configIds.contains("SPONGE"))
-            configIds.set("SPONGE", 19);//TODO: Armor stand
+            configIds.set("SPONGE", 19);
         if (!configIds.contains("SLIME_BLOCK"))
             configIds.set("SLIME_BLOCK", 165);
         if (!configIds.contains("BARRIER"))
