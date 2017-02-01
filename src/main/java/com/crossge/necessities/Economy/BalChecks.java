@@ -101,9 +101,11 @@ public class BalChecks {
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Pushing Economy data.");
             for (UUID id : balances.keySet()) {
                 double money = balances.get(id);
-                EventHit hit = new EventHit(new Client(Bukkit.getOfflinePlayer(id)), "Economy", "Economy");
-                hit.event_value = (int) money; //TODO Possibly multiply by 100 to not loose accuracy
-                Necessities.trackAction(hit);
+                if (Necessities.isTracking()) {
+                    EventHit hit = new EventHit(new Client(Bukkit.getOfflinePlayer(id)), "Economy", "Economy");
+                    hit.event_value = (int) money; //TODO Possibly multiply by 100 to not loose accuracy
+                    Necessities.trackAction(hit);
+                }
             }
             configTracker.set("economy.init", true);
             configTracker.save(check);
