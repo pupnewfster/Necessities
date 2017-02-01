@@ -70,4 +70,8 @@ public class CmdEco implements EconomyCmd {
         }
         return true;
     }
+
+    public boolean isPaintballEnabled() {
+        return true;
+    }
 }
