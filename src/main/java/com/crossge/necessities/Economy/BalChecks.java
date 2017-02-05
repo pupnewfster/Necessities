@@ -1,15 +1,13 @@
 package com.crossge.necessities.Economy;
 
 import com.crossge.necessities.Necessities;
+import com.crossge.necessities.OpenAnalyticsHook;
 import com.crossge.necessities.Utils;
-import net.nyvaria.googleanalytics.hit.EventHit;
-import net.nyvaria.openanalytics.bukkit.client.Client;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,11 +23,6 @@ public class BalChecks {
         for (String key : configUsers.getKeys(false))
             if (key != null && !key.equals("null") && !key.equals(""))//TODO: Is this needed or did I fix the null even having ability to show up
                 balances.put(UUID.fromString(key), configUsers.getDouble(key + ".balance"));
-        try {
-            trackAllBals();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Retrieved all balances.");
     }
 
@@ -88,44 +81,13 @@ public class BalChecks {
         setMoney(uuid, "500.0");
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    private void trackAllBals() throws IOException {
-        if (!Necessities.isTracking())
-            return;
-        File check = new File("plugins/Necessities", "track.yml");
-        if (!check.exists())
-            check.createNewFile();
-        YamlConfiguration configTracker = YamlConfiguration.loadConfiguration(check);
-        boolean didSend = configTracker.getBoolean("economy.init", false);
-        if (!didSend) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Pushing Economy data.");
-            for (UUID id : balances.keySet()) {
-                double money = balances.get(id);
-                if (Necessities.isTracking()) {
-                    EventHit hit = new EventHit(new Client(Bukkit.getOfflinePlayer(id)), "Economy", "Economy");
-                    hit.event_value = (int) money; //TODO Possibly multiply by 100 to not loose accuracy
-                    Necessities.trackAction(hit);
-                }
-            }
-            configTracker.set("economy.init", true);
-            configTracker.save(check);
-        }
-    }
-
     public void setMoney(UUID uuid, String amount) {
         if (!Utils.legalDouble(amount))
             return;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         double val = Double.parseDouble(amount);
-        if (Necessities.isTracking()) {
-            if (balances.containsKey(uuid)) {
-                double old = balances.get(uuid);
-                double change = val - old;
-                EventHit hit = new EventHit(new Client(Bukkit.getOfflinePlayer(uuid)), "Economy", "Economy");
-                hit.event_value = (int) change;//TODO Possibly multiply by 100 to not loose accuracy
-                Necessities.trackAction(hit);
-            }
-        }
+        if (Necessities.isTracking() && balances.containsKey(uuid))
+            OpenAnalyticsHook.trackEconomyAction(uuid, val - balances.get(uuid));
         balances.put(uuid, val);
         configUsers.set(uuid.toString() + ".balance", val);
         try {

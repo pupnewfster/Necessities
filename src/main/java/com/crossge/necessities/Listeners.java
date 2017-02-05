@@ -13,8 +13,6 @@ import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
 import com.crossge.necessities.WorldManager.WorldManager;
-import net.nyvaria.googleanalytics.hit.EventHit;
-import net.nyvaria.openanalytics.bukkit.client.Client;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.boss.BarColor;
@@ -134,11 +132,8 @@ class Listeners implements Listener {
         if (!get.hasJoined(uuid)) {
             YamlConfiguration config = Necessities.getInstance().getConfig();
             final String welcome = ChatColor.translateAlternateColorCodes('&', config.getString("Necessities.firstTime")).replaceAll("\\{NAME}", p.getName());
-            if (Necessities.isTracking()) {
-                EventHit hit = new EventHit(new Client(p), "NewLogin", "NewLogin");
-                hit.event_label = p.getName();
-                Necessities.trackAction(hit);
-            }
+            if (Necessities.isTracking())
+                OpenAnalyticsHook.trackNewLogin(p);
             if (config.contains("Spawn")) {
                 World world = Bukkit.getWorld(config.getString("Spawn.world"));
                 double x = Double.parseDouble(config.getString("Spawn.x"));

@@ -1,9 +1,8 @@
 package com.crossge.necessities.Commands.Economy;
 
 import com.crossge.necessities.Necessities;
+import com.crossge.necessities.OpenAnalyticsHook;
 import com.crossge.necessities.Variables;
-import net.nyvaria.googleanalytics.hit.EventHit;
-import net.nyvaria.openanalytics.bukkit.client.Client;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -35,11 +34,8 @@ public class CmdL2M implements EconomyCmd {
             double money = 2 * levelToExp(p.getLevel(), p.getLevel() - level);
             p.setLevel(p.getLevel() - level);
             Necessities.getInstance().getBalChecks().addMoney(p.getUniqueId(), money);
-            if (Necessities.isTracking()) {
-                EventHit hit = new EventHit(new Client(p), "ConvertLevel", "ConvertLevel");
-                hit.event_value = level;
-                Necessities.trackAction(hit);
-            }
+            if (Necessities.isTracking())
+                OpenAnalyticsHook.trackLevelConvert(p, level);
             p.sendMessage("" + ChatColor.GREEN + ChatColor.BOLD + "+" + ChatColor.RESET + " Converted " + ChatColor.BOLD + level + ChatColor.RESET + " levels to " + var.getMoney() + "$" + money + ChatColor.RESET + "!");
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command");
