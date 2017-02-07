@@ -1,14 +1,14 @@
 package com.crossge.necessities.Commands.Economy;
 
-import com.crossge.necessities.Economy.Materials;
+import com.crossge.necessities.Economy.Material;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.material.MaterialData;
 
 import java.util.UUID;
 
@@ -23,98 +23,89 @@ public class CmdSell implements EconomyCmd {
             }
             PlayerInventory inventory = player.getInventory();
             int amount = 0;
-            String itemName;
-            String temp;
-            short data = 0;
-            Materials mat = Necessities.getInstance().getMaterials();
+            Material mat;
             if (args.length == 2) {
-                temp = args[0].replaceAll(":", " ");
-                itemName = temp.split(" ")[0];
+                String temp = args[0].replaceAll(":", " ");
+                String itemName = temp.split(" ")[0];
+                short data = 0;
                 try {
                     data = Short.parseShort(temp.split(" ")[1]);
                 } catch (Exception ignored) {
                 }
                 if (Utils.legalInt(itemName))
-                    itemName = mat.idToName(Integer.parseInt(itemName));
+                    mat = Material.fromData(Integer.parseInt(itemName), data);
                 else if (itemName.equalsIgnoreCase("hand")) {
-                    itemName = inventory.getItemInMainHand().getType().name();
-                    data = inventory.getItemInMainHand().getDurability();
-                }
+                    mat = Material.fromString(inventory.getItemInMainHand().getType().toString());
+                    if (mat != null && !mat.isTool())
+                        mat = Material.fromData(mat, inventory.getItemInMainHand().getDurability());
+                } else
+                    mat = Material.fromData(itemName, data);
                 if (!Utils.legalInt(args[1])) {
                     if (!args[1].equalsIgnoreCase("all")) {
                         sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a the amount you want to sell.");
                         return true;
                     }
-                    amount = itemAmount(inventory, Material.matchMaterial(mat.findItem(itemName)), data, mat.isTool(new ItemStack(Material.matchMaterial(itemName), amount, data)));
+                    if (mat != null)
+                        amount = itemAmount(inventory, mat.getBukkitMaterial(), mat.isTool());
                 } else
                     amount = Integer.parseInt(args[1]);
             } else {
-                itemName = inventory.getItemInMainHand().getType().name();
-                data = inventory.getItemInMainHand().getDurability();
+                mat = Material.fromString(inventory.getItemInMainHand().getType().toString());
+                if (mat != null && !mat.isTool())
+                    mat = Material.fromData(mat, inventory.getItemInMainHand().getDurability());
                 if (!Utils.legalInt(args[0])) {
                     if (!args[0].equalsIgnoreCase("all")) {
                         sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a the amount you want to sell.");
                         return true;
                     }
-                    amount = itemAmount(inventory, Material.matchMaterial(mat.findItem(itemName)), data, mat.isTool(new ItemStack(Material.matchMaterial(itemName), amount, data)));
+                    if (mat != null)
+                        amount = itemAmount(inventory, mat.getBukkitMaterial(), mat.isTool());
                 } else
                     amount = Integer.parseInt(args[0]);
             }
-            itemName = mat.findItem(itemName);
-            if (itemName == null) {
+            if (mat == null) {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist");
                 return true;
             }
-            double cost = Necessities.getInstance().getPrices().getCost("sell", itemName, amount);
-            if (cost == -1.00) {
-                itemName = Utils.capFirst(mat.getName(itemName));
-                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + mat.pluralize(itemName, 2) + " cannot be sold to the server.");
-            } else {
-                if (Material.matchMaterial(itemName) == null) {
-                    player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + mat.pluralize(itemName, 2) + " is not a valid item as of yet.");
-                    return true;
-                }
-                ItemStack itemstack = new ItemStack(Material.matchMaterial(itemName), amount, data);
-                if (inventory.containsAtLeast(new ItemStack(Material.matchMaterial(itemName), 1, data), amount)) {
-                    if (mat.isTool(itemstack) && itemstack.getType().getMaxDurability() != 0)
-                        cost = cost * (1.0 * itemstack.getType().getMaxDurability() - itemstack.getDurability()) / itemstack.getType().getMaxDurability();
+            double cost = Necessities.getInstance().getPrices().getCost("sell", mat.getName(), amount);
+            if (cost == -1.00)
+                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + mat.getFriendlyName(2) + " cannot be sold to the server.");
+            else {
+                MaterialData bukkitMaterial = mat.getBukkitMaterial();
+                if (inventory.containsAtLeast(bukkitMaterial.toItemStack(1), amount)) {
+                    if (mat.isTool() && bukkitMaterial.getItemType().getMaxDurability() != 0)
+                        cost = cost * (1.0 * bukkitMaterial.getItemType().getMaxDurability() - bukkitMaterial.getData()) / bukkitMaterial.getItemType().getMaxDurability();
                     Necessities.getInstance().getBalChecks().addMoney(player.getUniqueId(), cost);
-                    inventory.removeItem(itemstack);
-                    itemName = Utils.capFirst(mat.getName(itemName));
-                    player.sendMessage(var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + " " + itemName + var.getMessages() + ".");
+                    inventory.removeItem(bukkitMaterial.toItemStack(amount));
+                    player.sendMessage(var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + " " + mat.getFriendlyName(amount) + var.getMessages() + ".");
                     player.sendMessage(var.getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(cost)) + var.getMessages() + " was added to your account.");
-                } else {
-                    if (inventory.contains(Material.matchMaterial(itemName), amount) && mat.isTool(itemstack)) {
-                        cost = sell(inventory, amount, Material.matchMaterial(itemName), player.getUniqueId(), cost);
-                        if (cost != -1.00) {
-                            itemName = mat.pluralize(mat.getName(itemName), amount);
-                            player.sendMessage(var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + " " + itemName + var.getMessages() + ".");
-                            player.sendMessage(var.getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(cost)) + var.getMessages() + " was added to your account.");
-                        } else {
-                            itemName = mat.pluralize(mat.getName(itemName), amount);
-                            player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + Integer.toString(amount) + " " + itemName + var.getMessages() + ".");
-                        }
-                    } else {
-                        itemName = mat.pluralize(mat.getName(itemName), amount);
-                        player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + Integer.toString(amount) + " " + itemName + var.getMessages() + ".");
-                    }
-                }
+                } else if (mat.isTool() && inventory.contains(new ItemStack(bukkitMaterial.getItemType(), 1))) {
+                    cost = sell(inventory, amount, bukkitMaterial, player.getUniqueId(), cost);
+                    if (cost != -1.00) {
+                        player.sendMessage(var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + " " + mat.getFriendlyName(amount) + var.getMessages() + ".");
+                        player.sendMessage(var.getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(cost)) + var.getMessages() + " was added to your account.");
+                    } else
+                        player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + Integer.toString(amount) + " " + mat.getFriendlyName(amount) + var.getMessages() + ".");
+                } else
+                    player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + Integer.toString(amount) + " " + mat.getFriendlyName(amount) + var.getMessages() + ".");
             }
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command");
         return true;
     }
 
-    private double sell(PlayerInventory inv, int cAmount, Material matType, UUID uuid, double baseCost) {
+    private double sell(PlayerInventory inv, int cAmount, MaterialData matType, UUID uuid, double baseCost) {
         double totalCost = 0.0;
         for (ItemStack s : inv.getContents()) {
             if (s == null)
                 continue;
-            if (cAmount > 0 && s.getType().equals(matType) && s.getEnchantments().size() == 0 && s.getType().getMaxDurability() != 0) {
+            if (cAmount > 0 && s.getType().equals(matType.getItemType()) && s.getEnchantments().size() == 0 && s.getType().getMaxDurability() != 0) {
                 short maxDur = s.getType().getMaxDurability(), dur = s.getDurability();
                 cAmount = cAmount - 1;
                 double cost = baseCost * ((1.0 * maxDur - dur) / (maxDur * 2.0));//why does it not work if not also divided by two?
-                inv.removeItem(new ItemStack(matType, 1, s.getDurability()));
+                ItemStack toRemove = s.clone();
+                toRemove.setAmount(1);
+                inv.removeItem(toRemove);
                 Necessities.getInstance().getBalChecks().addMoney(uuid, cost);
                 totalCost += cost;
             }
@@ -124,12 +115,12 @@ public class CmdSell implements EconomyCmd {
         return -1.00;
     }
 
-    private int itemAmount(PlayerInventory inv, Material matType, short data, boolean isTool) {
+    private int itemAmount(PlayerInventory inv, MaterialData matType, boolean isTool) {
         int amount = 0;
         for (ItemStack s : inv.getContents()) {
-            if (s == null || s.getType() != matType)
+            if (s == null || s.getType() != matType.getItemType())
                 continue;
-            if (s.getEnchantments().size() == 0 && (isTool || s.getDurability() == data))
+            if (s.getEnchantments().size() == 0 && (isTool || s.getDurability() == matType.getData()))
                 amount += s.getAmount();
         }
         return amount;

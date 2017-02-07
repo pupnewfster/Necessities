@@ -615,27 +615,7 @@ commands:
       description: Shows the prices of the sellable items on the server.
       usage: /<command> <page>
       permission: Necessities.economy.pricelist
-      aliases: [listprices, prices, catalog, pricecatalog, npricelist, nlistprices, nprices, ncatalog, npricecatalog]   
-   taccept:
-      description: Accepts a trade from <player>.
-      usage: /<command> <player who offered trade>
-      permission: Necessities.economy.taccept
-      aliases: [tradeaccept, ntaccept, ntradeaccept]
-   tdeny:
-      description: Denys a trade from <player>.
-      usage: /<command> <player who offered trade>
-      permission: Necessities.economy.tdeny
-      aliases: [tdecline, tradedeny, tradedecline, ntdeny, ntdecline, ntradedeny, ntradedecline]
-   trade:
-      description: Buys or sells an item to <player> for <price>.
-      usage: /<command> <name> <itemname|id> <amount> <price> <theypay|ipay>
-      permission: Necessities.economy.trade
-      aliases: [ntrade]
-   tradeitems:
-      description: Trades <item> to someone for <item>.
-      usage: /<command> <name> <itemname|id> <amount> <itemname|id> <amount>
-      permission: Necessities.economy.tradeitems      
-      aliases: [tradei, ntradeitems, ntradei]
+      aliases: [listprices, prices, catalog, pricecatalog, npricelist, nlistprices, nprices, ncatalog, npricecatalog]
    players:
       description: Shows how many unique players have visited the server.
       usage: /<command>
@@ -916,14 +896,11 @@ permissions:
                 Necessities.economy.cmdprices: true
                 Necessities.economy.setprice: true
                 Necessities.economy.editbal: true
-                Necessities.economy.taccept: true
                 Necessities.economy.players: true
                 Necessities.economy.setSign: true
                 Necessities.economy.prices: true
                 Necessities.economy.baltop: true
                 Necessities.economy.price: true
-                Necessities.economy.tdeny: true
-                Necessities.economy.trade: true
                 Necessities.economy.sell: true
                 Necessities.economy.pay: true
                 Necessities.economy.bal: true
@@ -1196,15 +1173,6 @@ permissions:
         default: true
     Necessities.rankmanager.rankcmds:
         description: Allows you to view the rank commands for a rank.
-        default: true
-    Necessities.economy.taccept:
-        description: Allows you to accept trades.
-        default: true
-    Necessities.economy.tdeny:
-        description: Allows you to deny trades.
-        default: true
-    Necessities.economy.trade:
-        description: Allows you to trade with players.
         default: true
     Necessities.economy.pricelist:
         description: Allows you to see the pricelist.

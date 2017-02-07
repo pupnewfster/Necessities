@@ -1,10 +1,9 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.Economy.Materials;
+import com.crossge.necessities.Economy.Material;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -18,18 +17,19 @@ public class CmdCraft implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getInstance().getVar();
         if (sender instanceof Player) {
-            Materials mat = Necessities.getInstance().getMaterials();
+            Material mat;
             Player p = (Player) sender;
             if (args.length == 0) {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter an item to craft.");
                 return true;
             }
-            if (Bukkit.getRecipesFor(new ItemStack(Material.matchMaterial(mat.findItem(args[0])))).isEmpty()) {
+            mat = Material.fromString(args[0]);
+            if (Bukkit.getRecipesFor(mat.getBukkitMaterial().toItemStack()).isEmpty()) {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "There are no recipes to craft that item.");
                 return true;
             }
             HashMap<ItemStack, Integer> items = new HashMap<>();
-            Recipe r = Bukkit.getRecipesFor(new ItemStack(Material.matchMaterial(mat.findItem(args[0])))).get(0);
+            Recipe r = Bukkit.getRecipesFor(mat.getBukkitMaterial().toItemStack()).get(0);
             if (r instanceof ShapedRecipe) {
                 ShapedRecipe s = (ShapedRecipe) r;
                 for (Character c : s.getIngredientMap().keySet())

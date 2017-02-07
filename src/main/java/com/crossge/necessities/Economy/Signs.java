@@ -7,7 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 
-public class Signs {
+public class Signs { //TODO Make sure this works, because some material names are long... so maybe use id if too long?
     public boolean checkFormat(Sign sign) {
         if (sign.getLines()[0] == null || sign.getLines()[1] == null || sign.getLines()[2] == null)
             return false;
@@ -34,19 +34,23 @@ public class Signs {
 
     private String itemName(Sign sign) {
         String itemName = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", "")).replaceAll(":", " ").split(" ")[0];
-        Materials mat = Necessities.getInstance().getMaterials();
+        Material mat;
         if (Utils.legalInt(itemName))
-            itemName = mat.idToName(Integer.parseInt(itemName));
-        return mat.findItem(itemName.trim());
+            mat = Material.fromID(Integer.parseInt(itemName));
+        else
+            mat = Material.fromString(itemName);
+        return mat.getName();
     }
 
     public String itemLine(Sign sign) {
         String line = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", ""));
         String itemName = line.replaceAll(":", " ").split(" ")[0];
-        Materials mat = Necessities.getInstance().getMaterials();
+        Material mat;
         if (Utils.legalInt(itemName))
-            itemName = mat.idToName(Integer.parseInt(itemName));
-        return mat.findItem(itemName.trim()) + (line.replaceAll(":", " ").split(" ").length > 1 ? ":" + line.replaceAll(":", " ").split(" ")[1] : "");
+            mat = Material.fromID(Integer.parseInt(itemName));
+        else
+            mat = Material.fromString(itemName);
+        return mat.getName() + (line.replaceAll(":", " ").split(" ").length > 1 ? ":" + line.replaceAll(":", " ").split(" ")[1] : "");
     }
 
     public Integer amount(Sign sign) {
@@ -60,12 +64,13 @@ public class Signs {
     private void setPrice(Sign sign) {
         String operation = getOperation(sign.getLine(0).trim());
         String itemName = sign.getLine(1).trim().replaceAll(" ", "").replaceAll(":", " ").split(" ")[0];
-        Materials mat = Necessities.getInstance().getMaterials();
+        Material mat;
         if (Utils.legalInt(itemName))
-            itemName = mat.idToName(Integer.parseInt(itemName));
-        itemName = mat.findItem(itemName);
+            mat = Material.fromID(Integer.parseInt(itemName));
+        else
+            mat = Material.fromString(itemName);
         int amount = Integer.parseInt(sign.getLine(2).trim());
-        double price = Necessities.getInstance().getPrices().getCost(operation, itemName, amount);
+        double price = Necessities.getInstance().getPrices().getCost(operation, mat.getName(), amount);
         sign.setLine(3, Necessities.getInstance().getVar().getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(price)));
     }
 

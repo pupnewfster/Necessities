@@ -1,6 +1,5 @@
 package com.crossge.necessities.Economy;
 
-import com.crossge.necessities.Necessities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -31,7 +30,7 @@ public class Prices {//TODO: Ability to set price for damage values probably use
     public void setCost(String direction, String itemName, String amount) {
         YamlConfiguration configPrices = YamlConfiguration.loadConfiguration(configFilePrices);
         itemName = itemName.toUpperCase().replaceAll("_", "");
-        if (Necessities.getInstance().getMaterials().findItem(itemName) == null)
+        if (Material.fromString(itemName) == null)
             return;
         if (amount.equalsIgnoreCase("null")) {
             sellPrices.remove(itemName);

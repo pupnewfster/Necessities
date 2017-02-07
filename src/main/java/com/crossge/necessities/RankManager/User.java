@@ -1,13 +1,10 @@
 package com.crossge.necessities.RankManager;
 
 import com.crossge.necessities.Commands.CmdHide;
-import com.crossge.necessities.Economy.BalChecks;
-import com.crossge.necessities.Economy.Materials;
 import com.crossge.necessities.Guilds.Guild;
 import com.crossge.necessities.Hats.Hat;
 import com.crossge.necessities.Hats.HatType;
 import com.crossge.necessities.Necessities;
-import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
 import com.google.common.io.Files;
 import org.bukkit.Bukkit;
@@ -235,18 +232,10 @@ public class User {
     public void teleport(final User toTpTo) {
         final YamlConfiguration config = Necessities.getInstance().getConfig();
         final Variables var = Necessities.getInstance().getVar();
-        final BalChecks bal = Necessities.getInstance().getBalChecks();
         this.teleporting = true;
         if (this.rank.getTpDelay() == 0) {
-            if (isTpaing()) {
-                if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand") && config.contains("Necessities.Creative") &&
-                        !config.getBoolean("Necessities.Creative")) {
-                    double price = Double.parseDouble(bal.bal(getUUID())) * .02;
-                    bal.removeMoney(getUUID(), price);
-                    getPlayer().sendMessage(var.getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(price)) + var.getMessages() + " was removed from your account.");
-                }
+            if (isTpaing())
                 setTpaing(false);
-            }
             getPlayer().teleport(toTpTo.getPlayer());
             tpSuccess();
             return;
@@ -254,15 +243,8 @@ public class User {
         this.bukkitPlayer.sendMessage(var.getMessages() + "Teleportation will begin in " + ChatColor.RED + this.rank.getTpDelay() + var.getMessages() + " seconds, don't move.");
         Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
             if (toTpTo.getPlayer() != null && getPlayer() != null && isTeleporting()) {
-                if (isTpaing()) {
-                    if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !getPlayer().hasPermission("Necessities.freeCommand") && config.contains("Necessities.Creative") &&
-                            !config.getBoolean("Necessities.Creative")) {
-                        double price = Double.parseDouble(bal.bal(getUUID())) * .02;
-                        bal.removeMoney(getUUID(), price);
-                        getPlayer().sendMessage(var.getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(price)) + var.getMessages() + " was removed from your account.");
-                    }
+                if (isTpaing())
                     setTpaing(false);
-                }
                 getPlayer().teleport(toTpTo.getPlayer());
                 tpSuccess();
             }
@@ -780,11 +762,10 @@ public class User {
     public Location getLookingAt() {
         if (this.bukkitPlayer == null)
             return null;
-        Materials mat = Necessities.getInstance().getMaterials();
         Iterator<Block> itr = new BlockIterator(this.bukkitPlayer, 140);
         while (itr.hasNext()) {
             Block block = itr.next();
-            if (mat.nameToId(block.getType().toString()) != 0)
+            if (block.getType().getId() != 0)
                 return block.getLocation();
         }
         return null;

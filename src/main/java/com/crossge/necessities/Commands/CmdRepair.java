@@ -19,7 +19,7 @@ public class CmdRepair implements Cmd {
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not holding an item.");
                     return true;
                 }
-                if (hand.getData().getItemType().equals(Material.ANVIL) || !Necessities.getInstance().getMaterials().isTool(hand)) {
+                if (hand.getData().getItemType().equals(Material.ANVIL) || !com.crossge.necessities.Economy.Material.isTool(hand.getType())) {
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot repair that item.");
                     return true;
                 }
@@ -27,7 +27,7 @@ public class CmdRepair implements Cmd {
                 player.sendMessage(var.getMessages() + "Repaired item in hand.");
             } else if (args[0].equalsIgnoreCase("all")) {
                 for (ItemStack is : player.getInventory())
-                    if (is != null && Necessities.getInstance().getMaterials().isTool(is) && !is.getData().getItemType().equals(Material.ANVIL))
+                    if (is != null && com.crossge.necessities.Economy.Material.isTool(is.getType()) && !is.getData().getItemType().equals(Material.ANVIL))
                         is.setDurability(dur);
                 player.sendMessage(var.getMessages() + "Repaired all items.");
             }

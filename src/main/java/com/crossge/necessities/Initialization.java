@@ -1,5 +1,6 @@
 package com.crossge.necessities;
 
+import com.crossge.necessities.Economy.Material;
 import com.crossge.necessities.Guilds.GuildManager;
 import com.crossge.necessities.Hats.HatType;
 import com.crossge.necessities.RankManager.RankManager;
@@ -32,6 +33,7 @@ class Initialization {
             }
         createYaml();
         HatType.mapHats();
+        Material.mapMaterials();
 
         //RankManager
         RankManager rm = Necessities.getInstance().getRM();
@@ -49,9 +51,6 @@ class Initialization {
         }
 
         Necessities.getInstance().getUUID().initiate();
-        Necessities.getInstance().getIds().setIds();
-        Necessities.getInstance().getMaterialNames().setIds();
-        Necessities.getInstance().getMaterials().readIds();
         Necessities.getInstance().getBot().initiate();
         Necessities.getInstance().getWrench().initiate();
         Necessities.getInstance().getSpy().init();

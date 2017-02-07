@@ -1,14 +1,12 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.Economy.Materials;
+import com.crossge.necessities.Economy.Material;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
@@ -25,18 +23,18 @@ public class CmdGive implements Cmd {
             return true;
         }
         Player t = Bukkit.getPlayer(uuid);
-        String itemName = args[1];
-        Materials mat = Necessities.getInstance().getMaterials();
-        if (Utils.legalInt(itemName))
-            itemName = mat.idToName(Integer.parseInt(itemName));
-        itemName = mat.findItem(itemName);
-        if (itemName == null) {
+        Material mat;
+        if (Utils.legalInt(args[1]))
+            mat = Material.fromID(Integer.parseInt(args[1]));
+        else
+            mat = Material.fromString(args[1]);
+        if (mat == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist.");
             return true;
         }
         if (args.length == 2) {
-            t.getInventory().addItem(new ItemStack(Material.getMaterial(itemName), 64));
-            sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + "64 " + mat.pluralize(Utils.capFirst(mat.getName(itemName)), 64) + " to " + t.getDisplayName() + var.getMessages() + ".");
+            t.getInventory().addItem(mat.getBukkitMaterial().toItemStack(64));
+            sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + "64 " + mat.getFriendlyName(64) + " to " + t.getDisplayName() + var.getMessages() + ".");
             return true;
         }
         if (!Utils.legalInt(args[2])) {
@@ -47,8 +45,9 @@ public class CmdGive implements Cmd {
         short data = 0;
         if (args.length > 3 && Utils.legalInt(args[3]))
             data = Short.parseShort(args[3]);
-        t.getInventory().addItem(new ItemStack(Material.getMaterial(itemName), amount, data));
-        sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.pluralize(Utils.capFirst(mat.getName(itemName)), amount) + " to " + t.getDisplayName() + var.getMessages() + ".");
+        mat = Material.fromData(mat, data);
+        t.getInventory().addItem(mat.getBukkitMaterial().toItemStack(amount));
+        sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.getFriendlyName(amount) + " to " + t.getDisplayName() + var.getMessages() + ".");
         return true;
     }
 }

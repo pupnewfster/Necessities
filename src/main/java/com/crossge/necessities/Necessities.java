@@ -76,14 +76,10 @@ public class Necessities extends JavaPlugin {
     private JanetAI ai = new JanetAI();
     private JanetSlack slack = new JanetSlack();
     private Reviews rev = new Reviews();
-    private Materials mat = new Materials();
-    private MaterialNames materialNames = new MaterialNames();
-    private Ids ids = new Ids();
     private BalChecks balc = new BalChecks();
     private Prices pr = new Prices();
     private RankPrices rp = new RankPrices();
     private CmdPrices cmdp = new CmdPrices();
-    private Trade tr = new Trade();
     private SafeLocation safe = new SafeLocation();
     private GuildManager gm = new GuildManager();
     private PowerManager power = new PowerManager();
@@ -452,14 +448,6 @@ public class Necessities extends JavaPlugin {
             com = new CmdBuy();
         else if (isEqual(name, "sell"))
             com = new CmdSell();
-        else if (isEqual(name, "taccept"))
-            com = new CmdTAccept();
-        else if (isEqual(name, "tdeny"))
-            com = new CmdTDeny();
-        else if (isEqual(name, "trade"))
-            com = new CmdTrade();
-        else if (isEqual(name, "tradeitems"))
-            com = new CmdTradeItems();
         else if (isEqual(name, "players"))
             com = new CmdPlayers();
         else if (isEqual(name, "rankprices"))
@@ -692,14 +680,6 @@ public class Necessities extends JavaPlugin {
         return this.rev == null ? this.rev = new Reviews() : this.rev;
     }
 
-    Ids getIds() {
-        return this.ids == null ? this.ids = new Ids() : this.ids;
-    }
-
-    MaterialNames getMaterialNames() {
-        return this.materialNames == null ? this.materialNames = new MaterialNames() : this.materialNames;
-    }
-
     Signs getEconomySigns() {
         return this.economySigns == null ? this.economySigns = new Signs() : this.economySigns;
     }
@@ -740,16 +720,8 @@ public class Necessities extends JavaPlugin {
         return this.rp == null ? this.rp = new RankPrices() : this.rp;
     }
 
-    public Trade getTrades() {
-        return this.tr == null ? this.tr = new Trade() : this.tr;
-    }
-
     public Prices getPrices() {
         return this.pr == null ? this.pr = new Prices() : this.pr;
-    }
-
-    public Materials getMaterials() {
-        return this.mat == null ? this.mat = new Materials() : this.mat;
     }
 
     public Announcer getAnnouncer() {

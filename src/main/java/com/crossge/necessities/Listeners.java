@@ -2,7 +2,6 @@ package com.crossge.necessities;
 
 import com.crossge.necessities.Commands.CmdHide;
 import com.crossge.necessities.Economy.BalChecks;
-import com.crossge.necessities.Economy.Materials;
 import com.crossge.necessities.Economy.Signs;
 import com.crossge.necessities.Guilds.Guild;
 import com.crossge.necessities.Guilds.GuildManager;
@@ -151,7 +150,6 @@ class Listeners implements Listener {
                 items.remove("");
             if (!items.isEmpty()) {
                 PlayerInventory i = p.getInventory();
-                Materials mat = Necessities.getInstance().getMaterials();
                 for (String item : items)
                     if (item.contains(" ")) {
                         String name = item.split(" ")[0];
@@ -159,7 +157,7 @@ class Listeners implements Listener {
                         if (name.contains(":"))
                             data = name.split(":")[1];
                         name = name.split(":")[0];
-                        i.addItem(new ItemStack(Material.matchMaterial(mat.idToName(Integer.parseInt(name))), Integer.parseInt(item.split(" ")[1]), Short.parseShort(data)));
+                        i.addItem(com.crossge.necessities.Economy.Material.fromData(Integer.parseInt(name), Short.parseShort(data)).getBukkitMaterial().toItemStack(Integer.parseInt(item.split(" ")[1])));
                     }
             }
             get.addUUID(uuid);
@@ -368,9 +366,7 @@ class Listeners implements Listener {
             for (String s : meta.getLore())
                 if (s.split(" ").length == 6 || s.split(" ").length == 7) {
                     int amount = Integer.parseInt(s.split(" ")[1]);
-                    Material type = Material.matchMaterial(Necessities.getInstance().getMaterials().idToName(Integer.parseInt(s.split(" ")[2])));
-                    short data = Short.parseShort(s.split(" ")[3]);
-                    ItemStack i = new ItemStack(type, amount, data);
+                    ItemStack i = com.crossge.necessities.Economy.Material.fromData(Integer.parseInt(s.split(" ")[2]), Short.parseShort(s.split(" ")[3])).getBukkitMaterial().toItemStack(amount);
                     for (String en : s.split(" ")[4].split(","))
                         if (!en.equals("n"))
                             i.addUnsafeEnchantment(Enchantment.getById(Integer.parseInt(en.split("-")[0])), Integer.parseInt(en.split("-")[1]));
@@ -705,7 +701,7 @@ class Listeners implements Listener {
                     enchants = "n";
                 if (meta.equals(""))
                     meta = "n";
-                String info = inv.getItem(i).getAmount() + " " + Necessities.getInstance().getMaterials().nameToId(inv.getItem(i).getType().toString()) + " " + inv.getItem(i).getDurability() + " " + enchants + " " + meta + disp;
+                String info = inv.getItem(i).getAmount() + " " + inv.getItem(i).getType().getId() + " " + inv.getItem(i).getDurability() + " " + enchants + " " + meta + disp;
                 condensedLore.put(info, condensedLore.containsKey(info) ? condensedLore.get(info) + "," + i : Integer.toString(i));
             }
         }

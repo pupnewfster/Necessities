@@ -1,6 +1,6 @@
 package com.crossge.necessities.Commands.Economy;
 
-import com.crossge.necessities.Economy.Materials;
+import com.crossge.necessities.Economy.Material;
 import com.crossge.necessities.Economy.Prices;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.Utils;
@@ -32,9 +32,8 @@ public class CmdPriceList implements EconomyCmd {
         sender.sendMessage(ChatColor.GOLD + "Price List Page [" + Integer.toString(page) + "/" + Integer.toString(totalPages) + "]");
         page = page - 1;
         price = pr.priceLists(page, time);
-        Materials mat = Necessities.getInstance().getMaterials();
         while (price != null) {
-            price = formL(Utils.capFirst(mat.getName(mat.findItem(price.split(" ")[0]))), price.split(" ")[1], price.split(" ")[2], Integer.toString((page * 10) + time + 1) + ".");
+            price = formL(Material.fromString(price.split(" ")[0]).getFriendlyName(2), price.split(" ")[1], price.split(" ")[2], Integer.toString((page * 10) + time + 1) + ".");
             sender.sendMessage(price);
             time++;
             price = pr.priceLists(page, time);
@@ -43,7 +42,6 @@ public class CmdPriceList implements EconomyCmd {
     }
 
     private String formL(String item, String buy, String sell, String numb) {
-        item = Necessities.getInstance().getMaterials().pluralize(item, 2);
         String selling = "  sell price: ", buying = "  buy price: ";
         if (!numb.equalsIgnoreCase("10."))
             numb += " ";

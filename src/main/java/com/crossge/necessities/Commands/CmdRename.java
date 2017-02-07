@@ -35,8 +35,8 @@ public class CmdRename implements Cmd {
             }
             handMeta.setDisplayName(name);
             hand.setItemMeta(handMeta);
-            player.sendMessage(var.getMessages() + "Successfully renamed your " + var.getObj() + Necessities.getInstance().getMaterials().pluralize(hand.getType().name(), 1) + var.getMessages() + " to " +
-                    var.getObj() + name);
+            player.sendMessage(var.getMessages() + "Successfully renamed your " + var.getObj() + com.crossge.necessities.Economy.Material.fromString(hand.getType().toString()).getFriendlyName() +
+                    var.getMessages() + " to " + var.getObj() + name);
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You can not rename your items because you do not have any.");
         return true;
