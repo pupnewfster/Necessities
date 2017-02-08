@@ -44,7 +44,7 @@ public class CmdPrice implements EconomyCmd {
             return true;
         }
         if (!mat.isTool())
-            mat = Material.fromData(mat, data);
+            mat = Material.fromData(data != 0 ? mat.getParent() : mat, data);
         String file;
         if (oper.equalsIgnoreCase("buy") || oper.equalsIgnoreCase("sell"))
             file = oper.toLowerCase();

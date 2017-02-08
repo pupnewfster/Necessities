@@ -348,7 +348,7 @@ public enum Material {//http://minecraft.gamepedia.com/Id
     NETHER_BRICK("NETHER_BRICK", org.bukkit.Material.NETHER_BRICK, "NETHER BRICKS", 112),
     NETHER_BRICK_FENCE("NETHER_BRICK_FENCE", org.bukkit.Material.NETHER_FENCE, "NETHER BRICK FENCES", 113, Collections.singletonList("NETHER_FENCE")),
     NETHER_BRICK_STAIRS("NETHER_BRICK_STAIRS", org.bukkit.Material.NETHER_BRICK_STAIRS, "NETHER BRICK STAIRS", 114, "NETHER BRICK STAIR"),
-    NETHER_WART_STALK("NETHER_WART_STALK", org.bukkit.Material.NETHER_STALK, 115, Collections.singletonList("NETHER_STALK")),//Unobtainable
+    NETHER_WART_STALK("NETHER_WART_STALK", org.bukkit.Material.NETHER_WARTS, 115, Collections.singletonList("NETHER_WARTS")),//Unobtainable
     NETHER_WART_STALK_1_4("NETHER_WART_STALK_1_4", NETHER_WART_STALK, (short) 0),
     NETHER_WART_STALK_2_4("NETHER_WART_STALK_2_4", NETHER_WART_STALK, (short) 1),
     NETHER_WART_STALK_3_4("NETHER_WART_STALK_3_4", NETHER_WART_STALK, (short) 2),
@@ -763,7 +763,7 @@ public enum Material {//http://minecraft.gamepedia.com/Id
     GRAY_DYE("GRAY_DYE", DYE, (short) 8),
     PINK_DYE("PINK_DYE", DYE, (short) 9),
     LIME_DYE("LIME_DYE", DYE, (short) 10),
-    DANDELION_YELLOW("DANDELION_YELLOW", DYE, (short) 11),
+    DANDELION_YELLOW("DANDELION_YELLOW", DYE, (short) 11, Collections.singletonList("YELLOW_DYE")),
     LIGHT_BLUE_DYE("LIGHT_BLUE_DYE", DYE, (short) 12),
     MAGENTA_DYE("MAGENTA_DYE", DYE, (short) 13),
     ORANGE_DYE("ORANGE_DYE", DYE, (short) 14),
@@ -788,7 +788,7 @@ public enum Material {//http://minecraft.gamepedia.com/Id
     BLAZE_ROD("BLAZE_ROD", org.bukkit.Material.BLAZE_ROD, "BLAZE RODS", 369),
     GHAST_TEAR("GHAST_TEAR", org.bukkit.Material.GHAST_TEAR, "GHAST TEARS", 370),
     GOLD_NUGGET("GOLD_NUGGET", org.bukkit.Material.GOLD_NUGGET, "GOLDEN NUGGETS", 371, "GOLDEN NUGGET", Collections.singletonList("GOLDEN_NUGGET")),
-    NETHER_WART("NETHER_WART", org.bukkit.Material.NETHER_WARTS, "NETHER WARTS", 372, Arrays.asList("WART", "NETHER_WARTS")),
+    NETHER_WART("NETHER_WART", org.bukkit.Material.NETHER_STALK, "NETHER WARTS", 372, Arrays.asList("WART", "NETHER_STALK")),
     POTION("POTION", org.bukkit.Material.POTION, "POTIONS", 373),
     WATER_BOTTLE("WATER_BOTTLE", "WATER BOTTLES", POTION, (short) 0),
     AWKWARD_POTION("AWKWARD_POTION", "AWKWARD POTIONS", POTION, (short) 16),
@@ -966,6 +966,22 @@ public enum Material {//http://minecraft.gamepedia.com/Id
     MUTTON("MUTTON", org.bukkit.Material.MUTTON, 423, "RAW MUTTON", Arrays.asList("RAW_LAMB_CHOPS", "RAW_LAMB", "RAW_MUTTON")),
     COOKED_MUTTON("COOKED_MUTTON", org.bukkit.Material.COOKED_MUTTON, 424, Arrays.asList("LAMB_CHOPS", "LAMB")),
     BANNER("BANNER", org.bukkit.Material.BANNER, "BANNERS", 425),
+    BLACK_BANNER("BLACK_BANNER", BANNER, (short) 0),
+    RED_BANNER("RED_BANNER", BANNER, (short) 1),
+    GREEN_BANNER("GREEN_BANNER", BANNER, (short) 2),
+    BROWN_BANNER("BROWN_BANNER", BANNER, (short) 3),
+    BLUE_BANNER("BLUE_BANNER", BANNER, (short) 4),
+    PURPLE_BANNER("PURPLE_BANNER", BANNER, (short) 5),
+    CYAN_BANNER("CYAN_BANNER", BANNER, (short) 6),
+    LIGHT_GRAY_BANNER("LIGHT_GRAY_BANNER", BANNER, (short) 7),
+    GRAY_BANNER("GRAY_BANNER", BANNER, (short) 8),
+    PINK_BANNER("PINK_BANNER", BANNER, (short) 9),
+    LIME_BANNER("LIME_BANNER", BANNER, (short) 10),
+    YELLOW_BANNER("YELLOW_BANNER", BANNER, (short) 11),
+    LIGHT_BLUE_BANNER("LIGHT_BLUE_BANNER", BANNER, (short) 12),
+    MAGENTA_BANNER("MAGENTA_BANNER", BANNER, (short) 13),
+    ORANGE_BANNER("ORANGE_BANNER", BANNER, (short) 14),
+    WHITE_BANNER("WHITE_BANNER", BANNER, (short) 15),
     END_CRYSTAL("END_CRYSTAL", org.bukkit.Material.END_CRYSTAL, "END CRYSTALS", 426, Collections.singletonList("ENDER_CRYSTAL")),
     SPRUCE_DOOR("SPRUCE_DOOR", org.bukkit.Material.SPRUCE_DOOR_ITEM, "SPRUCE DOORS", 427, Arrays.asList("SPRUCE_WOOD_DOOR", "SPRUCE_DOOR_ITEM")),
     BIRCH_DOOR("BIRCH_DOOR", org.bukkit.Material.BIRCH_DOOR_ITEM, "BIRCH DOORS", 428, Arrays.asList("BIRCH_WOOD_DOOR", "BIRCH_DOOR_ITEM")),
@@ -1165,9 +1181,7 @@ public enum Material {//http://minecraft.gamepedia.com/Id
     }
 
     public static Material fromData(Material m, short data) {
-        if (m == null)
-            return null;
-        return m.getChild(data);
+        return m == null ? null : m.getChild(data);
     }
 
     public static Material fromData(int id, short data) {

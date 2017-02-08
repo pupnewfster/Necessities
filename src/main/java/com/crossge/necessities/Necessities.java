@@ -180,7 +180,7 @@ public class Necessities extends JavaPlugin {
     }
 
     void addJanet(Player p) {
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(this.janetInfo);
+        //((CraftPlayer) p).getHandle().playerConnection.sendPacket(this.janetInfo);
     }
 
     void addHeader(Player p) {

@@ -308,7 +308,7 @@ class Listeners implements Listener {
             Guild owner = gm.chunkOwner(to.getChunk());
             if (owner != gm.chunkOwner(from.getChunk())) {
                 Variables var = Necessities.getInstance().getVar();
-                String m = var.getGuildMsgs() + " ~ " + (owner == null ? var.getWild() + "Wilderness" : owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription());
+                String m = owner == null ? var.getWild() + "Wilderness" : owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription();
                 IChatBaseComponent infoJSON = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + m + "\"}");
                 ((CraftPlayer) e.getPlayer()).getHandle().playerConnection.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.ACTIONBAR, infoJSON, 0, 60, 0));
             }
@@ -1061,7 +1061,7 @@ class Listeners implements Listener {
             GuildManager gm = Necessities.getInstance().getGM();
             Guild owner = gm.chunkOwner(e.getTo().getChunk());
             if (owner != gm.chunkOwner(e.getFrom().getChunk())) {
-                String m = var.getGuildMsgs() + " ~ " + (owner == null ? var.getWild() + "Wilderness" : owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription());
+                String m = owner == null ? var.getWild() + "Wilderness" : owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription();
                 IChatBaseComponent infoJSON = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + m + "\"}");
                 ((CraftPlayer) e.getPlayer()).getHandle().playerConnection.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.ACTIONBAR, infoJSON, 0, 60, 0));
             }

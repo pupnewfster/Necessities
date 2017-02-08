@@ -36,8 +36,10 @@ public class CmdSell implements EconomyCmd {
                     mat = Material.fromData(Integer.parseInt(itemName), data);
                 else if (itemName.equalsIgnoreCase("hand")) {
                     mat = Material.fromString(inventory.getItemInMainHand().getType().toString());
-                    if (mat != null && !mat.isTool())
-                        mat = Material.fromData(mat, inventory.getItemInMainHand().getDurability());
+                    if (mat != null && !mat.isTool()) {
+                        data = inventory.getItemInMainHand().getDurability();
+                        mat = Material.fromData(data != 0 ? mat.getParent() : mat, data);
+                    }
                 } else
                     mat = Material.fromData(itemName, data);
                 if (!Utils.legalInt(args[1])) {
@@ -51,8 +53,10 @@ public class CmdSell implements EconomyCmd {
                     amount = Integer.parseInt(args[1]);
             } else {
                 mat = Material.fromString(inventory.getItemInMainHand().getType().toString());
-                if (mat != null && !mat.isTool())
-                    mat = Material.fromData(mat, inventory.getItemInMainHand().getDurability());
+                if (mat != null && !mat.isTool()) {
+                    short data = inventory.getItemInMainHand().getDurability();
+                    mat = Material.fromData(data != 0 ? mat.getParent() : mat, data);
+                }
                 if (!Utils.legalInt(args[0])) {
                     if (!args[0].equalsIgnoreCase("all")) {
                         sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a the amount you want to sell.");

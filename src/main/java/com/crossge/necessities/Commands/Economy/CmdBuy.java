@@ -45,14 +45,18 @@ public class CmdBuy implements EconomyCmd {
                     mat = Material.fromData(Integer.parseInt(itemName), data);
                 else if (itemName.equalsIgnoreCase("hand")) {
                     mat = Material.fromString(inventory.getItemInMainHand().getType().toString());
-                    if (mat != null && !mat.isTool())
-                        mat = Material.fromData(mat, inventory.getItemInMainHand().getDurability());
+                    if (mat != null && !mat.isTool()) {
+                        data = inventory.getItemInMainHand().getDurability();
+                        mat = Material.fromData(data != 0 ? mat.getParent() : mat, data);
+                    }
                 } else
                     mat = Material.fromData(itemName, data);
             } else {
                 mat = Material.fromString(inventory.getItemInMainHand().getType().toString());
-                if (mat != null && !mat.isTool())
-                    mat = Material.fromData(mat, inventory.getItemInMainHand().getDurability());
+                if (mat != null && !mat.isTool()) {
+                    short data = inventory.getItemInMainHand().getDurability();
+                    mat = Material.fromData(data != 0 ? mat.getParent() : mat, data);
+                }
                 if (!Utils.legalInt(args[0])) {
                     sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid amount to buy.");
                     return true;

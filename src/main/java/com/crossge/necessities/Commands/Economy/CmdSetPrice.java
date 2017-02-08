@@ -29,8 +29,10 @@ public class CmdSetPrice implements EconomyCmd {
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist");
                     return true;
                 }
-                if (!mat.isTool())
-                    mat = Material.fromData(mat, player.getInventory().getItemInMainHand().getDurability());
+                if (!mat.isTool()) {
+                    short data = player.getInventory().getItemInMainHand().getDurability();
+                    mat = Material.fromData(data != 0 ? mat.getParent() : mat, data);
+                }
                 String file;
                 if (args[1].equalsIgnoreCase("buy") || args[1].equalsIgnoreCase("sell"))
                     file = args[1].toLowerCase();
@@ -73,7 +75,7 @@ public class CmdSetPrice implements EconomyCmd {
             return true;
         }
         if (!mat.isTool())
-            mat = Material.fromData(mat, data);
+            mat = Material.fromData(data != 0 ? mat.getParent() : mat, data);
         String file;
         if (args[2].equalsIgnoreCase("buy") || args[2].equalsIgnoreCase("sell"))
             file = args[2].toLowerCase();

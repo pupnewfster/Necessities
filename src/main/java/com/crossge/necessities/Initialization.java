@@ -108,8 +108,6 @@ class Initialization {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void createYaml() {
-        addYML(new File("plugins/Necessities/Economy", "friendlynames.yml"));
-        addYML(new File("plugins/Necessities/Economy", "pluralnames.yml"));
         addYML(new File("plugins/Necessities", "logoutmessages.yml"));
         addYML(new File("plugins/Necessities", "titles.yml"));
         addYML(new File("plugins/Necessities", "wrenched.yml"));
@@ -119,7 +117,6 @@ class Initialization {
         addYML(new File("plugins/Necessities/WorldManager", "warps.yml"));
         addYML(new File("plugins/Necessities", "loginmessages.yml"));
         addYML(new File("plugins/Necessities/RankManager", "users.yml"));
-        addYML(new File("plugins/Necessities/Economy", "ids.yml"));
         addYML(new File("plugins/Necessities/WorldManager", "worlds.yml"));
         addYML(new File("plugins/Necessities/WorldManager", "portals.yml"));
         addYML(new File("plugins/Necessities/Creative", "reviews.yml"));
