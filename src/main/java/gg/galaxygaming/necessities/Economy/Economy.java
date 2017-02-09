@@ -48,6 +48,7 @@ public class Economy {//TODO add OpenAnalytics
             ResultSet rs = stmt.executeQuery("SELECT * FROM " + this.table + " WHERE uuid = '" + uuid + "'");
             if (!rs.next()) {
                 stmt.execute("INSERT INTO " + this.table + " (uuid, balance) VALUES ('" + uuid + "'," + startBal + ")");
+                this.regenBalTop = true;
                 added = true;
             } else if (!loadedBals.containsKey(uuid)) //Loads it into memory for temporary faster lookup
                 this.loadedBals.put(uuid, rs.getDouble("balance"));
