@@ -17,7 +17,7 @@ public class CmdGive implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You need to enter an item and a player to give that item to.");
             return true;
         }
-        UUID uuid = Necessities.getInstance().getUUID().getID(args[0]);
+        UUID uuid = Utils.getID(args[0]);
         if (uuid == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;

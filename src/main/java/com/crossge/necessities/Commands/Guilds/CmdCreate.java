@@ -1,6 +1,6 @@
 package com.crossge.necessities.Commands.Guilds;
 
-import com.crossge.necessities.Economy.BalChecks;
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Guilds.Guild;
 import com.crossge.necessities.Guilds.GuildManager;
 import com.crossge.necessities.Necessities;
@@ -33,17 +33,18 @@ public class CmdCreate implements GuildCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are already in a guild.");
                 return true;
             }
-            BalChecks balc = Necessities.getInstance().getBalChecks();
-            if (balc.balance(u.getUUID()) < 800) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have $800 to spend on creating a guild.");
+            Economy eco = Necessities.getInstance().getEconomy();
+            if (eco.getBalance(u.getUUID()) < 800) {
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + Economy.format(800) + " to spend on creating a guild.");
                 return true;
             }
             gm.createGuild(args[0], p.getUniqueId());
             g = gm.getGuild(args[0]);
             u.joinGuild(g);
             g.setLeader(p.getUniqueId());
-            balc.removeMoney(u.getUUID(), 800);
+            eco.removeMoney(u.getUUID(), 800);
             sender.sendMessage(var.getMessages() + "Successfully created guild " + var.getObj() + args[0] + var.getMessages() + ".");
+            sender.sendMessage(var.getMoney() + Economy.format(800) + var.getMessages() + " was removed from your account.");
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to create a guild.");
         return true;

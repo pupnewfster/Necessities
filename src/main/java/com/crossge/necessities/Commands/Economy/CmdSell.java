@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands.Economy;
 
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Economy.Material;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.Utils;
@@ -79,15 +80,15 @@ public class CmdSell implements EconomyCmd {
                 if (inventory.containsAtLeast(bukkitMaterial.toItemStack(1), amount)) {
                     if (mat.isTool() && bukkitMaterial.getItemType().getMaxDurability() != 0)
                         cost = cost * (1.0 * bukkitMaterial.getItemType().getMaxDurability() - bukkitMaterial.getData()) / bukkitMaterial.getItemType().getMaxDurability();
-                    Necessities.getInstance().getBalChecks().addMoney(player.getUniqueId(), cost);
+                    Necessities.getInstance().getEconomy().addMoney(player.getUniqueId(), cost);
                     inventory.removeItem(bukkitMaterial.toItemStack(amount));
                     player.sendMessage(var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + " " + mat.getFriendlyName(amount) + var.getMessages() + ".");
-                    player.sendMessage(var.getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(cost)) + var.getMessages() + " was added to your account.");
+                    player.sendMessage(var.getMoney() + Economy.format(cost) + var.getMessages() + " was added to your account.");
                 } else if (mat.isTool() && inventory.contains(new ItemStack(bukkitMaterial.getItemType(), 1))) {
                     cost = sell(inventory, amount, bukkitMaterial, player.getUniqueId(), cost);
                     if (cost != -1.00) {
                         player.sendMessage(var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + " " + mat.getFriendlyName(amount) + var.getMessages() + ".");
-                        player.sendMessage(var.getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(cost)) + var.getMessages() + " was added to your account.");
+                        player.sendMessage(var.getMoney() + Economy.format(cost) + var.getMessages() + " was added to your account.");
                     } else
                         player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + Integer.toString(amount) + " " + mat.getFriendlyName(amount) + var.getMessages() + ".");
                 } else
@@ -110,7 +111,7 @@ public class CmdSell implements EconomyCmd {
                 ItemStack toRemove = s.clone();
                 toRemove.setAmount(1);
                 inv.removeItem(toRemove);
-                Necessities.getInstance().getBalChecks().addMoney(uuid, cost);
+                Necessities.getInstance().getEconomy().addMoney(uuid, cost);
                 totalCost += cost;
             }
             if (cAmount == 0)

@@ -1,6 +1,6 @@
 package com.crossge.necessities.Commands.Economy;
 
-import com.crossge.necessities.Economy.BalChecks;
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Economy.Material;
 import com.crossge.necessities.Economy.Prices;
 import com.crossge.necessities.Necessities;
@@ -23,9 +23,8 @@ public class CmdBuy implements EconomyCmd {
                 return true;
             }
             PlayerInventory inventory = player.getInventory();
-            BalChecks balc = Necessities.getInstance().getBalChecks();
-            String balance = balc.bal(player.getUniqueId());
-            double intBal = Double.parseDouble(balance);
+            Economy eco = Necessities.getInstance().getEconomy();
+            double intBal = eco.getBalance(player.getUniqueId());
             int amount;
             Material mat;
             if (args.length == 2) {
@@ -82,9 +81,9 @@ public class CmdBuy implements EconomyCmd {
                     cost = pr.getCost("buy", mat.getName(), amount);
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have enough inventory space to buy that much of that item, buying the amount you have inventory space for.");
                 }
-                balc.removeMoney(player.getUniqueId(), cost);
+                eco.removeMoney(player.getUniqueId(), cost);
                 player.sendMessage(var.getMessages() + "You bought " + var.getObj() + Integer.toString(amount) + " " + mat.getFriendlyName(amount) + var.getMessages() + ".");
-                player.sendMessage(var.getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(cost)) + var.getMessages() + " was removed from your account.");
+                player.sendMessage(var.getMoney() + Economy.format(cost) + var.getMessages() + " was removed from your account.");
             }
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command");

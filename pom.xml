@@ -5,7 +5,7 @@
 
     <groupId>me.eddiep.minecraft</groupId>
     <artifactId>necessities</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <repositories>
         <repository>

@@ -1,6 +1,7 @@
 package com.crossge.necessities.Commands;
 
 import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,7 +17,7 @@ public class CmdImp implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Must enter a message.");
             return true;
         }
-        UUID uuid = Necessities.getInstance().getUUID().getID(args[0]);
+        UUID uuid = Utils.getID(args[0]);
         Player p = null;
         if (uuid != null)
             p = Bukkit.getPlayer(uuid);

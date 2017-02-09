@@ -1,6 +1,7 @@
 package com.crossge.necessities.Commands.Economy;
 
 import com.crossge.necessities.Economy.CmdPrices;
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
@@ -28,12 +29,11 @@ public class CmdSetCmdPrice implements EconomyCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid price.");
             return true;
         }
-        String price = args[1];
+        String price = Utils.roundTwoDecimals(Double.parseDouble(args[1]));
         String rank = args[2];
         cmdp.addCommand(rank, cmd, price);
-        price = Utils.roundTwoDecimals(Double.parseDouble(price));
         sender.sendMessage(var.getMessages() + "Added " + var.getObj() + cmd + var.getMessages() + " to the commands of rank " + var.getObj() + rank + var.getMessages() + " at the price of " +
-                var.getMoney() + "$" + Utils.addCommas(price));
+                var.getMoney() + Economy.format(Double.parseDouble(price)));
         return true;
     }
 }

@@ -1,7 +1,7 @@
 package com.crossge.necessities.Commands.Economy;
 
-import com.crossge.necessities.Economy.BalChecks;
 import com.crossge.necessities.Economy.CmdPrices;
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.UserManager;
 import com.crossge.necessities.Utils;
@@ -25,12 +25,12 @@ public class CmdBuyCmd implements EconomyCmd {
         UserManager um = Necessities.getInstance().getUM();
         CmdPrices cmdp = Necessities.getInstance().getCommandPrices();
         if (sender instanceof Player) {
-            BalChecks balc = Necessities.getInstance().getBalChecks();
+            Economy eco = Necessities.getInstance().getEconomy();
             Player player = (Player) sender;
             String cmd = Utils.capFirst(args[0]);
             double cost = cmdp.getCost(cmd);
             String rank = um.getUser(player.getUniqueId()).getRank().getName().toUpperCase();
-            if (Double.parseDouble(balc.bal(player.getUniqueId())) < cost) {
+            if (eco.getBalance(player.getUniqueId()) < cost) {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Not enough money.");
                 return true;
             }
@@ -54,7 +54,7 @@ public class CmdBuyCmd implements EconomyCmd {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Already have command");
                 return true;
             }
-            balc.removeMoney(player.getUniqueId(), cost);
+            eco.removeMoney(player.getUniqueId(), cost);
             um.updateUserPerms(player.getUniqueId(), permNode, false);
             Bukkit.broadcastMessage(var.getMessages() + player.getName() + " bought the command " + var.getObj() + cmd.toLowerCase());
         } else

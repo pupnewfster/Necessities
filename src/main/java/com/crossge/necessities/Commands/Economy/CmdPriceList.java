@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands.Economy;
 
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Economy.Material;
 import com.crossge.necessities.Economy.Prices;
 import com.crossge.necessities.Necessities;
@@ -50,12 +51,12 @@ public class CmdPriceList implements EconomyCmd {
             buying = "";
             buy = "";
         } else
-            buy = "$" + Utils.addCommas(buy);
+            buy = Economy.format(Double.parseDouble(buy));
         if (sell.trim().equalsIgnoreCase("null")) {
             selling = "";
             sell = "";
         } else
-            sell = "$" + Utils.addCommas(sell);
+            sell = Economy.format(Double.parseDouble(sell));
         Variables var = Necessities.getInstance().getVar();
         return ChatColor.GOLD + numb + var.getCatalog() + item + buying + var.getMoney() + buy + var.getCatalog() + selling + var.getMoney() + sell;
     }

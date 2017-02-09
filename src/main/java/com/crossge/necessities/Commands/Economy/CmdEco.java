@@ -1,7 +1,6 @@
 package com.crossge.necessities.Commands.Economy;
 
-import com.crossge.necessities.Economy.BalChecks;
-import com.crossge.necessities.GetUUID;
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
@@ -20,13 +19,12 @@ public class CmdEco implements EconomyCmd {
             return true;
         }
         String targetsName = "";
-        GetUUID get = Necessities.getInstance().getUUID();
-        UUID uuid = get.getID(args[1]);
+        UUID uuid = Utils.getID(args[1]);
         Player target = null;
         if (uuid == null) {
-            uuid = get.getOfflineID(args[1]);
-            if (uuid == null) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
+            uuid = Utils.getOfflineID(args[1]);
+            if (uuid == null || !Bukkit.getOfflinePlayer(uuid).hasPlayedBefore()) {
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player does not exist or has not joined the server. If the player is offline, please use the full and most recent name.");
                 return true;
             }
             targetsName = Bukkit.getOfflinePlayer(uuid).getName();
@@ -34,13 +32,13 @@ public class CmdEco implements EconomyCmd {
             target = Bukkit.getPlayer(uuid);
         if (target != null)
             targetsName = target.getName();
-        BalChecks balc = Necessities.getInstance().getBalChecks();
-        if (!balc.doesPlayerExist(uuid)) {
+        Economy eco = Necessities.getInstance().getEconomy();
+        if (!eco.doesPlayerExist(uuid)) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Please enter a valid player to change the balance of.");
             return true;
         }
         if (args[0].equalsIgnoreCase("reset")) {
-            balc.setMoney(uuid, "0");
+            eco.setBalance(uuid, 0);
             sender.sendMessage(var.getMessages() + "Your successfully reset the balance of " + var.getObj() + targetsName + var.getMessages() + ".");
             return true;
         }
@@ -50,22 +48,19 @@ public class CmdEco implements EconomyCmd {
                 return true;
             }
             double amount = Double.parseDouble(args[2]);
-            String balance = balc.bal(uuid);
-            double intBal = Double.parseDouble(balance);
+            double intBal = eco.getBalance(uuid);
             amount = Double.parseDouble(Utils.roundTwoDecimals(amount));
-            String setAmount = Utils.roundTwoDecimals(amount);
             if (args[0].equalsIgnoreCase("give")) {
-                balc.addMoney(uuid, amount);
-                sender.sendMessage(var.getMessages() + "Your successfully gave " + var.getMoney() + " $" + Utils.addCommas(setAmount) + var.getMessages() + " to " + var.getObj() + targetsName +
+                eco.addMoney(uuid, amount);
+                sender.sendMessage(var.getMessages() + "Your successfully gave " + var.getMoney() + " " + Economy.format(amount) + var.getMessages() + " to " + var.getObj() + targetsName +
                         var.getMessages() + ".");
             } else if (args[0].equalsIgnoreCase("take") && intBal - amount >= 0) {
-                balc.removeMoney(uuid, amount);
-                sender.sendMessage(var.getMessages() + "Your successfully took " + var.getMoney() + " $" + Utils.addCommas(setAmount) + var.getMessages() + " from " + var.getObj() + targetsName +
+                eco.removeMoney(uuid, amount);
+                sender.sendMessage(var.getMessages() + "Your successfully took " + var.getMoney() + " " + Economy.format(amount) + var.getMessages() + " from " + var.getObj() + targetsName +
                         var.getMessages() + ".");
             } else if (args[0].equalsIgnoreCase("set")) {
-                balc.setMoney(uuid, setAmount);
-                sender.sendMessage(var.getMessages() + "Your successfully set the balance of " + var.getObj() + targetsName + var.getMessages() + " to " + var.getMoney() + "$" +
-                        Utils.addCommas(Utils.roundTwoDecimals(amount)));
+                eco.setBalance(uuid, amount);
+                sender.sendMessage(var.getMessages() + "Your successfully set the balance of " + var.getObj() + targetsName + var.getMessages() + " to " + var.getMoney() + Economy.format(amount));
             }
         }
         return true;

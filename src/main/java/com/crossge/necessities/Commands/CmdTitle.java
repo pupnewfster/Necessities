@@ -1,7 +1,8 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.Economy.BalChecks;
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,7 +22,7 @@ public class CmdTitle implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a title.");
             return true;
         }
-        UUID uuid = Necessities.getInstance().getUUID().getID(args[0]);
+        UUID uuid = Utils.getID(args[0]);
         if (uuid == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;
@@ -54,13 +55,13 @@ public class CmdTitle implements Cmd {
             return true;
         }
         if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free && config.contains("Necessities.Creative") && !config.getBoolean("Necessities.Creative")) {
-            BalChecks balc = Necessities.getInstance().getBalChecks();
-            if (balc.balance(target.getUniqueId()) < 1000) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must have $1000 to change your title.");
+            Economy eco = Necessities.getInstance().getEconomy();
+            if (eco.getBalance(target.getUniqueId()) < 1000) {
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must have " + Economy.format(1000) + " to change your title.");
                 return true;
             }
-            balc.removeMoney(target.getUniqueId(), 1000);
-            target.sendMessage(var.getMoney() + "$1000.00" + var.getMessages() + " was removed from your account.");
+            eco.removeMoney(target.getUniqueId(), 1000);
+            target.sendMessage(var.getMoney() + Economy.format(1000) + var.getMessages() + " was removed from your account.");
         }
         configTitles.set(target.getUniqueId() + ".title", title);
         if (configTitles.get(target.getUniqueId() + ".color") == null)

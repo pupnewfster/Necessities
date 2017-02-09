@@ -1,6 +1,7 @@
 package com.crossge.necessities.Commands.Economy;
 
 import com.crossge.necessities.Economy.CmdPrices;
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
@@ -75,10 +76,10 @@ public class CmdCmdPrices implements EconomyCmd {
         numb += " ";
         Variables var = Necessities.getInstance().getVar();
         if (curRank.equals("CONSOLE")) {
-            cost = "$" + Utils.addCommas(Utils.roundTwoDecimals(Double.parseDouble(cost)));
+            cost = Economy.format(Double.parseDouble(cost));
             price = ChatColor.GOLD + numb + var.getCatalog() + cmd + " can be bought for " + var.getMoney() + cost + var.getMessages() + " by " + rank + "s";
         } else {
-            cost = "$" + Utils.addCommas(Utils.roundTwoDecimals(Double.parseDouble(cost)));
+            cost = Economy.format(Double.parseDouble(cost));
             price = ChatColor.GOLD + numb + var.getCatalog() + cmd + " can be bought for " + var.getMoney() + cost;
             price += var.getCatalog() + (hasCmd ? "   Already Acquired." : " by " + Utils.ownerShip(rank));
         }

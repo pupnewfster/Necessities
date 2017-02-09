@@ -26,7 +26,7 @@ public class CmdExp implements Cmd {
             return true;
         }
         if (args.length == 1) {
-            UUID uuid = Necessities.getInstance().getUUID().getID(args[0]);
+            UUID uuid = Utils.getID(args[0]);
             if (uuid == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
                 return true;
@@ -38,7 +38,7 @@ public class CmdExp implements Cmd {
             return true;
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("show")) {
-            UUID uuid = Necessities.getInstance().getUUID().getID(args[1]);
+            UUID uuid = Utils.getID(args[1]);
             if (uuid == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
                 return true;
@@ -50,7 +50,7 @@ public class CmdExp implements Cmd {
             return true;
         }
         if (args.length == 3) {
-            UUID uuid = Necessities.getInstance().getUUID().getID(args[1]);
+            UUID uuid = Utils.getID(args[1]);
             if (uuid == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
                 return true;

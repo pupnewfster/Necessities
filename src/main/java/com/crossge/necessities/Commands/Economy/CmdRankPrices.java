@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands.Economy;
 
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Economy.RankPrices;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.RankManager;
@@ -52,10 +53,10 @@ public class CmdRankPrices implements EconomyCmd {
         numb += " ";
         Variables var = Necessities.getInstance().getVar();
         if (curRank.equals("CONSOLE")) {
-            cost = "$" + Utils.addCommas(Utils.roundTwoDecimals(Double.parseDouble(cost)));
+            cost = Economy.format(Double.parseDouble(cost));
             price = ChatColor.GOLD + numb + var.getCatalog() + rank + " can be bought for " + var.getMoney() + cost;
         } else {
-            cost = "$" + Utils.addCommas(Utils.roundTwoDecimals(Double.parseDouble(cost)));
+            cost = Economy.format(Double.parseDouble(cost));
             price = ChatColor.GOLD + numb + var.getCatalog() + rank + " can be bought for " + var.getMoney() + cost;
             RankManager rm = Necessities.getInstance().getRM();
             if (rm.hasRank(rm.getRank(curRank), rm.getRank(rank)))

@@ -7,7 +7,6 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.OfflinePlayer;
 
 import java.util.List;
-import java.util.UUID;
 
 public class VaultEconomy implements Economy {
     @Override
@@ -47,22 +46,22 @@ public class VaultEconomy implements Economy {
 
     @Override
     public boolean hasAccount(String s) {
-        return Necessities.getInstance().getBalChecks().doesPlayerExist(Necessities.getInstance().getUUID().getOfflineID(s));
+        return Necessities.getInstance().getEconomy().doesPlayerExist(Utils.getOfflineID(s));
     }
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        return Necessities.getInstance().getBalChecks().doesPlayerExist(offlinePlayer.getUniqueId());
+        return Necessities.getInstance().getEconomy().doesPlayerExist(offlinePlayer.getUniqueId());
     }
 
     @Override
     public double getBalance(String s) {
-        return Necessities.getInstance().getBalChecks().balance(Necessities.getInstance().getUUID().getOfflineID(s));
+        return Necessities.getInstance().getEconomy().getBalance(Utils.getOfflineID(s));
     }
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        return Necessities.getInstance().getBalChecks().balance(offlinePlayer.getUniqueId());
+        return Necessities.getInstance().getEconomy().getBalance(offlinePlayer.getUniqueId());
     }
 
     @Override
@@ -77,48 +76,36 @@ public class VaultEconomy implements Economy {
 
     @Override
     public EconomyResponse withdrawPlayer(String s, double v) {
-        Necessities.getInstance().getBalChecks().removeMoney(Necessities.getInstance().getUUID().getOfflineID(s), v);
+        Necessities.getInstance().getEconomy().removeMoney(Utils.getOfflineID(s), v);
         return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
-        Necessities.getInstance().getBalChecks().removeMoney(offlinePlayer.getUniqueId(), v);
+        Necessities.getInstance().getEconomy().removeMoney(offlinePlayer.getUniqueId(), v);
         return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse depositPlayer(String s, double v) {
-        Necessities.getInstance().getBalChecks().addMoney(Necessities.getInstance().getUUID().getOfflineID(s), v);
+        Necessities.getInstance().getEconomy().addMoney(Utils.getOfflineID(s), v);
         return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
-        Necessities.getInstance().getBalChecks().addMoney(offlinePlayer.getUniqueId(), v);
+        Necessities.getInstance().getEconomy().addMoney(offlinePlayer.getUniqueId(), v);
         return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public boolean createPlayerAccount(String s) {
-        UUID uuid = Necessities.getInstance().getUUID().getOfflineID(s);
-        BalChecks balc = Necessities.getInstance().getBalChecks();
-        if (!balc.doesPlayerExist(uuid)) {
-            balc.addPlayerToList(uuid);
-            return true;
-        } else
-            return false;
+        return Necessities.getInstance().getEconomy().addPlayerIfNotExists(Utils.getOfflineID(s));
     }
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
-        UUID uuid = offlinePlayer.getUniqueId();
-        BalChecks balc = Necessities.getInstance().getBalChecks();
-        if (!balc.doesPlayerExist(uuid)) {
-            balc.addPlayerToList(uuid);
-            return true;
-        } else
-            return false;
+        return Necessities.getInstance().getEconomy().addPlayerIfNotExists(offlinePlayer.getUniqueId());
     }
 
     //UNUSED METHODS BELOW

@@ -1,6 +1,6 @@
 package com.crossge.necessities.Commands.Economy;
 
-import com.crossge.necessities.Economy.BalChecks;
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
@@ -22,20 +22,20 @@ public class CmdBaltop implements EconomyCmd {
             page = 1;
         int time = 0;
         String bal;
-        BalChecks balc = Necessities.getInstance().getBalChecks();
-        int totalPages = balc.baltopPages();
+        Economy eco = Necessities.getInstance().getEconomy();
+        int totalPages = eco.baltopPages();
         if (page > totalPages) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer.toString(totalPages));
             return true;
         }
         sender.sendMessage(ChatColor.GOLD + "Balance Top Page [" + Integer.toString(page) + "/" + Integer.toString(totalPages) + "]");
         page = page - 1;
-        bal = balc.balTop(page, time);
+        bal = eco.balTop(page, time);
         while (bal != null) {
-            bal = ChatColor.GOLD + Integer.toString((page * 10) + time + 1) + ". " + var.getCatalog() + bal.split(" ")[0] + " has: " + var.getMoney() + "$" + Utils.addCommas(bal.split(" ")[1]);
+            bal = ChatColor.GOLD + Integer.toString((page * 10) + time + 1) + ". " + var.getCatalog() + Utils.nameFromString(bal.split(" ")[0]) + " has: " + var.getMoney() + Economy.format(Double.parseDouble(bal.split(" ")[1]));
             sender.sendMessage(bal);
             time++;
-            bal = balc.balTop(page, time);
+            bal = eco.balTop(page, time);
         }
         return true;
     }

@@ -1,6 +1,5 @@
 package com.crossge.necessities.Commands.RankManager;
 
-import com.crossge.necessities.GetUUID;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.RankManager;
 import com.crossge.necessities.Utils;
@@ -16,10 +15,9 @@ public class CmdAddSubrankUser implements RankCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires a user and a subrank to add for that user.");
             return true;
         }
-        GetUUID get = Necessities.getInstance().getUUID();
-        UUID uuid = get.getID(args[0]);
+        UUID uuid = Utils.getID(args[0]);
         if (uuid == null)
-            uuid = get.getOfflineID(args[0]);
+            uuid = Utils.getOfflineID(args[0]);
         if (uuid == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
             return true;
@@ -32,7 +30,7 @@ public class CmdAddSubrankUser implements RankCmd {
         }
         subrank = rm.getSub(subrank);
         Necessities.getInstance().getUM().updateUserSubrank(uuid, subrank, false);
-        sender.sendMessage(var.getMessages() + "Added " + var.getObj() + subrank + var.getMessages() + " to " + var.getObj() + Utils.ownerShip(get.nameFromString(uuid.toString())) + var.getMessages() + " subranks.");
+        sender.sendMessage(var.getMessages() + "Added " + var.getObj() + subrank + var.getMessages() + " to " + var.getObj() + Utils.ownerShip(Utils.nameFromString(uuid.toString())) + var.getMessages() + " subranks.");
         return true;
     }
 }

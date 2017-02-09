@@ -51,7 +51,7 @@ public class BalChecks {
         String balSpot = baltopCords(balsort.get(page + time), occurrence);
         if (balSpot == null)
             return null;
-        return Necessities.getInstance().getUUID().nameFromString(balSpot) + " " + Utils.roundTwoDecimals(balances.get(UUID.fromString(balSpot)));
+        return Utils.nameFromString(balSpot) + " " + Utils.roundTwoDecimals(balances.get(UUID.fromString(balSpot)));
     }
 
     private String baltopCords(double money, int occurrence) {

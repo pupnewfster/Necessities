@@ -69,9 +69,7 @@ public class Signs { //TODO Make sure this works, because some material names ar
             mat = Material.fromID(Integer.parseInt(itemName));
         else
             mat = Material.fromString(itemName);
-        int amount = Integer.parseInt(sign.getLine(2).trim());
-        double price = Necessities.getInstance().getPrices().getCost(operation, mat.getName(), amount);
-        sign.setLine(3, Necessities.getInstance().getVar().getMoney() + "$" + Utils.addCommas(Utils.roundTwoDecimals(price)));
+        sign.setLine(3, Necessities.getInstance().getVar().getMoney() + Economy.format(Necessities.getInstance().getPrices().getCost(operation, mat.getName(), Integer.parseInt(sign.getLine(2).trim()))));
     }
 
     private void formatSign(Sign sign) {

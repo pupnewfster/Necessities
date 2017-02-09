@@ -15,10 +15,9 @@ public class Reviews {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Retrieving stored review requests.");
         YamlConfiguration configReviews = YamlConfiguration.loadConfiguration(configFileReviews);
         //What other information is needed
-        GetUUID get = new GetUUID();
         for (String key : configReviews.getKeys(false))
             if (key != null) {
-                String name = get.nameFromString(key);
+                String name = Utils.nameFromString(key);
                 if (name != null)
                     reviews.put(name, configReviews.getString(key));
             }

@@ -21,7 +21,7 @@ public class CmdEnderChest implements Cmd {
             if (args.length == 0) {
                 p.sendMessage(var.getMessages() + "Ender chest opened.");
             } else {
-                UUID uuid = Necessities.getInstance().getUUID().getID(args[0]);
+                UUID uuid = Utils.getID(args[0]);
                 if (uuid == null) {
                     sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
                     return true;

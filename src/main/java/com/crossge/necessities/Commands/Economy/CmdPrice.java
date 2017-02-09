@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands.Economy;
 
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Economy.Material;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.Utils;
@@ -57,7 +58,8 @@ public class CmdPrice implements EconomyCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + mat.getFriendlyName(2) + " cannot be " + (oper.equalsIgnoreCase("buy") ? "bought from" : "sold to") + " the server");
             return true;
         }
-        sender.sendMessage(var.getObj() + mat.getFriendlyName(2) + var.getMessages() + " can be " + (oper.equalsIgnoreCase("buy") ? "bought" : "sold") + " for " + var.getMoney() + "$" + Utils.addCommas(cost));
+        sender.sendMessage(var.getObj() + mat.getFriendlyName(2) + var.getMessages() + " can be " + (oper.equalsIgnoreCase("buy") ? "bought" : "sold") + " for " + var.getMoney() +
+                Economy.format(Double.parseDouble(cost)));
         return true;
     }
 }

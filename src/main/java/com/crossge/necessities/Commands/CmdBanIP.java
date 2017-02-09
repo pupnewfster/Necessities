@@ -1,7 +1,7 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.GetUUID;
 import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
@@ -21,9 +21,8 @@ public class CmdBanIP implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter an player to ban.");
             return true;
         }
-        GetUUID get = Necessities.getInstance().getUUID();
         String name = Necessities.getInstance().getConsole().getName().replaceAll(":", "");
-        UUID uuid = get.getID(args[0]);
+        UUID uuid = Utils.getID(args[0]);
         if (uuid != null) {
             Player target = Bukkit.getPlayer(uuid);
             if (sender instanceof Player) {

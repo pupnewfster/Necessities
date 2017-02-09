@@ -1,10 +1,10 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.GetUUID;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
 import com.crossge.necessities.SafeLocation;
+import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -44,10 +44,9 @@ public class CmdHome implements Cmd {
                 }
                 String[] info = args[0].replaceAll("&", "").replaceAll("\\.", "").split(":");
                 String targetName = info[0];
-                GetUUID get = Necessities.getInstance().getUUID();
-                UUID uuid = get.getID(targetName);
+                UUID uuid = Utils.getID(targetName);
                 if (uuid == null) {
-                    uuid = get.getOfflineID(targetName);
+                    uuid = Utils.getOfflineID(targetName);
                     if (uuid == null) {
                         sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
                         return true;

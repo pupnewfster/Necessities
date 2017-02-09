@@ -20,7 +20,6 @@ import com.crossge.necessities.WorldManager.WarpManager;
 import com.crossge.necessities.WorldManager.WorldManager;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import net.milkbowl.vault.economy.Economy;
 import net.minecraft.server.v1_11_R1.*;
 import net.nyvaria.googleanalytics.hit.Hit;
 import net.nyvaria.openanalytics.bukkit.OpenAnalytics;
@@ -45,17 +44,16 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class Necessities extends JavaPlugin {
+public class Necessities extends JavaPlugin {//TODO refactor to gg.galaxygaming instead of com.crossge
     private static Necessities INSTANCE;
-    private final List<String> devs = Arrays.asList("pupnewfster", "Mod_Chris", "hypereddie10");
+    private final List<DevInfo> devs = new ArrayList<>();
     private final File configFile = new File("plugins/Necessities", "config.yml");
     private OpenAnalyticsTracker googleAnalyticsTracker;
     private PacketPlayOutPlayerInfo janetInfo;
-    //private DonationReader dr = new DonationReader();
     private CmdCommandSpy spy = new CmdCommandSpy();
     private CmdInvsee invsee = new CmdInvsee();
     private PortalManager pm = new PortalManager();
@@ -70,13 +68,12 @@ public class Necessities extends JavaPlugin {
     private Teleports tps = new Teleports();
     private JanetLog log = new JanetLog();
     private CmdHide hide = new CmdHide();
-    private GetUUID get = new GetUUID();
     private Janet bot = new Janet();
     private JanetNet net = new JanetNet();
     private JanetAI ai = new JanetAI();
     private JanetSlack slack = new JanetSlack();
     private Reviews rev = new Reviews();
-    private BalChecks balc = new BalChecks();
+    private Economy eco = new Economy();
     private Prices pr = new Prices();
     private RankPrices rp = new RankPrices();
     private CmdPrices cmdp = new CmdPrices();
@@ -109,9 +106,9 @@ public class Necessities extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new Listeners(), this);
 
         if (Bukkit.getPluginManager().getPlugin("Vault") != null)
-            Bukkit.getServicesManager().register(Economy.class, new VaultEconomy(), Bukkit.getPluginManager().getPlugin("Vault"), ServicePriority.Normal);
+            Bukkit.getServicesManager().register(net.milkbowl.vault.economy.Economy.class, new VaultEconomy(), Bukkit.getPluginManager().getPlugin("Vault"), ServicePriority.Normal);
 
-        //dr.init();
+        getDevInfo();
         getLogger().info("Necessities enabled.");
         GameProfile janetProfile = new GameProfile(UUID.randomUUID(), "Janet");
         janetProfile.getProperties().put("textures", getSkin());
@@ -180,7 +177,7 @@ public class Necessities extends JavaPlugin {
     }
 
     void addJanet(Player p) {
-        //((CraftPlayer) p).getHandle().playerConnection.sendPacket(this.janetInfo);
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(this.janetInfo);
     }
 
     void addHeader(Player p) {
@@ -210,14 +207,6 @@ public class Necessities extends JavaPlugin {
         } catch (Exception ignored) {
         }
         return null;
-    }
-
-    public boolean isDev(String name) {
-        return devs.contains(name);
-    }
-
-    public List<String> getDevs() {
-        return this.devs;
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args) {
@@ -578,8 +567,66 @@ public class Necessities extends JavaPlugin {
         this.slack.disconnect();
         this.bot.unload();
         this.announcer.exit();
-        //dr.disconnect();
         getLogger().info("Necessities disabled.");
+    }
+
+    public boolean isDev(UUID uuid) {
+        for (DevInfo i : this.devs)
+            if (uuid.equals(i.getMCUUID()))
+                return true;
+        return false;
+    }
+
+    public List<DevInfo> getDevs() {
+        return Collections.unmodifiableList(this.devs);
+    }
+
+    private void getDevInfo() {
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(new URL("http://galaxygaming.gg/staff.json").openConnection().getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+            while ((inputLine = in.readLine()) != null)
+                response.append(inputLine);
+            in.close();
+            JsonObject json = Jsoner.deserialize(response.toString(), new JsonObject());
+            JsonArray ar = (JsonArray) json.get("devs");
+            JsonObject ls = (JsonObject) json.get("Lavasurvival");
+            JsonArray lsDevs = (JsonArray) ls.get("devs");
+            for (int i = 0; i < lsDevs.size(); i++) {
+                JsonObject dev = null;
+                int devID = lsDevs.getInteger(i);
+                for (Object a : ar)
+                    if (devID == ((JsonObject) a).getInteger("devID")) {
+                        dev = (JsonObject) a;
+                        break;
+                    }
+                if (dev != null)
+                    this.devs.add(new DevInfo(dev));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class DevInfo {
+        private final UUID mcUUID;
+        private final String slackID;
+        private final String name;
+
+        private DevInfo(JsonObject dev) {
+            this.mcUUID = UUID.fromString(dev.getString("mcUUID"));
+            this.slackID = dev.getString("slackID");
+            this.name = dev.getString("name");
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public UUID getMCUUID() {
+            return this.mcUUID;
+        }
     }
 
     public static void trackAction(Hit hit) {
@@ -644,10 +691,6 @@ public class Necessities extends JavaPlugin {
         return this.bot == null ? this.bot = new Janet() : this.bot;
     }
 
-    public GetUUID getUUID() {
-        return this.get == null ? this.get = new GetUUID() : this.get;
-    }
-
     public WarpManager getWarps() {
         return this.warps == null ? this.warps = new WarpManager() : this.warps;
     }
@@ -708,8 +751,8 @@ public class Necessities extends JavaPlugin {
         return this.log == null ? this.log = new JanetLog() : this.log;
     }
 
-    public BalChecks getBalChecks() {
-        return this.balc == null ? this.balc = new BalChecks() : this.balc;
+    public Economy getEconomy() {
+        return this.eco == null ? this.eco = new Economy() : this.eco;
     }
 
     public CmdPrices getCommandPrices() {

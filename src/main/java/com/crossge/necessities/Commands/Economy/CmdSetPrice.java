@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands.Economy;
 
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Economy.Material;
 import com.crossge.necessities.Economy.Prices;
 import com.crossge.necessities.Necessities;
@@ -45,8 +46,8 @@ public class CmdSetPrice implements EconomyCmd {
                     player.sendMessage(var.getObj() + mat.getFriendlyName(2) + var.getMessages() + " can no longer be " + (args[1].equalsIgnoreCase("buy") ? "bought" : "sold"));
                 } else {
                     pr.setCost(file, mat.getName(), Utils.roundTwoDecimals(Double.parseDouble(args[0])));
-                    player.sendMessage(var.getObj() + Utils.ownerShip(mat.getFriendlyName(2)) + var.getMessages() + " " + (args[1].equalsIgnoreCase("buy") ? "buy" : "sell") + " price was set to " + var.getMoney() + "$" +
-                            Utils.addCommas(Utils.roundTwoDecimals(Double.parseDouble(args[0]))));
+                    player.sendMessage(var.getObj() + Utils.ownerShip(mat.getFriendlyName(2)) + var.getMessages() + " " + (args[1].equalsIgnoreCase("buy") ? "buy" : "sell") +
+                            " price was set to " + var.getMoney() + Economy.format(Double.parseDouble(args[0])));
                 }
                 return true;
             }
@@ -88,8 +89,8 @@ public class CmdSetPrice implements EconomyCmd {
             sender.sendMessage(var.getObj() + mat.getFriendlyName(2) + var.getMessages() + " can no longer be " + (args[2].equalsIgnoreCase("buy") ? "bought" : "sold"));
         } else {
             pr.setCost(file, mat.getName(), Utils.roundTwoDecimals(Double.parseDouble(args[1])));
-            sender.sendMessage(var.getObj() + Utils.ownerShip(mat.getFriendlyName(2)) + var.getMessages() + " " + (args[2].equalsIgnoreCase("buy") ? "buy" : "sell") + " price was set to " + var.getMoney() + "$" +
-                    Utils.addCommas(Utils.roundTwoDecimals(Double.parseDouble(args[1]))));
+            sender.sendMessage(var.getObj() + Utils.ownerShip(mat.getFriendlyName(2)) + var.getMessages() + " " + (args[2].equalsIgnoreCase("buy") ? "buy" : "sell") +
+                    " price was set to " + var.getMoney() + Economy.format(Double.parseDouble(args[1])));
         }
         return true;
     }

@@ -1,5 +1,6 @@
 package com.crossge.necessities.Commands.Economy;
 
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Economy.RankPrices;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.Utils;
@@ -24,10 +25,9 @@ public class CmdSetRankPrice implements EconomyCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Must enter a price to sell rank for.");
             return true;
         }
-        String cost = args[1];
+        String cost = Utils.roundTwoDecimals(Double.parseDouble(args[1]));
         rp.setCost(rankName, cost);
-        cost = Utils.roundTwoDecimals(Double.parseDouble(cost));
-        sender.sendMessage(var.getMessages() + "Added " + var.getObj() + rankName + var.getMessages() + " at the price of " + var.getMoney() + "$" + cost);
+        sender.sendMessage(var.getMessages() + "Added " + var.getObj() + rankName + var.getMessages() + " at the price of " + var.getMoney() + Economy.format(Double.parseDouble(cost)));
         return true;
     }
 

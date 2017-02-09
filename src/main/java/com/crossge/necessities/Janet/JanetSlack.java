@@ -1,8 +1,7 @@
 package com.crossge.necessities.Janet;
 
 import com.crossge.necessities.Commands.CmdHide;
-import com.crossge.necessities.Economy.BalChecks;
-import com.crossge.necessities.GetUUID;
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.Rank;
 import com.crossge.necessities.RankManager.RankManager;
@@ -43,7 +42,6 @@ public class JanetSlack {
     private JanetWarn warns;
     private Variables var;
     private CmdHide hide;
-    private GetUUID get;
 
     public void init() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Connecting to Slack...");
@@ -57,7 +55,7 @@ public class JanetSlack {
         try {
             hookURL = new URL(hook);
         } catch (Exception e) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + " Failed to connect to Slack.");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Failed to connect to Slack.");
             return;
         }
         rm = Necessities.getInstance().getRM();
@@ -65,7 +63,6 @@ public class JanetSlack {
         warns = Necessities.getInstance().getWarns();
         var = Necessities.getInstance().getVar();
         hide = Necessities.getInstance().getHide();
-        get = Necessities.getInstance().getUUID();
         setHelp();
         connect();
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Connected to Slack.");
@@ -309,7 +306,7 @@ public class JanetSlack {
         final String name = info.getName();
         if (message.startsWith("!")) {
             YamlConfiguration config = Necessities.getInstance().getConfig();
-            BalChecks balc = Necessities.getInstance().getBalChecks();
+            Economy eco = Necessities.getInstance().getEconomy();
             String m = "";
             if (message.startsWith("!help")) {
                 int page = 0;
@@ -362,9 +359,9 @@ public class JanetSlack {
                     return;
                 }
                 String target = message.split(" ")[1];
-                UUID uuid = get.getID(target);
+                UUID uuid = Utils.getID(target);
                 if (uuid == null) {
-                    uuid = get.getOfflineID(target);
+                    uuid = Utils.getOfflineID(target);
                     if (uuid == null) {
                         sendMessage("Error: That player has not joined the server. If the player is offline, please use the full and most recent name.", isPM, info);
                         return;
@@ -403,7 +400,7 @@ public class JanetSlack {
                     m += " - Location: (" + p.getWorld().getName() + ", " + p.getLocation().getBlockX() + ", " + p.getLocation().getBlockY() + ", " + p.getLocation().getBlockZ() + ")\n";
                 }
                 if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy"))
-                    m += " - Money: " + "$" + Utils.addCommas(balc.bal(uuid)) + "\n";
+                    m += " - Money: " + Economy.format(eco.getBalance(uuid)) + "\n";
                 if (u.getPlayer() != null) {
                     Player p = u.getPlayer();
                     m += " - IP Address: " + p.getAddress().toString().split("/")[1].split(":")[0] + "\n";
@@ -444,9 +441,9 @@ public class JanetSlack {
                 }
             } else if (message.startsWith("!devs")) {
                 String d = var.getMessages() + "The Devs for Necessities are: ";
-                List<String> devs = Necessities.getInstance().getDevs();
+                List<Necessities.DevInfo> devs = Necessities.getInstance().getDevs();
                 for (int i = 0; i < devs.size(); i++)
-                    d += (i + 1 >= devs.size() ? "and " + devs.get(i) + "." : devs.get(i) + ", ");
+                    d += (i + 1 >= devs.size() ? "and " + devs.get(i).getName() + "." : devs.get(i).getName() + ", ");
                 m += d + "\n";
             } else if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && (message.startsWith("!baltop") || message.startsWith("!moneytop") || message.startsWith("!balancetop"))) {
                 int page = 0;
@@ -461,19 +458,19 @@ public class JanetSlack {
                     page = 1;
                 int time = 0;
                 String bal;
-                int totalpages = balc.baltopPages();
+                int totalpages = eco.baltopPages();
                 if (page > totalpages) {
                     sendMessage("Error: Input a number from 1 to " + Integer.toString(totalpages), isPM, info);
                     return;
                 }
                 m += "Balance Top Page [" + Integer.toString(page) + "/" + Integer.toString(totalpages) + "]\n";
                 page = page - 1;
-                bal = balc.balTop(page, time);
+                bal = eco.balTop(page, time);
                 while (bal != null) {
-                    bal = ChatColor.GOLD + Integer.toString((page * 10) + time + 1) + ". " + var.getCatalog() + bal.split(" ")[0] + " has: " + var.getMoney() + "$" + Utils.addCommas(bal.split(" ")[1]);
+                    bal = ChatColor.GOLD + Integer.toString((page * 10) + time + 1) + ". " + var.getCatalog() + bal.split(" ")[0] + " has: " + var.getMoney() + Economy.format(Double.parseDouble(bal.split(" ")[1]));
                     m += bal + "\n";
                     time++;
-                    bal = balc.balTop(page, time);
+                    bal = eco.balTop(page, time);
                 }
             } else if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && (message.startsWith("!bal ") || message.startsWith("!balance ") || message.startsWith("!money "))) {
                 if (message.split(" ").length == 1) {
@@ -482,9 +479,9 @@ public class JanetSlack {
                 }
                 String target = message.split(" ")[1];
                 String playersname;
-                UUID uuid = get.getID(target);
+                UUID uuid = Utils.getID(target);
                 if (uuid == null) {
-                    uuid = get.getOfflineID(target);
+                    uuid = Utils.getOfflineID(target);
                     if (uuid == null) {
                         sendMessage("Error: That player has not joined the server. If the player is offline, please use the full and most recent name.", isPM, info);
                         return;
@@ -492,19 +489,19 @@ public class JanetSlack {
                     playersname = Bukkit.getOfflinePlayer(uuid).getName();
                 } else
                     playersname = Bukkit.getPlayer(uuid).getName();
-                String balance = balc.bal(uuid);
-                if (balance == null) {
+                double balance = eco.getBalance(uuid);
+                if (balance == -1.0) {
                     sendMessage("Error: That player is not in my records. If the player is offline, please use the full and most recent name.", isPM, info);
                     return;
                 }
-                m += ((playersname.endsWith("s") || playersname.endsWith("S")) ? playersname + "'" : playersname + "'s") + " balance is: " + "$" + Utils.addCommas(balance) + "\n";
+                m += ((playersname.endsWith("s") || playersname.endsWith("S")) ? playersname + "'" : playersname + "'s") + " balance is: " + Economy.format(balance) + "\n";
             } else if (message.startsWith("!warn ")) {
                 message = message.replaceFirst("!warn ", "");
                 if (message.split(" ").length < 2) {
                     sendMessage("Error: You must enter a player to warn and a reason.", isPM, info);
                     return;
                 }
-                UUID uuid = get.getID(message.split(" ")[0]);
+                UUID uuid = Utils.getID(message.split(" ")[0]);
                 if (uuid == null) {
                     sendMessage("Error: Invalid player.", isPM, info);
                     return;
@@ -533,7 +530,7 @@ public class JanetSlack {
                     sendMessage("Error: You must enter a player to kick and a reason.", isPM, info);
                     return;
                 }
-                UUID uuid = get.getID(message.split(" ")[0]);
+                UUID uuid = Utils.getID(message.split(" ")[0]);
                 if (uuid == null) {
                     sendMessage("Error: Invalid player.", isPM, info);
                     return;
@@ -549,12 +546,13 @@ public class JanetSlack {
                     sendMessage("Error: You must enter a player to ban.", isPM, info);
                     return;
                 }
-                UUID uuid = get.getID(message.split(" ")[0]);
-                if (uuid == null)
-                    uuid = get.getOfflineID(message.split(" ")[0]);
+                UUID uuid = Utils.getID(message.split(" ")[0]);
                 if (uuid == null) {
-                    sendMessage("Error: Invalid player.", isPM, info);
-                    return;
+                    uuid = Utils.getOfflineID(message.split(" ")[0]);
+                    if (uuid == null || !Bukkit.getOfflinePlayer(uuid).hasPlayedBefore()) {
+                        sendMessage("Error: That player does not exist or has not joined the server. If the player is offline, please use the full and most recent name.", isPM, info);
+                        return;
+                    }
                 }
                 final OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
                 if (target.getPlayer() != null && target.getPlayer().hasPermission("Necessities.antiBan") && !info.isOwner()) {
@@ -576,12 +574,13 @@ public class JanetSlack {
                     sendMessage("Error: You must enter a player to unban.", isPM, info);
                     return;
                 }
-                UUID uuid = get.getID(message.split(" ")[0]);
-                if (uuid == null)
-                    uuid = get.getOfflineID(message.split(" ")[0]);
+                UUID uuid = Utils.getID(message.split(" ")[0]);
                 if (uuid == null) {
-                    sendMessage("Error: Invalid player.", isPM, info);
-                    return;
+                    uuid = Utils.getOfflineID(message.split(" ")[0]);
+                    if (uuid == null || !Bukkit.getOfflinePlayer(uuid).hasPlayedBefore()) {
+                        sendMessage("Error: That player does not exist or has not joined the server. If the player is offline, please use the full and most recent name.", isPM, info);
+                        return;
+                    }
                 }
                 OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
                 BanList bans = Bukkit.getBanList(BanList.Type.NAME);
@@ -599,7 +598,7 @@ public class JanetSlack {
                     sendMessage("Error: You must enter a player to mute.", isPM, info);
                     return;
                 }
-                UUID uuid = get.getID(message.split(" ")[0]);
+                UUID uuid = Utils.getID(message.split(" ")[0]);
                 if (uuid == null) {
                     sendMessage("Error: Invalid player.", isPM, info);
                     return;
@@ -615,7 +614,7 @@ public class JanetSlack {
                     sendMessage("Error: You must enter a player to slap.", isPM, info);
                     return;
                 }
-                UUID uuid = get.getID(message.split(" ")[0]);
+                UUID uuid = Utils.getID(message.split(" ")[0]);
                 if (uuid == null) {
                     sendMessage("Error: Invalid player.", isPM, info);
                     return;
@@ -631,12 +630,13 @@ public class JanetSlack {
                     sendMessage("Error: You must enter a player to ban and a duration in minutes.", isPM, info);
                     return;
                 }
-                UUID uuid = get.getID(message.split(" ")[0]);
-                if (uuid == null)
-                    uuid = get.getOfflineID(message.split(" ")[0]);
+                UUID uuid = Utils.getID(message.split(" ")[0]);
                 if (uuid == null) {
-                    sendMessage("Error: Invalid player.", isPM, info);
-                    return;
+                    uuid = Utils.getOfflineID(message.split(" ")[0]);
+                    if (uuid == null || !Bukkit.getOfflinePlayer(uuid).hasPlayedBefore()) {
+                        sendMessage("Error: That player does not exist or has not joined the server. If the player is offline, please use the full and most recent name.", isPM, info);
+                        return;
+                    }
                 }
                 final OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
                 if (target.getPlayer() != null && target.getPlayer().hasPermission("Necessities.antiBan") && !info.isOwner()) {
@@ -671,7 +671,7 @@ public class JanetSlack {
                     sendMessage("Error: You must enter an ip to ban.", isPM, info);
                     return;
                 }
-                UUID uuid = get.getID(message.split(" ")[0]);
+                UUID uuid = Utils.getID(message.split(" ")[0]);
                 if (uuid != null) {
                     final Player target = Bukkit.getPlayer(uuid);
                     if (target.hasPermission("Necessities.antiBan") && !info.isOwner()) {

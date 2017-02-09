@@ -24,16 +24,16 @@ class Initialization {
         fileCreate("plugins/Necessities/rules.txt");
         fileCreate("plugins/Necessities/faq.txt");
         fileCreate("plugins/Necessities/announcements.txt");
-        File cwords = new File("plugins/Necessities", "customWords.txt");
-        if (!cwords.exists())
+        File cWords = new File("plugins/Necessities", "customWords.txt");
+        if (!cWords.exists())
             try {
-                cwords.createNewFile();
-                FileUtils.copyURLToFile(getClass().getResource("/customWords.txt"), cwords);
+                cWords.createNewFile();
+                FileUtils.copyURLToFile(getClass().getResource("/customWords.txt"), cWords);
             } catch (Exception ignored) {
             }
         createYaml();
         HatType.mapHats();
-        Material.mapMaterials();
+        Material.mapMaterials();//This is not in the Economy section because it is useful to have even without economy being enabled
 
         //RankManager
         RankManager rm = Necessities.getInstance().getRM();
@@ -50,7 +50,6 @@ class Initialization {
             Necessities.getInstance().getPM().initiate();
         }
 
-        Necessities.getInstance().getUUID().initiate();
         Necessities.getInstance().getBot().initiate();
         Necessities.getInstance().getWrench().initiate();
         Necessities.getInstance().getSpy().init();
@@ -68,7 +67,7 @@ class Initialization {
         //Economy
         if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy")) {
             Necessities.getInstance().getPrices().parseList();
-            Necessities.getInstance().getBalChecks().updateB();
+            Necessities.getInstance().getEconomy().init();
             Necessities.getInstance().getRankPrices().initiate();
             Necessities.getInstance().getCommandPrices().upList();//Command prices are disabled anyways atm
         }
@@ -159,6 +158,14 @@ class Initialization {
                 config.set("Necessities.MaxSingleTypeEntities", 100);
                 config.set("Console.AliveStatus", "Alive");
                 config.set("Announcements.frequency", 5);
+                config.set("Economy.DBHost", "127.0.0.1:3306");
+                config.set("Economy.DBName", "minecraft");
+                config.set("Economy.DBUser", "user");
+                config.set("Economy.DBPassword", "password");
+                config.set("Economy.metaName", "currency");
+                config.set("Economy.prefix", "");
+                config.set("Economy.suffix", "");
+                config.set("Economy.initialMoney", 0.0);
                 config.save(Necessities.getInstance().getConfigFile());
             } catch (Exception ignored) {
             }
@@ -212,6 +219,22 @@ class Initialization {
                 config.set("Necessities.MaxSingleTypeEntities", 100);
             if (!config.contains("Announcements.frequency"))
                 config.set("Announcements.frequency", 5);
+            if (!config.contains("Economy.DBHost"))
+                config.set("Economy.DBHost", "127.0.0.1:3306");
+            if (!config.contains("Economy.DBName"))
+                config.set("Economy.DBName", "minecraft");
+            if (!config.contains("Economy.DBUser"))
+                config.set("Economy.DBUser", "user");
+            if (!config.contains("Economy.DBPassword"))
+                config.set("Economy.DBPassword", "password");
+            if (!config.contains("Economy.metaName"))
+                config.set("Economy.metaName", "currency");
+            if (!config.contains("Economy.prefix"))
+                config.set("Economy.prefix", "");
+            if (!config.contains("Economy.suffix"))
+                config.set("Economy.suffix", "");
+            if (!config.contains("Economy.initialMoney"))
+                config.set("Economy.initialMoney", 0.0);
             try {
                 config.save(Necessities.getInstance().getConfigFile());
             } catch (Exception ignored) {

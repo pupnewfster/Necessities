@@ -1,10 +1,10 @@
 package com.crossge.necessities.Commands;
 
 import com.crossge.necessities.Console;
-import com.crossge.necessities.GetUUID;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
+import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,7 +20,6 @@ public class CmdMsg implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a player to message and a message to send.");
             return true;
         }
-        GetUUID get = Necessities.getInstance().getUUID();
         Console console = Necessities.getInstance().getConsole();
         UserManager um = Necessities.getInstance().getUM();
         if (sender instanceof Player) {
@@ -43,7 +42,7 @@ public class CmdMsg implements Cmd {
                 Bukkit.getConsoleSender().sendMessage(var.getMessages() + "[" + p.getDisplayName() + var.getMessages() + " -> me] " + message);
                 return true;
             }
-            UUID uuid = get.getID(args[0]);
+            UUID uuid = Utils.getID(args[0]);
             if (uuid == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
                 return true;
@@ -69,7 +68,7 @@ public class CmdMsg implements Cmd {
             p.sendMessage(var.getMessages() + "[me -> " + t.getDisplayName() + var.getMessages() + "] " + message);
             t.sendMessage(var.getMessages() + "[" + p.getDisplayName() + var.getMessages() + " -> me] " + message);
         } else {
-            UUID uuid = get.getID(args[0]);
+            UUID uuid = Utils.getID(args[0]);
             if (uuid == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
                 return true;

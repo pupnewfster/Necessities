@@ -1,7 +1,6 @@
 package com.crossge.necessities;
 
 import com.crossge.necessities.Commands.CmdHide;
-import com.crossge.necessities.Economy.BalChecks;
 import com.crossge.necessities.Economy.Signs;
 import com.crossge.necessities.Guilds.Guild;
 import com.crossge.necessities.Guilds.GuildManager;
@@ -129,9 +128,8 @@ class Listeners implements Listener {
         e.setJoinMessage((ChatColor.GREEN + " + " + var.getGuildMsgs() + ChatColor.translateAlternateColorCodes('&',
                 configLogIn.getString(uuid.toString()).replaceAll("\\{NAME}", p.getDisplayName()).replaceAll("\\{RANK}",
                         um.getUser(p.getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET + "", var.getGuildMsgs() + ""));
-        GetUUID get = Necessities.getInstance().getUUID();
         CmdHide hide = Necessities.getInstance().getHide();
-        if (!get.hasJoined(uuid)) {
+        if (!Bukkit.getOfflinePlayer(uuid).hasPlayedBefore()) {
             YamlConfiguration config = Necessities.getInstance().getConfig();
             final String welcome = ChatColor.translateAlternateColorCodes('&', config.getString("Necessities.firstTime")).replaceAll("\\{NAME}", p.getName());
             if (Necessities.isTracking())
@@ -160,7 +158,6 @@ class Listeners implements Listener {
                         i.addItem(com.crossge.necessities.Economy.Material.fromData(Integer.parseInt(name), Short.parseShort(data)).getBukkitMaterial().toItemStack(Integer.parseInt(item.split(" ")[1])));
                     }
             }
-            get.addUUID(uuid);
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
                 Bukkit.broadcastMessage(welcome);
                 Bukkit.broadcastMessage(JanetName + "Welcome to Galaxy Gaming! Enjoy your stay.");
@@ -174,9 +171,7 @@ class Listeners implements Listener {
                     Bukkit.broadcastMessage(JanetName + "Welcome back.");
             });
         }
-        BalChecks balc = Necessities.getInstance().getBalChecks();
-        if (!balc.doesPlayerExist(uuid))
-            balc.addPlayerToList(uuid);
+        Necessities.getInstance().getEconomy().addPlayerIfNotExists(uuid);
         Necessities.getInstance().getBot().logIn(uuid);
         hide.playerJoined(p);
         u.setLastAction(System.currentTimeMillis());
@@ -230,6 +225,7 @@ class Listeners implements Listener {
             Bukkit.broadcast(var.getMessages() + "To Ops -" + e.getQuitMessage(), "Necessities.opBroadcast");
             e.setQuitMessage(null);
         }
+        Necessities.getInstance().getEconomy().unloadAccount(uuid);
         if (u.isAfk())
             u.setAfk(false);
         u.logOut();

@@ -1,9 +1,9 @@
 package com.crossge.necessities.Commands.Guilds;
 
-import com.crossge.necessities.GetUUID;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.User;
 import com.crossge.necessities.RankManager.UserManager;
+import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,10 +30,9 @@ public class CmdLeader implements GuildCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a player to make leader in your guild.");
                 return true;
             }
-            GetUUID get = Necessities.getInstance().getUUID();
-            UUID uuid = get.getID(args[0]);
+            UUID uuid = Utils.getID(args[0]);
             if (uuid == null)
-                uuid = get.getOfflineID(args[0]);
+                uuid = Utils.getOfflineID(args[0]);
             if (uuid == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
                 return true;

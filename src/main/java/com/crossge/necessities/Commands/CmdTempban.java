@@ -1,7 +1,7 @@
 package com.crossge.necessities.Commands;
 
-import com.crossge.necessities.GetUUID;
 import com.crossge.necessities.Necessities;
+import com.crossge.necessities.Utils;
 import com.crossge.necessities.Variables;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
@@ -20,13 +20,13 @@ public class CmdTempban implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a player to ban and a duration in minutes.");
             return true;
         }
-        GetUUID get = Necessities.getInstance().getUUID();
-        UUID uuid = get.getID(args[0]);
-        if (uuid == null)
-            uuid = get.getOfflineID(args[0]);
+        UUID uuid = Utils.getID(args[0]);
         if (uuid == null) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
-            return true;
+            uuid = Utils.getOfflineID(args[0]);
+            if (uuid == null || !Bukkit.getOfflinePlayer(uuid).hasPlayedBefore()) {
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player does not exist or has not joined the server. If the player is offline, please use the full and most recent name.");
+                return true;
+            }
         }
         OfflinePlayer target = Bukkit.getOfflinePlayer(uuid);
         String name = Necessities.getInstance().getConsole().getName().replaceAll(":", "");

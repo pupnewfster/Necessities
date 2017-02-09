@@ -18,7 +18,7 @@ public class CmdTpDim implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a player a dimension to send them to an x coordinate a y coordinate a z coordinate and a yaw and pitch.");
             return true;
         }
-        UUID uuid = Necessities.getInstance().getUUID().getID(args[0]);
+        UUID uuid = Utils.getID(args[0]);
         if (uuid == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
             return true;

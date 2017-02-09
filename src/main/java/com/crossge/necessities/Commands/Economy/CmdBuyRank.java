@@ -1,6 +1,6 @@
 package com.crossge.necessities.Commands.Economy;
 
-import com.crossge.necessities.Economy.BalChecks;
+import com.crossge.necessities.Economy.Economy;
 import com.crossge.necessities.Economy.RankPrices;
 import com.crossge.necessities.Necessities;
 import com.crossge.necessities.RankManager.RankManager;
@@ -19,12 +19,12 @@ public class CmdBuyRank implements EconomyCmd {
             return true;
         }
         if (sender instanceof Player) {
-            BalChecks balc = Necessities.getInstance().getBalChecks();
+            Economy eco = Necessities.getInstance().getEconomy();
             Player player = (Player) sender;
             String rankName = Utils.capFirst(args[0]);
             RankPrices rp = Necessities.getInstance().getRankPrices();
             double cost = rp.getCost(rankName);
-            if (Double.parseDouble(balc.bal(player.getUniqueId())) < cost) {
+            if (eco.getBalance(player.getUniqueId()) < cost) {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Not enough money.");
                 return true;
             }
@@ -39,7 +39,7 @@ public class CmdBuyRank implements EconomyCmd {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You may not skip ranks or buy ranks you have already gotten.");
                 return true;
             }
-            balc.removeMoney(player.getUniqueId(), cost);
+            eco.removeMoney(player.getUniqueId(), cost);
             um.updateUserRank(um.getUser(player.getUniqueId()), player.getUniqueId(), rm.getRank(Utils.capFirst(rankName)));
             Bukkit.broadcastMessage(var.getMessages() + player.getName() + " bought the rank " + var.getObj() + rankName.toLowerCase());
         } else

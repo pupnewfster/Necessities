@@ -30,7 +30,7 @@ public class CmdInvsee implements Cmd {
         }
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            UUID uuid = Necessities.getInstance().getUUID().getID(args[0]);
+            UUID uuid = Utils.getID(args[0]);
             if (uuid == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
                 return true;

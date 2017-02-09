@@ -83,15 +83,12 @@ public class UserManager {
                 configUsers.set(player.getUniqueId().toString() + ".permissions", Collections.singletonList(""));
             if (!configUsers.contains(player.getUniqueId().toString() + ".subranks"))
                 configUsers.set(player.getUniqueId().toString() + ".subranks", Collections.singletonList(""));
-            if (!configUsers.contains(player.getUniqueId().toString() + ".balance"))
-                configUsers.set(player.getUniqueId().toString() + ".balance", 0.0);
             if (!configUsers.contains(player.getUniqueId().toString() + ".power"))
                 configUsers.set(player.getUniqueId().toString() + ".power", 0);
         } else {
             configUsers.set(player.getUniqueId().toString() + ".rank", rm.getRank(0).getName());
             configUsers.set(player.getUniqueId().toString() + ".permissions", Collections.singletonList(""));
             configUsers.set(player.getUniqueId().toString() + ".subranks", Collections.singletonList(""));
-            configUsers.set(player.getUniqueId().toString() + ".balance", 0.0);
             configUsers.set(player.getUniqueId().toString() + ".power", 0);
         }
         try {
