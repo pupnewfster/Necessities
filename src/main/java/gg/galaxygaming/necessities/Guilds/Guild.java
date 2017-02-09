@@ -105,7 +105,7 @@ public class Guild {
         if (this.power == -1)
             return;
         this.power = 0;
-        UserManager um = Necessities.getInstance().getUM();
+        UserManager um = Necessities.getUM();
         if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet"))
             this.power += um.getUser(UUID.fromString(this.leader)).getPower();
         if (!this.mods.isEmpty())
@@ -137,11 +137,11 @@ public class Guild {
     }
 
     public void rename(String newName) {
-        GuildManager gm = Necessities.getInstance().getGM();
+        GuildManager gm = Necessities.getGM();
         this.enemies.forEach(enemy -> gm.getGuild(enemy).setNeutral(this));
         this.allies.forEach(ally -> gm.getGuild(ally).setNeutral(this));
         this.name = newName;
-        UserManager um = Necessities.getInstance().getUM();
+        UserManager um = Necessities.getUM();
         if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet"))
             um.getUser(UUID.fromString(this.leader)).joinGuild(this);//Already is this but force updates the name
         this.mods.forEach(id -> um.getUser(UUID.fromString(id)).joinGuild(this));//Already is this but force updates the name
@@ -285,7 +285,7 @@ public class Guild {
     }
 
     public String onlineMembers(boolean countHidden) {
-        CmdHide hide = Necessities.getInstance().getHide();
+        CmdHide hide = Necessities.getHide();
         String member = "";
         if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) != null &&
                 (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(this.leader)))))
@@ -304,7 +304,7 @@ public class Guild {
     }
 
     public String offlineMember(boolean countHidden) {
-        CmdHide hide = Necessities.getInstance().getHide();
+        CmdHide hide = Necessities.getHide();
         String member = "";
         if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet") && (Bukkit.getPlayer(UUID.fromString(this.leader)) == null ||
                 (!countHidden && hide.isHidden(Bukkit.getPlayer(UUID.fromString(this.leader))))))
@@ -323,7 +323,7 @@ public class Guild {
     }
 
     public int getOnline(boolean countHidden) {
-        CmdHide hide = Necessities.getInstance().getHide();
+        CmdHide hide = Necessities.getHide();
         int online = 0;
         if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) != null &&
                 (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(this.leader)))))
@@ -350,7 +350,7 @@ public class Guild {
     }
 
     public ChatColor relation(Guild other) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         ChatColor col = var.getNeutral();
         if (other != null) {
             if (this.equals(other))
@@ -544,12 +544,12 @@ public class Guild {
                 memberList.add("");
             configGuild.set("members", memberList);
         }
-        UserManager um = Necessities.getInstance().getUM();
+        UserManager um = Necessities.getUM();
         um.getUser(uuid).leaveGuild();
         if (this.totalMembers != 0)
             this.totalMembers--;
         if (!this.permanent && getTotal() == 0)
-            Necessities.getInstance().getGM().disband(this);
+            Necessities.getGM().disband(this);
         if (this.power != -1)
             this.power -= um.getUser(uuid).getPower();
         configGuild.set("power", this.power);
@@ -568,7 +568,7 @@ public class Guild {
         if (memberList.contains(""))
             memberList.remove("");
         configGuild.set("members", memberList);
-        UserManager um = Necessities.getInstance().getUM();
+        UserManager um = Necessities.getUM();
         um.getUser(uuid).joinGuild(this);
         this.invited.remove(uuid);
         this.totalMembers++;
@@ -626,7 +626,7 @@ public class Guild {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     void disband() {
-        UserManager um = Necessities.getInstance().getUM();
+        UserManager um = Necessities.getUM();
         if (this.leader != null && !this.leader.equalsIgnoreCase("Janet") && !this.leader.equalsIgnoreCase(""))
             um.getUser(UUID.fromString(this.leader)).leaveGuild();
         this.mods.forEach(mod -> um.getUser(UUID.fromString(mod)).leaveGuild());

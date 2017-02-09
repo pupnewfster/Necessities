@@ -17,7 +17,7 @@ public class CmdTitle implements Cmd {
     private final File configFileTitles = new File("plugins/Necessities", "titles.yml");
 
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a title.");
             return true;
@@ -55,7 +55,7 @@ public class CmdTitle implements Cmd {
             return true;
         }
         if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free && config.contains("Necessities.Creative") && !config.getBoolean("Necessities.Creative")) {
-            Economy eco = Necessities.getInstance().getEconomy();
+            Economy eco = Necessities.getEconomy();
             if (eco.getBalance(target.getUniqueId()) < 1000) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must have " + Economy.format(1000) + " to change your title.");
                 return true;

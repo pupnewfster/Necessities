@@ -10,8 +10,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
 public class CmdClear implements Cmd {
+    @SuppressWarnings("deprecation")
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (args.length == 0) {

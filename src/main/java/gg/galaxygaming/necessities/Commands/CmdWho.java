@@ -15,10 +15,10 @@ import java.util.HashMap;
 
 public class CmdWho implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
-        RankManager rm = Necessities.getInstance().getRM();
-        UserManager um = Necessities.getInstance().getUM();
-        CmdHide hide = Necessities.getInstance().getHide();
+        Variables var = Necessities.getVar();
+        RankManager rm = Necessities.getRM();
+        UserManager um = Necessities.getUM();
+        CmdHide hide = Necessities.getHide();
         if (sender instanceof Player && !sender.hasPermission("Necessities.seehidden")) {
             HashMap<Rank, String> online = new HashMap<>();
             int numbOnline = 1;

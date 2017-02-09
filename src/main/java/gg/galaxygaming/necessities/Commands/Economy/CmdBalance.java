@@ -14,8 +14,8 @@ import java.util.UUID;
 
 public class CmdBalance implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Economy eco = Necessities.getInstance().getEconomy();
-        Variables var = Necessities.getInstance().getVar();
+        Economy eco = Necessities.getEconomy();
+        Variables var = Necessities.getVar();
         if (args.length == 0 && sender instanceof Player) {
             Player player = (Player) sender;
             double balance = eco.getBalance(player.getUniqueId());

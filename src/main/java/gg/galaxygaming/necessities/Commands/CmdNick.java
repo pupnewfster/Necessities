@@ -17,10 +17,10 @@ import java.util.UUID;
 public class CmdNick implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         YamlConfiguration config = Necessities.getInstance().getConfig();
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         boolean free = !(sender instanceof Player);
-        UserManager um = Necessities.getInstance().getUM();
-        Economy eco = Necessities.getInstance().getEconomy();
+        UserManager um = Necessities.getUM();
+        Economy eco = Necessities.getEconomy();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             free = p.hasPermission("Necessities.freeCommand");

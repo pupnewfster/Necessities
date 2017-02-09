@@ -11,13 +11,13 @@ import org.bukkit.entity.Player;
 
 public class CmdSetPrice implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length < 2) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter the item and price for it and whether buying or selling price.");
             return true;
         }
         Material mat;
-        Prices pr = Necessities.getInstance().getPrices();
+        Prices pr = Necessities.getPrices();
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (args.length == 2) {

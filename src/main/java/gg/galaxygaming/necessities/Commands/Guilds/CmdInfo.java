@@ -15,9 +15,9 @@ import java.util.UUID;
 public class CmdInfo implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         Guild g = null;
-        Variables var = Necessities.getInstance().getVar();
-        UserManager um = Necessities.getInstance().getUM();
-        GuildManager gm = Necessities.getInstance().getGM();
+        Variables var = Necessities.getVar();
+        UserManager um = Necessities.getUM();
+        GuildManager gm = Necessities.getGM();
         if (args.length != 0) {
             g = gm.getGuild(args[0]);
             if (g == null) {

@@ -14,7 +14,7 @@ import java.util.List;
 
 public class CmdEnchant implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             if (args.length == 0) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter an enchantment and a level to enchant it with.");

@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class CmdJail implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a player to jail.");
             return true;
@@ -30,7 +30,7 @@ public class CmdJail implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Jail not set.");
             return true;
         }
-        User u = Necessities.getInstance().getUM().getUser(uuid);
+        User u = Necessities.getUM().getUser(uuid);
         if (!config.contains("Spawn") && u.getLastPos() == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Spawn not set.");
             return true;
@@ -40,7 +40,7 @@ public class CmdJail implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player cannot be jailed.");
             return true;
         }
-        SafeLocation safe = Necessities.getInstance().getSafeLocations();
+        SafeLocation safe = Necessities.getSafeLocations();
         if (!u.isJailed()) {
             sender.sendMessage(var.getMessages() + "You jailed " + var.getObj() + u.getPlayer().getDisplayName() + var.getMessages() + ".");
             u.getPlayer().sendMessage(var.getDemote() + "You have been jailed.");

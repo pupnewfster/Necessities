@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class CmdWrench implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player player = (Player) sender;
             ItemStack stick = new ItemStack(Material.STICK, 1);

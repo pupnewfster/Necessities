@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 public class CmdRequestReview implements CreativeCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             //User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());

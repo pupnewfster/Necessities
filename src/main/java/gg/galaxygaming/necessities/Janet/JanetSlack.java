@@ -1,5 +1,8 @@
 package gg.galaxygaming.necessities.Janet;
 
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketFactory;
 import gg.galaxygaming.necessities.Commands.CmdHide;
 import gg.galaxygaming.necessities.Economy.Economy;
 import gg.galaxygaming.necessities.Necessities;
@@ -9,9 +12,6 @@ import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
-import com.neovisionaries.ws.client.WebSocket;
-import com.neovisionaries.ws.client.WebSocketAdapter;
-import com.neovisionaries.ws.client.WebSocketFactory;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -49,7 +49,7 @@ public class JanetSlack {
         token = config.contains("Necessities.SlackToken") ? config.getString("Necessities.SlackToken") : "token";
         String hook = config.contains("Necessities.WebHook") ? config.getString("Necessities.WebHook") : "webHook";
         if (token.equals("token") || hook.equals("webHook")) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + " Failed to connect to Slack.");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Failed to connect to Slack.");
             return;
         }
         try {
@@ -58,11 +58,11 @@ public class JanetSlack {
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Failed to connect to Slack.");
             return;
         }
-        rm = Necessities.getInstance().getRM();
-        um = Necessities.getInstance().getUM();
-        warns = Necessities.getInstance().getWarns();
-        var = Necessities.getInstance().getVar();
-        hide = Necessities.getInstance().getHide();
+        rm = Necessities.getRM();
+        um = Necessities.getUM();
+        warns = Necessities.getWarns();
+        var = Necessities.getVar();
+        hide = Necessities.getHide();
         setHelp();
         connect();
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Connected to Slack.");
@@ -306,7 +306,7 @@ public class JanetSlack {
         final String name = info.getName();
         if (message.startsWith("!")) {
             YamlConfiguration config = Necessities.getInstance().getConfig();
-            Economy eco = Necessities.getInstance().getEconomy();
+            Economy eco = Necessities.getEconomy();
             String m = "";
             if (message.startsWith("!help")) {
                 int page = 0;
@@ -772,7 +772,7 @@ public class JanetSlack {
             sendMessage(m, isPM, info);
         } else if (!isPM)
             Bukkit.broadcast(var.getMessages() + "From Slack - " + ChatColor.WHITE + name + ": " + message, "Necessities.slack");
-        Necessities.getInstance().getAI().parseMessage(name, message, JanetAI.Source.Slack, isPM, info);
+        Necessities.getAI().parseMessage(name, message, JanetAI.Source.Slack, isPM, info);
     }
 
     @SuppressWarnings("unused")

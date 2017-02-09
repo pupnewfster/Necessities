@@ -12,14 +12,14 @@ import java.util.UUID;
 
 public class CmdLeader implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.leader")) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You have not have permission to use /guild leader.");
                 return true;
             }
-            UserManager um = Necessities.getInstance().getUM();
+            UserManager um = Necessities.getUM();
             User u = um.getUser(p.getUniqueId());
             if (!p.hasPermission("Necessities.guilds.admin") && (u.getGuild() == null || u.getGuild().getRank(p.getUniqueId()) == null ||
                     !u.getGuild().getRank(p.getUniqueId()).equalsIgnoreCase("leader"))) {

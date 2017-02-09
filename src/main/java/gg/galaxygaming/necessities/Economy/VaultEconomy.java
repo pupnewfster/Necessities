@@ -46,22 +46,22 @@ public class VaultEconomy implements Economy {
 
     @Override
     public boolean hasAccount(String s) {
-        return Necessities.getInstance().getEconomy().doesPlayerExist(Utils.getOfflineID(s));
+        return Necessities.getEconomy().doesPlayerExist(Utils.getOfflineID(s));
     }
 
     @Override
     public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        return Necessities.getInstance().getEconomy().doesPlayerExist(offlinePlayer.getUniqueId());
+        return Necessities.getEconomy().doesPlayerExist(offlinePlayer.getUniqueId());
     }
 
     @Override
     public double getBalance(String s) {
-        return Necessities.getInstance().getEconomy().getBalance(Utils.getOfflineID(s));
+        return Necessities.getEconomy().getBalance(Utils.getOfflineID(s));
     }
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        return Necessities.getInstance().getEconomy().getBalance(offlinePlayer.getUniqueId());
+        return Necessities.getEconomy().getBalance(offlinePlayer.getUniqueId());
     }
 
     @Override
@@ -76,36 +76,36 @@ public class VaultEconomy implements Economy {
 
     @Override
     public EconomyResponse withdrawPlayer(String s, double v) {
-        Necessities.getInstance().getEconomy().removeMoney(Utils.getOfflineID(s), v);
+        Necessities.getEconomy().removeMoney(Utils.getOfflineID(s), v);
         return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
-        Necessities.getInstance().getEconomy().removeMoney(offlinePlayer.getUniqueId(), v);
+        Necessities.getEconomy().removeMoney(offlinePlayer.getUniqueId(), v);
         return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse depositPlayer(String s, double v) {
-        Necessities.getInstance().getEconomy().addMoney(Utils.getOfflineID(s), v);
+        Necessities.getEconomy().addMoney(Utils.getOfflineID(s), v);
         return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
-        Necessities.getInstance().getEconomy().addMoney(offlinePlayer.getUniqueId(), v);
+        Necessities.getEconomy().addMoney(offlinePlayer.getUniqueId(), v);
         return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public boolean createPlayerAccount(String s) {
-        return Necessities.getInstance().getEconomy().addPlayerIfNotExists(Utils.getOfflineID(s));
+        return Necessities.getEconomy().addPlayerIfNotExists(Utils.getOfflineID(s));
     }
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
-        return Necessities.getInstance().getEconomy().addPlayerIfNotExists(offlinePlayer.getUniqueId());
+        return Necessities.getEconomy().addPlayerIfNotExists(offlinePlayer.getUniqueId());
     }
 
     //UNUSED METHODS BELOW

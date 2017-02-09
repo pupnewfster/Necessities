@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class CmdDemote implements RankCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length != 1) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a user to demote.");
             return true;
@@ -29,7 +29,7 @@ public class CmdDemote implements RankCmd {
             target = Bukkit.getOfflinePlayer(uuid).getPlayer();
         } else
             target = Bukkit.getPlayer(uuid);
-        UserManager um = Necessities.getInstance().getUM();
+        UserManager um = Necessities.getUM();
         User u = um.getUser(uuid);
         if (u.getRank().getPrevious() == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + target.getName() + " is already the lowest rank.");
@@ -38,7 +38,7 @@ public class CmdDemote implements RankCmd {
         String name = "Console";
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (!player.hasPermission("Necessities.rankmanager.setranksame") && Necessities.getInstance().getRM().hasRank(um.getUser(player.getUniqueId()).getRank(), u.getRank())) {
+            if (!player.hasPermission("Necessities.rankmanager.setranksame") && Necessities.getRM().hasRank(um.getUser(player.getUniqueId()).getRank(), u.getRank())) {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You may not demote people a higher or equal rank.");
                 return true;
             }

@@ -8,7 +8,7 @@ import org.bukkit.inventory.meta.BookMeta;
 public class JanetBooks {
     public String newTitle(String title, Player p) {
         YamlConfiguration config = Necessities.getInstance().getConfig();
-        Janet bot = Necessities.getInstance().getBot();
+        Janet bot = Necessities.getBot();
         String censored = title.trim();
         if (config.getBoolean("Necessities.language") && !p.hasPermission("Necessities.language"))
             censored = bot.internalLang(censored);
@@ -26,7 +26,7 @@ public class JanetBooks {
     private String censor(String page, Player p) {
         YamlConfiguration config = Necessities.getInstance().getConfig();
         String censored = page;
-        Janet bot = Necessities.getInstance().getBot();
+        Janet bot = Necessities.getBot();
         if (config.getBoolean("Necessities.language") && !p.hasPermission("Necessities.language")) {
             String tempCensor = "";
             String[] lines = censored.split("\n");

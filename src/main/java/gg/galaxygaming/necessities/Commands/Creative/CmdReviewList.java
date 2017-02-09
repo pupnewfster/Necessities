@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 public class CmdReviewList implements CreativeCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         int page = 0;
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length > 0) {
             if (!Utils.legalInt(args[0])) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid review request page.");
@@ -22,7 +22,7 @@ public class CmdReviewList implements CreativeCmd {
             page = 1;
         int time = 0;
         String review;
-        Reviews rev = Necessities.getInstance().getRev();
+        Reviews rev = Necessities.getRev();
         int totalPages = rev.priceListPages();
         if (page > totalPages) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer.toString(totalPages));

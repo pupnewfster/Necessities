@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class CmdEco implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length < 2) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a player and the type of edit you want to do.");
             sender.sendMessage(var.getMessages() + "Valid edits are: reset, give, take, and set.");
@@ -32,7 +32,7 @@ public class CmdEco implements EconomyCmd {
             target = Bukkit.getPlayer(uuid);
         if (target != null)
             targetsName = target.getName();
-        Economy eco = Necessities.getInstance().getEconomy();
+        Economy eco = Necessities.getEconomy();
         if (!eco.doesPlayerExist(uuid)) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Please enter a valid player to change the balance of.");
             return true;

@@ -1,12 +1,12 @@
 package gg.galaxygaming.necessities.RankManager;
 
+import com.google.common.io.Files;
 import gg.galaxygaming.necessities.Commands.CmdHide;
 import gg.galaxygaming.necessities.Guilds.Guild;
 import gg.galaxygaming.necessities.Hats.Hat;
 import gg.galaxygaming.necessities.Hats.HatType;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
-import com.google.common.io.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -45,7 +45,7 @@ public class User {
     public User(Player p) {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         YamlConfiguration config = Necessities.getInstance().getConfig();
-        RankManager rm = Necessities.getInstance().getRM();
+        RankManager rm = Necessities.getRM();
         this.bukkitPlayer = p;
         this.right = p.getLocation();
         this.left = p.getLocation();
@@ -65,7 +65,7 @@ public class User {
         if (configUsers.contains(getUUID().toString() + ".power"))
             this.power = configUsers.getDouble(getUUID().toString() + ".power");
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && configUsers.contains(getUUID().toString() + ".guild"))
-            this.guild = Necessities.getInstance().getGM().getGuild(configUsers.getString(getUUID().toString() + ".guild"));
+            this.guild = Necessities.getGM().getGuild(configUsers.getString(getUUID().toString() + ".guild"));
         if (configUsers.contains(getUUID().toString() + ".timePlayed"))
             this.pastTotal = configUsers.getInt(getUUID().toString() + ".timePlayed");
         if (configUsers.contains(getUUID().toString() + ".hat"))
@@ -81,7 +81,7 @@ public class User {
         readIgnored();
         updateListName();
         Necessities.getInstance().updateAll(this.bukkitPlayer);
-        CmdHide hide = Necessities.getInstance().getHide();
+        CmdHide hide = Necessities.getHide();
         if (hide.isHidden(this.bukkitPlayer)) {
             this.opChat = true;
             hide.hidePlayer(this.bukkitPlayer);
@@ -92,7 +92,7 @@ public class User {
         this.userUUID = uuid;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         YamlConfiguration config = Necessities.getInstance().getConfig();
-        RankManager rm = Necessities.getInstance().getRM();
+        RankManager rm = Necessities.getRM();
         if (configUsers.contains(getUUID().toString() + ".rank"))
             this.rank = rm.getRank(configUsers.getString(getUUID().toString() + ".rank"));
         for (String subrank : configUsers.getStringList(uuid + ".subranks"))
@@ -108,7 +108,7 @@ public class User {
         if (configUsers.contains(getUUID().toString() + ".power"))
             this.power = configUsers.getDouble(getUUID().toString() + ".power");
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && configUsers.contains(getUUID().toString() + ".guild"))
-            this.guild = Necessities.getInstance().getGM().getGuild(configUsers.getString(getUUID().toString() + ".guild"));
+            this.guild = Necessities.getGM().getGuild(configUsers.getString(getUUID().toString() + ".guild"));
         if (configUsers.contains(getUUID().toString() + ".timePlayed"))
             this.pastTotal = configUsers.getInt(getUUID().toString() + ".timePlayed");
         readHomes();
@@ -130,7 +130,7 @@ public class User {
 
     public void logOut() {
         updateTimePlayed();
-        Necessities.getInstance().getSBs().delPlayer(this);
+        Necessities.getSBs().delPlayer(this);
         if (this.hat != null)
             this.hat.despawn();
         this.bukkitPlayer = null;
@@ -231,7 +231,7 @@ public class User {
 
     public void teleport(final User toTpTo) {
         final YamlConfiguration config = Necessities.getInstance().getConfig();
-        final Variables var = Necessities.getInstance().getVar();
+        final Variables var = Necessities.getVar();
         this.teleporting = true;
         if (this.rank.getTpDelay() == 0) {
             if (isTpaing())
@@ -254,12 +254,12 @@ public class User {
     public void cancelTp() {
         this.teleporting = false;
         setTpaing(false);
-        getPlayer().sendMessage(Necessities.getInstance().getVar().getMessages() + "Teleportation canceled.");
+        getPlayer().sendMessage(Necessities.getVar().getMessages() + "Teleportation canceled.");
     }
 
     private void tpSuccess() {
         this.teleporting = false;
-        getPlayer().sendMessage(Necessities.getInstance().getVar().getMessages() + "Teleportation successful.");
+        getPlayer().sendMessage(Necessities.getVar().getMessages() + "Teleportation successful.");
     }
 
     public void teleport(final Location l) {
@@ -269,7 +269,7 @@ public class User {
             tpSuccess();
             return;
         }
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         this.bukkitPlayer.sendMessage(var.getMessages() + "Teleportation will begin in " + ChatColor.RED + this.rank.getTpDelay() + var.getMessages() + " seconds, don't move.");
         Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
             if (getPlayer() != null && isTeleporting()) {
@@ -464,8 +464,8 @@ public class User {
         this.afk = isAfk;
         if (getPlayer() != null) {
             this.bukkitPlayer.setSleepingIgnored(this.afk);
-            Variables var = Necessities.getInstance().getVar();
-            if (Necessities.getInstance().getHide().isHidden(this.bukkitPlayer))
+            Variables var = Necessities.getVar();
+            if (Necessities.getHide().isHidden(this.bukkitPlayer))
                 Bukkit.broadcast(var.getMessages() + "To Ops - " + var.getMe() + "*" + getRank().getColor() + getPlayer().getDisplayName() + var.getMe() + " is " + (isAfk() ? "now" : "no longer") + " AFK",
                         "Necessities.opBroadcast");
             else
@@ -509,7 +509,7 @@ public class User {
     }
 
     public void givePerms() {
-        Necessities.getInstance().getSBs().addPlayer(this);
+        Necessities.getSBs().addPlayer(this);
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
         this.attachment = this.bukkitPlayer.addAttachment(Necessities.getInstance());
@@ -759,6 +759,7 @@ public class User {
             this.guild.updatePower();
     }
 
+    @SuppressWarnings("deprecation")
     public Location getLookingAt() {
         if (this.bukkitPlayer == null)
             return null;

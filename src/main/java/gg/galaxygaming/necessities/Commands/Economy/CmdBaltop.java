@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 
 public class CmdBaltop implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         int page = 0;
         if (args.length > 0) {
             if (!Utils.legalInt(args[0])) {
@@ -22,7 +22,7 @@ public class CmdBaltop implements EconomyCmd {
             page = 1;
         int time = 0;
         String bal;
-        Economy eco = Necessities.getInstance().getEconomy();
+        Economy eco = Necessities.getEconomy();
         int totalPages = eco.baltopPages();
         if (page > totalPages) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer.toString(totalPages));

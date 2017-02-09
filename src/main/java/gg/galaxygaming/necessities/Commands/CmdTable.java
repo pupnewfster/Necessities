@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 public class CmdTable implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             ((Player) sender).openEnchanting(null, true);
             sender.sendMessage(var.getMessages() + "Enchanting table opened.");

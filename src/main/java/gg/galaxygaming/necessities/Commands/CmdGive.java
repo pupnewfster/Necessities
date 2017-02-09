@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class CmdGive implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length < 2) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You need to enter an item and a player to give that item to.");
             return true;

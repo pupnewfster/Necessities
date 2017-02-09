@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public class CmdWeather implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a world name and weather.");
             return true;

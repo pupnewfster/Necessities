@@ -22,7 +22,7 @@ public class CmdPrices {
         if (!configPrices.contains("commands." + cmd))
             return false;
         String price = configPrices.getString("commands." + cmd);
-        RankManager rm = Necessities.getInstance().getRM();
+        RankManager rm = Necessities.getRM();
         return rm.hasRank(rm.getRank(Utils.capFirst(rank)), rm.getRank(Utils.capFirst(price.split(" ")[0])));
     }
 
@@ -54,7 +54,7 @@ public class CmdPrices {
 
     private void ordList() {
         ArrayList<String> temp = new ArrayList<>();
-        for (Rank r : Necessities.getInstance().getRM().getOrder())
+        for (Rank r : Necessities.getRM().getOrder())
             for (String cmd : co)
                 if (r.getName().toUpperCase().equals(cmd.split(" ")[1]))
                     temp.add(cmd);

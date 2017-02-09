@@ -17,7 +17,7 @@ public class Signs { //TODO Make sure this works, because some material names ar
             if (itemName == null)
                 return false;
             String amount = ChatColor.stripColor(sign.getLine(2).trim());
-            return Utils.legalInt(amount) && Necessities.getInstance().getPrices().getCost(operation, itemName, Integer.parseInt(amount)) != -1 && Integer.parseInt(amount) > 0;
+            return Utils.legalInt(amount) && Necessities.getPrices().getCost(operation, itemName, Integer.parseInt(amount)) != -1 && Integer.parseInt(amount) > 0;
         }
         return false;
     }
@@ -69,14 +69,14 @@ public class Signs { //TODO Make sure this works, because some material names ar
             mat = Material.fromID(Integer.parseInt(itemName));
         else
             mat = Material.fromString(itemName);
-        sign.setLine(3, Necessities.getInstance().getVar().getMoney() + Economy.format(Necessities.getInstance().getPrices().getCost(operation, mat.getName(), Integer.parseInt(sign.getLine(2).trim()))));
+        sign.setLine(3, Necessities.getVar().getMoney() + Economy.format(Necessities.getPrices().getCost(operation, mat.getName(), Integer.parseInt(sign.getLine(2).trim()))));
     }
 
     private void formatSign(Sign sign) {
         String operation = sign.getLine(0).trim();
         operation = ChatColor.BLUE + "[" + Utils.capFirst(getOperation(operation)) + "]";
         sign.setLine(0, operation);
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         sign.setLine(1, var.getMessages() + Utils.capFirst(sign.getLine(1).trim()));
         sign.setLine(2, var.getMessages() + sign.getLine(2).trim());
     }

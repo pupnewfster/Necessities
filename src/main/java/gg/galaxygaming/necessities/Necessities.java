@@ -1,9 +1,15 @@
 package gg.galaxygaming.necessities;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
+import gg.galaxygaming.necessities.Commands.*;
 import gg.galaxygaming.necessities.Commands.Creative.CmdRequestReview;
 import gg.galaxygaming.necessities.Commands.Creative.CmdReviewList;
 import gg.galaxygaming.necessities.Commands.Creative.CreativeCmd;
+import gg.galaxygaming.necessities.Commands.Economy.*;
 import gg.galaxygaming.necessities.Commands.Guilds.CmdGuild;
+import gg.galaxygaming.necessities.Commands.RankManager.*;
+import gg.galaxygaming.necessities.Commands.WorldManager.*;
 import gg.galaxygaming.necessities.Economy.*;
 import gg.galaxygaming.necessities.Guilds.GuildManager;
 import gg.galaxygaming.necessities.Guilds.PowerManager;
@@ -14,12 +20,6 @@ import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.WorldManager.PortalManager;
 import gg.galaxygaming.necessities.WorldManager.WarpManager;
 import gg.galaxygaming.necessities.WorldManager.WorldManager;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-import gg.galaxygaming.necessities.Commands.*;
-import gg.galaxygaming.necessities.Commands.Economy.*;
-import gg.galaxygaming.necessities.Commands.RankManager.*;
-import gg.galaxygaming.necessities.Commands.WorldManager.*;
 import net.minecraft.server.v1_11_R1.*;
 import net.nyvaria.googleanalytics.hit.Hit;
 import net.nyvaria.openanalytics.bukkit.OpenAnalytics;
@@ -635,140 +635,140 @@ public class Necessities extends JavaPlugin {
             tracker.trackHit(hit);
     }
 
-    public UserManager getUM() {
-        return this.um == null ? this.um = new UserManager() : this.um;
+    public static UserManager getUM() {
+        return INSTANCE.um == null ? INSTANCE.um = new UserManager() : INSTANCE.um;
     }
 
-    public JanetNet getNet() {
-        return this.net == null ? this.net = new JanetNet() : this.net;
+    public static JanetNet getNet() {
+        return INSTANCE.net == null ? INSTANCE.net = new JanetNet() : INSTANCE.net;
     }
 
-    CmdCommandSpy getSpy() {
-        return this.spy == null ? this.spy = new CmdCommandSpy() : this.spy;
+    static CmdCommandSpy getSpy() {
+        return INSTANCE.spy == null ? INSTANCE.spy = new CmdCommandSpy() : INSTANCE.spy;
     }
 
-    public RankManager getRM() {
-        return this.rm == null ? this.rm = new RankManager() : this.rm;
+    public static RankManager getRM() {
+        return INSTANCE.rm == null ? INSTANCE.rm = new RankManager() : INSTANCE.rm;
     }
 
-    public PortalManager getPM() {
-        return this.pm == null ? this.pm = new PortalManager() : this.pm;
+    public static PortalManager getPM() {
+        return INSTANCE.pm == null ? INSTANCE.pm = new PortalManager() : INSTANCE.pm;
     }
 
-    public JanetSlack getSlack() {
-        return this.slack == null ? this.slack = new JanetSlack() : this.slack;
+    public static JanetSlack getSlack() {
+        return INSTANCE.slack == null ? INSTANCE.slack = new JanetSlack() : INSTANCE.slack;
     }
 
-    public Console getConsole() {
-        return this.console == null ? this.console = new Console() : this.console;
+    public static Console getConsole() {
+        return INSTANCE.console == null ? INSTANCE.console = new Console() : INSTANCE.console;
     }
 
-    public Variables getVar() {
-        return this.var == null ? this.var = new Variables() : this.var;
+    public static Variables getVar() {
+        return INSTANCE.var == null ? INSTANCE.var = new Variables() : INSTANCE.var;
     }
 
-    public Teleports getTPs() {
-        return this.tps == null ? this.tps = new Teleports() : this.tps;
+    public static Teleports getTPs() {
+        return INSTANCE.tps == null ? INSTANCE.tps = new Teleports() : INSTANCE.tps;
     }
 
-    public JanetWarn getWarns() {
-        return this.warns == null ? this.warns = new JanetWarn() : this.warns;
+    public static JanetWarn getWarns() {
+        return INSTANCE.warns == null ? INSTANCE.warns = new JanetWarn() : INSTANCE.warns;
     }
 
-    public ScoreBoards getSBs() {
-        return this.sb == null ? this.sb = new ScoreBoards() : this.sb;
+    public static ScoreBoards getSBs() {
+        return INSTANCE.sb == null ? INSTANCE.sb = new ScoreBoards() : INSTANCE.sb;
     }
 
-    public CmdHide getHide() {
-        return this.hide == null ? this.hide = new CmdHide() : this.hide;
+    public static CmdHide getHide() {
+        return INSTANCE.hide == null ? INSTANCE.hide = new CmdHide() : INSTANCE.hide;
     }
 
-    public JanetAI getAI() {
-        return this.ai == null ? this.ai = new JanetAI() : this.ai;
+    public static JanetAI getAI() {
+        return INSTANCE.ai == null ? INSTANCE.ai = new JanetAI() : INSTANCE.ai;
     }
 
-    public Janet getBot() {
-        return this.bot == null ? this.bot = new Janet() : this.bot;
+    public static Janet getBot() {
+        return INSTANCE.bot == null ? INSTANCE.bot = new Janet() : INSTANCE.bot;
     }
 
-    public WarpManager getWarps() {
-        return this.warps == null ? this.warps = new WarpManager() : this.warps;
+    public static WarpManager getWarps() {
+        return INSTANCE.warps == null ? INSTANCE.warps = new WarpManager() : INSTANCE.warps;
     }
 
-    public WorldManager getWM() {
-        return this.wm == null ? this.wm = new WorldManager() : this.wm;
+    public static WorldManager getWM() {
+        return INSTANCE.wm == null ? INSTANCE.wm = new WorldManager() : INSTANCE.wm;
     }
 
-    public GuildManager getGM() {
-        return this.gm == null ? this.gm = new GuildManager() : this.gm;
+    public static GuildManager getGM() {
+        return INSTANCE.gm == null ? INSTANCE.gm = new GuildManager() : INSTANCE.gm;
     }
 
-    public Teleports getTeleports() {
-        return this.tps == null ? this.tps = new Teleports() : this.tps;
+    public static Teleports getTeleports() {
+        return INSTANCE.tps == null ? INSTANCE.tps = new Teleports() : INSTANCE.tps;
     }
 
-    CmdInvsee getInvsee() {
-        return this.invsee == null ? this.invsee = new CmdInvsee() : this.invsee;
+    static CmdInvsee getInvsee() {
+        return INSTANCE.invsee == null ? INSTANCE.invsee = new CmdInvsee() : INSTANCE.invsee;
     }
 
-    JanetBooks getBooks() {
-        return this.books == null ? this.books = new JanetBooks() : this.books;
+    static JanetBooks getBooks() {
+        return INSTANCE.books == null ? INSTANCE.books = new JanetBooks() : INSTANCE.books;
     }
 
-    public JanetRename getRename() {
-        return this.rename == null ? this.rename = new JanetRename() : this.rename;
+    public static JanetRename getRename() {
+        return INSTANCE.rename == null ? INSTANCE.rename = new JanetRename() : INSTANCE.rename;
     }
 
-    public Reviews getRev() {
-        return this.rev == null ? this.rev = new Reviews() : this.rev;
+    public static Reviews getRev() {
+        return INSTANCE.rev == null ? INSTANCE.rev = new Reviews() : INSTANCE.rev;
     }
 
-    Signs getEconomySigns() {
-        return this.economySigns == null ? this.economySigns = new Signs() : this.economySigns;
+    static Signs getEconomySigns() {
+        return INSTANCE.economySigns == null ? INSTANCE.economySigns = new Signs() : INSTANCE.economySigns;
     }
 
-    JanetSigns getSigns() {
-        return this.signs == null ? this.signs = new JanetSigns() : this.signs;
+    static JanetSigns getSigns() {
+        return INSTANCE.signs == null ? INSTANCE.signs = new JanetSigns() : INSTANCE.signs;
     }
 
-    Wrenched getWrench() {
-        return this.wrench == null ? this.wrench = new Wrenched() : this.wrench;
+    static Wrenched getWrench() {
+        return INSTANCE.wrench == null ? INSTANCE.wrench = new Wrenched() : INSTANCE.wrench;
     }
 
-    AntiCombatLog getACB() {
-        return this.acb == null ? this.acb = new AntiCombatLog() : this.acb;
+    static AntiCombatLog getACB() {
+        return INSTANCE.acb == null ? INSTANCE.acb = new AntiCombatLog() : INSTANCE.acb;
     }
 
-    public PowerManager getPower() {
-        return this.power == null ? this.power = new PowerManager() : this.power;
+    public static PowerManager getPower() {
+        return INSTANCE.power == null ? INSTANCE.power = new PowerManager() : INSTANCE.power;
     }
 
-    public SafeLocation getSafeLocations() {
-        return this.safe == null ? this.safe = new SafeLocation() : this.safe;
+    public static SafeLocation getSafeLocations() {
+        return INSTANCE.safe == null ? INSTANCE.safe = new SafeLocation() : INSTANCE.safe;
     }
 
-    public JanetLog getLog() {
-        return this.log == null ? this.log = new JanetLog() : this.log;
+    public static JanetLog getLog() {
+        return INSTANCE.log == null ? INSTANCE.log = new JanetLog() : INSTANCE.log;
     }
 
-    public Economy getEconomy() {
-        return this.eco == null ? this.eco = new Economy() : this.eco;
+    public static Economy getEconomy() {
+        return INSTANCE.eco == null ? INSTANCE.eco = new Economy() : INSTANCE.eco;
     }
 
-    public CmdPrices getCommandPrices() {
-        return this.cmdp == null ? this.cmdp = new CmdPrices() : this.cmdp;
+    public static CmdPrices getCommandPrices() {
+        return INSTANCE.cmdp == null ? INSTANCE.cmdp = new CmdPrices() : INSTANCE.cmdp;
     }
 
-    public RankPrices getRankPrices() {
-        return this.rp == null ? this.rp = new RankPrices() : this.rp;
+    public static RankPrices getRankPrices() {
+        return INSTANCE.rp == null ? INSTANCE.rp = new RankPrices() : INSTANCE.rp;
     }
 
-    public Prices getPrices() {
-        return this.pr == null ? this.pr = new Prices() : this.pr;
+    public static Prices getPrices() {
+        return INSTANCE.pr == null ? INSTANCE.pr = new Prices() : INSTANCE.pr;
     }
 
-    public Announcer getAnnouncer() {
-        return this.announcer == null ? this.announcer = new Announcer() : this.announcer;
+    public static Announcer getAnnouncer() {
+        return INSTANCE.announcer == null ? INSTANCE.announcer = new Announcer() : INSTANCE.announcer;
     }
 
     public File getConfigFile() {

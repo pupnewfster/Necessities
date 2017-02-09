@@ -12,8 +12,8 @@ import java.util.UUID;
 
 public class CmdPower implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
-        UserManager um = Necessities.getInstance().getUM();
+        Variables var = Necessities.getVar();
+        UserManager um = Necessities.getUM();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.power")) {

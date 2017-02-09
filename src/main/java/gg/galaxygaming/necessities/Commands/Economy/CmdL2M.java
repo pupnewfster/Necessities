@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class CmdL2M implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (args.length == 0) {
@@ -34,7 +34,7 @@ public class CmdL2M implements EconomyCmd {
             }
             double money = 2 * levelToExp(p.getLevel(), p.getLevel() - level);
             p.setLevel(p.getLevel() - level);
-            Necessities.getInstance().getEconomy().addMoney(p.getUniqueId(), money);
+            Necessities.getEconomy().addMoney(p.getUniqueId(), money);
             if (Necessities.isTracking())
                 OpenAnalyticsHook.trackLevelConvert(p, level);
             p.sendMessage("" + ChatColor.GREEN + ChatColor.BOLD + "+" + ChatColor.RESET + " Converted " + ChatColor.BOLD + level + ChatColor.RESET + " levels to " + var.getMoney() + Economy.format(money) +

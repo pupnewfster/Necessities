@@ -11,7 +11,7 @@ public class AntiCombatLog {
         if (p.hasPermission("Necessities.canCombatLog") || other.hasPermission("Necessities.canCombatLog"))
             return;
         long time = System.currentTimeMillis();
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (!this.inCombat.containsKey(p))
             p.sendMessage(var.getMessages() + "You are now in combat.");
         if (!this.inCombat.containsKey(other))
@@ -28,7 +28,7 @@ public class AntiCombatLog {
         long time = System.currentTimeMillis();
         if (this.inCombat.containsKey(p) && (time - this.inCombat.get(p)) / 1000.0 >= 9) {
             this.inCombat.remove(p);
-            p.sendMessage(Necessities.getInstance().getVar().getMessages() + "You are no longer in combat.");
+            p.sendMessage(Necessities.getVar().getMessages() + "You are no longer in combat.");
         }
     }
 }

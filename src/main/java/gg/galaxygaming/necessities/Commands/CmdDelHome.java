@@ -14,10 +14,10 @@ import java.util.UUID;
 
 public class CmdDelHome implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            UserManager um = Necessities.getInstance().getUM();
+            UserManager um = Necessities.getUM();
             User u = um.getUser(p.getUniqueId());
             String name = "home";
             if (args.length > 0) {
@@ -36,7 +36,7 @@ public class CmdDelHome implements Cmd {
                         p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "They do not have a home under that name.");
                         return true;
                     }
-                    if (Necessities.getInstance().getRM().hasRank(us.getRank(), u.getRank())) {
+                    if (Necessities.getRM().hasRank(us.getRank(), u.getRank())) {
                         p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You can not delete same rank or higher homes.");
                         return true;
                     }
@@ -63,7 +63,7 @@ public class CmdDelHome implements Cmd {
         if (args.length == 1)
             search = args[0];
         if (sender instanceof Player) {
-            User u = Necessities.getInstance().getUM().getUser(((Player) sender).getUniqueId());
+            User u = Necessities.getUM().getUser(((Player) sender).getUniqueId());
             for (String home : u.getHomes().split(", "))
                 if (home.startsWith(search))
                     complete.add(home);

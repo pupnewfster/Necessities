@@ -522,7 +522,7 @@ commands:
       permission: Necessities.worldmanager.removeworld
       aliases: [nremoveworld]
    createportal:
-      description: Creates a portal called <name> that teleports to given <world>.
+      description: Creates a portal called <name> that teleports to given <world>. Add a dash infront of world to make it a warp.
       usage: /<command> <name> <world teleporting to>
       permission: Necessities.worldmanager.createportal
       aliases: [ncreateportal, cportal, ncportal]

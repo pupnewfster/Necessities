@@ -14,11 +14,11 @@ import java.util.UUID;
 
 public class CmdHome implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            UserManager um = Necessities.getInstance().getUM();
-            SafeLocation safe = Necessities.getInstance().getSafeLocations();
+            UserManager um = Necessities.getUM();
+            SafeLocation safe = Necessities.getSafeLocations();
             User u = um.getUser(p.getUniqueId());
             String homes = u.getHomes();
             int homeCount = u.homeCount();

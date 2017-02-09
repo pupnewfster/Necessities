@@ -14,10 +14,10 @@ import java.util.UUID;
 
 public class CmdChat implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
+            User u = Necessities.getUM().getUser(p.getUniqueId());
             if (!p.hasPermission("Necessities.guilds.chat")) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You have not have permission to use /guild chat.");
                 return true;
@@ -45,10 +45,10 @@ public class CmdChat implements GuildCmd {
     private void sendGuild(UUID uuid, String message) {
         YamlConfiguration config = Necessities.getInstance().getConfig();
         Player player = Bukkit.getPlayer(uuid);
-        UserManager um = Necessities.getInstance().getUM();
+        UserManager um = Necessities.getUM();
         User sender = um.getUser(uuid);
         String send = ChatColor.translateAlternateColorCodes('&', config.getString("Necessities.ChatFormat"));
-        send = Necessities.getInstance().getVar().getMessages() + "To Guild - " + ChatColor.WHITE + send;
+        send = Necessities.getVar().getMessages() + "To Guild - " + ChatColor.WHITE + send;
         send = send.replaceAll("\\{WORLD} ", "");
         send = send.replaceAll("\\{GUILD} ", "");
         send = send.replaceAll("\\{TITLE} ", "");

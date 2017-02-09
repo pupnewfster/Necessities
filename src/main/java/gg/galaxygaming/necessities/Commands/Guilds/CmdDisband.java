@@ -10,15 +10,15 @@ import org.bukkit.entity.Player;
 
 public class CmdDisband implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
-        GuildManager gm = Necessities.getInstance().getGM();
+        Variables var = Necessities.getVar();
+        GuildManager gm = Necessities.getGM();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.disband")) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You have not have permission to use /guild disband.");
                 return true;
             }
-            User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
+            User u = Necessities.getUM().getUser(p.getUniqueId());
             if (!p.hasPermission("Necessities.guilds.admin") && (u.getGuild() == null || u.getGuild().getRank(p.getUniqueId()) == null ||
                     !u.getGuild().getRank(p.getUniqueId()).equalsIgnoreCase("leader"))) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be the leader to disband your guild.");

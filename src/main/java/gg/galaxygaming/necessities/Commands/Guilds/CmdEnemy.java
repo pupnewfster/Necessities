@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class CmdEnemy implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.enemy")) {
@@ -24,8 +24,8 @@ public class CmdEnemy implements GuildCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Must enter a name for the guild you wish to become enemies with.");
                 return true;
             }
-            Guild g = Necessities.getInstance().getGM().getGuild(args[0]);
-            UserManager um = Necessities.getInstance().getUM();
+            Guild g = Necessities.getGM().getGuild(args[0]);
+            UserManager um = Necessities.getUM();
             if (g == null) {
                 UUID uuid = Utils.getID(args[0]);
                 if (uuid == null)

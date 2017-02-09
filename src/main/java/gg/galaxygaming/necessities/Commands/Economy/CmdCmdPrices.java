@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class CmdCmdPrices implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         int page = 0;
         if (args.length >= 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "This command is currently disabled.");
@@ -29,7 +29,7 @@ public class CmdCmdPrices implements EconomyCmd {
             page = 1;
         int time = 0;
         String price;
-        CmdPrices cmdp = Necessities.getInstance().getCommandPrices();
+        CmdPrices cmdp = Necessities.getCommandPrices();
         int totalPages = cmdp.priceListPages();
         if (page > totalPages) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer.toString(totalPages));
@@ -40,7 +40,7 @@ public class CmdCmdPrices implements EconomyCmd {
         price = cmdp.priceLists(page, time);
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            String rank = Necessities.getInstance().getUM().getUser(player.getUniqueId()).getRank().getName();
+            String rank = Necessities.getUM().getUser(player.getUniqueId()).getRank().getName();
             Command com;
             boolean hasNode;
             while (price != null) {
@@ -74,7 +74,7 @@ public class CmdCmdPrices implements EconomyCmd {
         if (!numb.equalsIgnoreCase("10."))
             numb += " ";
         numb += " ";
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (curRank.equals("CONSOLE")) {
             cost = Economy.format(Double.parseDouble(cost));
             price = ChatColor.GOLD + numb + var.getCatalog() + cmd + " can be bought for " + var.getMoney() + cost + var.getMessages() + " by " + rank + "s";

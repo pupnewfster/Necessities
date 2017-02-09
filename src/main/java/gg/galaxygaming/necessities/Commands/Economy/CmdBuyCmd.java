@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 public class CmdBuyCmd implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length != 1) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a command to buy.");
             return true;
@@ -22,10 +22,10 @@ public class CmdBuyCmd implements EconomyCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "This command is temporarily disabled as we work on transitioning to per use paying.");
             return true;
         }
-        UserManager um = Necessities.getInstance().getUM();
-        CmdPrices cmdp = Necessities.getInstance().getCommandPrices();
+        UserManager um = Necessities.getUM();
+        CmdPrices cmdp = Necessities.getCommandPrices();
         if (sender instanceof Player) {
-            Economy eco = Necessities.getInstance().getEconomy();
+            Economy eco = Necessities.getEconomy();
             Player player = (Player) sender;
             String cmd = Utils.capFirst(args[0]);
             double cost = cmdp.getCost(cmd);

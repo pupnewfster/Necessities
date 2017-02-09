@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class CmdTpDim implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length < 7) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a player a dimension to send them to an x coordinate a y coordinate a z coordinate and a yaw and pitch.");
             return true;
@@ -49,7 +49,7 @@ public class CmdTpDim implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid pitch.");
             return true;
         }
-        target.teleport(Necessities.getInstance().getSafeLocations().getSafe(new Location(dim, Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]),
+        target.teleport(Necessities.getSafeLocations().getSafe(new Location(dim, Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]),
                 Integer.parseInt(args[6]))));
         return true;
     }

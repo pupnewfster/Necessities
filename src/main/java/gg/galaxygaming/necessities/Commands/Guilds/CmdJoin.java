@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class CmdJoin implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.join")) {
@@ -24,13 +24,13 @@ public class CmdJoin implements GuildCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a guild to join.");
                 return true;
             }
-            UserManager um = Necessities.getInstance().getUM();
+            UserManager um = Necessities.getUM();
             User u = um.getUser(p.getUniqueId());
             if (u.getGuild() != null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are already in a guild.");
                 return true;
             }
-            Guild g = Necessities.getInstance().getGM().getGuild(args[0]);
+            Guild g = Necessities.getGM().getGuild(args[0]);
             if (g == null) {
                 UUID uuid = Utils.getID(args[0]);
                 if (uuid == null)

@@ -12,11 +12,11 @@ import java.util.UUID;
 
 public class CmdGod implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (args.length == 0) {
-                User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
+                User u = Necessities.getUM().getUser(p.getUniqueId());
                 if (u.godMode())
                     p.sendMessage(var.getMessages() + "God mode " + var.getObj() + "disabled" + var.getMessages() + ".");
                 else {
@@ -43,7 +43,7 @@ public class CmdGod implements Cmd {
                 uuid = p.getUniqueId();
         }
         Player target = Bukkit.getPlayer(uuid);
-        User u = Necessities.getInstance().getUM().getUser(uuid);
+        User u = Necessities.getUM().getUser(uuid);
         if (u.godMode()) {
             target.sendMessage(var.getMessages() + "God mode " + var.getObj() + "disabled" + var.getMessages() + ".");
             sender.sendMessage(var.getMessages() + "God mode " + var.getObj() + "disabled" + var.getMessages() + " for " + var.getObj() + target.getDisplayName());

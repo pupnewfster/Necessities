@@ -8,12 +8,12 @@ import org.bukkit.entity.Player;
 
 public class CmdTpall implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             for (Player t : Bukkit.getOnlinePlayers())
-                if (p.hasPermission("Necessities.seehidden") || !Necessities.getInstance().getHide().isHidden(t)) {
-                    t.teleport(Necessities.getInstance().getSafeLocations().getSafe(p.getLocation()));
+                if (p.hasPermission("Necessities.seehidden") || !Necessities.getHide().isHidden(t)) {
+                    t.teleport(Necessities.getSafeLocations().getSafe(p.getLocation()));
                     t.sendMessage(var.getMessages() + "Teleporting...");
                 }
             p.sendMessage(var.getMessages() + "Teleporting all players...");

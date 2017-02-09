@@ -14,8 +14,8 @@ import java.util.UUID;
 
 public class CmdTpaccept implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
-        Teleports tps = Necessities.getInstance().getTeleports();
+        Variables var = Necessities.getVar();
+        Teleports tps = Necessities.getTeleports();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             UUID uuid = null;
@@ -33,7 +33,7 @@ public class CmdTpaccept implements Cmd {
                 return true;
             }
             Player target = Bukkit.getPlayer(uuid);
-            if (!p.hasPermission("Necessities.seehidden") && Necessities.getInstance().getHide().isHidden(target)) {
+            if (!p.hasPermission("Necessities.seehidden") && Necessities.getHide().isHidden(target)) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
                 return true;
             }
@@ -41,7 +41,7 @@ public class CmdTpaccept implements Cmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have any pending teleport request from that player.");
                 return true;
             }
-            UserManager um = Necessities.getInstance().getUM();
+            UserManager um = Necessities.getUM();
             User u = um.getUser(uuid);
             User self = um.getUser(p.getUniqueId());
             if (u.isIgnoring(p.getUniqueId())) {

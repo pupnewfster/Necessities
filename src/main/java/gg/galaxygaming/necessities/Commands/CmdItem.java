@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 public class CmdItem implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (args.length == 0) {

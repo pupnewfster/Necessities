@@ -17,7 +17,7 @@ public class JanetSigns {
         if (s.getLine(3) != null)
             line3 = s.getLine(3).trim();
         YamlConfiguration config = Necessities.getInstance().getConfig();
-        Janet bot = Necessities.getInstance().getBot();
+        Janet bot = Necessities.getBot();
         if (config.getBoolean("Necessities.language") && !p.hasPermission("Necessities.language")) {
             line0 = bot.internalLang(line0);
             line1 = bot.internalLang(line1);

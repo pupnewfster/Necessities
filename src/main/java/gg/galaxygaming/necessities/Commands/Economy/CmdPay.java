@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class CmdPay implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (args.length > 2 || args.length == 0 || !Utils.legalDouble(args[1])) {
@@ -33,7 +33,7 @@ public class CmdPay implements EconomyCmd {
                 target = Bukkit.getPlayer(uuid);
             if (target != null)
                 targetsName = target.getName();
-            Economy eco = Necessities.getInstance().getEconomy();
+            Economy eco = Necessities.getEconomy();
             if (!eco.doesPlayerExist(uuid)) {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Please enter a valid player to send money to.");
                 return true;

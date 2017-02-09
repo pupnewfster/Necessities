@@ -13,7 +13,7 @@ import java.util.UUID;
 public class CmdImp implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            Variables var = Necessities.getInstance().getVar();
+            Variables var = Necessities.getVar();
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Must enter a message.");
             return true;
         }

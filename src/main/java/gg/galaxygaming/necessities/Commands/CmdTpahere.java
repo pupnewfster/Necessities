@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class CmdTpahere implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             if (args.length == 0) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a player to send a teleport request to.");
@@ -26,7 +26,7 @@ public class CmdTpahere implements Cmd {
             }
             Player target = Bukkit.getPlayer(uuid);
             Player p = (Player) sender;
-            if (!p.hasPermission("Necessities.seehidden") && Necessities.getInstance().getHide().isHidden(target)) {
+            if (!p.hasPermission("Necessities.seehidden") && Necessities.getHide().isHidden(target)) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
                 return true;
             }
@@ -34,7 +34,7 @@ public class CmdTpahere implements Cmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You may not send teleport requests to yourself.");
                 return true;
             }
-            UserManager um = Necessities.getInstance().getUM();
+            UserManager um = Necessities.getUM();
             User u = um.getUser(uuid);
             User self = um.getUser(p.getUniqueId());
             if (u.isIgnoring(p.getUniqueId())) {
@@ -45,7 +45,7 @@ public class CmdTpahere implements Cmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are ignoring that user, so cannot send them a teleport request.");
                 return true;
             }
-            Necessities.getInstance().getTeleports().addRequest(uuid, p.getUniqueId().toString() + " toThem");
+            Necessities.getTeleports().addRequest(uuid, p.getUniqueId().toString() + " toThem");
             target.sendMessage(var.getObj() + p.getName() + var.getMessages() + " has requested that you teleport to them.");
             target.sendMessage(var.getMessages() + "To teleport, type " + var.getObj() + "/tpaccept" + var.getMessages() + ".");
             target.sendMessage(var.getMessages() + "To deny this request, type " + var.getObj() + "/tpdeny" + var.getMessages() + ".");

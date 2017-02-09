@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class CmdRename implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a name to rename your item to.");
             return true;

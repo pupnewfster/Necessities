@@ -10,7 +10,7 @@ public class Console {
     private UUID lastContact = null;
 
     public String getName() {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         YamlConfiguration config = Necessities.getInstance().getConfig();
         return var.getMessages() + "Console [" + ChatColor.GREEN + (config.contains("Console.AliveStatus") ? ChatColor.translateAlternateColorCodes('&', config.getString("Console.AliveStatus")) : "Alive") +
                 var.getMessages() + "]:" + ChatColor.RESET;

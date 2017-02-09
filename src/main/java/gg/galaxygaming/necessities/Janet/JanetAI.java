@@ -31,12 +31,12 @@ public class JanetAI {//TODO: Move to JanetNet and add understanding logic
     }
 
     public void initiate() {
-        RankManager rm = Necessities.getInstance().getRM();
+        RankManager rm = Necessities.getRM();
         JanetName = (!rm.getOrder().isEmpty() ? ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") : "") + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
-        this.slack = Necessities.getInstance().getSlack();
-        this.var = Necessities.getInstance().getVar();
+        this.slack = Necessities.getSlack();
+        this.var = Necessities.getVar();
         //this.get = Utils;
-        this.net = Necessities.getInstance().getNet();
+        this.net = Necessities.getNet();
     }
 
     public enum Source {

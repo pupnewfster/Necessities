@@ -12,17 +12,17 @@ public class CmdFlag implements GuildCmd {
         Guild g = null;
         Guild other = null;
         if (args.length != 0)
-            g = Necessities.getInstance().getGM().getGuild(args[0]);
+            g = Necessities.getGM().getGuild(args[0]);
         String bool = "";
         String opper = "";
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.flag")) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You have not have permission to use /guild flag.");
                 return true;
             }
-            User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
+            User u = Necessities.getUM().getUser(p.getUniqueId());
             if (args.length == 0) {
                 g = u.getGuild();
                 other = u.getGuild();

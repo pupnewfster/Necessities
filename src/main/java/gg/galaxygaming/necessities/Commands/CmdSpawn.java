@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 public class CmdSpawn implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             YamlConfiguration config = Necessities.getInstance().getConfig();
@@ -26,7 +26,7 @@ public class CmdSpawn implements Cmd {
             float yaw = Float.parseFloat(config.getString("Spawn.yaw"));
             float pitch = Float.parseFloat(config.getString("Spawn.pitch"));
             p.sendMessage(var.getMessages() + "Teleporting to spawn.");
-            Necessities.getInstance().getUM().getUser(p.getUniqueId()).teleport(Necessities.getInstance().getSafeLocations().getSafe(new Location(world, x, y, z, yaw, pitch)));
+            Necessities.getUM().getUser(p.getUniqueId()).teleport(Necessities.getSafeLocations().getSafe(new Location(world, x, y, z, yaw, pitch)));
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot go to the spawn.");
         return true;

@@ -53,21 +53,21 @@ public class UserManager {
     }
 
     void addRankPerm(Rank r, String node) {
-        RankManager rm = Necessities.getInstance().getRM();
+        RankManager rm = Necessities.getRM();
         for (UUID uuid : players.keySet())
             if (rm.hasRank(players.get(uuid).getRank(), r))
                 players.get(uuid).addPerm(node);
     }
 
     void delRankPerm(Rank r, String node) {
-        RankManager rm = Necessities.getInstance().getRM();
+        RankManager rm = Necessities.getRM();
         for (UUID uuid : players.keySet())
             if (rm.hasRank(players.get(uuid).getRank(), r))
                 players.get(uuid).removePerm(node);
     }
 
     void refreshRankPerm(Rank r) {
-        RankManager rm = Necessities.getInstance().getRM();
+        RankManager rm = Necessities.getRM();
         for (UUID uuid : players.keySet())
             if (rm.hasRank(players.get(uuid).getRank(), r))
                 players.get(uuid).refreshPerms();
@@ -75,7 +75,7 @@ public class UserManager {
 
     public void addUser(Player player) {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
-        RankManager rm = Necessities.getInstance().getRM();
+        RankManager rm = Necessities.getRM();
         if (configUsers.contains(player.getUniqueId().toString())) {
             if (!configUsers.contains(player.getUniqueId().toString() + ".rank"))
                 configUsers.set(player.getUniqueId().toString() + ".rank", rm.getRank(0).getName());

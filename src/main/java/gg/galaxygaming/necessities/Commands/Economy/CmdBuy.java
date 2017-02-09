@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 public class CmdBuy implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (args.length > 2 || args.length == 0) {
@@ -23,7 +23,7 @@ public class CmdBuy implements EconomyCmd {
                 return true;
             }
             PlayerInventory inventory = player.getInventory();
-            Economy eco = Necessities.getInstance().getEconomy();
+            Economy eco = Necessities.getEconomy();
             double intBal = eco.getBalance(player.getUniqueId());
             int amount;
             Material mat;
@@ -66,7 +66,7 @@ public class CmdBuy implements EconomyCmd {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist");
                 return true;
             }
-            Prices pr = Necessities.getInstance().getPrices();
+            Prices pr = Necessities.getPrices();
             double cost = pr.getCost("buy", mat.getName(), amount);
             if (cost == -1.00)
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + mat.getFriendlyName(2) + " cannot be bought from the server.");

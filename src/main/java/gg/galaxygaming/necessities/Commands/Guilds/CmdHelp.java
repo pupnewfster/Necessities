@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class CmdHelp implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             if (!sender.hasPermission("Necessities.guilds.help")) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You have not have permission to use /guild help.");
@@ -59,7 +59,7 @@ public class CmdHelp implements GuildCmd {
     }
 
     private void setHelp(ArrayList<String> helpList, CommandSender sender) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (p.hasPermission("Necessities.guilds.list"))

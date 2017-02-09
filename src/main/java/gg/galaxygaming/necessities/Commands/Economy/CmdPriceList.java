@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
 
 public class CmdPriceList implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         int page = 0;
         if (args.length > 0) {
             if (!Utils.legalInt(args[0])) {
@@ -24,7 +24,7 @@ public class CmdPriceList implements EconomyCmd {
             page = 1;
         int time = 0;
         String price;
-        Prices pr = Necessities.getInstance().getPrices();
+        Prices pr = Necessities.getPrices();
         int totalPages = pr.priceListPages();
         if (page > totalPages) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer.toString(totalPages));
@@ -57,7 +57,7 @@ public class CmdPriceList implements EconomyCmd {
             sell = "";
         } else
             sell = Economy.format(Double.parseDouble(sell));
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         return ChatColor.GOLD + numb + var.getCatalog() + item + buying + var.getMoney() + buy + var.getCatalog() + selling + var.getMoney() + sell;
     }
 }

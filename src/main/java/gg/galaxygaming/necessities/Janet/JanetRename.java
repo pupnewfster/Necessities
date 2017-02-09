@@ -8,7 +8,7 @@ public class JanetRename {
     public String parseRename(String message, Player p) {
         YamlConfiguration config = Necessities.getInstance().getConfig();
         String censored = message;
-        Janet bot = Necessities.getInstance().getBot();
+        Janet bot = Necessities.getBot();
         if (config.getBoolean("Necessities.language") && !p.hasPermission("Necessities.language"))
             censored = bot.internalLang(censored);
         if (config.getBoolean("Necessities.advertise") && !p.hasPermission("Necessities.advertise"))

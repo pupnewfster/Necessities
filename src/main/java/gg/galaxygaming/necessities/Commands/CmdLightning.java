@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class CmdLightning implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length > 0) {
             UUID uuid = Utils.getID(args[0]);
             if (uuid == null) {
@@ -28,7 +28,7 @@ public class CmdLightning implements Cmd {
         }
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
+            User u = Necessities.getUM().getUser(p.getUniqueId());
             Location l = u.getLookingAt();
             if (l == null) {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Block out of range.");

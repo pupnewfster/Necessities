@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class CmdWorld implements WorldCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a world name.");
             return true;

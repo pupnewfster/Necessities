@@ -13,16 +13,16 @@ import org.bukkit.entity.Player;
 
 public class CmdBuyRank implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length != 1) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid rank to buy. View the buyable ranks with /rankprices");
             return true;
         }
         if (sender instanceof Player) {
-            Economy eco = Necessities.getInstance().getEconomy();
+            Economy eco = Necessities.getEconomy();
             Player player = (Player) sender;
             String rankName = Utils.capFirst(args[0]);
-            RankPrices rp = Necessities.getInstance().getRankPrices();
+            RankPrices rp = Necessities.getRankPrices();
             double cost = rp.getCost(rankName);
             if (eco.getBalance(player.getUniqueId()) < cost) {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Not enough money.");
@@ -32,8 +32,8 @@ public class CmdBuyRank implements EconomyCmd {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Unknown or unbuyable rank.");
                 return true;
             }
-            UserManager um = Necessities.getInstance().getUM();
-            RankManager rm = Necessities.getInstance().getRM();
+            UserManager um = Necessities.getUM();
+            RankManager rm = Necessities.getRM();
             String curRank = um.getUser(player.getUniqueId()).getRank().getName();
             if (rm.getRank(rankName).getNext().equals(rm.getRank(curRank))) {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You may not skip ranks or buy ranks you have already gotten.");

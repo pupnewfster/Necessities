@@ -16,9 +16,9 @@ import java.util.UUID;
 public class CmdList implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         ArrayList<String> guildList = new ArrayList<>();
-        Variables var = Necessities.getInstance().getVar();
-        UserManager um = Necessities.getInstance().getUM();
-        GuildManager gm = Necessities.getInstance().getGM();
+        Variables var = Necessities.getVar();
+        UserManager um = Necessities.getUM();
+        GuildManager gm = Necessities.getGM();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.list")) {

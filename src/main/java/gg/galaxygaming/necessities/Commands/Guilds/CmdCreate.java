@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 public class CmdCreate implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.create")) {
@@ -22,18 +22,18 @@ public class CmdCreate implements GuildCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Must enter a name for the guild you wish to create.");
                 return true;
             }
-            GuildManager gm = Necessities.getInstance().getGM();
+            GuildManager gm = Necessities.getGM();
             Guild g = gm.getGuild(args[0]);
             if (g != null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That guild already exists.");
                 return true;
             }
-            User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
+            User u = Necessities.getUM().getUser(p.getUniqueId());
             if (u.getGuild() != null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are already in a guild.");
                 return true;
             }
-            Economy eco = Necessities.getInstance().getEconomy();
+            Economy eco = Necessities.getEconomy();
             if (eco.getBalance(u.getUUID()) < 800) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + Economy.format(800) + " to spend on creating a guild.");
                 return true;

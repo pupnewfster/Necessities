@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class CmdRankPrices implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         int page = 0;
         if (args.length > 1) {
             if (!Utils.legalInt(args[0])) {
@@ -25,7 +25,7 @@ public class CmdRankPrices implements EconomyCmd {
             page = 1;
         int time = 0;
         String price;
-        RankPrices rp = Necessities.getInstance().getRankPrices();
+        RankPrices rp = Necessities.getRankPrices();
         int totalPages = rp.priceListPages();
         if (page > totalPages) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer.toString(totalPages));
@@ -36,7 +36,7 @@ public class CmdRankPrices implements EconomyCmd {
         price = rp.priceLists(page, time);
         String rank = "CONSOLE";
         if (sender instanceof Player)
-            rank = Necessities.getInstance().getUM().getUser(((Player) sender).getUniqueId()).getRank().getName();
+            rank = Necessities.getUM().getUser(((Player) sender).getUniqueId()).getRank().getName();
         while (price != null) {
             price = formL(price.split(" ")[0], price.split(" ")[1], Integer.toString((page * 10) + time + 1) + ".", rank);
             sender.sendMessage(price);
@@ -51,14 +51,14 @@ public class CmdRankPrices implements EconomyCmd {
         if (!numb.equalsIgnoreCase("10."))
             numb += " ";
         numb += " ";
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (curRank.equals("CONSOLE")) {
             cost = Economy.format(Double.parseDouble(cost));
             price = ChatColor.GOLD + numb + var.getCatalog() + rank + " can be bought for " + var.getMoney() + cost;
         } else {
             cost = Economy.format(Double.parseDouble(cost));
             price = ChatColor.GOLD + numb + var.getCatalog() + rank + " can be bought for " + var.getMoney() + cost;
-            RankManager rm = Necessities.getInstance().getRM();
+            RankManager rm = Necessities.getRM();
             if (rm.hasRank(rm.getRank(curRank), rm.getRank(rank)))
                 price += var.getCatalog() + "   Already Acquired.";
         }

@@ -8,14 +8,14 @@ import org.bukkit.entity.Player;
 
 public class CmdLeave implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.leave")) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You have not have permission to use /guild leave.");
                 return true;
             }
-            User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
+            User u = Necessities.getUM().getUser(p.getUniqueId());
             if (u.getGuild() == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not in a guild.");
                 return true;

@@ -9,13 +9,13 @@ import org.bukkit.command.CommandSender;
 
 public class CmdSetRankPrice implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length < 2) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a rank and a price to sell that rank for.");
             return true;
         }
         String rankName = Utils.capFirst(args[0]);
-        RankPrices rp = Necessities.getInstance().getRankPrices();
+        RankPrices rp = Necessities.getRankPrices();
         if (!Utils.legalDouble(args[1])) {
             if (args[1].equalsIgnoreCase("null")) {
                 rp.rCost(rankName);

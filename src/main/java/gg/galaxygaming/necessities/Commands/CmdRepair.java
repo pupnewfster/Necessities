@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class CmdRepair implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player player = (Player) sender;
             short dur = 0;

@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class CmdPrice implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter the item you want to know the price of and whether to buy or sell.");
             return true;
@@ -53,7 +53,7 @@ public class CmdPrice implements EconomyCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input either buy or sell");
             return true;
         }
-        String cost = Necessities.getInstance().getPrices().cost(file, mat.getName());
+        String cost = Necessities.getPrices().cost(file, mat.getName());
         if (cost == null || cost.equalsIgnoreCase("null")) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + mat.getFriendlyName(2) + " cannot be " + (oper.equalsIgnoreCase("buy") ? "bought from" : "sold to") + " the server");
             return true;

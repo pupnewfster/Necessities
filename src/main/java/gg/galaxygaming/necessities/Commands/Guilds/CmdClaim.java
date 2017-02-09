@@ -11,14 +11,14 @@ import org.bukkit.entity.Player;
 
 public class CmdClaim implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.claim")) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You have not have permission to use /guild claim.");
                 return true;
             }
-            User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
+            User u = Necessities.getUM().getUser(p.getUniqueId());
             if (u.getGuild() == null || u.getGuild().getRank(p.getUniqueId()) == null || u.getGuild().getRank(p.getUniqueId()).equalsIgnoreCase("member")) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a mod or higher to claim land for your guild.");
                 return true;
@@ -28,7 +28,7 @@ public class CmdClaim implements GuildCmd {
                 return true;
             }
             if (args.length == 0 || args[0].equals("0") || !Utils.legalInt(args[0])) {
-                Guild owner = Necessities.getInstance().getGM().chunkOwner(p.getLocation().getChunk());
+                Guild owner = Necessities.getGM().chunkOwner(p.getLocation().getChunk());
                 if (owner != null) {
                     if (owner.equals(u.getGuild()))
                         sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Your guild already owns this chunk.");
@@ -66,7 +66,7 @@ public class CmdClaim implements GuildCmd {
                             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Your guild does not have that much power, claiming stopped.");
                             return true;
                         }
-                        Guild o = Necessities.getInstance().getGM().chunkOwner(c);
+                        Guild o = Necessities.getGM().chunkOwner(c);
                         if (o != null) {
                             if (!o.equals(u.getGuild()) && o.getPower() != -1 && ((o.getLand() > o.getPower() && !o.isAlly(u.getGuild()) &&
                                     !o.isNeutral(u.getGuild())) || p.hasPermission("Necessities.guilds.admin"))) {

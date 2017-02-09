@@ -27,15 +27,15 @@ public class Janet {//TODO: Make the logic run async for performance reasons
     private JanetLog log;
 
     public void initiate() {//now has its own function instead of reading them all every time Janet was re-initiated
-        this.warns = Necessities.getInstance().getWarns();
-        this.log = Necessities.getInstance().getLog();
+        this.warns = Necessities.getWarns();
+        this.log = Necessities.getLog();
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Janet initiating...");
         File customConfigFileCensors = new File("plugins/Necessities", "censors.yml");
         YamlConfiguration customConfigCensors = YamlConfiguration.loadConfiguration(customConfigFileCensors);
         badwords.addAll(customConfigCensors.getStringList("badwords").stream().filter(word -> !word.equals("")).map(String::toUpperCase).collect(Collectors.toList()));
         goodwords.addAll(customConfigCensors.getStringList("goodwords").stream().filter(word -> !word.equals("")).map(String::toUpperCase).collect(Collectors.toList()));
         ips.addAll(customConfigCensors.getStringList("ips").stream().filter(ip -> !ip.equals("")).collect(Collectors.toList()));
-        RankManager rm = Necessities.getInstance().getRM();
+        RankManager rm = Necessities.getRM();
         String rank = "";
         if (!rm.getOrder().isEmpty())
             rank = rm.getRank(rm.getOrder().size() - 1).getTitle() + " ";
@@ -45,7 +45,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
     }
 
     public void unload() {//possibly empty the lists not sure if needed though
-        RankManager rm = Necessities.getInstance().getRM();
+        RankManager rm = Necessities.getRM();
         String rank = "";
         if (!rm.getOrder().isEmpty())
             rank = rm.getRank(rm.getOrder().size() - 1).getTitle() + " ";

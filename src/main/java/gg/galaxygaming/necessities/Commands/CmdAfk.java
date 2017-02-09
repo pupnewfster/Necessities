@@ -8,10 +8,10 @@ import org.bukkit.entity.Player;
 
 public class CmdAfk implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
+            User u = Necessities.getUM().getUser(p.getUniqueId());
             p.sendMessage(var.getMessages() + (!u.isAfk() ? "You are now afk." : "You are no longer afk."));
             u.setAfk(!u.isAfk());
         } else

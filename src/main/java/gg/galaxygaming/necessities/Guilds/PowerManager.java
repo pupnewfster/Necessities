@@ -25,7 +25,7 @@ public class PowerManager {
 
     public void addPlayer(Player p) {
         if (!players.keySet().contains(p)) {
-            final User u = Necessities.getInstance().getUM().getUser(p.getUniqueId());
+            final User u = Necessities.getUM().getUser(p.getUniqueId());
             players.put(p, new BukkitRunnable() {
                 @Override
                 public void run() {

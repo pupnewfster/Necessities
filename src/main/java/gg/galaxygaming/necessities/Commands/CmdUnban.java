@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class CmdUnban implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a player to ban.");
             return true;
@@ -26,8 +26,8 @@ public class CmdUnban implements Cmd {
                 return true;
             }
         }
-        User u = Necessities.getInstance().getUM().getUser(uuid);
-        String name = Necessities.getInstance().getConsole().getName().replaceAll(":", "");
+        User u = Necessities.getUM().getUser(uuid);
+        String name = Necessities.getConsole().getName().replaceAll(":", "");
         if (sender instanceof Player)
             name = sender.getName();
         BanList bans = Bukkit.getBanList(BanList.Type.NAME);

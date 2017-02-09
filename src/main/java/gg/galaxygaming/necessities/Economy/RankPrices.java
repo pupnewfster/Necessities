@@ -68,7 +68,7 @@ public class RankPrices {
         page *= 10;
         if (rankPrices.size() < time + page + 1 || time == 10)
             return null;
-        Rank r = Necessities.getInstance().getRM().getRank(page + time + 1);
+        Rank r = Necessities.getRM().getRank(page + time + 1);
         return r == null ? null : r.getName() + " " + rankPrices.get(r.getName().toUpperCase());
     }
 }

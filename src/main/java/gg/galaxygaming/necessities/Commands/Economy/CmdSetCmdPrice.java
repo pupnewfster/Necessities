@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 
 public class CmdSetCmdPrice implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (args.length >= 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "This command is currently disabled.");
             return true;
@@ -19,7 +19,7 @@ public class CmdSetCmdPrice implements EconomyCmd {
             return true;
         }
         String cmd = Utils.capFirst(args[0]);
-        CmdPrices cmdp = Necessities.getInstance().getCommandPrices();
+        CmdPrices cmdp = Necessities.getCommandPrices();
         if (!Utils.legalDouble(args[1])) {
             if (args[1].equalsIgnoreCase("null")) {
                 cmdp.removeCommand(cmd);

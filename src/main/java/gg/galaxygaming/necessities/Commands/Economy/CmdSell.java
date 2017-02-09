@@ -14,8 +14,9 @@ import org.bukkit.material.MaterialData;
 import java.util.UUID;
 
 public class CmdSell implements EconomyCmd {
+    @SuppressWarnings("deprecation")
     public boolean commandUse(CommandSender sender, String[] args) {
-        Variables var = Necessities.getInstance().getVar();
+        Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (args.length > 2 || args.length == 0) {
@@ -72,7 +73,7 @@ public class CmdSell implements EconomyCmd {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist");
                 return true;
             }
-            double cost = Necessities.getInstance().getPrices().getCost("sell", mat.getName(), amount);
+            double cost = Necessities.getPrices().getCost("sell", mat.getName(), amount);
             if (cost == -1.00)
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + mat.getFriendlyName(2) + " cannot be sold to the server.");
             else {
@@ -80,7 +81,7 @@ public class CmdSell implements EconomyCmd {
                 if (inventory.containsAtLeast(bukkitMaterial.toItemStack(1), amount)) {
                     if (mat.isTool() && bukkitMaterial.getItemType().getMaxDurability() != 0)
                         cost = cost * (1.0 * bukkitMaterial.getItemType().getMaxDurability() - bukkitMaterial.getData()) / bukkitMaterial.getItemType().getMaxDurability();
-                    Necessities.getInstance().getEconomy().addMoney(player.getUniqueId(), cost);
+                    Necessities.getEconomy().addMoney(player.getUniqueId(), cost);
                     inventory.removeItem(bukkitMaterial.toItemStack(amount));
                     player.sendMessage(var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + " " + mat.getFriendlyName(amount) + var.getMessages() + ".");
                     player.sendMessage(var.getMoney() + Economy.format(cost) + var.getMessages() + " was added to your account.");
@@ -111,7 +112,7 @@ public class CmdSell implements EconomyCmd {
                 ItemStack toRemove = s.clone();
                 toRemove.setAmount(1);
                 inv.removeItem(toRemove);
-                Necessities.getInstance().getEconomy().addMoney(uuid, cost);
+                Necessities.getEconomy().addMoney(uuid, cost);
                 totalCost += cost;
             }
             if (cAmount == 0)
@@ -120,6 +121,7 @@ public class CmdSell implements EconomyCmd {
         return -1.00;
     }
 
+    @SuppressWarnings("deprecation")
     private int itemAmount(PlayerInventory inv, MaterialData matType, boolean isTool) {
         int amount = 0;
         for (ItemStack s : inv.getContents()) {

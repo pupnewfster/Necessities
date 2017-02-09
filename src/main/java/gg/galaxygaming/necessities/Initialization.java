@@ -36,47 +36,47 @@ class Initialization {
         Material.mapMaterials();//This is not in the Economy section because it is useful to have even without economy being enabled
 
         //RankManager
-        RankManager rm = Necessities.getInstance().getRM();
+        RankManager rm = Necessities.getRM();
         rm.setRanks();
         rm.setSubranks();
         rm.readRanks();
-        Necessities.getInstance().getSBs().createScoreboard();
+        Necessities.getSBs().createScoreboard();
 
         YamlConfiguration config = Necessities.getInstance().getConfig();
         //WorldManager
         if (config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager")) {
-            Necessities.getInstance().getWM().initiate();
-            Necessities.getInstance().getWarps().initiate();
-            Necessities.getInstance().getPM().initiate();
+            Necessities.getWM().initiate();
+            Necessities.getWarps().initiate();
+            Necessities.getPM().initiate();
         }
 
-        Necessities.getInstance().getBot().initiate();
-        Necessities.getInstance().getWrench().initiate();
-        Necessities.getInstance().getSpy().init();
-        Necessities.getInstance().getHide().init();
-        Necessities.getInstance().getWarns().initiate();
+        Necessities.getBot().initiate();
+        Necessities.getWrench().initiate();
+        Necessities.getSpy().init();
+        Necessities.getHide().init();
+        Necessities.getWarns().initiate();
 
         //Guilds
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
-            GuildManager gm = Necessities.getInstance().getGM();
+            GuildManager gm = Necessities.getGM();
             gm.createFiles();
             gm.initiate();
-            Necessities.getInstance().getPower().initiate();
+            Necessities.getPower().initiate();
         }
 
         //Economy
         if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy")) {
-            Necessities.getInstance().getPrices().parseList();
-            Necessities.getInstance().getEconomy().init();
-            Necessities.getInstance().getRankPrices().initiate();
-            Necessities.getInstance().getCommandPrices().upList();//Command prices are disabled anyways atm
+            Necessities.getPrices().parseList();
+            Necessities.getEconomy().init();
+            Necessities.getRankPrices().initiate();
+            Necessities.getCommandPrices().upList();//Command prices are disabled anyways atm
         }
 
-        Necessities.getInstance().getRev().parseList();
-        Necessities.getInstance().getNet().readCustom();
-        Necessities.getInstance().getSlack().init();
-        Necessities.getInstance().getAI().initiate();
-        Necessities.getInstance().getAnnouncer().init();
+        Necessities.getRev().parseList();
+        Necessities.getNet().readCustom();
+        Necessities.getSlack().init();
+        Necessities.getAI().initiate();
+        Necessities.getAnnouncer().init();
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
