@@ -162,7 +162,7 @@ class Initialization {
                 config.set("Economy.DBName", "minecraft");
                 config.set("Economy.DBUser", "user");
                 config.set("Economy.DBPassword", "password");
-                config.set("Economy.metaName", "currency");
+                config.set("Economy.currencyType", 0);
                 config.set("Economy.prefix", "");
                 config.set("Economy.suffix", "");
                 config.set("Economy.initialMoney", 0.0);
@@ -227,8 +227,8 @@ class Initialization {
                 config.set("Economy.DBUser", "user");
             if (!config.contains("Economy.DBPassword"))
                 config.set("Economy.DBPassword", "password");
-            if (!config.contains("Economy.metaName"))
-                config.set("Economy.metaName", "currency");
+            if (!config.contains("Economy.currencyType"))
+                config.set("Economy.currencyType", 0);
             if (!config.contains("Economy.prefix"))
                 config.set("Economy.prefix", "");
             if (!config.contains("Economy.suffix"))

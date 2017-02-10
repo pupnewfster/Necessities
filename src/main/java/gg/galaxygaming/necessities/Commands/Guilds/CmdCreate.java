@@ -38,6 +38,10 @@ public class CmdCreate implements GuildCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + Economy.format(800) + " to spend on creating a guild.");
                 return true;
             }
+            if (args[0].length() > 20) {
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Your guild name is too long, the maximum length for a guild name is 20.");
+                return true;
+            }
             gm.createGuild(args[0], p.getUniqueId());
             g = gm.getGuild(args[0]);
             u.joinGuild(g);

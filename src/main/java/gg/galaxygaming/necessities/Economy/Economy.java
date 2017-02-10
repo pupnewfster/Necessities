@@ -11,18 +11,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 
 public class Economy {//TODO add OpenAnalytics
     private final HashMap<UUID, Double> loadedBals = new HashMap<>();
-    private ArrayList<String> balTop = new ArrayList<>();
     private Properties properties;
-    private boolean regenBalTop = true;
-    private String table;
     private String dbURL;
+    private int type;
 
     public void init() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loading Economy...");
@@ -33,22 +28,21 @@ public class Economy {//TODO add OpenAnalytics
         this.properties.setProperty("password", config.getString("Economy.DBPassword"));
         this.properties.setProperty("useSSL", "false");
         this.properties.setProperty("autoReconnect", "true");
-        this.table = "currency_" + config.getString("Economy.metaName");
+        this.type = config.getInt("Economy.currencyType");
         Bukkit.getOnlinePlayers().forEach(p -> addPlayerIfNotExists(p.getUniqueId()));
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Economy loaded.");
     }
 
-    public boolean addPlayerIfNotExists(UUID uuid) {
+    public boolean addPlayerIfNotExists(UUID uuid) { //TODO let the table have default values
         YamlConfiguration config = Necessities.getInstance().getConfig();
         double startBal = config.getDouble("Economy.initialMoney");
         boolean added = false;
         try {
             Connection conn = DriverManager.getConnection(this.dbURL, this.properties);
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM " + this.table + " WHERE uuid = '" + uuid + "'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM economy WHERE uuid = '" + uuid + "' AND currencyType=" + this.type);
             if (!rs.next()) {
-                stmt.execute("INSERT INTO " + this.table + " (uuid, balance) VALUES ('" + uuid + "'," + startBal + ")");
-                this.regenBalTop = true;
+                stmt.execute("INSERT INTO economy (uuid, currencyType, balance) VALUES ('" + uuid + "'," + this.type + "," + startBal + ")");
                 added = true;
             } else if (!loadedBals.containsKey(uuid)) //Loads it into memory for temporary faster lookup
                 this.loadedBals.put(uuid, rs.getDouble("balance"));
@@ -67,7 +61,7 @@ public class Economy {//TODO add OpenAnalytics
         try {
             Connection conn = DriverManager.getConnection(this.dbURL, this.properties);
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM " + this.table + " WHERE uuid = '" + uuid + "'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM economy WHERE uuid = '" + uuid + "' AND currencyType=" + this.type);
             if (rs.next())
                 exists = true;
             rs.close();
@@ -87,7 +81,7 @@ public class Economy {//TODO add OpenAnalytics
         try {
             Connection conn = DriverManager.getConnection(this.dbURL, this.properties);
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT balance FROM " + this.table + " WHERE uuid = '" + uuid + "'");
+            ResultSet rs = stmt.executeQuery("SELECT balance FROM economy WHERE uuid = '" + uuid + "' AND currencyType=" + this.type);
             if (rs.next())
                 bal = rs.getDouble("balance");
             else
@@ -113,10 +107,9 @@ public class Economy {//TODO add OpenAnalytics
                 try {
                     Connection conn = DriverManager.getConnection(dbURL, properties);
                     Statement stmt = conn.createStatement();
-                    stmt.execute("UPDATE " + table + " SET balance = balance - " + amount + " WHERE uuid = '" + uuid + "'");
+                    stmt.execute("UPDATE economy SET balance = balance - " + amount + " WHERE uuid = '" + uuid + "' AND currencyType=" + type);
                     stmt.close();
                     conn.close();
-                    regenBalTop = true;
                 } catch (Exception ignored) {
                 }
             }
@@ -132,10 +125,9 @@ public class Economy {//TODO add OpenAnalytics
                 try {
                     Connection conn = DriverManager.getConnection(dbURL, properties);
                     Statement stmt = conn.createStatement();
-                    stmt.execute("UPDATE " + table + " SET balance = balance + " + amount + " WHERE uuid = '" + uuid + "'");
+                    stmt.execute("UPDATE economy SET balance = balance + " + amount + " WHERE uuid = '" + uuid + "' AND currencyType=" + type);
                     stmt.close();
                     conn.close();
-                    regenBalTop = true;
                 } catch (Exception ignored) {
                 }
             }
@@ -151,42 +143,34 @@ public class Economy {//TODO add OpenAnalytics
                 try {
                     Connection conn = DriverManager.getConnection(dbURL, properties);
                     Statement stmt = conn.createStatement();
-                    stmt.execute("UPDATE " + table + " SET balance = " + amount + " WHERE uuid = '" + uuid + "'");
+                    stmt.execute("UPDATE economy SET balance = " + amount + " WHERE uuid = '" + uuid + "' AND currencyType=" + type);
                     stmt.close();
                     conn.close();
-                    regenBalTop = true;
                 } catch (Exception ignored) {
                 }
             }
         }.runTaskAsynchronously(Necessities.getInstance());
     }
 
-    private void updateBalTop() { //Should this just be cached and only update the cache if things change
-        if (!this.regenBalTop)
-            return;
-        this.regenBalTop = false;
-        this.balTop = new ArrayList<>();
+    public List<String> getBalTop(int page) {
+        List<String> balTop = new ArrayList<>();
         try {
             Connection conn = DriverManager.getConnection(this.dbURL, this.properties);
-            Statement stmt = conn.createStatement();//TODO can we change default order of table to just be balance desc then we can just get from it??
-            ResultSet rs = stmt.executeQuery("SELECT uuid,balance FROM " + this.table + " ORDER BY balance DESC");
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT uuid,balance FROM economy WHERE currencyType=" + this.type + " ORDER BY balance DESC LIMIT " + (page - 1) * 10 + ",10");
             while (rs.next())
-                this.balTop.add(rs.getString("uuid") + " " + rs.getDouble("balance"));
+                balTop.add(rs.getString("uuid") + " " + rs.getDouble("balance"));
             rs.close();
             stmt.close();
             conn.close();
         } catch (Exception ignored) {
         }
-    }
-
-    public String balTop(int page, int time) {
-        page *= 10;
-        return (this.balTop.size() < time + page + 1 || time == 10) ? null : this.balTop.get(page + time);
+        return balTop;
     }
 
     public int baltopPages() {
-        updateBalTop(); //make sure the bal top is up to date
-        return this.balTop.size() % 10 != 0 ? (this.balTop.size() / 10) + 1 : (this.balTop.size() / 10);
+        int size = playerCount();
+        return size % 10 != 0 ? size / 10 + 1 : size / 10;
     }
 
     public static String format(double balance) {
@@ -194,7 +178,19 @@ public class Economy {//TODO add OpenAnalytics
         return config.getString("Economy.prefix") + Utils.addCommas(Utils.roundTwoDecimals(balance)) + config.getString("Economy.suffix");
     }
 
-    public String players() {
-        return Integer.toString(this.balTop.size());
+    public int playerCount() {
+        int amount = 0;
+        try {
+            Connection conn = DriverManager.getConnection(this.dbURL, this.properties);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM economy WHERE currencyType=" + this.type);
+            if (rs.next())
+                amount = rs.getInt(1);
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception ignored) {
+        }
+        return amount;
     }
 }

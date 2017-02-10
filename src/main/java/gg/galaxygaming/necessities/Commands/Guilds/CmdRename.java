@@ -31,6 +31,10 @@ public class CmdRename implements GuildCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Another guild already has that name.");
                 return true;
             }
+            if (name.length() > 20) {
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Your guild name is too long, the maximum length for a guild name is 20.");
+                return true;
+            }
             gm.renameGuild(u.getGuild(), name);
             sender.sendMessage(var.getMessages() + "Successfully renamed guild to " + var.getObj() + name + var.getMessages() + ".");
         } else

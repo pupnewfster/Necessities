@@ -5,7 +5,8 @@ import org.bukkit.command.CommandSender;
 
 public class CmdPlayers implements EconomyCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
-        sender.sendMessage(Necessities.getVar().getMessages() + Necessities.getEconomy().players() + " players have joined the server.");
+        int num = Necessities.getEconomy().playerCount();
+        sender.sendMessage(Necessities.getVar().getMessages() + "" + num + " " + (num == 1 ? "player" : "players") +" have joined the server.");
         return true;
     }
 

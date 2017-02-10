@@ -457,21 +457,17 @@ public class JanetSlack {
                 if (message.split(" ").length <= 1 || page == 0)
                     page = 1;
                 int time = 0;
-                String bal;
                 int totalpages = eco.baltopPages();
                 if (page > totalpages) {
                     sendMessage("Error: Input a number from 1 to " + Integer.toString(totalpages), isPM, info);
                     return;
                 }
                 m += "Balance Top Page [" + Integer.toString(page) + "/" + Integer.toString(totalpages) + "]\n";
-                page = page - 1;
-                bal = eco.balTop(page, time);
-                while (bal != null) {
-                    bal = ChatColor.GOLD + Integer.toString((page * 10) + time + 1) + ". " + var.getCatalog() + bal.split(" ")[0] + " has: " + var.getMoney() + Economy.format(Double.parseDouble(bal.split(" ")[1]));
-                    m += bal + "\n";
-                    time++;
-                    bal = eco.balTop(page, time);
-                }
+                List<String> balTop = eco.getBalTop(page);
+                page -= 1;
+                for (String bal : balTop)
+                    m += ChatColor.GOLD + Integer.toString((page * 10) + time++ + 1) + ". " + var.getCatalog() + bal.split(" ")[0] + " has: " + var.getMoney() +
+                            Economy.format(Double.parseDouble(bal.split(" ")[1])) + "\n";
             } else if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && (message.startsWith("!bal ") || message.startsWith("!balance ") || message.startsWith("!money "))) {
                 if (message.split(" ").length == 1) {
                     sendMessage("Error: You must enter a player to view info of.", isPM, info);
