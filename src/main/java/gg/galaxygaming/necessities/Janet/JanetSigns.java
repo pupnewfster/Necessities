@@ -6,6 +6,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class JanetSigns {
+    /**
+     * Potentially censors the content on a sign.
+     * @param s The sign to censor.
+     * @param p The player who made the sign.
+     */
     public void censorSign(Sign s, Player p) {
         String line0 = "", line1 = "", line2 = "", line3 = "";
         if (s.getLine(0) != null)

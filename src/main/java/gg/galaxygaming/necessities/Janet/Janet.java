@@ -23,12 +23,11 @@ public class Janet {//TODO: Make the logic run async for performance reasons
     private final ArrayList<String> ips = new ArrayList<>();
     private final HashMap<UUID, Long[]> lastChat = new HashMap<>();
     private final HashMap<UUID, Long[]> lastCmd = new HashMap<>();
-    private JanetWarn warns;
-    private JanetLog log;
 
+    /**
+     * Initiates Janet.
+     */
     public void initiate() {//now has its own function instead of reading them all every time Janet was re-initiated
-        this.warns = Necessities.getWarns();
-        this.log = Necessities.getLog();
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Janet initiating...");
         File customConfigFileCensors = new File("plugins/Necessities", "censors.yml");
         YamlConfiguration customConfigCensors = YamlConfiguration.loadConfiguration(customConfigFileCensors);
@@ -44,6 +43,9 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Janet initiated.");
     }
 
+    /**
+     * Called when Janet is being turned off.
+     */
     public void unload() {//possibly empty the lists not sure if needed though
         RankManager rm = Necessities.getRM();
         String rank = "";
@@ -53,7 +55,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
     }
 
     private void removePlayer(UUID uuid) {//called when player disconnects
-        this.warns.removePlayer(uuid);
+        Necessities.getWarns().removePlayer(uuid);
         lastChat.remove(uuid);
         lastCmd.remove(uuid);
     }
@@ -151,13 +153,14 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         if (bad.isEmpty())
             return message;
         String[] nonCapitalized = message.split(" ");
-        String censored = "";
+        StringBuilder censoredBuilder = new StringBuilder();
         for (int i = 0; i < nonCapitalized.length; i++) {
             for (String word : bad)
                 if (nonCapitalized[i].replaceAll("[^a-zA-Z]", "").equalsIgnoreCase(word))
                     nonCapitalized[i] = stars(nonCapitalized[i]);
-            censored += nonCapitalized[i] + " ";
+            censoredBuilder.append(nonCapitalized[i]).append(" ");
         }
+        String censored = censoredBuilder.toString();
         if (censored.equals(""))
             censored = message;
         return addSpaces(bad, censored);
@@ -170,14 +173,11 @@ public class Janet {//TODO: Make the logic run async for performance reasons
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean isGood(String msg) {
-        for (String g : goodwords)
-            if (msg.startsWith(g))
-                return true;
-        return false;
+        return goodwords.stream().anyMatch(msg::startsWith);
     }
 
     private String addSpaces(ArrayList<String> bad, String orig) {
-        String censored = "";
+        String censored;
         String temp = orig.toUpperCase().replaceAll("[^a-zA-Z]", "");
         String t = removeConsec(temp);
         HashMap<Integer, Character> stars = new HashMap<>();
@@ -189,23 +189,25 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         for (int i = 0; i < s.length(); i++)
             if (s.charAt(i) == '*')
                 stars.put(i, t.charAt(i));
-        String c = "";
+        StringBuilder c = new StringBuilder();
         int noSpace = 0;
         for (int i = 0; i < temp.length(); i++) {
-            c += (stars.containsKey(noSpace) && stars.get(noSpace) == temp.charAt(i)) ? "*" : temp.charAt(i);
+            c.append((stars.containsKey(noSpace) && stars.get(noSpace) == temp.charAt(i)) ? "*" : temp.charAt(i));
             if (i + 1 < temp.length() && stars.containsKey(noSpace) && stars.get(noSpace) != temp.charAt(i + 1))
                 noSpace++;
         }
-        temp = c;
+        temp = c.toString();
         int loc = 0;
+        StringBuilder censoredBuilder = new StringBuilder();
         for (int i = 0; i < orig.length(); i++) {
             if (loc < temp.length() && temp.charAt(loc) == '*')
-                censored += orig.charAt(i) == ' ' ? " " : "*";
+                censoredBuilder.append(orig.charAt(i) == ' ' ? " " : "*");
             else
-                censored += orig.charAt(i);
+                censoredBuilder.append(orig.charAt(i));
             if (Character.isLetter(orig.charAt(i)))
                 loc++;
         }
+        censored = censoredBuilder.toString();
         return censored.equals("") ? orig : censored;
     }
 
@@ -240,26 +242,26 @@ public class Janet {//TODO: Make the logic run async for performance reasons
     private String removeConsec(String message) {
         if (message.equals(""))
             return "";
-        String temp = "" + message.charAt(0);
+        StringBuilder temp = new StringBuilder("" + message.charAt(0));
         for (int i = 1; i < message.length(); i++)
             if (message.charAt(i) != message.charAt(i - 1))
-                temp += message.charAt(i);
-        return temp;
+                temp.append(message.charAt(i));
+        return temp.toString();
     }
 
     private String stars(String toStar) {
         String[] split = toStar.split(" ");
-        String star = "";
+        StringBuilder star = new StringBuilder();
         for (String s : split)
-            star += starNoSpaces(s) + " ";
-        return star.trim();
+            star.append(starNoSpaces(s)).append(" ");
+        return star.toString().trim();
     }
 
     private String starNoSpaces(String toStar) {
-        String star = "";
+        StringBuilder star = new StringBuilder();
         for (int i = 0; i < toStar.trim().length(); i++)
-            star += "*";
-        return star;
+            star.append("*");
+        return star.toString();
     }
 
     private String starIP(String toStar) {
@@ -269,9 +271,10 @@ public class Janet {//TODO: Make the logic run async for performance reasons
             toStar = toStar.substring(0, toStar.length() - 2 - port.length());
         }
         String[] ipPieces = toStar.trim().split("\\.");
-        String star = "";
+        StringBuilder starBuilder = new StringBuilder();
         for (String i : ipPieces)
-            star += stars(i) + ".";
+            starBuilder.append(stars(i)).append(".");
+        String star = starBuilder.toString();
         star = star.substring(0, star.length() - 1);
         return !port.equals("") ? star + ":" + port : star;
     }
@@ -308,10 +311,10 @@ public class Janet {//TODO: Make the logic run async for performance reasons
                     }
             }
         }
-        String censored = "";
+        StringBuilder censored = new StringBuilder();
         for (String word : orig)
-            censored += word + " ";
-        return censored.trim();
+            censored.append(word).append(" ");
+        return censored.toString().trim();
     }
 
     private boolean whitelistedIP(String ip) {
@@ -331,7 +334,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         Player p = Bukkit.getPlayer(uuid);
         YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.log") && config.getBoolean("Necessities.log"))
-            this.log.log(p.getName() + ": " + message);
+            Necessities.getLog().log(p.getName() + ": " + message);
         boolean warn = true;
         String censored = message;
         if (config.getBoolean("Necessities.chatSpam") && !p.hasPermission("Necessities.spamchat"))
@@ -347,12 +350,18 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         return censored;
     }
 
+    /**
+     * Potentially censors a command.
+     * @param uuid    The uuid of the player who performed the command.
+     * @param message The command to censor.
+     * @return The potentially censored version of the command.
+     */
     public String logCom(UUID uuid, String message) {
         Player p = Bukkit.getPlayer(uuid);
         String messageOrig = message;
         YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.log") && config.getBoolean("Necessities.log"))
-            this.log.log(p.getName() + " issued server command: " + message);
+            Necessities.getLog().log(p.getName() + " issued server command: " + message);
         boolean warn = false;
         String censored = message.replaceFirst(message.split(" ")[0], "").trim();
         message = message.replaceFirst(message.split(" ")[0], "").trim();
@@ -371,6 +380,10 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         return messageOrig.split(" ")[0] + " " + censored;
     }
 
+    /**
+     * Logs a message or command that was sent by the console.
+     * @param message The message sent.
+     */
     public void logConsole(String message) {
         if (message.startsWith("say"))
             message = "Console:" + message.replaceFirst("say", "");
@@ -378,26 +391,38 @@ public class Janet {//TODO: Make the logic run async for performance reasons
             message = "Console issued command: " + message;
         YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.log") && config.getBoolean("Necessities.log"))
-            this.log.log(message);
+            Necessities.getLog().log(message);
     }
 
+    /**
+     * Logs the fact that a player logged in.
+     * @param uuid The uuid of the player who logged in.
+     */
     public void logIn(UUID uuid) {
         YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.log") && config.getBoolean("Necessities.log"))
-            this.log.log(" + " + playerInfo(Bukkit.getPlayer(uuid)) + " joined the game.");
+            Necessities.getLog().log(" + " + playerInfo(Bukkit.getPlayer(uuid)) + " joined the game.");
     }
 
+    /**
+     * Logs a players death.
+     * @param uuid The uuid of the player who died.
+     */
     public void logDeath(UUID uuid, String cause) {
         YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.log") && config.getBoolean("Necessities.log"))
-            this.log.log(playerInfo(Bukkit.getPlayer(uuid)) + " " + cause);
+            Necessities.getLog().log(playerInfo(Bukkit.getPlayer(uuid)) + " " + cause);
     }
 
+    /**
+     * Logs the fact that a player logged out.
+     * @param uuid The uuid of the player who left.
+     */
     public void logOut(UUID uuid) {
         removePlayer(uuid);
         YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.log") && config.getBoolean("Necessities.log"))
-            this.log.log(" - " + playerInfo(Bukkit.getPlayer(uuid)) + " Disconnected.");
+            Necessities.getLog().log(" - " + playerInfo(Bukkit.getPlayer(uuid)) + " Disconnected.");
     }
 
     private String playerInfo(Player p) {
@@ -406,6 +431,6 @@ public class Janet {//TODO: Make the logic run async for performance reasons
     }
 
     private void delayedWarn(final UUID uuid, final String reason) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> this.warns.warn(uuid, reason, "Janet"));
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> Necessities.getWarns().warn(uuid, reason, "Janet"));
     }
 }

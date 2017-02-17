@@ -28,10 +28,10 @@ public class CmdWarn implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You may not warn someone who has Necessities.antiPWarn.");
             return true;
         }
-        String reason = "";
+        StringBuilder reasonBuilder = new StringBuilder();
         for (int i = 1; i < args.length; i++)
-            reason += args[i] + " ";
-        reason = reason.trim();
+            reasonBuilder.append(args[i]).append(" ");
+        String reason = reasonBuilder.toString().trim();
         if (sender instanceof Player && sender.hasPermission("Necessities.colorchat"))
             reason = ChatColor.translateAlternateColorCodes('&', (sender.hasPermission("Necessities.magicchat") ? reason : reason.replaceAll("&k", "")));
         else if (!(sender instanceof Player))

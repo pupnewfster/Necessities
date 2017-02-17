@@ -8,6 +8,11 @@ import org.bukkit.Location;
 import org.bukkit.block.Sign;
 
 public class Signs { //TODO Make sure this works, because some material names are long... so maybe use id if too long?
+    /**
+     * Checks if the sign has a valid format to be an economy sign.
+     * @param sign The sign to check the format of.
+     * @return True if the sign is valid, false otherwise.
+     */
     public boolean checkFormat(Sign sign) {
         if (sign.getLines()[0] == null || sign.getLines()[1] == null || sign.getLines()[2] == null)
             return false;
@@ -17,15 +22,24 @@ public class Signs { //TODO Make sure this works, because some material names ar
             if (itemName == null)
                 return false;
             String amount = ChatColor.stripColor(sign.getLine(2).trim());
-            return Utils.legalInt(amount) && Necessities.getPrices().getCost(operation, itemName, Integer.parseInt(amount)) != -1 && Integer.parseInt(amount) > 0;
+            return Utils.legalInt(amount) && Necessities.getPrices().getPrice(operation, itemName, Integer.parseInt(amount)) != -1 && Integer.parseInt(amount) > 0;
         }
         return false;
     }
 
+    /**
+     * Gets the sign at the specified location if it exists.
+     * @param loc The location to look for a sign in.
+     * @return The sign at the location, or null if there is not one.
+     */
     public Sign sign(Location loc) {
         return loc.getBlock().getState() instanceof Sign ? (Sign) loc.getBlock().getState() : null;
     }
 
+    /**
+     * Formats a sign to have the correct colors.
+     * @param sign The sign to format.
+     */
     public void setSign(Sign sign) {
         setPrice(sign);
         formatSign(sign);
@@ -42,6 +56,11 @@ public class Signs { //TODO Make sure this works, because some material names ar
         return mat.getName();
     }
 
+    /**
+     * Retrieves the name of the item on the sign.
+     * @param sign The sign to check.
+     * @return The name of the item on the sign.
+     */
     public String itemLine(Sign sign) {
         String line = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", ""));
         String itemName = line.replaceAll(":", " ").split(" ")[0];
@@ -53,10 +72,20 @@ public class Signs { //TODO Make sure this works, because some material names ar
         return mat.getName() + (line.replaceAll(":", " ").split(" ").length > 1 ? ":" + line.replaceAll(":", " ").split(" ")[1] : "");
     }
 
+    /**
+     * Gets the amount per buy on the sign.
+     * @param sign The sign to check.
+     * @return The number of items in one buy or sell transaction of the sign.
+     */
     public Integer amount(Sign sign) {
         return Integer.parseInt(ChatColor.stripColor(sign.getLine(2)));
     }
 
+    /**
+     * Retrieves the operation, buy/sell that the sign represents.
+     * @param sign The sign to check.
+     * @return Returns buy, sell, or an empty string.
+     */
     public String operation(Sign sign) {
         return getOperation(ChatColor.stripColor(sign.getLine(0).trim().toLowerCase()));
     }
@@ -69,7 +98,7 @@ public class Signs { //TODO Make sure this works, because some material names ar
             mat = Material.fromID(Integer.parseInt(itemName));
         else
             mat = Material.fromString(itemName);
-        sign.setLine(3, Necessities.getVar().getMoney() + Economy.format(Necessities.getPrices().getCost(operation, mat.getName(), Integer.parseInt(sign.getLine(2).trim()))));
+        sign.setLine(3, Necessities.getVar().getMoney() + Economy.format(Necessities.getPrices().getPrice(operation, mat.getName(), Integer.parseInt(sign.getLine(2).trim()))));
     }
 
     private void formatSign(Sign sign) {

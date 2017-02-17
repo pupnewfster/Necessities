@@ -22,19 +22,19 @@ public class CmdImp implements Cmd {
         if (uuid != null)
             p = Bukkit.getPlayer(uuid);
         if (args.length > 1 && p != null) {
-            String message = "";
+            StringBuilder messageBuilder = new StringBuilder();
             for (String a : args)
-                message = message + " " + a;
-            message = ChatColor.translateAlternateColorCodes('&', message.replaceFirst(args[0], "").trim());
+                messageBuilder.append(" ").append(a);
+            String message = ChatColor.translateAlternateColorCodes('&', messageBuilder.toString().replaceFirst(args[0], "").trim());
             while (message.startsWith("/"))
                 message = message.replaceFirst("/", "");
             p.chat(message);
             return true;
         }
-        String message = "";
+        StringBuilder message = new StringBuilder();
         for (String a : args)
-            message = message + " " + a;
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', message.trim()));
+            message.append(" ").append(a);
+        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', message.toString().trim()));
         return true;
     }
 

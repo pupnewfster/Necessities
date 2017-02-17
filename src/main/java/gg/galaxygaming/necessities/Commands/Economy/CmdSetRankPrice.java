@@ -26,7 +26,7 @@ public class CmdSetRankPrice implements EconomyCmd {
             return true;
         }
         String cost = Utils.roundTwoDecimals(Double.parseDouble(args[1]));
-        rp.setCost(rankName, cost);
+        rp.setPrice(rankName, cost);
         sender.sendMessage(var.getMessages() + "Added " + var.getObj() + rankName + var.getMessages() + " at the price of " + var.getMoney() + Economy.format(Double.parseDouble(cost)));
         return true;
     }

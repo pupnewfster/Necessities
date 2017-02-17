@@ -34,6 +34,11 @@ public class SafeLocation {
         return temp;
     }
 
+    /**
+     * Returns a safer location than the given one.
+     * @param l The location to check.
+     * @return A safer location than the initial one.
+     */
     public Location getSafe(Location l) {//TODO: Make it check for air pockets nearby instead of just up
         int maxHeight = l.getWorld().getMaxHeight();
         if (l.getWorld().getEnvironment().equals(World.Environment.NETHER))

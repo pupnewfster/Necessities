@@ -16,7 +16,7 @@ public class UserManager {
     private final File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
     private final HashMap<UUID, User> players = new HashMap<>();
 
-    public void readUsers() {
+    void readUsers() {
         Bukkit.getOnlinePlayers().forEach(this::parseUser);
     }
 
@@ -24,23 +24,43 @@ public class UserManager {
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> forceParseUser(p));
     }
 
+    /**
+     * Force adds a user.
+     * @param p The player to add as a user.
+     */
     public void forceParseUser(Player p) {
         players.put(p.getUniqueId(), new User(p));
         players.get(p.getUniqueId()).givePerms();
     }
 
+    /**
+     * Gets the uuid to user mapping.
+     * @return The uuid to user mapping.
+     */
     public HashMap<UUID, User> getUsers() {
         return players;
     }
 
+    /**
+     * Removes a given user.
+     * @param uuid The uuid of the user.
+     */
     public void removeUser(UUID uuid) {
         players.remove(uuid);
     }
 
+    /**
+     * Gets the user with the specified uuid.
+     * @param uuid The uuid of the user.
+     * @return The user with the given uuid.
+     */
     public User getUser(UUID uuid) {
         return !players.containsKey(uuid) ? new User(uuid) : players.get(uuid);
     }
 
+    /**
+     * Unload the user manager.
+     */
     public void unload() {
         for (UUID uuid : players.keySet()) {
             User u = players.get(uuid);
@@ -73,6 +93,10 @@ public class UserManager {
                 players.get(uuid).refreshPerms();
     }
 
+    /**
+     * Adds the specified player.
+     * @param player The player to add.
+     */
     public void addUser(Player player) {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         RankManager rm = Necessities.getRM();
@@ -97,11 +121,16 @@ public class UserManager {
         }
     }
 
-    public void updateUserRank(User u, UUID uuid, Rank r) {
+    /**
+     * Updates a user's rank.
+     * @param u The user to update the rank of.
+     * @param r The rank to set the user to.
+     */
+    public void updateUserRank(User u, Rank r) {
         if (r == null)
             return;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
-        configUsers.set(uuid.toString() + ".rank", r.getName());
+        configUsers.set(u.getUUID().toString() + ".rank", r.getName());
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -109,6 +138,12 @@ public class UserManager {
         u.updateRank(r);
     }
 
+    /**
+     * Updates a user's permissions.
+     * @param uuid       The uuid of the user to update.
+     * @param permission The permission to add or remove.
+     * @param remove     True to remove the permission, false otherwise.
+     */
     public void updateUserPerms(UUID uuid, String permission, boolean remove) {
         if (permission.equals(""))
             return;
@@ -136,6 +171,12 @@ public class UserManager {
         }
     }
 
+    /**
+     * Updates a user's subranks.
+     * @param uuid   The uuid of the user to update.
+     * @param name   The name of the subrank to add or remove.
+     * @param remove True to remove the subrank, false otherwise.
+     */
     public void updateUserSubrank(UUID uuid, String name, boolean remove) {
         if (name.equals(""))
             return;

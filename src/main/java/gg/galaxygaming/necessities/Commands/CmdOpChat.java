@@ -15,10 +15,12 @@ public class CmdOpChat implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         String message = "";
-        if (args.length > 0)
+        if (args.length > 0) {
+            StringBuilder messageBuilder = new StringBuilder();
             for (String arg : args)
-                message += arg + " ";
-        message = message.trim();
+                messageBuilder.append(arg).append(" ");
+            message = messageBuilder.toString().trim();
+        }
         if (sender instanceof Player) {
             Player p = (Player) sender;
             User u = Necessities.getUM().getUser(p.getUniqueId());
@@ -42,6 +44,7 @@ public class CmdOpChat implements Cmd {
         Player player = Bukkit.getPlayer(uuid);
         String send = ChatColor.translateAlternateColorCodes('&', config.getString("Necessities.ChatFormat"));
         send = Necessities.getVar().getMessages() + "To Ops - " + ChatColor.WHITE + send;
+        send = send.replaceAll("\\{PREFIX} ", "");
         send = send.replaceAll("\\{WORLD} ", "");
         send = send.replaceAll("\\{GUILD} ", "");
         send = send.replaceAll("\\{TITLE} ", "");

@@ -25,13 +25,13 @@ import java.util.*;
 public class User {
     private final File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
     private final File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
-    private boolean teleporting = false, jailed = false, opChat = false, afk = false, istpaing = false, god = false, muted = false, autoClaiming = false, guildChat = false, slackChat = false;
+    private boolean teleporting = false, jailed = false, opChat = false, afk = false, istpaing = false, god = false, muted = false, autoClaiming = false, guildChat = false, slackChat = false, frozen = false;
     private final ArrayList<String> permissions = new ArrayList<>();
     private final ArrayList<String> subranks = new ArrayList<>();
     private long lastAction = 0, lastAFK = 0, lastRequest = 0, login = 0;
     private int pastTotal = 0, lastActionTask = 0, afkTask = 0;
     private final HashMap<String, Location> homes = new HashMap<>();
-    private String appended = "", nick = null, lastContact;
+    private String appended = "", nick = null, lastContact, prefix = "";
     private final ArrayList<UUID> ignored = new ArrayList<>();
     private Location lastPos, right, left;
     private PermissionAttachment attachment;
@@ -42,7 +42,7 @@ public class User {
     private Guild guild;
     private Rank rank;
 
-    public User(Player p) {
+    User(Player p) {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         YamlConfiguration config = Necessities.getInstance().getConfig();
         RankManager rm = Necessities.getRM();
@@ -62,6 +62,8 @@ public class User {
             this.afk = configUsers.getBoolean(getUUID().toString() + ".afk");
         if (configUsers.contains(getUUID().toString() + ".muted"))
             this.muted = configUsers.getBoolean(getUUID().toString() + ".muted");
+        if (configUsers.contains(getUUID().toString() + ".frozen"))
+            this.frozen = configUsers.getBoolean(getUUID().toString() + ".frozen");
         if (configUsers.contains(getUUID().toString() + ".power"))
             this.power = configUsers.getDouble(getUUID().toString() + ".power");
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && configUsers.contains(getUUID().toString() + ".guild"))
@@ -72,10 +74,9 @@ public class User {
             this.hat = Hat.fromType(HatType.fromString(configUsers.getString(getUUID().toString() + ".hat")), this.bukkitPlayer.getLocation());
         if (configUsers.contains(getUUID().toString() + ".location"))
             this.lastPos = new Location(Bukkit.getWorld(configUsers.getString(getUUID().toString() + ".location.world")),
-                    Double.parseDouble(configUsers.getString(getUUID().toString() + ".location.x")), Double.parseDouble(configUsers.getString(getUUID().toString() +
-                    ".location.y")), Double.parseDouble(configUsers.getString(getUUID().toString() + ".location.z")),
-                    Float.parseFloat(configUsers.getString(getUUID().toString() + ".location.yaw")), Float.parseFloat(configUsers.getString(getUUID().toString() +
-                    ".location.pitch")));
+                    Double.parseDouble(configUsers.getString(getUUID().toString() + ".location.x")), Double.parseDouble(configUsers.getString(getUUID().toString() + ".location.y")),
+                    Double.parseDouble(configUsers.getString(getUUID().toString() + ".location.z")), Float.parseFloat(configUsers.getString(getUUID().toString() + ".location.yaw")),
+                    Float.parseFloat(configUsers.getString(getUUID().toString() + ".location.pitch")));
         this.login = System.currentTimeMillis();
         readHomes();
         readIgnored();
@@ -88,7 +89,7 @@ public class User {
         }
     }
 
-    public User(UUID uuid) {
+    User(UUID uuid) {
         this.userUUID = uuid;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         YamlConfiguration config = Necessities.getInstance().getConfig();
@@ -128,6 +129,9 @@ public class User {
         this.login = 0;
     }
 
+    /**
+     * Called when the user logs out.
+     */
     public void logOut() {
         updateTimePlayed();
         Necessities.getSBs().delPlayer(this);
@@ -153,10 +157,19 @@ public class User {
         }
     }
 
+    /**
+     * Checks if the current user is ignoring the player with the specified uuid.
+     * @param uuid The uuid of the player to check.
+     * @return True if the user is ignoring the specified player, false otherwise.
+     */
     public boolean isIgnoring(UUID uuid) {
         return this.ignored.contains(uuid);
     }
 
+    /**
+     * Stars ignoring the specified player.
+     * @param uuid The uuid of the player to start ignoring.
+     */
     public void ignore(UUID uuid) {
         if (!this.ignored.contains(uuid)) {//this should already be checked but whatever
             this.ignored.add(uuid);
@@ -175,6 +188,10 @@ public class User {
         }
     }
 
+    /**
+     * Stops ignoring the specified player.
+     * @param uuid The uuid of the player to stop ignoring.
+     */
     public void unignore(UUID uuid) {
         if (this.ignored.contains(uuid)) {//this should already be checked but whatever
             this.ignored.remove(uuid);
@@ -193,6 +210,9 @@ public class User {
         }
     }
 
+    /**
+     * Leaves the current guild.
+     */
     public void leaveGuild() {
         this.guild = null;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
@@ -205,14 +225,26 @@ public class User {
         }
     }
 
+    /**
+     * Gets the text that the user has appended.
+     * @return The text the user has appended.
+     */
     public String getAppended() {
         return this.appended;
     }
 
+    /**
+     * Sets the text that the user has appended.
+     * @param toAppend The text to set as appended.
+     */
     public void setAppended(String toAppend) {
         this.appended = toAppend;
     }
 
+    /**
+     * Joins the given guild.
+     * @param g The guild to join.
+     */
     public void joinGuild(Guild g) {
         this.guild = g;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
@@ -225,13 +257,19 @@ public class User {
         }
     }
 
+    /**
+     * Gets the power this user has.
+     * @return The power this user has.
+     */
     public double getPower() {
         return this.power;
     }
 
+    /**
+     * Teleports to the given user.
+     * @param toTpTo The user to teleport to.
+     */
     public void teleport(final User toTpTo) {
-        final YamlConfiguration config = Necessities.getInstance().getConfig();
-        final Variables var = Necessities.getVar();
         this.teleporting = true;
         if (this.rank.getTpDelay() == 0) {
             if (isTpaing())
@@ -240,6 +278,7 @@ public class User {
             tpSuccess();
             return;
         }
+        Variables var = Necessities.getVar();
         this.bukkitPlayer.sendMessage(var.getMessages() + "Teleportation will begin in " + ChatColor.RED + this.rank.getTpDelay() + var.getMessages() + " seconds, don't move.");
         Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
             if (toTpTo.getPlayer() != null && getPlayer() != null && isTeleporting()) {
@@ -251,6 +290,9 @@ public class User {
         }, 20 * this.rank.getTpDelay());
     }
 
+    /**
+     * Called when the user moves during teleportation.
+     */
     public void cancelTp() {
         this.teleporting = false;
         setTpaing(false);
@@ -262,6 +304,10 @@ public class User {
         getPlayer().sendMessage(Necessities.getVar().getMessages() + "Teleportation successful.");
     }
 
+    /**
+     * Teleports to the given location.
+     * @param l The location to teleport to.
+     */
     public void teleport(final Location l) {
         this.teleporting = true;
         if (this.rank.getTpDelay() == 0) {
@@ -283,6 +329,10 @@ public class User {
         return this.istpaing;
     }
 
+    /**
+     * Sets whether or not the user is tpaing.
+     * @param tpaing True if they are tpaing, false otherwise.
+     */
     public void setTpaing(boolean tpaing) {
         this.istpaing = tpaing;
     }
@@ -291,6 +341,10 @@ public class User {
         return this.lastAction;
     }
 
+    /**
+     * Sets the time that the player last performed an action.
+     * @param time The time to set.
+     */
     public void setLastAction(long time) {
         this.lastAction = time;
         int temp = this.lastActionTask;
@@ -305,34 +359,58 @@ public class User {
             }
     }
 
+    /**
+     * Checks if the user is currently teleporting.
+     * @return True if the user is teleporting, false otherwise.
+     */
     public boolean isTeleporting() {
         return this.teleporting;
     }
 
+    /**
+     * Gets the uuid of the user.
+     * @return The uuid of the user.
+     */
     public UUID getUUID() {
         return this.bukkitPlayer == null ? this.userUUID : this.bukkitPlayer.getUniqueId();
     }
 
+    /**
+     * Gets the name of the user.
+     * @return The name of the user.
+     */
     public String getName() {
         return this.bukkitPlayer == null ? Bukkit.getOfflinePlayer(this.userUUID).getName() : this.bukkitPlayer.getName();
     }
 
-    public String getDispName() {
-        return this.bukkitPlayer == null ? Bukkit.getOfflinePlayer(this.userUUID).getName() : ChatColor.translateAlternateColorCodes('&', getRank().getTitle() + this.bukkitPlayer.getDisplayName());
-    }
-
+    /**
+     * Gets the last time this user requested a mod.
+     * @return The last time this user requested a mod.
+     */
     public long getLastRequest() {
         return this.lastRequest == 0 ? System.currentTimeMillis() : this.lastRequest;
     }
 
+    /**
+     * Sets the time that the user last requested a mod.
+     * @param time The time that the user last requested a mod.
+     */
     public void setLastRequest(long time) {
         this.lastRequest = time;
     }
 
+    /**
+     * Gets the user's rank.
+     * @return The user's rank.
+     */
     public Rank getRank() {
         return this.rank;
     }
 
+    /**
+     * Sets the user's rank to the specified rank.
+     * @param r The rank to set the user at.
+     */
     public void setRank(Rank r) {
         this.rank = r;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
@@ -346,10 +424,18 @@ public class User {
         refreshPerms();
     }
 
+    /**
+     * Gets the user's nickname.
+     * @return The user's nickname.
+     */
     public String getNick() {
         return this.nick;
     }
 
+    /**
+     * Sets the user's nickname.
+     * @param message The new nickname of the user.
+     */
     public void setNick(String message) {
         this.nick = message != null ? ChatColor.translateAlternateColorCodes('&', message) : null;
         updateListName();
@@ -363,10 +449,18 @@ public class User {
         }
     }
 
+    /**
+     * Gets the last location of the user.
+     * @return The last location of the user.
+     */
     public Location getLastPos() {
         return this.lastPos;
     }
 
+    /**
+     * Sets the last location of the user.
+     * @param l The location to set as the last location.
+     */
     public void setLastPos(Location l) {
         this.lastPos = l;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
@@ -384,10 +478,17 @@ public class User {
         }
     }
 
+    /**
+     * Gets the user's hat.
+     * @return The user's hat.
+     */
     public Hat getHat() {
         return this.hat;
     }
 
+    /**
+     * Respawns the user's hat.
+     */
     public void respawnHat() {
         if (this.hat == null || this.bukkitPlayer == null)
             return;
@@ -395,6 +496,10 @@ public class User {
         this.hat = Hat.fromType(this.hat.getType(), this.bukkitPlayer.getLocation());
     }
 
+    /**
+     * Sets the user's hat.
+     * @param hat The hat to set as the user's hat.
+     */
     public void setHat(Hat hat) {
         if (this.hat != null)
             this.hat.despawn();
@@ -409,10 +514,18 @@ public class User {
         }
     }
 
+    /**
+     * Checks if the user is jailed.
+     * @return True if the user is jailed, false otherwise.
+     */
     public boolean isJailed() {
         return this.jailed;
     }
 
+    /**
+     * Jails or frees a user.
+     * @param jail True to jail the user, false to free the user.
+     */
     public void setJailed(boolean jail) {
         this.jailed = jail;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
@@ -425,6 +538,9 @@ public class User {
         }
     }
 
+    /**
+     * Updates the user's tab list name.
+     */
     public void updateListName() {
         if (this.bukkitPlayer == null)
             return;
@@ -432,10 +548,18 @@ public class User {
         Necessities.getInstance().updateName(this.bukkitPlayer);
     }
 
+    /**
+     * Checks if the user is muted.
+     * @return True if the user is muted, false otherwise.
+     */
     public boolean isMuted() {
         return this.muted;
     }
 
+    /**
+     * Mutes or unmutes the user.
+     * @param toMute True to mute the user, false to unmute.
+     */
     public void setMuted(boolean toMute) {
         this.muted = toMute;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
@@ -448,18 +572,58 @@ public class User {
         }
     }
 
+    /**
+     * Checks if the user is frozen.
+     * @return True if the user is frozen, false otherwise.
+     */
+    public boolean isFrozen() {
+        return this.frozen;
+    }
+
+    /**
+     * Freezes or defrosts the user.
+     * @param toFreeze True to mute the user, false to defrost.
+     */
+    public void setFrozen(boolean toFreeze) {
+        this.frozen = toFreeze;
+        YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
+        if (!configUsers.contains(getUUID().toString()))
+            return;
+        configUsers.set(getUUID().toString() + ".frozen", this.frozen);
+        try {
+            configUsers.save(configFileUsers);
+        } catch (Exception ignored) {
+        }
+    }
+
+    /**
+     * Sets whether or not the user is in god mode.
+     * @param godMode True to make the user a god, false otherwise.
+     */
     public void setGod(boolean godMode) {
         this.god = godMode;
     }
 
+    /**
+     * Checks if the user is in god mode.
+     * @return True if the user is in god mode, false otherwise.
+     */
     public boolean godMode() {
         return this.god;
     }
 
+    /**
+     * Checks if the user is afk.
+     * @return True if the user is afk, false otherwise.
+     */
     public boolean isAfk() {
         return this.afk;
     }
 
+    /**
+     * Sets the user as afk.
+     * @param isAfk True to set the user as afk, false otherwise.
+     */
     public void setAfk(boolean isAfk) {
         this.afk = isAfk;
         if (getPlayer() != null) {
@@ -500,15 +664,23 @@ public class User {
         return this.lastAFK;
     }
 
+    /**
+     * Gets the last contact of this user.
+     * @return The last contact of this user.
+     */
     public String getLastC() {
         return this.lastContact;
     }
 
+    /**
+     * Sets the last contact this user had.
+     * @param last The last contact this user had.
+     */
     public void setLastC(String last) {
         this.lastContact = last;
     }
 
-    public void givePerms() {
+    void givePerms() {
         Necessities.getSBs().addPlayer(this);
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
@@ -536,7 +708,7 @@ public class User {
             this.attachment.setPermission(node, true);
     }
 
-    public void updateRank(Rank r) {
+    void updateRank(Rank r) {
         this.rank = r;
         if (this.bukkitPlayer != null)
             refreshPerms();
@@ -557,6 +729,11 @@ public class User {
                             Float.parseFloat(configUsers.getString(getUUID().toString() + ".homes." + home + ".pitch"))));
     }
 
+    /**
+     * Adds a home at the specified location with the given name.
+     * @param l    The location of the home.
+     * @param name The name of the home.
+     */
     public void addHome(Location l, String name) {
         name = name.toLowerCase().trim();
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
@@ -585,6 +762,10 @@ public class User {
         this.homes.put(name, l);
     }
 
+    /**
+     * Removes the home with the specified name.
+     * @param name The name of the home to remove.
+     */
     public void delHome(String name) {
         name = name.toLowerCase().trim();
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
@@ -603,26 +784,46 @@ public class User {
         this.homes.remove(name);
     }
 
+    /**
+     * Gets the list of homes this user has.
+     * @return The list of homes this user has.
+     */
     public String getHomes() {
         if (this.homes.isEmpty())
             return "";
-        String homeslist = "";
+        String homeslist;
         ArrayList<String> sortHomes = new ArrayList<>();
-        this.homes.keySet().forEach(sortHomes::add);
+        sortHomes.addAll(this.homes.keySet());
         Collections.sort(sortHomes);
+        StringBuilder homeslistBuilder = new StringBuilder();
         for (String name : sortHomes)
-            homeslist += name + ", ";
+            homeslistBuilder.append(name).append(", ");
+        homeslist = homeslistBuilder.toString();
         return homeslist.trim().substring(0, homeslist.length() - 2);
     }
 
+    /**
+     * Checks if the user has a home with the specified name.
+     * @param name The name to check.
+     * @return True if the user has a home with the given name, false otherwise.
+     */
     public boolean hasHome(String name) {
         return this.homes.containsKey(name.toLowerCase().trim());
     }
 
+    /**
+     * Gets the location of the home with the given name.
+     * @param name The name of the home to get.
+     * @return The location of the home with the given name.
+     */
     public Location getHome(String name) {
         return this.homes.get(name.toLowerCase().trim());
     }
 
+    /**
+     * Returns the number of homes this user has.
+     * @return The number of homes this user has.
+     */
     public int homeCount() {
         return this.homes.size();
     }
@@ -639,21 +840,33 @@ public class User {
         this.attachment.getPermissions().keySet().forEach(p -> this.attachment.unsetPermission(p));
     }
 
+    /**
+     * Gets the list of subranks this user has.
+     * @return The list of subranks this user has.
+     */
     public String getSubranks() {
-        String sublist = "";
+        String sublist;
         if (this.subranks.isEmpty())
             return null;
+        StringBuilder sublistBuilder = new StringBuilder();
         for (String sub : this.subranks)
-            sublist += sub + ", ";
+            sublistBuilder.append(sub).append(", ");
+        sublist = sublistBuilder.toString();
         return sublist.trim().substring(0, sublist.length() - 2);
     }
 
+    /**
+     * Gets the list of permissions this user has.
+     * @return The list of permissions this user has.
+     */
     public String getPermissions() {
-        String permlist = "";
+        String permlist;
         if (this.permissions.isEmpty())
             return null;
+        StringBuilder permlistBuilder = new StringBuilder();
         for (String perm : this.permissions)
-            permlist += perm + ", ";
+            permlistBuilder.append(perm).append(", ");
+        permlist = permlistBuilder.toString();
         return permlist.trim().substring(0, permlist.length() - 2);
     }
 
@@ -667,62 +880,118 @@ public class User {
             this.permissions.remove(permission);
     }
 
+    /**
+     * Gets the Player object of this user.
+     * @return The Player object of this user.
+     */
     public Player getPlayer() {
         return this.bukkitPlayer;
     }
 
+    /**
+     * Gets the location the player last left clicked on.
+     * @return The location the player last left clicked on.
+     */
     public Location getLeft() {
         return this.left;
     }
 
+    /**
+     * Sets the location the player last left clicked on.
+     * @param l The location the player last left clicked on.
+     */
     public void setLeft(Location l) {
         this.left = l;
     }
 
+    /**
+     * Gets the location the player last right clicked on.
+     * @return The location the player last right clicked on.
+     */
     public Location getRight() {
         return this.right;
     }
 
+    /**
+     * Sets the location the player last right clicked on.
+     * @param l The location the player last right clicked on.
+     */
     public void setRight(Location l) {
         this.right = l;
     }
 
+    /**
+     * Gets the guild this user is in.
+     * @return The guild this user is in.
+     */
     public Guild getGuild() {
         return this.guild;
     }
 
+    /**
+     * Returns if the user is currently auto claiming land.
+     * @return True if the user is auto claiming land, false otherwise.
+     */
     public boolean isClaiming() {
         return this.autoClaiming;
     }
 
+    /**
+     * Sets whether the user is currently auto claiming land.
+     * @param value True to make the user auto claim land, false otherwise.
+     */
     public void setClaiming(boolean value) {
         this.autoClaiming = value;
     }
 
+    /**
+     * Checks if the user is currently sending messages to slack.
+     * @return True if the user is currently sending messages to slack, false otherwise.
+     */
     public boolean slackChat() {
         return this.slackChat;
     }
 
+    /**
+     * Toggles sending messages to slack.
+     */
     public void toggleSlackChat() {
         this.slackChat = !this.slackChat;
     }
 
+    /**
+     * Checks if the user is currently sending messages to ops only.
+     * @return True if the user is currently sending messages to ops, false otherwise.
+     */
     public boolean opChat() {
         return this.opChat;
     }
 
+    /**
+     * Toggles sending messages to ops.
+     */
     public void toggleOpChat() {
         this.opChat = !this.opChat;
     }
 
+    /**
+     * Checks if the user is currently sending messages to their guild.
+     * @return True if the user is currently sending messages to their guild, false otherwise.
+     */
     public boolean guildChat() {
         return this.guildChat;
     }
 
+    /**
+     * Toggles sending messages to the guild.
+     */
     public void toggleGuildChat() {
         this.guildChat = !this.guildChat;
     }
 
+    /**
+     * Removes power from the user. Called when the user dies.
+     */
     public void removePower() {
         if (this.power - 2 < -20)
             this.power = -20;
@@ -740,6 +1009,9 @@ public class User {
             this.guild.updatePower();
     }
 
+    /**
+     * Adds power to the user for being online.
+     */
     public void addPower() {
         if (this.afk)
             return;
@@ -759,6 +1031,10 @@ public class User {
             this.guild.updatePower();
     }
 
+    /**
+     * Gets the location the user is looking at.
+     * @return The location the user is looking at.
+     */
     @SuppressWarnings("deprecation")
     public Location getLookingAt() {
         if (this.bukkitPlayer == null)
@@ -772,6 +1048,11 @@ public class User {
         return null;
     }
 
+    /**
+     * Saves the user's inventory and loads the inventory for the world they are going to.
+     * @param s    The inventory system to load their inventory from.
+     * @param from The inventory system to save their current inventory to.
+     */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void saveInventory(String s, String from) {
         if (this.bukkitPlayer == null)
@@ -809,6 +1090,26 @@ public class User {
         this.bukkitPlayer.saveData();
     }
 
+    /**
+     * Sets the prefix for this user. Mainly used for team names in gamemodes.
+     * @param prefix The prefix to set for the user.
+     */
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    /**
+     * Gets the current prefix of the user.
+     * @return The current prefix of the user.
+     */
+    public String getPrefix() {
+        return this.prefix;
+    }
+
+    /**
+     * Gets the time that this user has played on the server.
+     * @return The time that this user has played on the server.
+     */
     public String getTimePlayed() {
         long seconds = this.pastTotal;
         if (this.login != 0)

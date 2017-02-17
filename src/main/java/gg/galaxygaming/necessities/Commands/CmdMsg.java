@@ -30,10 +30,10 @@ public class CmdMsg implements Cmd {
                 return true;
             }
             if (args[0].equalsIgnoreCase("console")) {
-                String message = "";
+                StringBuilder messageBuilder = new StringBuilder();
                 for (int i = 1; i < args.length; i++)
-                    message += args[i] + " ";
-                message = ChatColor.WHITE + message.trim();
+                    messageBuilder.append(args[i]).append(" ");
+                String message = ChatColor.WHITE + messageBuilder.toString().trim();
                 if (p.hasPermission("Necessities.colorchat"))
                     message = ChatColor.translateAlternateColorCodes('&', (p.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", "")));
                 self.setLastC("Console");
@@ -57,10 +57,10 @@ public class CmdMsg implements Cmd {
                 return true;
             }
             Player t = Bukkit.getPlayer(uuid);
-            String message = "";
+            StringBuilder messageBuilder = new StringBuilder();
             for (int i = 1; i < args.length; i++)
-                message += args[i] + " ";
-            message = ChatColor.WHITE + message.trim();
+                messageBuilder.append(args[i]).append(" ");
+            String message = ChatColor.WHITE + messageBuilder.toString().trim();
             if (p.hasPermission("Necessities.colorchat"))
                 message = ChatColor.translateAlternateColorCodes('&', (p.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", "")));
             u.setLastC(self.getUUID().toString());
@@ -75,11 +75,10 @@ public class CmdMsg implements Cmd {
             }
             User u = um.getUser(uuid);
             Player t = Bukkit.getPlayer(uuid);
-            String message = "";
+            StringBuilder messageBuilder = new StringBuilder();
             for (int i = 1; i < args.length; i++)
-                message += args[i] + " ";
-            message = ChatColor.WHITE + message.trim();
-            message = ChatColor.translateAlternateColorCodes('&', message);
+                messageBuilder.append(args[i]).append(" ");
+            String message = ChatColor.translateAlternateColorCodes('&', ChatColor.WHITE + messageBuilder.toString().trim());
             u.setLastC("Console");
             console.setLastContact(u.getUUID());
             sender.sendMessage(var.getMessages() + "[me -> " + t.getDisplayName() + var.getMessages() + "] " + message);

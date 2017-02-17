@@ -20,14 +20,26 @@ public class Warp {
                     Float.parseFloat(configWarps.getString(this.name + ".yaw")), Float.parseFloat(configWarps.getString(this.name + ".pitch")));
     }
 
+    /**
+     * Gets the name of the warp.
+     * @return The name of the warp.
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Retrieves if this warp has a destination.
+     * @return True if there is a destination to the portal, false otherwise.
+     */
     public boolean hasDestination() {
         return this.loc != null;
     }
 
+    /**
+     * Retrieves the location of the warp.
+     * @return The location of the warp.
+     */
     public Location getDestination() {
         return this.loc;
     }

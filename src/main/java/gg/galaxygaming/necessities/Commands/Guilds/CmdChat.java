@@ -27,10 +27,12 @@ public class CmdChat implements GuildCmd {
                 return true;
             }
             String message = "";
-            if (args.length > 0)
+            if (args.length > 0) {
+                StringBuilder messageBuilder = new StringBuilder();
                 for (String arg : args)
-                    message += arg + " ";
-            message = message.trim();
+                    messageBuilder.append(arg).append(" ");
+                message = messageBuilder.toString().trim();
+            }
             if (args.length > 0)
                 sendGuild(p.getUniqueId(), message);
             else {
@@ -49,6 +51,7 @@ public class CmdChat implements GuildCmd {
         User sender = um.getUser(uuid);
         String send = ChatColor.translateAlternateColorCodes('&', config.getString("Necessities.ChatFormat"));
         send = Necessities.getVar().getMessages() + "To Guild - " + ChatColor.WHITE + send;
+        send = send.replaceAll("\\{PREFIX} ", "");
         send = send.replaceAll("\\{WORLD} ", "");
         send = send.replaceAll("\\{GUILD} ", "");
         send = send.replaceAll("\\{TITLE} ", "");

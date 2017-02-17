@@ -67,7 +67,7 @@ public class CmdBuy implements EconomyCmd {
                 return true;
             }
             Prices pr = Necessities.getPrices();
-            double cost = pr.getCost("buy", mat.getName(), amount);
+            double cost = pr.getPrice("buy", mat.getName(), amount);
             if (cost == -1.00)
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + mat.getFriendlyName(2) + " cannot be bought from the server.");
             else {
@@ -78,7 +78,7 @@ public class CmdBuy implements EconomyCmd {
                 HashMap<Integer, ItemStack> noFit = inventory.addItem(mat.getBukkitMaterial().toItemStack(amount));
                 if (!noFit.isEmpty()) {
                     amount = amount - noFit.get(0).getAmount();
-                    cost = pr.getCost("buy", mat.getName(), amount);
+                    cost = pr.getPrice("buy", mat.getName(), amount);
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have enough inventory space to buy that much of that item, buying the amount you have inventory space for.");
                 }
                 eco.removeMoney(player.getUniqueId(), cost);

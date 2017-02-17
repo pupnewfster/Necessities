@@ -41,9 +41,10 @@ public class CmdBan implements Cmd {
         }
         String reason = "";
         if (args.length > 1) {
+            StringBuilder reasonBuilder = new StringBuilder();
             for (int i = 1; i < args.length; i++)
-                reason += args[i] + " ";
-            reason = ChatColor.translateAlternateColorCodes('&', reason.trim());
+                reasonBuilder.append(args[i]).append(" ");
+            reason = ChatColor.translateAlternateColorCodes('&', reasonBuilder.toString().trim());
         }
         BanList bans = Bukkit.getBanList(BanList.Type.NAME);
         String theirName = target.getName();

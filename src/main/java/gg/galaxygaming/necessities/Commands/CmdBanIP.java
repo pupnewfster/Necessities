@@ -35,9 +35,10 @@ public class CmdBanIP implements Cmd {
             }
             String reason = "";
             if (args.length > 1) {
+                StringBuilder reasonBuilder = new StringBuilder();
                 for (int i = 1; i < args.length; i++)
-                    reason += args[i] + " ";
-                reason = ChatColor.translateAlternateColorCodes('&', reason.trim());
+                    reasonBuilder.append(args[i]).append(" ");
+                reason = ChatColor.translateAlternateColorCodes('&', reasonBuilder.toString().trim());
             }
             BanList bans = Bukkit.getBanList(BanList.Type.IP);
             String theirName = target.getName();
@@ -61,9 +62,10 @@ public class CmdBanIP implements Cmd {
             name = sender.getName();
         String reason = "";
         if (args.length > 1) {
+            StringBuilder reasonBuilder = new StringBuilder();
             for (int i = 1; i < args.length; i++)
-                reason += args[i] + " ";
-            reason = ChatColor.translateAlternateColorCodes('&', reason.trim());
+                reasonBuilder.append(args[i]).append(" ");
+            reason = ChatColor.translateAlternateColorCodes('&', reasonBuilder.toString().trim());
         }
         BanList bans = Bukkit.getBanList(BanList.Type.IP);
         String theirIP = args[0];

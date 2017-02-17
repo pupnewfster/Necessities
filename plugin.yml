@@ -331,6 +331,11 @@ commands:
       usage: /<command> <name>
       permission: Necessities.mute
       aliases: [silence, unmute, nmute, nsilence, nunmute]
+   freeze:
+      description: Freezes <name>.
+      usage: /<command> <name>
+      permission: Necessities.freeze
+      aliases: [unfreeze, nfreeze, nunfreeze]
    exp:
       description: Sets, gives or shows the amount of xp <name> has.
       usage: /<command> <show|give|set> <name> <amount>
@@ -606,6 +611,11 @@ commands:
       usage: /<command> <itemname|id|hand> <amount>
       permission: Necessities.economy.buy
       aliases: [nbuy]
+   buycmd:
+      description: Buys <commandToBuy>.
+      usage: /<command> <commandToBuy>
+      permission: Necessities.economy.buy
+      aliases: [nbuycmd, buycommand, nbuycommand]
    sell:
       description: Sells <amount> of <item>. Default is all in inventory.
       usage: /<command> <itemname|id|hand|all> <amount|all>
@@ -833,6 +843,7 @@ permissions:
             Necessities.tphere: true
             Necessities.tpdeny: true
             Necessities.wrench: true
+            Necessities.freeze: true
             Necessities.slack: true
             Necessities.tppos: true
             Necessities.tpall: true
@@ -904,7 +915,6 @@ permissions:
                 Necessities.economy.sell: true
                 Necessities.economy.pay: true
                 Necessities.economy.bal: true
-                Necessities.economy.buy: true
                 Necessities.economy.buy: true
                 Necessities.economy.srp: true
                 Necessities.economy.scp: true
@@ -1179,9 +1189,6 @@ permissions:
         default: true
     Necessities.economy.prices:
         description: Prices of a rank.
-        default: true
-    Necessities.economy.buy:
-        description: Buys a rank.
         default: true
     Necessities.economy.cmdprices:
         description: Prices of commands.
@@ -1623,4 +1630,7 @@ permissions:
         default: op
     Necessities.reloadannouncer:
         description: Allows you to reload the announcer.
+        default: op
+    Necessities.freeze:
+        description: Allows you to freeze and unfreeze players.
         default: op

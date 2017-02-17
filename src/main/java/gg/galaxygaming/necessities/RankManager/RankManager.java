@@ -17,6 +17,9 @@ public class RankManager {
     private final ArrayList<String> names = new ArrayList<>();
     private final ArrayList<Rank> order = new ArrayList<>();
 
+    /**
+     * Initializes the rank manager.
+     */
     public void readRanks() {
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks), configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
         for (String rank : configRanks.getKeys(false)) {
@@ -66,6 +69,9 @@ public class RankManager {
         }
     }
 
+    /**
+     * Reloads the permissions.
+     */
     public void reloadPermissions() {
         UserManager um = Necessities.getUM();
         for (Rank r : getOrder()) {
@@ -74,34 +80,74 @@ public class RankManager {
         }
     }
 
+    /**
+     * Checks if the given name is a valid subrank.
+     * @param subrank The name to check.
+     * @return True if the name is a valid subrank, false otherwise.
+     */
     public boolean validSubrank(String subrank) {
         return !subranks.containsKey(subrank.toLowerCase());
     }
 
+    /**
+     * Gets the proper name of the given subrank.
+     * @param subrank The subrank to get the proper name of.
+     * @return The proper name of the given subrank.
+     */
     public String getSub(String subrank) {
         return subranks.get(subrank.toLowerCase());
     }
 
+    /**
+     * Gets the list of ranks in their order of lowest to highest.
+     * @return The list of ranks in their order of lowest to highest.
+     */
     public ArrayList<Rank> getOrder() {
         return order;
     }
 
+    /**
+     * Gets the list of subranks.
+     * @return The list of subranks.
+     */
     public Collection<String> getSubranks() {
         return subranks.values();
     }
 
+    /**
+     * Gets the rank at the specified index in the order list.
+     * @param index The index in the order list.
+     * @return The rank at the specified index.
+     */
     public Rank getRank(int index) {
         return order.size() - 1 < index ? null : order.get(index);
     }
 
+    /**
+     * Gets the rank based off of the given name.
+     * @param name The name of the rank to get.
+     * @return The rank based on the given rank name.
+     */
     public Rank getRank(String name) {
         return ranks.get(name);
     }
 
+    /**
+     * Checks if the given rank has the specified rank.
+     * @param rank  The rank to check if it has the other rank.
+     * @param check The rank to check.
+     * @return True if the given rank has the specified rank, false otherwise.
+     */
     public boolean hasRank(Rank rank, Rank check) {
-        return !(!order.contains(check) || !order.contains(rank)) && order.indexOf(rank) - order.indexOf(check) >= 0;
+        return order.contains(check) && order.contains(rank) && order.indexOf(rank) - order.indexOf(check) >= 0;
     }
 
+    /**
+     * Update the permissions of a given rank.
+     * @param r          The rank to update the permissions of.
+     * @param permission The permission to add or remove.
+     * @param remove     True to remove the permission, false otherwise.
+     */
     public void updateRankPerms(Rank r, String permission, boolean remove) {
         if (permission.equals(""))
             return;
@@ -129,6 +175,12 @@ public class RankManager {
         }
     }
 
+    /**
+     * Update the permissions of a given subrank.
+     * @param subrank    The subrank to update the permissions of.
+     * @param permission The permission to add or remove.
+     * @param remove     True to remove the permission, false otherwise.
+     */
     public void updateSubPerms(String subrank, String permission, boolean remove) {
         if (permission.equals(""))
             return;
@@ -158,6 +210,12 @@ public class RankManager {
             }
     }
 
+    /**
+     * Update the subranks of a given rank.
+     * @param r      The rank to update the subranks of.
+     * @param name   The name of the subrank to add or remove.
+     * @param remove True to remove the subrank, false otherwise.
+     */
     public void updateRankSubrank(Rank r, String name, boolean remove) {
         if (name.equals(""))
             return;
@@ -180,6 +238,12 @@ public class RankManager {
         Necessities.getUM().refreshRankPerm(r);
     }
 
+    /**
+     * Adds a rank with the specified name with the given previous and next ranks.
+     * @param name     The name of the rank to create.
+     * @param previous The rank that goes before this new rank.
+     * @param next     The rank that goes after this new rank.
+     */
     public void addRank(String name, Rank previous, Rank next) {
         if (name.equals(""))
             return;
@@ -212,6 +276,10 @@ public class RankManager {
         }
     }
 
+    /**
+     * Removes the specified rank.
+     * @param rank The rank to remove.
+     */
     public void removeRank(Rank rank) {
         UserManager um = Necessities.getUM();
         Rank previous = rank.getPrevious();
@@ -244,6 +312,10 @@ public class RankManager {
             um.refreshRankPerm(previous);
     }
 
+    /**
+     * Adds a subrank with the given name.
+     * @param name The name of the subrank to add.
+     */
     public void addSubrank(String name) {
         if (name.equals(""))
             return;
@@ -256,6 +328,10 @@ public class RankManager {
         }
     }
 
+    /**
+     * Removes the subrank with the specified name.
+     * @param name The name of the subrank to remove.
+     */
     public void removeSubrank(String name) {
         if (name.equals(""))
             return;
@@ -271,6 +347,9 @@ public class RankManager {
         }
     }
 
+    /**
+     * Sets the default subranks if they do not currently exist.
+     */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void setSubranks() {
         if (!configFileSubranks.exists())
@@ -307,6 +386,9 @@ public class RankManager {
             }
     }
 
+    /**
+     * Sets the default ranks if they do not currently exist.
+     */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void setRanks() {
         if (!configFileRanks.exists())

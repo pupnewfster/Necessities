@@ -42,10 +42,10 @@ public class CmdSetPrice implements EconomyCmd {
                     return true;
                 }
                 if (args[0].equalsIgnoreCase("null")) {
-                    pr.setCost(file, mat.getName(), args[0]);
+                    pr.setPrice(file, mat.getName(), args[0]);
                     player.sendMessage(var.getObj() + mat.getFriendlyName(2) + var.getMessages() + " can no longer be " + (args[1].equalsIgnoreCase("buy") ? "bought" : "sold"));
                 } else {
-                    pr.setCost(file, mat.getName(), Utils.roundTwoDecimals(Double.parseDouble(args[0])));
+                    pr.setPrice(file, mat.getName(), Utils.roundTwoDecimals(Double.parseDouble(args[0])));
                     player.sendMessage(var.getObj() + Utils.ownerShip(mat.getFriendlyName(2)) + var.getMessages() + " " + (args[1].equalsIgnoreCase("buy") ? "buy" : "sell") +
                             " price was set to " + var.getMoney() + Economy.format(Double.parseDouble(args[0])));
                 }
@@ -85,10 +85,10 @@ public class CmdSetPrice implements EconomyCmd {
             return true;
         }
         if (args[1].equalsIgnoreCase("null")) {
-            pr.setCost(file, mat.getName(), args[1]);
+            pr.setPrice(file, mat.getName(), args[1]);
             sender.sendMessage(var.getObj() + mat.getFriendlyName(2) + var.getMessages() + " can no longer be " + (args[2].equalsIgnoreCase("buy") ? "bought" : "sold"));
         } else {
-            pr.setCost(file, mat.getName(), Utils.roundTwoDecimals(Double.parseDouble(args[1])));
+            pr.setPrice(file, mat.getName(), Utils.roundTwoDecimals(Double.parseDouble(args[1])));
             sender.sendMessage(var.getObj() + Utils.ownerShip(mat.getFriendlyName(2)) + var.getMessages() + " " + (args[2].equalsIgnoreCase("buy") ? "buy" : "sell") +
                     " price was set to " + var.getMoney() + Economy.format(Double.parseDouble(args[1])));
         }

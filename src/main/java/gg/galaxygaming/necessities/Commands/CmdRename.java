@@ -24,11 +24,10 @@ public class CmdRename implements Cmd {
                 return true;
             }
             ItemMeta handMeta = hand.getItemMeta();
-            String name = "";
+            StringBuilder nameBuilder = new StringBuilder();
             for (String arg : args)
-                name += arg + " ";
-            name = name.trim();
-            name = ChatColor.translateAlternateColorCodes('&', name).trim();
+                nameBuilder.append(arg).append(" ");
+            String name = ChatColor.translateAlternateColorCodes('&', nameBuilder.toString()).trim();
             if (ChatColor.stripColor(name).trim().equals("")) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a name to rename your item to.");
                 return true;

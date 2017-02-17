@@ -60,10 +60,11 @@ public class CmdSpawnmob implements Cmd {
     }
 
     private String validTypes() {
-        String types = "";
+        StringBuilder typesBuilder = new StringBuilder();
         for (EntityType type : EntityType.values())
             if (type.isSpawnable())
-                types += type.toString().replaceAll("_", " ").toLowerCase() + ", ";
+                typesBuilder.append(type.toString().replaceAll("_", " ").toLowerCase()).append(", ");
+        String types = typesBuilder.toString();
         return types.trim().substring(0, types.length() - 2);
     }
 }

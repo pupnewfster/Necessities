@@ -13,6 +13,9 @@ public class PortalManager {//TODO: add a method to update the things when a wor
     private final HashMap<String, String> lowerNames = new HashMap<>();
     private final File configFilePM = new File("plugins/Necessities/WorldManager", "portals.yml");
 
+    /**
+     * Initiates the portal manager.
+     */
     public void initiate() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loading portals...");
         YamlConfiguration configPM = YamlConfiguration.loadConfiguration(configFilePM);
@@ -23,6 +26,11 @@ public class PortalManager {//TODO: add a method to update the things when a wor
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "All portals loaded.");
     }
 
+    /**
+     * Gets the destination of the portal at the given location.
+     * @param l The location to check if it is a portal and if so retrieve its destination.
+     * @return The destination of the portal.
+     */
     public Location portalDestination(Location l) {
         for (String key : portals.keySet())
             if (portals.get(key).isPortal(l)) {
@@ -33,10 +41,19 @@ public class PortalManager {//TODO: add a method to update the things when a wor
         return null;
     }
 
+    /**
+     * Checks if a portal exists with the given name.
+     * @param name The name of the portal.
+     * @return True if there is a portal with the given name, false otherwise.
+     */
     public boolean exists(String name) {
         return lowerNames.containsKey(name.toLowerCase());
     }
 
+    /**
+     * Removes a specified portal.
+     * @param name The name of the portal to remove.
+     */
     public void remove(String name) {
         YamlConfiguration configPM = YamlConfiguration.loadConfiguration(configFilePM);
         configPM.set(name, null);
@@ -48,6 +65,13 @@ public class PortalManager {//TODO: add a method to update the things when a wor
         lowerNames.remove(name.toLowerCase());
     }
 
+    /**
+     * Creates a new portal wth the specified name and bounds with the given destination and.
+     * @param name        The name of the portal.
+     * @param destination The destination of the portal.
+     * @param left        The first boundary of the portal.
+     * @param right       The second boundary of the portal.
+     */
     public void create(String name, String destination, Location left, Location right) {
         YamlConfiguration configPM = YamlConfiguration.loadConfiguration(configFilePM);
         configPM.set(name + ".world", left.getWorld().getName());

@@ -15,7 +15,7 @@ import java.util.UUID;
 public class CmdTpaccept implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
-        Teleports tps = Necessities.getTeleports();
+        Teleports tps = Necessities.getTPs();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             UUID uuid = null;

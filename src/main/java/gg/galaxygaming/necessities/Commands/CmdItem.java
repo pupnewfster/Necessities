@@ -43,7 +43,7 @@ public class CmdItem implements Cmd {
             short data = 0;
             if (Utils.legalInt(args[2])) //Really a short
                 data = Short.parseShort(args[2]);
-            mat = Material.fromData(mat, data);
+            mat = mat.getChild(data);
             p.getInventory().addItem(mat.getBukkitMaterial().toItemStack(amount));
             p.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.getFriendlyName(amount) + var.getMessages() + ".");
         } else

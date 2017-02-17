@@ -128,6 +128,10 @@ public class Necessities extends JavaPlugin {
         return true;
     }
 
+    /**
+     * Checks if Necessities is tracking.
+     * @return True if Necessities is tracking, false otherwise.
+     */
     public static boolean isTracking() {
         return getTracker() != null;
     }
@@ -140,6 +144,10 @@ public class Necessities extends JavaPlugin {
         return IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
     }
 
+    /**
+     * Removes a player from the tab list.
+     * @param p The player to remove from the tab list.
+     */
     public void removePlayer(Player p) {
         PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer) p).getHandle());
         for (Player x : Bukkit.getOnlinePlayers())
@@ -147,6 +155,10 @@ public class Necessities extends JavaPlugin {
                 ((CraftPlayer) x).getHandle().playerConnection.sendPacket(info);
     }
 
+    /**
+     * Adds a player to the tab list.
+     * @param p The player to add to the tab list.
+     */
     public void addPlayer(Player p) {
         EntityPlayer ep = ((CraftPlayer) p).getHandle();
         User u = um.getUser(p.getUniqueId());
@@ -157,6 +169,10 @@ public class Necessities extends JavaPlugin {
                 ((CraftPlayer) x).getHandle().playerConnection.sendPacket(info);
     }
 
+    /**
+     * Updates the tab list of the specified player.
+     * @param p The player to update the tab list name of.
+     */
     public void updateName(Player p) {
         EntityPlayer ep = ((CraftPlayer) p).getHandle();
         User u = um.getUser(p.getUniqueId());
@@ -165,6 +181,10 @@ public class Necessities extends JavaPlugin {
         Bukkit.getOnlinePlayers().forEach(x -> ((CraftPlayer) x).getHandle().playerConnection.sendPacket(tabList));
     }
 
+    /**
+     * Shows the given player all the players on the tab list.
+     * @param x The player to refresh their tab list.
+     */
     public void updateAll(Player x) {
         ArrayList<EntityPlayer> players = new ArrayList<>();
         for (Player p : Bukkit.getOnlinePlayers()) {
@@ -418,6 +438,8 @@ public class Necessities extends JavaPlugin {
             com = new CmdTps();
         else if (isEqual(name, "reloadannouncer"))
             com = new CmdReloadAnnouncer();
+        else if (isEqual(name, "freeze"))
+            com = new CmdFreeze();
             //Economy
         else if (isEqual(name, "bal"))
             com = new CmdBalance();
@@ -445,6 +467,8 @@ public class Necessities extends JavaPlugin {
             com = new CmdSetRankPrice();
         else if (isEqual(name, "buyrank"))
             com = new CmdBuyRank();
+        else if (isEqual(name, "buycmd"))
+            com = new CmdBuyCmd();
         else if (isEqual(name, "l2m"))
             com = new CmdL2M();
         else if (isEqual(name, "commandprices"))
@@ -553,6 +577,12 @@ public class Necessities extends JavaPlugin {
         return com;
     }
 
+    /**
+     * Checks if the given command is enabled.
+     * @param cmd The command to check if it is enabled.
+     * @return True if the command is enabled, false otherwise.
+     */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isCommandEnabled(String cmd) {
         Cmd c = getCmd(cmd);
         return c != null && !c.equals(this.disabled);
@@ -570,13 +600,19 @@ public class Necessities extends JavaPlugin {
         getLogger().info("Necessities disabled.");
     }
 
+    /**
+     * Checks if the player with the specified uuid is a dev.
+     * @param uuid The uuid of the player to check.
+     * @return True if the uuid is the uuid of a dev, false otherwise.
+     */
     public boolean isDev(UUID uuid) {
-        for (DevInfo i : this.devs)
-            if (uuid.equals(i.getMCUUID()))
-                return true;
-        return false;
+        return this.devs.stream().anyMatch(i -> uuid.equals(i.getMCUUID()));
     }
 
+    /**
+     * Gets the list of devs.
+     * @return The list of devs.
+     */
     public List<DevInfo> getDevs() {
         return Collections.unmodifiableList(this.devs);
     }
@@ -594,13 +630,8 @@ public class Necessities extends JavaPlugin {
             JsonObject ls = (JsonObject) json.get("Lavasurvival");
             JsonArray lsDevs = (JsonArray) ls.get("devs");
             for (int i = 0; i < lsDevs.size(); i++) {
-                JsonObject dev = null;
                 int devID = lsDevs.getInteger(i);
-                for (Object a : ar)
-                    if (devID == ((JsonObject) a).getInteger("devID")) {
-                        dev = (JsonObject) a;
-                        break;
-                    }
+                JsonObject dev = (JsonObject) ar.stream().filter(a -> devID == ((JsonObject) a).getInteger("devID")).findFirst().orElse(null);
                 if (dev != null)
                     this.devs.add(new DevInfo(dev));
             }
@@ -627,18 +658,34 @@ public class Necessities extends JavaPlugin {
         public UUID getMCUUID() {
             return this.mcUUID;
         }
+
+        public String getSlackID() {
+            return this.slackID;
+        }
     }
 
+    /**
+     * Tracks the given action.
+     * @param hit The action to track.
+     */
     public static void trackAction(Hit hit) {
         OpenAnalyticsTracker tracker;
         if ((tracker = getTracker()) != null)
             tracker.trackHit(hit);
     }
 
+    /**
+     * Gets the UserManager.
+     * @return The UserManager.
+     */
     public static UserManager getUM() {
         return INSTANCE.um == null ? INSTANCE.um = new UserManager() : INSTANCE.um;
     }
 
+    /**
+     * Gets JanetNet.
+     * @return JanetNet.
+     */
     public static JanetNet getNet() {
         return INSTANCE.net == null ? INSTANCE.net = new JanetNet() : INSTANCE.net;
     }
@@ -647,64 +694,116 @@ public class Necessities extends JavaPlugin {
         return INSTANCE.spy == null ? INSTANCE.spy = new CmdCommandSpy() : INSTANCE.spy;
     }
 
+    /**
+     * Gets the RankManager.
+     * @return The RankManager.
+     */
     public static RankManager getRM() {
         return INSTANCE.rm == null ? INSTANCE.rm = new RankManager() : INSTANCE.rm;
     }
 
+    /**
+     * Gets the PortalManager.
+     * @return The PortalManager.
+     */
     public static PortalManager getPM() {
         return INSTANCE.pm == null ? INSTANCE.pm = new PortalManager() : INSTANCE.pm;
     }
 
+    /**
+     * Gets JanetSlack.
+     * @return JanetSlack.
+     */
     public static JanetSlack getSlack() {
         return INSTANCE.slack == null ? INSTANCE.slack = new JanetSlack() : INSTANCE.slack;
     }
 
+    /**
+     * Gets the Console.
+     * @return The Console.
+     */
     public static Console getConsole() {
         return INSTANCE.console == null ? INSTANCE.console = new Console() : INSTANCE.console;
     }
 
+    /**
+     * Gets Variables.
+     * @return Variables.
+     */
     public static Variables getVar() {
         return INSTANCE.var == null ? INSTANCE.var = new Variables() : INSTANCE.var;
     }
 
+    /**
+     * Gets Teleports.
+     * @return Teleports.
+     */
     public static Teleports getTPs() {
         return INSTANCE.tps == null ? INSTANCE.tps = new Teleports() : INSTANCE.tps;
     }
 
+    /**
+     * Gets JanetWarns.
+     * @return JanetWarns.
+     */
     public static JanetWarn getWarns() {
         return INSTANCE.warns == null ? INSTANCE.warns = new JanetWarn() : INSTANCE.warns;
     }
 
+    /**
+     * Gets ScoreBoards.
+     * @return ScoreBoards.
+     */
     public static ScoreBoards getSBs() {
         return INSTANCE.sb == null ? INSTANCE.sb = new ScoreBoards() : INSTANCE.sb;
     }
 
+    /**
+     * Gets Hide.
+     * @return Hide.
+     */
     public static CmdHide getHide() {
         return INSTANCE.hide == null ? INSTANCE.hide = new CmdHide() : INSTANCE.hide;
     }
 
+    /**
+     * Gets JanetAI.
+     * @return JanetAI.
+     */
     public static JanetAI getAI() {
         return INSTANCE.ai == null ? INSTANCE.ai = new JanetAI() : INSTANCE.ai;
     }
 
+    /**
+     * Gets Janet.
+     * @return Janet.
+     */
     public static Janet getBot() {
         return INSTANCE.bot == null ? INSTANCE.bot = new Janet() : INSTANCE.bot;
     }
 
+    /**
+     * Gets the WarpManager.
+     * @return The WarpManager.
+     */
     public static WarpManager getWarps() {
         return INSTANCE.warps == null ? INSTANCE.warps = new WarpManager() : INSTANCE.warps;
     }
 
+    /**
+     * Gets the WorldManager.
+     * @return The WorldManager.
+     */
     public static WorldManager getWM() {
         return INSTANCE.wm == null ? INSTANCE.wm = new WorldManager() : INSTANCE.wm;
     }
 
+    /**
+     * Gets the GuildManager.
+     * @return The GuildManager.
+     */
     public static GuildManager getGM() {
         return INSTANCE.gm == null ? INSTANCE.gm = new GuildManager() : INSTANCE.gm;
-    }
-
-    public static Teleports getTeleports() {
-        return INSTANCE.tps == null ? INSTANCE.tps = new Teleports() : INSTANCE.tps;
     }
 
     static CmdInvsee getInvsee() {
@@ -715,10 +814,18 @@ public class Necessities extends JavaPlugin {
         return INSTANCE.books == null ? INSTANCE.books = new JanetBooks() : INSTANCE.books;
     }
 
+    /**
+     * Gets JanetRename.
+     * @return JanetRename.
+     */
     public static JanetRename getRename() {
         return INSTANCE.rename == null ? INSTANCE.rename = new JanetRename() : INSTANCE.rename;
     }
 
+    /**
+     * Gets the Review.
+     * @return The Review.
+     */
     public static Reviews getRev() {
         return INSTANCE.rev == null ? INSTANCE.rev = new Reviews() : INSTANCE.rev;
     }
@@ -739,42 +846,82 @@ public class Necessities extends JavaPlugin {
         return INSTANCE.acb == null ? INSTANCE.acb = new AntiCombatLog() : INSTANCE.acb;
     }
 
+    /**
+     * Gets the PowerManager.
+     * @return The PowerManager.
+     */
     public static PowerManager getPower() {
         return INSTANCE.power == null ? INSTANCE.power = new PowerManager() : INSTANCE.power;
     }
 
+    /**
+     * Gets the SafeLocation.
+     * @return The SafeLocation.
+     */
     public static SafeLocation getSafeLocations() {
         return INSTANCE.safe == null ? INSTANCE.safe = new SafeLocation() : INSTANCE.safe;
     }
 
+    /**
+     * Gets JanetLog.
+     * @return JanetLog.
+     */
     public static JanetLog getLog() {
         return INSTANCE.log == null ? INSTANCE.log = new JanetLog() : INSTANCE.log;
     }
 
+    /**
+     * Gets the Economy.
+     * @return The Economy.
+     */
     public static Economy getEconomy() {
         return INSTANCE.eco == null ? INSTANCE.eco = new Economy() : INSTANCE.eco;
     }
 
+    /**
+     * Gets the Command Prices.
+     * @return The Command Prices.
+     */
     public static CmdPrices getCommandPrices() {
         return INSTANCE.cmdp == null ? INSTANCE.cmdp = new CmdPrices() : INSTANCE.cmdp;
     }
 
+    /**
+     * Gets the Rank Prices.
+     * @return The Rank Prices.
+     */
     public static RankPrices getRankPrices() {
         return INSTANCE.rp == null ? INSTANCE.rp = new RankPrices() : INSTANCE.rp;
     }
 
+    /**
+     * Gets the Prices.
+     * @return The Prices.
+     */
     public static Prices getPrices() {
         return INSTANCE.pr == null ? INSTANCE.pr = new Prices() : INSTANCE.pr;
     }
 
+    /**
+     * Gets the Announcer.
+     * @return The Announcer.
+     */
     public static Announcer getAnnouncer() {
         return INSTANCE.announcer == null ? INSTANCE.announcer = new Announcer() : INSTANCE.announcer;
     }
 
+    /**
+     * Gets the config file.
+     * @return The config file.
+     */
     public File getConfigFile() {
         return this.configFile;
     }
 
+    /**
+     * Gets the config..
+     * @return The config.
+     */
     public YamlConfiguration getConfig() {
         return YamlConfiguration.loadConfiguration(getConfigFile());
     }

@@ -37,12 +37,10 @@ public class JanetSlack {
     private String token;
     private URL hookURL;
     private WebSocket ws;
-    private RankManager rm;
-    private UserManager um;
-    private JanetWarn warns;
-    private Variables var;
-    private CmdHide hide;
 
+    /**
+     * Initializes JanetSlack and connections to a slack channel.
+     */
     public void init() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Connecting to Slack...");
         YamlConfiguration config = Necessities.getInstance().getConfig();
@@ -58,16 +56,14 @@ public class JanetSlack {
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Failed to connect to Slack.");
             return;
         }
-        rm = Necessities.getRM();
-        um = Necessities.getUM();
-        warns = Necessities.getWarns();
-        var = Necessities.getVar();
-        hide = Necessities.getHide();
         setHelp();
         connect();
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Connected to Slack.");
     }
 
+    /**
+     * Disconnects from slack.
+     */
     public void disconnect() {
         if (!isConnected)
             return;
@@ -80,10 +76,20 @@ public class JanetSlack {
             ws.disconnect();
     }
 
+    /**
+     * Sends ingame chat to all the slack users monitoring ingame chat.
+     * @param message The message to send.
+     */
     public void handleInGameChat(String message) {
         userMap.values().stream().filter(SlackUser::viewingChat).forEach(u -> u.sendPrivateMessage(message));
     }
 
+    /**
+     * Sends a message to slack.
+     * @param message The message to send.
+     * @param isPM    True if the message was a private message, false otherwise.
+     * @param u       The SlackUser who sent the pm if there was one.
+     */
     public void sendMessage(String message, boolean isPM, SlackUser u) {
         if (isPM)
             u.sendPrivateMessage(message);
@@ -91,6 +97,10 @@ public class JanetSlack {
             sendMessage(message);
     }
 
+    /**
+     * Sends a message to slack.
+     * @param message The message to send.
+     */
     //sendPost("https://slack.com/api/chat.postMessage?token=" + token + "&channel=%23" + channel + "&text=" + ChatColor.stripColor(message.replaceAll(" ", "%20")) + "&as_user=true&pretty=1");
     public void sendMessage(String message) {
         message = ChatColor.stripColor(message);
@@ -304,6 +314,7 @@ public class JanetSlack {
         if (info.isBot) //If bot don't send to game
             return;
         final String name = info.getName();
+        Variables var = Necessities.getVar();
         if (message.startsWith("!")) {
             YamlConfiguration config = Necessities.getInstance().getConfig();
             Economy eco = Necessities.getEconomy();
@@ -331,11 +342,13 @@ public class JanetSlack {
                 m += " ---- Help -- Page " + Integer.toString(page) + "/" + Integer.toString(totalpages) + " ---- \n";
                 page = page - 1;
                 String msg = getLine(page, time, helpList);
+                StringBuilder mBuilder = new StringBuilder(m);
                 while (msg != null) {
-                    m += msg + "\n";
+                    mBuilder.append(msg).append("\n");
                     time++;
                     msg = getLine(page, time, helpList);
                 }
+                m = mBuilder.toString();
                 if (page + 1 < totalpages)
                     m += "Type !help " + Integer.toString(page + 2) + " to read the next page.\n";
             } else if (message.startsWith("!rank")) {
@@ -343,14 +356,18 @@ public class JanetSlack {
             } else if (message.startsWith("!bans") || message.startsWith("!banlist") || message.startsWith("!bannedplayers") || message.startsWith("!bannedips")) {
                 BanList bans = Bukkit.getBanList(BanList.Type.NAME);
                 m += "Banned players: ";
+                StringBuilder mBuilder = new StringBuilder(m);
                 for (BanEntry e : bans.getBanEntries())
-                    m += e.getTarget() + ", ";
+                    mBuilder.append(e.getTarget()).append(", ");
+                m = mBuilder.toString();
                 if (m.endsWith(", "))
                     m = m.substring(0, m.length() - 2).trim();
                 m += "\nBanned ips: ";
                 bans = Bukkit.getBanList(BanList.Type.IP);
+                StringBuilder mBuilder1 = new StringBuilder(m);
                 for (BanEntry e : bans.getBanEntries())
-                    m += e.getTarget() + ", ";
+                    mBuilder1.append(e.getTarget()).append(", ");
+                m = mBuilder1.toString();
                 if (m.endsWith(", "))
                     m = m.substring(0, m.length() - 2).trim();
             } else if (message.startsWith("!whois ")) {
@@ -367,7 +384,7 @@ public class JanetSlack {
                         return;
                     }
                 }
-                User u = um.getUser(uuid);
+                User u = Necessities.getUM().getUser(uuid);
                 m += "===== WhoIs: " + u.getName() + " =====\n";
                 if (u.getPlayer() != null)
                     m += " - Nick: " + u.getPlayer().getDisplayName() + "\n";
@@ -413,15 +430,18 @@ public class JanetSlack {
                         gamemode = "Spectator";
                     m += " - Gamemode: " + gamemode + "\n";
                     m += " - Banned: " + (p.isBanned() ? "true" : "false") + "\n";
-                    m += " - Visible: " + (hide.isHidden(p) ? "false" : "true") + "\n";
+                    m += " - Visible: " + (Necessities.getHide().isHidden(p) ? "false" : "true") + "\n";
                 } else
                     m += " - Banned: " + (Bukkit.getOfflinePlayer(u.getUUID()).isBanned() ? "true" : "false") + "\n";
             } else if (message.startsWith("!who")) {
+                RankManager rm = Necessities.getRM();
                 int numbOnline = Bukkit.getOnlinePlayers().size() + 1;
                 HashMap<Rank, String> online = new HashMap<>();
                 if (!rm.getOrder().isEmpty())
                     online.put(rm.getRank(rm.getOrder().size() - 1), rm.getRank(rm.getOrder().size() - 1).getColor() + "Janet, ");
-                if (!um.getUsers().isEmpty())
+                UserManager um = Necessities.getUM();
+                if (!um.getUsers().isEmpty()) {
+                    CmdHide hide = Necessities.getHide();
                     for (User u : um.getUsers().values()) {
                         if (u.isAfk() && hide.isHidden(u.getPlayer()))
                             online.put(u.getRank(), online.containsKey(u.getRank()) ? online.get(u.getRank()) + "[AFK][HIDDEN]" + u.getPlayer().getDisplayName() + ", " : "[AFK][HIDDEN]" +
@@ -433,17 +453,20 @@ public class JanetSlack {
                         else
                             online.put(u.getRank(), online.containsKey(u.getRank()) ? online.get(u.getRank()) + u.getPlayer().getDisplayName() + ", " : u.getPlayer().getDisplayName() + ", ");
                     }
+                }
                 m += "There " + (numbOnline == 1 ? "is " : "are ") + numbOnline + " out of a maximum " + Bukkit.getMaxPlayers() + " players online.\n";
+                StringBuilder mBuilder = new StringBuilder(m);
                 for (int i = rm.getOrder().size() - 1; i >= 0; i--) {
                     Rank r = rm.getRank(i);
                     if (online.containsKey(r))
-                        m += r.getName() + "s: " + online.get(r).trim().substring(0, online.get(r).length() - 2) + "\n";
+                        mBuilder.append(r.getName()).append("s: ").append(online.get(r).trim().substring(0, online.get(r).length() - 2)).append("\n");
                 }
+                m = mBuilder.toString();
             } else if (message.startsWith("!devs")) {
-                String d = var.getMessages() + "The Devs for Necessities are: ";
+                StringBuilder d = new StringBuilder("The Devs for Necessities are: ");
                 List<Necessities.DevInfo> devs = Necessities.getInstance().getDevs();
                 for (int i = 0; i < devs.size(); i++)
-                    d += (i + 1 >= devs.size() ? "and " + devs.get(i).getName() + "." : devs.get(i).getName() + ", ");
+                    d.append(i + 1 >= devs.size() ? "and " + devs.get(i).getName() + "." : devs.get(i).getName() + ", ");
                 m += d + "\n";
             } else if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && (message.startsWith("!baltop") || message.startsWith("!moneytop") || message.startsWith("!balancetop"))) {
                 int page = 0;
@@ -465,9 +488,10 @@ public class JanetSlack {
                 m += "Balance Top Page [" + Integer.toString(page) + "/" + Integer.toString(totalpages) + "]\n";
                 List<String> balTop = eco.getBalTop(page);
                 page -= 1;
+                StringBuilder mBuilder = new StringBuilder(m);
                 for (String bal : balTop)
-                    m += ChatColor.GOLD + Integer.toString((page * 10) + time++ + 1) + ". " + var.getCatalog() + bal.split(" ")[0] + " has: " + var.getMoney() +
-                            Economy.format(Double.parseDouble(bal.split(" ")[1])) + "\n";
+                    mBuilder.append(ChatColor.GOLD).append(Integer.toString((page * 10) + time++ + 1)).append(". ").append(Utils.nameFromString(bal.split(" ")[0])).append(" has: ").append(Economy.format(Double.parseDouble(bal.split(" ")[1]))).append("\n");
+                m = mBuilder.toString();
             } else if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && (message.startsWith("!bal ") || message.startsWith("!balance ") || message.startsWith("!money "))) {
                 if (message.split(" ").length == 1) {
                     sendMessage("Error: You must enter a player to view info of.", isPM, info);
@@ -508,15 +532,15 @@ public class JanetSlack {
                     return;
                 }
                 final String reason = message.replaceFirst(message.split(" ")[0], "").trim();
-                Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> warns.warn(target.getUniqueId(), reason, name));
+                Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> Necessities.getWarns().warn(target.getUniqueId(), reason, name));
                 m += target.getName() + " was warned by " + name + " for " + reason + ".\n";
             } else if (message.startsWith("!worlds")) {
-                String levels = "";
                 ArrayList<String> worlds = Bukkit.getWorlds().stream().map(World::getName).collect(Collectors.toCollection(ArrayList::new));
+                StringBuilder levelsBuilder = new StringBuilder();
                 for (int i = 0; i < worlds.size() - 1; i++)
-                    levels += worlds.get(i) + ", ";
-                levels += "and " + worlds.get(worlds.size() - 1) + ".";
-                m += "The worlds are: " + levels + "\n";
+                    levelsBuilder.append(worlds.get(i)).append(", ");
+                levelsBuilder.append("and ").append(worlds.get(worlds.size() - 1)).append(".");
+                m += "The worlds are: " + levelsBuilder.toString() + "\n";
             } else if (message.startsWith("!say ") && info.isAdmin()) {
                 Bukkit.broadcastMessage(ChatColor.WHITE + name + ": " + message.replaceFirst("!say ", ""));
                 return;
@@ -599,7 +623,7 @@ public class JanetSlack {
                     sendMessage("Error: Invalid player.", isPM, info);
                     return;
                 }
-                User u = um.getUser(uuid);
+                User u = Necessities.getUM().getUser(uuid);
                 Bukkit.broadcastMessage(var.getObj() + name + var.getMessages() + (!u.isMuted() ? " muted " : " unmuted ") + var.getObj() + u.getPlayer().getDisplayName() + var.getMessages() + ".");
                 u.getPlayer().sendMessage(var.getDemote() + "You have been " + var.getObj() + (!u.isMuted() ? "muted" : "unmuted") + var.getMessages() + ".");
                 m += name + (!u.isMuted() ? " muted " : " unmuted ") + u.getPlayer().getDisplayName() + ".\n";
@@ -696,11 +720,7 @@ public class JanetSlack {
                     final String reason = (message.split(" ").length > 1) ? message.replaceFirst(message.split(" ")[0], "").trim() : "";
                     BanList bans = Bukkit.getBanList(BanList.Type.IP);
                     String theirIP = message.split(" ")[0];
-                    for (final Player t : Bukkit.getOnlinePlayers())
-                        if (t.getAddress().toString().split("/")[1].split(":")[0].equals(theirIP)) {
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> t.getPlayer().kickPlayer(reason));
-                            break;
-                        }
+                    Bukkit.getOnlinePlayers().stream().filter(t -> t.getAddress().toString().split("/")[1].split(":")[0].equals(theirIP)).findFirst().ifPresent(t -> Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> t.getPlayer().kickPlayer(reason)));
                     bans.addBan(theirIP, reason, null, "Console");
                     Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirIP + var.getMessages() + (reason.equals("") ? "." : " for " + var.getObj() + reason + var.getMessages() + "."));
                     m += name + " banned " + theirIP + (reason.equals("") ? "." : " for " + reason + ".") + "\n";
@@ -738,10 +758,10 @@ public class JanetSlack {
                 m += "Total Memory: " + runtime.totalMemory() / mb + " mb.\n";
                 m += "Free Memory: " + runtime.freeMemory() / mb + " mb.\n";
                 m += "Used Memory: " + (runtime.totalMemory() - runtime.freeMemory()) / mb + " mb.\n";
-                for (World w : Bukkit.getWorlds()) {
-                    m += "World: " + w.getName() + "\n";
-                    m += "    Entities Loaded: " + w.getEntities().size() + "\n";
-                }
+                StringBuilder mBuilder = new StringBuilder(m);
+                for (World w : Bukkit.getWorlds())
+                    mBuilder.append("World: ").append(w.getName()).append("\n").append("    Entities Loaded: ").append(w.getEntities().size()).append("\n");
+                m = mBuilder.toString();
             } else if (message.startsWith("!reload") && info.isAdmin()) {
                 sendMessage("Reloading...", isPM, info);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), Bukkit::reload);
@@ -768,7 +788,7 @@ public class JanetSlack {
             sendMessage(m, isPM, info);
         } else if (!isPM)
             Bukkit.broadcast(var.getMessages() + "From Slack - " + ChatColor.WHITE + name + ": " + message, "Necessities.slack");
-        Necessities.getAI().parseMessage(name, message, JanetAI.Source.Slack, isPM, info);
+        Necessities.getAI().parseMessage(message, JanetAI.Source.Slack, isPM, info);
     }
 
     @SuppressWarnings("unused")
@@ -799,19 +819,19 @@ public class JanetSlack {
             //else leave it at 0 for member
         }
 
-        public String getName() {
+        String getName() {
             return this.name;
         }
 
-        public String getID() {
+        String getID() {
             return this.id;
         }
 
-        public int getRank() {
+        int getRank() {
             return this.rank;
         }
 
-        public boolean isBot() {
+        boolean isBot() {
             return this.isBot;
         }
 
@@ -831,7 +851,7 @@ public class JanetSlack {
             return this.rank >= 1;
         }
 
-        public boolean isOwner() {
+        boolean isOwner() {
             return this.rank >= 2;
         }
 
@@ -863,23 +883,23 @@ public class JanetSlack {
             this.viewingChat = !this.viewingChat;
         }
 
-        public void setJustLoaded(boolean loaded) {
+        void setJustLoaded(boolean loaded) {
             this.justLoaded = loaded;
         }
 
-        public boolean getJustLoaded() {
+        boolean getJustLoaded() {
             return this.justLoaded;
         }
 
-        public String getLatest() {
+        String getLatest() {
             return this.latest;
         }
 
-        public void setLatest(String latest) {
+        void setLatest(String latest) {
             this.latest = latest;
         }
 
-        public String getChannel() {
+        String getChannel() {
             return this.channel;
         }
 

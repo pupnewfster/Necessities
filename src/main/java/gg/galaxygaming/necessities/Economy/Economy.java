@@ -19,6 +19,9 @@ public class Economy {//TODO add OpenAnalytics
     private String dbURL;
     private int type;
 
+    /**
+     * Initializes the economy.
+     */
     public void init() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loading Economy...");
         YamlConfiguration config = Necessities.getInstance().getConfig();
@@ -33,7 +36,12 @@ public class Economy {//TODO add OpenAnalytics
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Economy loaded.");
     }
 
-    public boolean addPlayerIfNotExists(UUID uuid) { //TODO let the table have default values
+    /**
+     * Adds a player with the specified UUID if they are not already in the table.
+     * @param uuid The uuid of the player to check.
+     * @return True if the player was added to the table, false otherwise.
+     */
+    public boolean addPlayerIfNotExists(UUID uuid) {
         YamlConfiguration config = Necessities.getInstance().getConfig();
         double startBal = config.getDouble("Economy.initialMoney");
         boolean added = false;
@@ -54,6 +62,11 @@ public class Economy {//TODO add OpenAnalytics
         return added;
     }
 
+    /**
+     * Checks if the player with the specified UUID is in the table.
+     * @param uuid The uuid of the player to check.
+     * @return True if the player exists in the table, false otherwise.
+     */
     public boolean doesPlayerExist(UUID uuid) {
         if (loadedBals.containsKey(uuid))
             return true;
@@ -72,6 +85,11 @@ public class Economy {//TODO add OpenAnalytics
         return exists;
     }
 
+    /**
+     * Retrieves a player's balance.
+     * @param uuid The uuid of the player to retrieve the balance of.
+     * @return The balance of the specified player.
+     */
     public double getBalance(UUID uuid) {
         if (uuid == null)
             return 0.0;
@@ -94,10 +112,19 @@ public class Economy {//TODO add OpenAnalytics
         return bal;
     }
 
+    /**
+     * Removes an account from active memory.
+     * @param uuid The uuid of the account to unload from memory.
+     */
     public void unloadAccount(UUID uuid) {
         this.loadedBals.remove(uuid);
     }
 
+    /**
+     * Removes a specified amount of money from the given player.
+     * @param uuid   The uuid of the player to remove the money from.
+     * @param amount The amount of money to remove.
+     */
     public void removeMoney(UUID uuid, double amount) {
         if (this.loadedBals.containsKey(uuid))
             this.loadedBals.put(uuid, this.loadedBals.get(uuid) - amount);
@@ -116,6 +143,11 @@ public class Economy {//TODO add OpenAnalytics
         }.runTaskAsynchronously(Necessities.getInstance());
     }
 
+    /**
+     * Adds a specified amount of money from the given player.
+     * @param uuid   The uuid of the player to add the money to.
+     * @param amount The amount of money to add.
+     */
     public void addMoney(UUID uuid, double amount) {
         if (this.loadedBals.containsKey(uuid))
             this.loadedBals.put(uuid, this.loadedBals.get(uuid) + amount);
@@ -134,6 +166,11 @@ public class Economy {//TODO add OpenAnalytics
         }.runTaskAsynchronously(Necessities.getInstance());
     }
 
+    /**
+     * Sets a player's balanced to the given amount.
+     * @param uuid   The uuid of the player to change the balance of.
+     * @param amount The amount to set the player's balance to.
+     */
     public void setBalance(UUID uuid, double amount) {
         if (this.loadedBals.containsKey(uuid))
             this.loadedBals.put(uuid, amount);
@@ -152,6 +189,11 @@ public class Economy {//TODO add OpenAnalytics
         }.runTaskAsynchronously(Necessities.getInstance());
     }
 
+    /**
+     * Retrieve a page of baltop.
+     * @param page The page number to retrieve.
+     * @return The specified page of baltop.
+     */
     public List<String> getBalTop(int page) {
         List<String> balTop = new ArrayList<>();
         try {
@@ -168,16 +210,29 @@ public class Economy {//TODO add OpenAnalytics
         return balTop;
     }
 
+    /**
+     * Gets the number of baltop pages there are.
+     * @return The number of pages in baltop.
+     */
     public int baltopPages() {
         int size = playerCount();
         return size % 10 != 0 ? size / 10 + 1 : size / 10;
     }
 
+    /**
+     * Formats a given balance based on the config.
+     * @param balance The balance to format.
+     * @return A formatted string of the given balance.
+     */
     public static String format(double balance) {
         YamlConfiguration config = Necessities.getInstance().getConfig();
         return config.getString("Economy.prefix") + Utils.addCommas(Utils.roundTwoDecimals(balance)) + config.getString("Economy.suffix");
     }
 
+    /**
+     * Gets the number of players who has joined the server.
+     * @return The number of players who has joined the server.
+     */
     public int playerCount() {
         int amount = 0;
         try {

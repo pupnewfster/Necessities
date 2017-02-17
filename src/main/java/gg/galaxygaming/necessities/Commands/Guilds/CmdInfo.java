@@ -62,15 +62,17 @@ public class CmdInfo implements GuildCmd {
             sender.sendMessage(var.getMessages() + "This guild is permanent - remaining even with no players.");
         sender.sendMessage(var.getMessages() + "Land / Power / Max power: " + var.getGuildMsgs() + g.getLand() + "/" + Utils.roundTwoDecimals(g.getPower()) + "/" + g.getMaxPower() + ".00");
         if (!g.getAllies().isEmpty()) {
-            String allies = "";
+            StringBuilder alliesBuilder = new StringBuilder();
             for (String ally : g.getAllies())
-                allies += (other == null ? var.getNeutral() + ally + ", " : other.relation(gm.getGuild(ally)) + ally + ", ");
+                alliesBuilder.append(other == null ? var.getNeutral() + ally + ", " : other.relation(gm.getGuild(ally)) + ally + ", ");
+            String allies = alliesBuilder.toString();
             sender.sendMessage(var.getMessages() + "Allies: " + allies.substring(0, allies.length() - 2));
         }
         if (!g.getEnemies().isEmpty()) {
-            String enemies = "";
+            StringBuilder enemiesBuilder = new StringBuilder();
             for (String enemy : g.getEnemies())
-                enemies += (other == null ? var.getNeutral() + enemy + ", " : other.relation(gm.getGuild(enemy)) + enemy + ", ");
+                enemiesBuilder.append(other == null ? var.getNeutral() + enemy + ", " : other.relation(gm.getGuild(enemy)) + enemy + ", ");
+            String enemies = enemiesBuilder.toString();
             sender.sendMessage(var.getMessages() + "Enemies: " + enemies.substring(0, enemies.length() - 2));
         }
         if (sender instanceof Player) {
@@ -85,9 +87,9 @@ public class CmdInfo implements GuildCmd {
     }
 
     private String parant(int nameLength) {
-        String p = "";
+        StringBuilder p = new StringBuilder();
         for (int i = 0; i < 22 - nameLength; i++)
-            p += "_";
-        return p;
+            p.append("_");
+        return p.toString();
     }
 }

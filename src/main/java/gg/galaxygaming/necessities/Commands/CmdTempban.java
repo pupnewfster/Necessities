@@ -51,9 +51,10 @@ public class CmdTempban implements Cmd {
         }
         String reason = "";
         if (args.length > 2) {
+            StringBuilder reasonBuilder = new StringBuilder();
             for (int i = 2; i < args.length; i++)
-                reason += args[i] + " ";
-            reason = ChatColor.translateAlternateColorCodes('&', reason.trim());
+                reasonBuilder.append(args[i]).append(" ");
+            reason = ChatColor.translateAlternateColorCodes('&', reasonBuilder.toString().trim());
         }
         BanList bans = Bukkit.getBanList(BanList.Type.NAME);
         String theirName = target.getName();

@@ -12,19 +12,26 @@ public class JanetWarn {
     private final HashMap<UUID, Integer> warnCount = new HashMap<>();
     private String JanetName = "";
     private int warns;
-    private JanetLog log;
 
+    /**
+     * Initiates JanetWarn.
+     */
     public void initiate() {
         RankManager rm = Necessities.getRM();
         JanetName = (!rm.getOrder().isEmpty() ? ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") : "") + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
         warns = Necessities.getInstance().getConfig().getInt("Necessities.warns");
-        log = Necessities.getLog();
     }
 
     void removePlayer(UUID uuid) {
         warnCount.remove(uuid);
     }
 
+    /**
+     * Warns a specified player for the given reason.
+     * @param uuid   The uuid of the player to warn.
+     * @param reason The reason the player is getting warned.
+     * @param warner The name of the person who warned the player.
+     */
     public void warn(UUID uuid, String reason, String warner) {
         if (!warnCount.containsKey(uuid))
             warnCount.put(uuid, 1);
@@ -69,7 +76,7 @@ public class JanetWarn {
             }
             timesLeft(uuid);
         }
-        log.log("Janet: " + warning);
+        Necessities.getLog().log("Janet: " + warning);
     }
 
     private void timesLeft(UUID uuid) {

@@ -93,9 +93,9 @@ public class CmdFlag implements GuildCmd {
     }
 
     private String parant(int nameLength) {
-        String p = "";
+        StringBuilder p = new StringBuilder();
         for (int i = 0; i < 23 - nameLength; i++)
-            p += "_";
-        return p;
+            p.append("_");
+        return p.toString();
     }
 }

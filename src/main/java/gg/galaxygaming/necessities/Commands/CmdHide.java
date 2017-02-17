@@ -67,19 +67,36 @@ public class CmdHide implements Cmd {
         return true;
     }
 
+    /**
+     * Checks if the specified player is hidden.
+     * @param p The player to check.
+     * @return True if the player is hidden, false otherwise.
+     */
     public boolean isHidden(Player p) {
         return p != null && hidden.contains(p.getUniqueId());
     }
 
+    /**
+     * Hides all the hidden players if the specified player is unable to see them.
+     * @param p The player to check if they can see hidden players.
+     */
     public void playerJoined(Player p) {
         if (!p.hasPermission("Necessities.seehidden"))
             hidden.stream().filter(uuid -> Bukkit.getPlayer(uuid) != null).forEach(uuid -> p.hidePlayer(Bukkit.getPlayer(uuid)));
     }
 
+    /**
+     * Shows all the hidden players to the specified player, to prevent glitches when they log back in.
+     * @param p The player to show the hidden players to.
+     */
     public void playerLeft(Player p) {
         hidden.stream().filter(uuid -> Bukkit.getPlayer(uuid) != null).forEach(uuid -> p.showPlayer(Bukkit.getPlayer(uuid)));
     }
 
+    /**
+     * Hides the specified player.
+     * @param p The player to hide.
+     */
     public void hidePlayer(Player p) {
         Bukkit.getOnlinePlayers().stream().filter(x -> !x.equals(p) && x.canSee(p) && !x.hasPermission("Necessities.seehidden")).forEach(x -> x.hidePlayer(p));
         Necessities.getInstance().removePlayer(p);
@@ -90,6 +107,9 @@ public class CmdHide implements Cmd {
         Necessities.getInstance().addPlayer(p);
     }
 
+    /**
+     * Saves the hidden players to file.
+     */
     public void unload() {
         YamlConfiguration configHiding = YamlConfiguration.loadConfiguration(configFileHiding);
         configHiding.getKeys(false).forEach(key -> configHiding.set(key, null));
@@ -100,6 +120,9 @@ public class CmdHide implements Cmd {
         }
     }
 
+    /**
+     * Loads the hidden players from file.
+     */
     public void init() {
         YamlConfiguration configSpying = YamlConfiguration.loadConfiguration(configFileHiding);
         hidden.addAll(configSpying.getKeys(false).stream().map(UUID::fromString).collect(Collectors.toList()));

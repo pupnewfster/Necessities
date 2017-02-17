@@ -23,7 +23,7 @@ public class CmdBuyRank implements EconomyCmd {
             Player player = (Player) sender;
             String rankName = Utils.capFirst(args[0]);
             RankPrices rp = Necessities.getRankPrices();
-            double cost = rp.getCost(rankName);
+            double cost = rp.getPrice(rankName);
             if (eco.getBalance(player.getUniqueId()) < cost) {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Not enough money.");
                 return true;
@@ -40,7 +40,7 @@ public class CmdBuyRank implements EconomyCmd {
                 return true;
             }
             eco.removeMoney(player.getUniqueId(), cost);
-            um.updateUserRank(um.getUser(player.getUniqueId()), player.getUniqueId(), rm.getRank(Utils.capFirst(rankName)));
+            um.updateUserRank(um.getUser(player.getUniqueId()), rm.getRank(Utils.capFirst(rankName)));
             Bukkit.broadcastMessage(var.getMessages() + player.getName() + " bought the rank " + var.getObj() + rankName.toLowerCase());
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console may not buy ranks.");

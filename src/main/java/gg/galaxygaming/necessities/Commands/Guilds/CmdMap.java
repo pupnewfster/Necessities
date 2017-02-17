@@ -81,33 +81,34 @@ public class CmdMap implements GuildCmd {
                 name += "Wilderness";
                 sender.sendMessage(var.getMessages() + parant(name.length() / 2) + ".[ " + var.getWild() + name + var.getMessages() + " ]." + parant(name.length() / 2));
             }
-            String line = "";
+            StringBuilder line = new StringBuilder();
             int row = 0;
             for (int i = 0; i < chunks.size(); i++) {
                 if (i % 39 == 0 && i != 0) {
                     if (row == 0)
-                        sender.sendMessage(line + var.getMessages() + "   " + up);
+                        sender.sendMessage(line.toString() + var.getMessages() + "   " + up);
                     else if (row == 1)
-                        sender.sendMessage(line + var.getMessages() + " " + left(up) + var.getMessages() + "   " + right(up));
+                        sender.sendMessage(line.toString() + var.getMessages() + " " + left(up) + var.getMessages() + "   " + right(up));
                     else if (row == 2)
-                        sender.sendMessage(line + var.getMessages() + "   " + down(up));
+                        sender.sendMessage(line.toString() + var.getMessages() + "   " + down(up));
                     else
-                        sender.sendMessage(line);
+                        sender.sendMessage(line.toString());
                     row++;
-                    line = "";
+                    line = new StringBuilder();
                 }
                 Guild g = gm.chunkOwner(chunks.get(i));
                 if (i == 175)
-                    line += ChatColor.AQUA + "+";
+                    line.append(ChatColor.AQUA.toString()).append("+");
                 else if (u.getGuild() == null)
-                    line += var.getNeutral() + (g == null ? "-" : symbols.get(g));
+                    line.append(var.getNeutral()).append(g == null ? "-" : symbols.get(g));
                 else
-                    line += (g == null ? var.getNeutral() + "-" : u.getGuild().relation(g) + symbols.get(g));
+                    line.append(g == null ? var.getNeutral() + "-" : u.getGuild().relation(g) + symbols.get(g));
 
             }
-            String key = "";
+            StringBuilder keyBuilder = new StringBuilder();
             for (Guild g : symbols.keySet())
-                key += (u.getGuild() == null ? var.getNeutral() + symbols.get(g) + ": " + g.getName() + ", " : u.getGuild().relation(g) + symbols.get(g) + ": " + g.getName() + ", ");
+                keyBuilder.append(u.getGuild() == null ? var.getNeutral() + symbols.get(g) + ": " + g.getName() + ", " : u.getGuild().relation(g) + symbols.get(g) + ": " + g.getName() + ", ");
+            String key = keyBuilder.toString();
             if (!key.equals(""))
                 sender.sendMessage(key.substring(0, key.length() - 2));
         } else
@@ -116,10 +117,10 @@ public class CmdMap implements GuildCmd {
     }
 
     private String parant(int nameLength) {
-        String p = "";
+        StringBuilder p = new StringBuilder();
         for (int i = 0; i < 21 - nameLength; i++)
-            p += "_";
-        return p;
+            p.append("_");
+        return p.toString();
     }
 
     private String up(float yaw) {

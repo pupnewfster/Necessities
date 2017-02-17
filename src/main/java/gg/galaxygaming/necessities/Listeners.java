@@ -47,6 +47,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 class Listeners implements Listener {
@@ -236,7 +237,7 @@ class Listeners implements Listener {
             Bukkit.broadcastMessage(var.getMessages() + e.getPlayer().getName() + " combat logged.");
         }
         hide.playerLeft(e.getPlayer());
-        Necessities.getTeleports().removeRequests(uuid);
+        Necessities.getTPs().removeRequests(uuid);
         YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds"))
             Necessities.getPower().removePlayer(e.getPlayer());
@@ -279,6 +280,10 @@ class Listeners implements Listener {
     @EventHandler
     public void onPlayerMove(final PlayerMoveEvent e) {
         User u = Necessities.getUM().getUser(e.getPlayer().getUniqueId());
+        if (u.isFrozen()) {
+            e.setCancelled(true);
+            return;
+        }
         Location from = e.getFrom();
         Location to = e.getTo();
         boolean locationChanged = Math.abs(from.getX() - to.getX()) > 0.1 || Math.abs(from.getY() - to.getY()) > 0.1 || Math.abs(from.getZ() - to.getZ()) > 0.1;
@@ -413,16 +418,16 @@ class Listeners implements Listener {
     }
 
     private String getSub(String sub) {
-        String temp = "";
+        StringBuilder temp = new StringBuilder();
         int in = 0;
         for (int i = 0; i < sub.length(); i++) {
             if (sub.charAt(i) == '[')
                 in++;
             else if (sub.charAt(i) == ']')
                 in--;
-            temp += (in == 0 && sub.charAt(i) == '@') ? "," : sub.charAt(i);
+            temp.append((in == 0 && sub.charAt(i) == '@') ? "," : sub.charAt(i));
         }
-        return temp;
+        return temp.toString();
     }
 
     @SuppressWarnings("deprecation")
@@ -674,25 +679,26 @@ class Listeners implements Listener {
 
     @SuppressWarnings("deprecation")
     private ArrayList<String> getLore(Inventory inv) {
-        ArrayList<String> lore = new ArrayList<>();
         HashMap<String, String> condensedLore = new HashMap<>();
         for (int i = 0; i < inv.getSize(); i++) {//loc amount type damage enchants meta name
             if (inv.getItem(i) != null && !inv.getItem(i).getType().equals(Material.AIR)) {
-                String enchants = "";
+                StringBuilder enchantsBuilder = new StringBuilder();
                 for (Enchantment en : inv.getItem(i).getEnchantments().keySet())
-                    enchants += en.getId() + "-" + inv.getItem(i).getEnchantments().get(en) + ",";
+                    enchantsBuilder.append(en.getId()).append("-").append(inv.getItem(i).getEnchantments().get(en)).append(",");
                 String meta = "";
                 ItemMeta innerMeta = inv.getItem(i).getItemMeta();
                 if (innerMeta.hasLore()) {
+                    StringBuilder metaBuilder = new StringBuilder();
                     for (String l : innerMeta.getLore())
-                        meta += "[" + l.replaceAll(" ", "~").replaceAll(",", "@") + "]" + ",";
+                        metaBuilder.append("[").append(l.replaceAll(" ", "~").replaceAll(",", "@")).append("]").append(",");
+                    meta = metaBuilder.toString();
                     if (meta.length() > 1)
                         meta = meta.substring(0, meta.length() - 1);
                 }
                 String disp = "";
                 if (innerMeta.hasDisplayName())
                     disp = " " + innerMeta.getDisplayName().replaceAll(" ", "`");
-                enchants = enchants.trim();
+                String enchants = enchantsBuilder.toString().trim();
                 if (enchants.equals(""))
                     enchants = "n";
                 if (meta.equals(""))
@@ -701,9 +707,7 @@ class Listeners implements Listener {
                 condensedLore.put(info, condensedLore.containsKey(info) ? condensedLore.get(info) + "," + i : Integer.toString(i));
             }
         }
-        for (String key : condensedLore.keySet())
-            lore.add(condensedLore.get(key) + " " + key);
-        return lore;
+        return condensedLore.keySet().stream().map(key -> condensedLore.get(key) + " " + key).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private byte getDir(BlockFace f) {
@@ -879,27 +883,32 @@ class Listeners implements Listener {
             e.setFormat(e.getFormat().replaceAll("\\{WORLD} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{GUILD} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{TITLE} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{PREFIX} ", ""));
         } else if (u.opChat()) {
             isOp = true;
             e.setFormat(var.getMessages() + "To Ops - " + ChatColor.WHITE + e.getFormat());
             e.setFormat(e.getFormat().replaceAll("\\{WORLD} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{GUILD} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{TITLE} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{PREFIX} ", ""));
         } else if (player.hasPermission("Necessities.opBroadcast") && e.getMessage().startsWith("#")) {
             isOp = true;
             e.setFormat(var.getMessages() + "To Ops - " + ChatColor.WHITE + e.getFormat());
             e.setFormat(e.getFormat().replaceAll("\\{WORLD} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{GUILD} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{TITLE} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{PREFIX} ", ""));
             e.setMessage(e.getMessage().replaceFirst("#", ""));
         } else if (u.guildChat()) {
             e.setFormat(var.getMessages() + "To Guild - " + ChatColor.WHITE + e.getFormat());
             e.setFormat(e.getFormat().replaceAll("\\{WORLD} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{GUILD} ", ""));
             e.setFormat(e.getFormat().replaceAll("\\{TITLE} ", ""));
+            e.setFormat(e.getFormat().replaceAll("\\{PREFIX} ", ""));
         }
-        e.setFormat(e.getFormat().replaceAll("\\{GUILD} ", config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.getGuild() != null && u.getGuild().getRank(uuid) != null ?
-                "{GCOLOR}" + Necessities.getGM().getPrefix(u.getGuild().getRank(uuid)) + u.getGuild().getName() + " " : ""));
+        e.setFormat(e.getFormat().replaceAll("\\{GUILD} ", config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.getGuild() != null &&
+                u.getGuild().getRank(uuid) != null ? "{GCOLOR}" + Necessities.getGM().getPrefix(u.getGuild().getRank(uuid)) + u.getGuild().getName() + " " : ""));
+        e.setFormat(e.getFormat().replaceFirst("\\{PREFIX}", u.getPrefix()));
         String fullTitle = "";
         if (configTitles.contains(player.getUniqueId() + ".title")) {
             ChatColor brackets = ChatColor.getByChar(configTitles.getString(player.getUniqueId() + ".color"));
@@ -925,32 +934,37 @@ class Listeners implements Listener {
             if (!e.getRecipients().isEmpty()) {
                 ArrayList<Player> toRem = new ArrayList<>();
                 for (Player recip : e.getRecipients())
-                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (isOp && !recip.hasPermission("Necessities.opBroadcast")) || (u.slackChat() && !recip.hasPermission("Necessities.slack"))
-                            || (u.guildChat() && u.getGuild() != null && u.getGuild() != um.getUser(recip.getUniqueId()).getGuild()))
+                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (isOp && !recip.hasPermission("Necessities.opBroadcast")) || (u.slackChat() &&
+                            !recip.hasPermission("Necessities.slack")) || (u.guildChat() && u.getGuild() != null && u.getGuild() != um.getUser(recip.getUniqueId()).getGuild()))
                         toRem.add(recip);
                 toRem.forEach(recip -> e.getRecipients().remove(recip));
             }
-            if (!e.getRecipients().isEmpty())
+            String msg = e.getFormat().replaceAll("\\{MESSAGE}", e.getMessage());
+            if (!e.getRecipients().isEmpty()) {
+                boolean noGuilds = u.getGuild() == null || u.getGuild().getRank(uuid) == null || !config.contains("Necessities.Guilds") || !config.getBoolean("Necessities.Guilds");
+                String ngm = "";
+                if (noGuilds)
+                    ngm = msg.replaceFirst("\\{GCOLOR}", "");
                 for (Player recip : e.getRecipients()) {
                     User r = um.getUser(recip.getUniqueId());
-                    if (u.getGuild() == null || u.getGuild().getRank(uuid) == null || (config.contains("Necessities.Guilds") && !config.getBoolean("Necessities.Guilds")))
-                        recip.sendMessage(e.getFormat().replaceFirst("\\{GCOLOR}", "").replaceAll("\\{MESSAGE}", "") + e.getMessage());
+                    if (noGuilds)
+                        recip.sendMessage(ngm);
                     else
-                        recip.sendMessage(e.getFormat().replaceFirst("\\{GCOLOR}", u.getGuild().relation(r.getGuild()) + "").replaceAll("\\{MESSAGE}", "") + e.getMessage());
+                        recip.sendMessage(msg.replaceFirst("\\{GCOLOR}", u.getGuild().relation(r.getGuild()) + ""));
                 }
-            Bukkit.getConsoleSender().sendMessage(e.getFormat().replaceFirst("\\{GCOLOR}", var.getNeutral() + "").replaceAll("\\{MESSAGE}", "") + e.getMessage());
+            }
+            Bukkit.getConsoleSender().sendMessage(msg.replaceFirst("\\{GCOLOR}", var.getNeutral() + ""));
             if (u.slackChat())
-                Necessities.getSlack().sendMessage((e.getFormat().replaceFirst("\\{GCOLOR}", var.getNeutral() + "").replaceAll("\\{MESSAGE}", "") + e.getMessage()).replaceFirst("To Slack - ", ""));
+                Necessities.getSlack().sendMessage(msg.replaceFirst("\\{GCOLOR}", var.getNeutral() + "").replaceFirst("To Slack - ", ""));
             else if (!u.guildChat())
-                Necessities.getSlack().handleInGameChat((e.getFormat().replaceFirst("\\{GCOLOR}", var.getNeutral() + "").replaceAll("\\{MESSAGE}", "") + e.getMessage()));
+                Necessities.getSlack().handleInGameChat(msg.replaceFirst("\\{GCOLOR}", var.getNeutral() + ""));
         }
         e.setCancelled(true);
         if (config.contains("Necessities.AI") && config.getBoolean("Necessities.AI") && (!isOp || message.startsWith("!")) && !u.guildChat()) {
-            final String pname = player.getName();
             BukkitRunnable aiTask = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    Necessities.getAI().parseMessage(pname, message, JanetAI.Source.Server, false, null);
+                    Necessities.getAI().parseMessage(message, JanetAI.Source.Server, false, null);
                 }
             };
             aiTask.runTaskLaterAsynchronously(Necessities.getInstance(), 1);
@@ -1021,6 +1035,10 @@ class Listeners implements Listener {
     public void onPlayerTeleport(PlayerTeleportEvent e) {
         YamlConfiguration config = Necessities.getInstance().getConfig();
         final User u = Necessities.getUM().getUser(e.getPlayer().getUniqueId());
+        if (u.isFrozen()) {
+            e.setCancelled(true);
+            return;
+        }
         if (!e.getFrom().getWorld().equals(e.getTo().getWorld())) {
             WorldManager wm = Necessities.getWM();
             if (wm.multiple()) {
@@ -1254,15 +1272,9 @@ class Listeners implements Listener {
             if (g != null && !g.canHostileSpawn() && e.getEntity() instanceof Monster)
                 e.setCancelled(true);
         }
-        if (!e.isCancelled() && config.contains("Necessities.MaxSingleTypeEntities") && !e.getEntityType().equals(EntityType.ARMOR_STAND)) {
-            int max = config.getInt("Necessities.MaxSingleTypeEntities");
-            int cur = 0;
-            for (Entity t : e.getLocation().getChunk().getEntities())
-                if (t.getType().equals(e.getEntityType()))
-                    cur++;
-            if (cur >= max)
-                e.setCancelled(true);
-        }
+        if (!e.isCancelled() && config.contains("Necessities.MaxSingleTypeEntities") && !e.getEntityType().equals(EntityType.ARMOR_STAND) &&
+                (int) Arrays.stream(e.getLocation().getChunk().getEntities()).filter(t -> t.getType().equals(e.getEntityType())).count() >= config.getInt("Necessities.MaxSingleTypeEntities"))
+            e.setCancelled(true);
     }
 
     @EventHandler

@@ -17,6 +17,11 @@ public class CmdCommandSpy implements Cmd {
     private final ArrayList<UUID> spying = new ArrayList<>();
     private final File configFileSpying = new File("plugins/Necessities", "spying.yml");
 
+    /**
+     * Broadcasts the given command to the players spying on commands.
+     * @param sender  The sender of the command.
+     * @param command The command to send.
+     */
     public void broadcast(String sender, String command) {
         ArrayList<UUID> temp = new ArrayList<>();
         this.spying.stream().filter(uuid -> Bukkit.getPlayer(uuid) != null).forEach(uuid -> {
@@ -25,7 +30,7 @@ public class CmdCommandSpy implements Cmd {
             else
                 temp.add(uuid);
         });
-        temp.forEach(this.spying::remove);
+        this.spying.removeAll(temp);
     }
 
     public boolean commandUse(CommandSender sender, String[] args) {
@@ -42,6 +47,9 @@ public class CmdCommandSpy implements Cmd {
         return true;
     }
 
+    /**
+     * Saves the users who are spying on commands to file.
+     */
     public void unload() {
         YamlConfiguration configSpying = YamlConfiguration.loadConfiguration(configFileSpying);
         configSpying.getKeys(false).forEach(key -> configSpying.set(key, null));
@@ -52,6 +60,9 @@ public class CmdCommandSpy implements Cmd {
         }
     }
 
+    /**
+     * Loads from file the users who are spying on commands.
+     */
     public void init() {
         YamlConfiguration configSpying = YamlConfiguration.loadConfiguration(configFileSpying);
         this.spying.addAll(configSpying.getKeys(false).stream().map(UUID::fromString).collect(Collectors.toList()));

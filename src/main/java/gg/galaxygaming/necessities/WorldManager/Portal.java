@@ -71,7 +71,7 @@ class Portal {
         this.z2 += 0.3;
     }
 
-    public String getName() {
+    String getName() {
         return this.name;
     }
 
@@ -79,11 +79,11 @@ class Portal {
         return this.to;
     }
 
-    public Warp getWarp() {
+    Warp getWarp() {
         return this.destination;
     }
 
-    public boolean isWarp() {
+    boolean isWarp() {
         return (this.destination != null && this.destination.hasDestination());
     }
 

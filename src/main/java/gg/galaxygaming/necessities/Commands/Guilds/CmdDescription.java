@@ -21,10 +21,10 @@ public class CmdDescription implements GuildCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a mod or higher in your guild to change its description.");
                 return true;
             }
-            String description = "";
+            StringBuilder descriptionBuilder = new StringBuilder();
             for (String arg : args)
-                description += arg + " ";
-            description = ChatColor.translateAlternateColorCodes('&', description.trim());
+                descriptionBuilder.append(arg).append(" ");
+            String description = ChatColor.translateAlternateColorCodes('&', descriptionBuilder.toString().trim());
             u.getGuild().setDescription(description);
             sender.sendMessage(var.getMessages() + "Set guild description to: " + ChatColor.WHITE + description);
         } else

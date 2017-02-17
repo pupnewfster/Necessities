@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
+import java.util.Arrays;
+
 public class CmdClear implements Cmd {
     @SuppressWarnings("deprecation")
     public boolean commandUse(CommandSender sender, String[] args) {
@@ -35,11 +37,8 @@ public class CmdClear implements Cmd {
                     sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have any of that item.");
                     return true;
                 }
-                int amount = 0;
-                for (ItemStack i : p.getInventory().getContents()) {
-                    if (i != null && i.getType().equals(bukkitMaterial.getItemType()) && (Material.isTool(i.getType()) || i.getDurability() == bukkitMaterial.getData()))
-                        amount += i.getAmount();
-                }
+                int amount = Arrays.stream(p.getInventory().getContents()).filter(i -> i != null && i.getType().equals(bukkitMaterial.getItemType()) && (Material.isTool(i.getType()) ||
+                        i.getDurability() == bukkitMaterial.getData())).mapToInt(ItemStack::getAmount).sum();
                 p.getInventory().remove(bukkitMaterial.toItemStack());
                 p.sendMessage(var.getMessages() + "Removed " + var.getObj() + amount + " " + mat.getFriendlyName(amount) + var.getMessages() + " from your inventory.");
                 return true;
@@ -61,7 +60,7 @@ public class CmdClear implements Cmd {
             short data = 0;
             if (Utils.legalInt(args[2])) //Really is a short
                 data = Short.parseShort(args[2]);
-            mat = Material.fromData(mat, data);
+            mat = mat.getChild(data);
             if (!p.getInventory().contains(bukkitMaterial.toItemStack(amount))) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + amount + var.getMessages() + " of that item.");
                 return true;

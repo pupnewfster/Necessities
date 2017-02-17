@@ -45,7 +45,7 @@ public class CmdSetrank implements RankCmd {
             }
             name = player.getName();
         }
-        um.updateUserRank(u, uuid, r);
+        um.updateUserRank(u, r);
         Bukkit.broadcastMessage(var.getMessages() + name + " set " + Utils.ownerShip(Utils.nameFromString(uuid.toString())) + " rank to " + u.getRank().getName() + ".");
         return true;
     }

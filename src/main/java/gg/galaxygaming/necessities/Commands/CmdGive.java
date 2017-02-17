@@ -45,7 +45,7 @@ public class CmdGive implements Cmd {
         short data = 0;
         if (args.length > 3 && Utils.legalInt(args[3]))
             data = Short.parseShort(args[3]);
-        mat = Material.fromData(mat, data);
+        mat = mat.getChild(data);
         t.getInventory().addItem(mat.getBukkitMaterial().toItemStack(amount));
         sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.getFriendlyName(amount) + " to " + t.getDisplayName() + var.getMessages() + ".");
         return true;

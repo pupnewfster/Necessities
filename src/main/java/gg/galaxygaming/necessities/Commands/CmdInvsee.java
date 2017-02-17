@@ -14,10 +14,19 @@ import java.util.UUID;
 public class CmdInvsee implements Cmd {
     private final HashMap<PlayerInventory, Player> openInvs = new HashMap<>();
 
+    /**
+     * Get player who owns the inventory.
+     * @param inv The inventory to get the owner of.
+     * @return The player who owns the given inventory.
+     */
     public Player getFromInv(PlayerInventory inv) {
         return openInvs.get(inv);
     }
 
+    /**
+     * Removes the specified inventory as being tracked.
+     * @param inv The inventory to close.
+     */
     public void closeInv(PlayerInventory inv) {
         openInvs.remove(inv);
     }

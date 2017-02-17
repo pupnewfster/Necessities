@@ -6,6 +6,10 @@ import java.io.FileWriter;
 import java.util.Calendar;
 
 public class JanetLog {
+    /**
+     * Logs a message to file.
+     * @param message The message to log.
+     */
     public void log(String message) {
         Calendar c = Calendar.getInstance();
         String second = Integer.toString(c.get(Calendar.SECOND));

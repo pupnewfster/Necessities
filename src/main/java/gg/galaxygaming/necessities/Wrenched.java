@@ -7,10 +7,13 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.util.ArrayList;
 
-public class Wrenched {
+class Wrenched {
     private final ArrayList<String> locations = new ArrayList<>();
     private final File configFileWrench = new File("plugins/Necessities", "wrenched.yml");
 
+    /**
+     * Loads previously wrenched locations.
+     */
     public void initiate() {
         YamlConfiguration wrenches = YamlConfiguration.loadConfiguration(configFileWrench);
         for (String key : wrenches.getKeys(false))

@@ -45,7 +45,7 @@ public class CmdTpahere implements Cmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are ignoring that user, so cannot send them a teleport request.");
                 return true;
             }
-            Necessities.getTeleports().addRequest(uuid, p.getUniqueId().toString() + " toThem");
+            Necessities.getTPs().addRequest(uuid, p.getUniqueId().toString() + " toThem");
             target.sendMessage(var.getObj() + p.getName() + var.getMessages() + " has requested that you teleport to them.");
             target.sendMessage(var.getMessages() + "To teleport, type " + var.getObj() + "/tpaccept" + var.getMessages() + ".");
             target.sendMessage(var.getMessages() + "To deny this request, type " + var.getObj() + "/tpdeny" + var.getMessages() + ".");

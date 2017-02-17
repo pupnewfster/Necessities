@@ -45,11 +45,11 @@ public class CmdTitle implements Cmd {
             sender.sendMessage(var.getMessages() + "Title removed for player " + var.getObj() + target.getName());
             return true;
         }
-        String title = "";
+        StringBuilder titleBuilder = new StringBuilder();
         for (String arg : args)
-            title += arg + " ";
+            titleBuilder.append(arg).append(" ");
         YamlConfiguration config = Necessities.getInstance().getConfig();
-        title = title.replaceFirst(args[0], "").trim();
+        String title = titleBuilder.toString().replaceFirst(args[0], "").trim();
         if (ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', title + "&r")).length() > 24) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Titles have a maximum of 24 characters.");
             return true;

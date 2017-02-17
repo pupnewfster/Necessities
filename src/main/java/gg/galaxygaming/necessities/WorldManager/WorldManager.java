@@ -12,6 +12,9 @@ public class WorldManager {
     private final HashMap<String, String> invSys = new HashMap<>();
     private final File configFileWM = new File("plugins/Necessities/WorldManager", "worlds.yml");
 
+    /**
+     * Initializes the world manager.
+     */
     public void initiate() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loading worlds...");
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
@@ -35,6 +38,11 @@ public class WorldManager {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "All worlds loaded.");
     }
 
+    /**
+     * Retrieves the inventory system for the given world.
+     * @param world The name of the world to get the inventory system of.
+     * @return The inventory system for the given world.
+     */
     public String getSysPath(String world) {
         if (!invSys.containsKey(world.toLowerCase())) {
             setSetting(world, "inventorySystem", "default");
@@ -43,10 +51,19 @@ public class WorldManager {
         return invSys.get(world.toLowerCase());
     }
 
+    /**
+     * Checks if there is more than one inventory system.
+     * @return True if there are multiple inventory systems, false otherwise.
+     */
     public boolean multiple() {
         return invSys.values().size() > 1;
     }
 
+    /**
+     * Gets the default gamemode for the specified world.
+     * @param world The name of the world to get the default gamemode of.
+     * @return The default gamemode of the specified world.
+     */
     public GameMode getGameMode(String world) {
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
         if (configWM.contains(world + ".gamemode")) {
@@ -92,6 +109,11 @@ public class WorldManager {
         }
     }
 
+    /**
+     * Gets the difficulty based on the string representation.
+     * @param difficulty The string representation of the difficulty.
+     * @return The difficulty based on the string representation.
+     */
     public Difficulty getDifficulty(String difficulty) {
         if (difficulty.equalsIgnoreCase("easy"))
             return Difficulty.EASY;
@@ -102,6 +124,11 @@ public class WorldManager {
         return Difficulty.PEACEFUL;
     }
 
+    /**
+     * Gets the environment based on the string representation.
+     * @param environment The string representation of the environment.
+     * @return The environment based on the string representation.
+     */
     public World.Environment getEnvironment(String environment) {
         if (environment.equalsIgnoreCase("nether"))
             return World.Environment.NETHER;
@@ -110,6 +137,11 @@ public class WorldManager {
         return World.Environment.NORMAL;
     }
 
+    /**
+     * Gets the world type based on the string representation.
+     * @param type The string representation of the world type.
+     * @return The world type based on the string representation.
+     */
     public WorldType getType(String type) {
         if (type.equalsIgnoreCase("amplified"))
             return WorldType.AMPLIFIED;
@@ -120,6 +152,10 @@ public class WorldManager {
         return WorldType.NORMAL;
     }
 
+    /**
+     * Unloads the specified world.
+     * @param name The name of the world to unload.
+     */
     public void unloadWorld(String name) {
         YamlConfiguration config = Necessities.getInstance().getConfig();
         Location spawn = null;
@@ -138,6 +174,10 @@ public class WorldManager {
         Bukkit.unloadWorld(name, true);
     }
 
+    /**
+     * Loads a specified world.
+     * @param name The name of the world to load.
+     */
     public void loadWorld(String name) {
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
         if (!worldExists(name) && (new File(name + "/level.dat")).exists()) {
@@ -156,6 +196,10 @@ public class WorldManager {
         setWorldProps(name);
     }
 
+    /**
+     * Sets the spawn of a world.
+     * @param l The location to make the default spawn location of that world.
+     */
     public void setWorldSpawn(Location l) {
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
         configWM.set(l.getWorld().getName() + ".defaultSpawn", false);
@@ -169,6 +213,12 @@ public class WorldManager {
         l.getWorld().setSpawnLocation(l.getBlockX(), l.getBlockY(), l.getBlockZ());
     }
 
+    /**
+     * Sets a specified setting with the given value.
+     * @param name    The name of the world to set the setting for.
+     * @param setting The setting to set.
+     * @param value   The value of the setting.
+     */
     public void setSetting(String name, String setting, String value) {
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
         configWM.set(name + "." + setting, value);
@@ -178,6 +228,12 @@ public class WorldManager {
         }
     }
 
+    /**
+     * Sets a specified setting with the given value.
+     * @param name    The name of the world to set the setting for.
+     * @param setting The setting to set.
+     * @param value   The value of the setting.
+     */
     public void setSetting(String name, String setting, boolean value) {
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
         configWM.set(name + "." + setting, value);
@@ -187,6 +243,13 @@ public class WorldManager {
         }
     }
 
+    /**
+     * Creates a new world with the specified name, environment, generator, and world type.
+     * @param name        The name of the new world.
+     * @param environment The environment of the new world.
+     * @param generator   The generator to use for the new world.
+     * @param type        The type of the new world.
+     */
     public void createWorld(String name, World.Environment environment, String generator, WorldType type) {
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
         configWM.set(name + ".difficulty", "EASY");
@@ -217,6 +280,10 @@ public class WorldManager {
         setWorldProps(name);
     }
 
+    /**
+     * Removes the specified world from the config.
+     * @param name The name of the world to remove.
+     */
     public void removeWorld(String name) {
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
         configWM.set(name, null);
@@ -226,10 +293,20 @@ public class WorldManager {
         }
     }
 
+    /**
+     * Checks if a world is in the config but is not loaded.
+     * @param name The name of the world to check.
+     * @return True if the world is not loaded, but is in the config. False otherwise.
+     */
     public boolean worldUnloaded(String name) {
         return !worldExists(name) && YamlConfiguration.loadConfiguration(configFileWM).contains(name);
     }
 
+    /**
+     * Checks if the world with the given name is loaded.
+     * @param name The name of the world to check.
+     * @return True if the world is loaded, false otherwise.
+     */
     public boolean worldExists(String name) {
         return Bukkit.getWorld(name) != null;
     }

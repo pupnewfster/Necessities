@@ -12,17 +12,27 @@ import java.util.HashMap;
 public class PowerManager {
     private final HashMap<Player, BukkitRunnable> players = new HashMap<>();
 
+    /**
+     * Initiates the power manager and add all online players to it.
+     */
     public void initiate() {
         YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds"))
             Bukkit.getOnlinePlayers().forEach(this::addPlayer);
     }
 
+    /**
+     * Unloads all the players from the power manager.
+     */
     public void unload() {
         if (!players.isEmpty())
             Bukkit.getOnlinePlayers().forEach(this::removePlayer);
     }
 
+    /**
+     * Adds the specified player to the power manager.
+     * @param p The player to add.
+     */
     public void addPlayer(Player p) {
         if (!players.keySet().contains(p)) {
             final User u = Necessities.getUM().getUser(p.getUniqueId());
@@ -36,6 +46,10 @@ public class PowerManager {
         }
     }
 
+    /**
+     * Removes the specified player from the power manager.
+     * @param p The player to remove.
+     */
     public void removePlayer(Player p) {
         players.get(p).cancel();
         players.remove(p);

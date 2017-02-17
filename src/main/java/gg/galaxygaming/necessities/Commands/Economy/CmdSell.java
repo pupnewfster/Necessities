@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.material.MaterialData;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 public class CmdSell implements EconomyCmd {
@@ -73,7 +74,7 @@ public class CmdSell implements EconomyCmd {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist");
                 return true;
             }
-            double cost = Necessities.getPrices().getCost("sell", mat.getName(), amount);
+            double cost = Necessities.getPrices().getPrice("sell", mat.getName(), amount);
             if (cost == -1.00)
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + mat.getFriendlyName(2) + " cannot be sold to the server.");
             else {
@@ -123,13 +124,7 @@ public class CmdSell implements EconomyCmd {
 
     @SuppressWarnings("deprecation")
     private int itemAmount(PlayerInventory inv, MaterialData matType, boolean isTool) {
-        int amount = 0;
-        for (ItemStack s : inv.getContents()) {
-            if (s == null || s.getType() != matType.getItemType())
-                continue;
-            if (s.getEnchantments().size() == 0 && (isTool || s.getDurability() == matType.getData()))
-                amount += s.getAmount();
-        }
-        return amount;
+        return Arrays.stream(inv.getContents()).filter(s -> !(s == null || s.getType() != matType.getItemType())).filter(s -> s.getEnchantments().size() == 0 && (isTool ||
+                s.getDurability() == matType.getData())).mapToInt(ItemStack::getAmount).sum();
     }
 }

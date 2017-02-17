@@ -11,7 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class CmdList implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
@@ -26,29 +25,15 @@ public class CmdList implements GuildCmd {
                 return true;
             }
             User u = um.getUser(p.getUniqueId());
-            int guildless = 0;
-            for (UUID uuid : um.getUsers().keySet()) {
-                User x = um.getUser(uuid);
-                if (x.getGuild() == null && x.getPlayer() != null && p.canSee(x.getPlayer()))
-                    guildless++;
-            }
-            guildList.add(var.getGuildMsgs() + "" + guildless + " guildless online");
-            for (String name : gm.getGuilds().keySet()) {
-                Guild g = gm.getGuild(name);
+            guildList.add(var.getGuildMsgs() + "" + (int) um.getUsers().keySet().stream().map(um::getUser).filter(x -> x.getGuild() == null && x.getPlayer() != null && p.canSee(x.getPlayer())).count() + " guildless online");
+            for (Guild g : gm.getGuilds())
                 guildList.add(g.relation(u.getGuild()) + g.getName() + " " + var.getGuildMsgs() + g.getOnline(p.hasPermission("Necessities.seehidden")) + "/" + g.getTotal() + " online, " + g.getLand() + "/" +
                         Utils.roundTwoDecimals(g.getPower()) + "/" + g.getMaxPower() + ".00");
-            }
         } else {
-            int guildless = 0;
-            for (UUID uuid : um.getUsers().keySet())
-                if (um.getUser(uuid).getGuild() == null)
-                    guildless++;
-            guildList.add(var.getGuildMsgs() + "" + guildless + " guildless online");
-            for (String name : gm.getGuilds().keySet()) {
-                Guild g = gm.getGuild(name);
+            guildList.add(var.getGuildMsgs() + "" + (int) um.getUsers().keySet().stream().filter(uuid -> um.getUser(uuid).getGuild() == null).count() + " guildless online");
+            for (Guild g : gm.getGuilds())
                 guildList.add(var.getNeutral() + g.getName() + " " + var.getGuildMsgs() + g.getOnline(true) + "/" + g.getTotal() + " online, " + g.getLand() + "/" +
                         Utils.roundTwoDecimals(g.getPower()) + "/" + g.getMaxPower() + ".00");
-            }
         }
         int page = 0;
         if (args.length != 0 && !Utils.legalInt(args[0])) {

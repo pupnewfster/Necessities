@@ -28,7 +28,7 @@ public class CmdBuyCmd implements EconomyCmd {
             Economy eco = Necessities.getEconomy();
             Player player = (Player) sender;
             String cmd = Utils.capFirst(args[0]);
-            double cost = cmdp.getCost(cmd);
+            double cost = cmdp.getPrice(cmd);
             String rank = um.getUser(player.getUniqueId()).getRank().getName().toUpperCase();
             if (eco.getBalance(player.getUniqueId()) < cost) {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Not enough money.");

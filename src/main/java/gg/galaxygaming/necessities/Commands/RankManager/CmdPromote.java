@@ -46,7 +46,7 @@ public class CmdPromote implements RankCmd {
             }
             name = player.getName();
         }
-        um.updateUserRank(u, uuid, u.getRank().getNext());
+        um.updateUserRank(u, u.getRank().getNext());
         Bukkit.broadcastMessage(var.getPromote() + name + " promoted " + Utils.nameFromString(uuid.toString()) + " to " + u.getRank().getName() + ".");
         return true;
     }

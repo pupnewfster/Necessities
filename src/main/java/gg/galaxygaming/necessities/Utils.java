@@ -18,6 +18,11 @@ import java.text.DecimalFormat;
 import java.util.UUID;
 
 public class Utils {
+    /**
+     * Checks if the given string is a valid double.
+     * @param input The string to check.
+     * @return True if the input is a valid double, false otherwise.
+     */
     @SuppressWarnings({"BooleanMethodIsAlwaysInverted", "ResultOfMethodCallIgnored"})
     public static boolean legalDouble(String input) {
         try {
@@ -28,6 +33,11 @@ public class Utils {
         return true;
     }
 
+    /**
+     * Checks if the given string is a valid integer.
+     * @param input The string to check.
+     * @return True if the input is a valid integer, false otherwise.
+     */
     @SuppressWarnings({"BooleanMethodIsAlwaysInverted", "ResultOfMethodCallIgnored"})
     public static boolean legalInt(String input) {
         try {
@@ -38,6 +48,11 @@ public class Utils {
         return true;
     }
 
+    /**
+     * Checks if the given string is a valid long.
+     * @param input The string to check.
+     * @return True if the input is a valid long, false otherwise.
+     */
     @SuppressWarnings({"BooleanMethodIsAlwaysInverted", "ResultOfMethodCallIgnored"})
     public static boolean legalLong(String input) {
         try {
@@ -48,27 +63,47 @@ public class Utils {
         return true;
     }
 
+    /**
+     * Rounds the given double to a string with two decimals.
+     * @param d The double to round.
+     * @return The string representation rounded to two decimals of the given double.
+     */
     public static String roundTwoDecimals(double d) {
         return new DecimalFormat("0.00").format(d);
     }
 
+    /**
+     * Adds commas to the specified string representation of a string.
+     * @param s The string to add commas to.
+     * @return The string with commas added.
+     */
     public static String addCommas(String s) {
         return new DecimalFormat("#,##0.00").format(Double.parseDouble(s));
     }
 
+    /**
+     * Adds commas to the string representation of an integer.
+     * @param i The integer to convert to a string and add commas.
+     * @return The string of the integer with commas added.
+     */
     public static String addCommas(int i) {
         return new DecimalFormat("#,###").format(i);
     }
 
+    /**
+     * Capitalizes the first letter of each word.
+     * @param matName The text to capitalize the first letter of each word.
+     * @return The given string with the first letter of each word capitalized.
+     */
     public static String capFirst(String matName) {
         if (matName == null)
             return "";
-        String name = "";
+        StringBuilder name = new StringBuilder();
         matName = matName.replaceAll("_", " ").toLowerCase();
         String[] namePieces = matName.split(" ");
         for (String piece : namePieces)
-            name += uppercaseFirst(piece) + " ";
-        return name.trim();
+            name.append(uppercaseFirst(piece)).append(" ");
+        return name.toString().trim();
     }
 
     private static String uppercaseFirst(String word) {
@@ -82,10 +117,20 @@ public class Utils {
         return firstCapitalized;
     }
 
+    /**
+     * Adds an ' or 's to the end of a string.
+     * @param name The string to add the apostrophe to.
+     * @return The string with an ', or 's at the end.
+     */
     public static String ownerShip(String name) {
-        return (name.endsWith("s") || name.endsWith("S")) ? name + "'" : name + "'s";
+        return name.endsWith("s") || name.endsWith("S") ? name + "'" : name + "'s";
     }
 
+    /**
+     * Gets the uuid of an online player based on a partial name.
+     * @param name The name to search for.
+     * @return The uuid of an online player based on a partial name.
+     */
     public static UUID getID(String name) {
         UUID partial = null;
         boolean startsWith = false;
@@ -102,6 +147,11 @@ public class Utils {
         return partial;
     }
 
+    /**
+     * Gets the uuid of an offline player based on their name.
+     * @param name The name to search for.
+     * @return The uuid of an offline player based on their name.
+     */
     public static UUID getOfflineID(String name) {
         if (name == null)
             return null;
@@ -118,6 +168,11 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Gets a players name based on the string representation of their uuid.
+     * @param message The string representation of a players uuid.
+     * @return A players name based on the string representation of their uuid.
+     */
     public static String nameFromString(String message) {
         if (message == null)
             return null;
@@ -142,10 +197,15 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Gets the server's TPS.
+     * @return The server's TPS.
+     */
     public static String getTPS() {
-        String ticks = ChatColor.GOLD + "TPS from last 1m, 5m, 15m: ";
+        StringBuilder ticksBuilder = new StringBuilder(ChatColor.GOLD + "TPS from last 1m, 5m, 15m: ");
         for (double tps : getNMSRecentTps())
-            ticks += format(tps) + ", ";
+            ticksBuilder.append(format(tps)).append(", ");
+        String ticks = ticksBuilder.toString();
         return ticks.substring(0, ticks.length() - 2).trim();
     }
 

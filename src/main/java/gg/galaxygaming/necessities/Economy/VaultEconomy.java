@@ -26,7 +26,7 @@ public class VaultEconomy implements Economy {
 
     @Override
     public int fractionalDigits() {
-        return 0;
+        return 2;
     }
 
     @Override
@@ -36,12 +36,12 @@ public class VaultEconomy implements Economy {
 
     @Override
     public String currencyNamePlural() {
-        return "gz";
+        return "ggs";
     }
 
     @Override
     public String currencyNameSingular() {
-        return "gz";
+        return "gg";
     }
 
     @Override

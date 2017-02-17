@@ -32,10 +32,10 @@ public class CmdKick implements Cmd {
             }
             name = p.getName();
         }
-        String reason = "";
+        StringBuilder reasonBuilder = new StringBuilder();
         for (int i = 1; i < args.length; i++)
-            reason += args[i] + " ";
-        reason = ChatColor.translateAlternateColorCodes('&', reason.trim());
+            reasonBuilder.append(args[i]).append(" ");
+        String reason = ChatColor.translateAlternateColorCodes('&', reasonBuilder.toString().trim());
         Bukkit.broadcastMessage(var.getMessages() + name + " kicked " + var.getObj() + target.getName() + (reason.equals("") ? "" : var.getMessages() + " for " + var.getObj() + reason));
         target.kickPlayer(reason);
         return true;

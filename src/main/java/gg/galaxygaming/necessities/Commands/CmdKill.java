@@ -24,10 +24,10 @@ public class CmdKill implements Cmd {
         }
         Player target = Bukkit.getServer().getPlayer(uuid);
         target.setHealth(0);
-        String reason = "";
+        StringBuilder reasonBuilder = new StringBuilder();
         for (int i = 1; i < args.length; i++)
-            reason += args[i] + " ";
-        reason = ChatColor.translateAlternateColorCodes('&', reason.trim());
+            reasonBuilder.append(args[i]).append(" ");
+        String reason = ChatColor.translateAlternateColorCodes('&', reasonBuilder.toString().trim());
         if (reason.equals(""))
             reason = "no reason.";
         Bukkit.broadcastMessage(var.getMessages() + target.getDisplayName() + var.getMessages() + " was killed for " + reason);

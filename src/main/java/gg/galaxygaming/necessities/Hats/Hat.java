@@ -14,32 +14,41 @@ public abstract class Hat {
     private HatType type;
     //private double x1, y1, z1 = 1, pitch, yaw;
 
-    public static Hat fromType(HatType type, Location loc) {
+    /**
+     * Gets a new instance of a hat at the specified location based on the given type.
+     * @param type     The type of the hat to create.
+     * @param location The location to create the hat at.
+     * @return A new instance of a hate of the specified type at the given location.
+     */
+    public static Hat fromType(HatType type, Location location) {
         Hat h = null;
-        loc = loc.clone().add(0, 0.5, 0);
+        location = location.clone().add(0, 0.5, 0);
         if (type.equals(HatType.BoxTopHat))
-            h = new BoxTopHat(loc);
+            h = new BoxTopHat(location);
         else if (type.equals(HatType.TopHat))
-            h = new TopHat(loc);
+            h = new TopHat(location);
         else if (type.equals(HatType.StrawHat))
-            h = new StrawHat(loc);
+            h = new StrawHat(location);
         else if (type.equals(HatType.Fedora))
-            h = new Fedora(loc);
+            h = new Fedora(location);
         else if (type.equals(HatType.Pot))
-            h = new Pot(loc);
+            h = new Pot(location);
         else if (type.equals(HatType.RimmedHat))
-            h = new RimmedHat(loc);
+            h = new RimmedHat(location);
         else if (type.equals(HatType.Trippy))
-            h = new Trippy(loc);
+            h = new Trippy(location);
         else if (type.equals(HatType.SunHat))
-            h = new SunHat(loc);
+            h = new SunHat(location);
         else if (type.equals(HatType.Design))
-            h = new Design(loc);
+            h = new Design(location);
         if (h != null)
             h.setType(type);
         return h;
     }
 
+    /**
+     * Despawns the hat.
+     */
     public void despawn() {
         this.armorStands.forEach(Entity::remove);
     }
@@ -67,6 +76,14 @@ public abstract class Hat {
         }
     }
 
+    /**
+     * Moves the hat a specified amount.
+     * @param x     The amount in the x direction to move the hat.
+     * @param y     The amount in the y direction to move the hat.
+     * @param z     The amount in the z direction to move the hat.
+     * @param yaw   The yaw to set the hat's direction to.
+     * @param pitch The pitch to set the hat's direction to.
+     */
     public void move(double x, double y, double z, float yaw, float pitch) {
         /*this.pitch = ((90 - pitch) * Math.PI) / 180;
         this.yaw  = ((yaw + 90 + 180) * Math.PI) / 180;
@@ -91,6 +108,10 @@ public abstract class Hat {
         this.type = type;
     }
 
+    /**
+     * Retrieves the type of the hat.
+     * @return The type of the current hat.
+     */
     public HatType getType() {
         return this.type;
     }

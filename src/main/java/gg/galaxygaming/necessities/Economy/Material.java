@@ -1117,26 +1117,47 @@ public enum Material {//http://minecraft.gamepedia.com/Id
         this.parent.addChild(this.data, this);
     }
 
-    protected void addChild(short data, Material child) {
+    private void addChild(short data, Material child) {
         this.children.put(data, child);
     }
 
+    /**
+     * Retrieves the parent material.
+     * @return The parent material, or the current material if there is no parent.
+     */
     public Material getParent() {
         return this.parent;
     }
 
+    /**
+     * Retrieves the String representation of the current Material.
+     * @return The String representation of the current Material.
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Retrieves the friendly name for this material.
+     * @return The friendly name of this Material.
+     */
     public String getFriendlyName() {
         return Utils.capFirst(this.friendlyName == null ? this.name.replaceAll("_", " ") : this.friendlyName);
     }
 
+    /**
+     * Retrieves the friendly name for the specified amount.
+     * @param amount The amount of items to see if it should be the plural or normal friendly name.
+     * @return The friendly potentially plural name.
+     */
     public String getFriendlyName(int amount) {
         return amount == 1 || this.plural == null ? getFriendlyName() : Utils.capFirst(this.plural);
     }
 
+    /**
+     * The id of the material.
+     * @return The id of the material.
+     */
     public int getID() {
         return this.parent.id;
     }
@@ -1149,49 +1170,101 @@ public enum Material {//http://minecraft.gamepedia.com/Id
         return this.data;
     }
 
+    /**
+     * Retrieves the list of aliases.
+     * @return The list of aliases.
+     */
     public List<String> getAliases() {
         return this.aliases;
     }
 
+    /**
+     * Retrieves a child of the current material.
+     * @param data The damage value to get a more specific child.
+     * @return The child with the specified damage value.
+     */
     public Material getChild(short data) {
         return this.children.get(data) == null ? this : this.children.get(data);
     }
 
+    /**
+     * Checks if the current material has any children.
+     * @return True if this material has children, false otherwise.
+     */
     public boolean hasChildren() {
         return !this.children.isEmpty();
     }
 
+    /**
+     * Gets the bukkit version of the material.
+     * @return The bukkit version of the material, in the form of MaterialData to not loose the damage value.
+     */
     @SuppressWarnings("deprecation")
     public MaterialData getBukkitMaterial() {
         return new MaterialData(this.bukkitMaterial, (byte) this.data);
     }
 
+    /**
+     * Checks if the current material has a durability bar.
+     * @return True if the current material has a durability bar, false otherwise.
+     */
     public boolean isTool() {
         return isTool(this.bukkitMaterial);
     }
 
+    /**
+     * Retrieves the material with the specified id.
+     * @param id The id of the material to retrieve.
+     * @return The material with the specified id.
+     */
     public static Material fromID(int id) {
         return idMap.get(id);
     }
 
+    /**
+     * Retrieves the material with the specified name or alias.
+     * @param name The name of the material to retrieve.
+     * @return The material with the specified name or alias.
+     */
     public static Material fromString(String name) {//Tries to get based on alias and then on exact name if no alias
         name = name.toUpperCase().replaceAll(" ", "").replaceAll("_", "");
         String n = aliasMap.get(name);
         return n == null ? nameMap.get(name) : nameMap.get(n);
     }
 
+    /**
+     * Gets the material that is a child of the specified material with the given damage value.
+     * @param m    The material to get the child of.
+     * @param data The damage value of the material.
+     * @return The child with the specified damage value of the specified material.
+     */
     public static Material fromData(Material m, short data) {
         return m == null ? null : m.getChild(data);
     }
 
+    /**
+     * Gets the material with the specified id and damage value.
+     * @param id   The id of the material to retrieve.
+     * @param data The damage value of the material with the specified id.
+     * @return The material with the specified id and damage value.
+     */
     public static Material fromData(int id, short data) {
         return fromData(fromID(id), data);
     }
 
+    /**
+     * Gets the material with the specified name and damage value.
+     * @param name The name of the material to retrieve.
+     * @param data The damage value of the material with the specified name.
+     * @return The material with the specified name and damage value.
+     */
     public static Material fromData(String name, short data) {
         return fromData(fromString(name), data);
     }
 
+    /**
+     * Maps the different materials for purposes of getting retrieving based on aliases.
+     */
     public static void mapMaterials() {
         for (Material m : values()) {
             if (m.mapID())
@@ -1202,6 +1275,11 @@ public enum Material {//http://minecraft.gamepedia.com/Id
         }
     }
 
+    /**
+     * Checks if the specified bukkit material has a durability bar.
+     * @param type The bukkit material type to check.
+     * @return True if the specified bukkit material has a durability bar, false otherwise.
+     */
     public static boolean isTool(org.bukkit.Material type) {
         //Wood tools
         if (type.equals(org.bukkit.Material.WOOD_AXE) || type.equals(org.bukkit.Material.WOOD_HOE) || type.equals(org.bukkit.Material.WOOD_PICKAXE) ||

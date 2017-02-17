@@ -66,13 +66,13 @@ class Initialization {
 
         //Economy
         if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy")) {
-            Necessities.getPrices().parseList();
+            Necessities.getPrices().init();
             Necessities.getEconomy().init();
             Necessities.getRankPrices().initiate();
-            Necessities.getCommandPrices().upList();//Command prices are disabled anyways atm
+            Necessities.getCommandPrices().init();//Command prices are disabled anyways atm
         }
 
-        Necessities.getRev().parseList();
+        Necessities.getRev().init();
         Necessities.getNet().readCustom();
         Necessities.getSlack().init();
         Necessities.getAI().initiate();

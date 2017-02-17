@@ -29,7 +29,7 @@ public class Guild {
     private double power = 0.0;
     private Location home;
 
-    public Guild(String name) {
+    Guild(String name) {
         this.name = name;
         this.configFileGuild = new File("plugins/Necessities/Guilds", this.name + ".yml");
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
@@ -63,28 +63,28 @@ public class Guild {
             if (mods.contains(""))
                 mods.remove("");
             if (!mods.isEmpty())
-                mods.forEach(this.mods::add);
+                this.mods.addAll(mods);
         }
         if (configGuild.contains("members")) {
             List<String> members = configGuild.getStringList("members");
             if (members.contains(""))
                 members.remove("");
             if (!members.isEmpty())
-                members.forEach(this.members::add);
+                this.members.addAll(members);
         }
         if (configGuild.contains("allies")) {
             List<String> allies = configGuild.getStringList("allies");
             if (allies.contains(""))
                 allies.remove("");
             if (!allies.isEmpty())
-                allies.forEach(this.allies::add);
+                this.allies.addAll(allies);
         }
         if (configGuild.contains("enemies")) {
             List<String> enemies = configGuild.getStringList("enemies");
             if (enemies.contains(""))
                 enemies.remove("");
             if (!enemies.isEmpty())
-                enemies.forEach(this.enemies::add);
+                this.enemies.addAll(enemies);
         }
         if (configGuild.contains("claims")) {
             List<String> claims = configGuild.getStringList("claims");
@@ -97,10 +97,12 @@ public class Guild {
         }
         if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet"))
             this.totalMembers++;
-        this.totalMembers += this.mods.size();
-        this.totalMembers += this.members.size();
+        this.totalMembers += this.mods.size() + this.members.size();
     }
 
+    /**
+     * Updates the power for this guild based on the power of its members.
+     */
     public void updatePower() {
         if (this.power == -1)
             return;
@@ -122,10 +124,18 @@ public class Guild {
         }
     }
 
+    /**
+     * Gets whether the guild is permanent or not.
+     * @return True if the guild is permanent, false otherwise.
+     */
     public boolean isPermanent() {
         return this.permanent;
     }
 
+    /**
+     * Sets whether or not the guild is permanent.
+     * @param perm True to make the guild permanent, false otherwise.
+     */
     public void setPermanent(boolean perm) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         this.permanent = perm;
@@ -136,6 +146,10 @@ public class Guild {
         }
     }
 
+    /**
+     * Changes the name of the guild to the specified name.
+     * @param newName The name to change the guild to.
+     */
     public void rename(String newName) {
         GuildManager gm = Necessities.getGM();
         this.enemies.forEach(enemy -> gm.getGuild(enemy).setNeutral(this));
@@ -150,10 +164,18 @@ public class Guild {
         this.allies.forEach(ally -> gm.getGuild(ally).addAlly(this));
     }
 
+    /**
+     * Check if players are allowed to interact with doors and the like in this guild's territory.
+     * @return True if players can interact, false otherwise.
+     */
     public boolean allowInteract() {
         return this.interact;
     }
 
+    /**
+     * Sets whether or not players are allowed to interact with doors and the like in this guild's territory.
+     * @param allow True to allow players to interact, false otherwise.
+     */
     public void setInteract(boolean allow) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         this.interact = allow;
@@ -164,24 +186,40 @@ public class Guild {
         }
     }
 
+    /**
+     * Checks if hostile mobs can spawn in this guild's territory.
+     * @return True if hostile mobs can spawn, false otherwise.
+     */
     public boolean canHostileSpawn() {
         return this.hostileSpawn;
     }
 
-    public void setHostileSpawn(boolean can) {
+    /**
+     * Sets whether or not hostile mobs can spawn in this guild's territory.
+     * @param canSpawn True to make it so hostile mobs can spawn, false otherwise.
+     */
+    public void setHostileSpawn(boolean canSpawn) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
-        this.hostileSpawn = can;
-        configGuild.set("flag.hostileSpawn", can);
+        this.hostileSpawn = canSpawn;
+        configGuild.set("flag.hostileSpawn", canSpawn);
         try {
             configGuild.save(this.configFileGuild);
         } catch (Exception ignored) {
         }
     }
 
+    /**
+     * Checks if explosions are allowed in this guild's land.
+     * @return True if explosions are allowed, false otherwise.
+     */
     public boolean canExplode() {
         return this.explosions;
     }
 
+    /**
+     * Sets the leader of the guild.
+     * @param uuid The uuid of the new leader of the guild.
+     */
     public void setLeader(UUID uuid) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         String name = uuid.toString();
@@ -211,10 +249,18 @@ public class Guild {
         }
     }
 
+    /**
+     * Retrieves the current power of the guild.
+     * @return The amount of power the guild has.
+     */
     public double getPower() {
         return this.power;
     }
 
+    /**
+     * Retrieves the name of this guild.
+     * @return The name of the guild.
+     */
     public String getName() {
         return this.name;
     }
@@ -223,10 +269,18 @@ public class Guild {
         return this.claims.contains(c.getWorld().getName() + " " + c.getX() + " " + c.getZ());
     }
 
+    /**
+     * Retrieves the description of this guild.
+     * @return The description of the guild.
+     */
     public String getDescription() {
         return this.description;
     }
 
+    /**
+     * Sets the description of the guild to the specified description.
+     * @param newDesc The new description for the guild.
+     */
     public void setDescription(String newDesc) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         this.description = newDesc;
@@ -237,91 +291,140 @@ public class Guild {
         }
     }
 
+    /**
+     * Retrieves the location representing the home of this guild.
+     * @return The location representing the home of this guild.
+     */
     public Location getHome() {
         if (this.home != null && !claimed(this.home.getChunk()))
             delHome();
         return this.home;
     }
 
-    public void setHome(Location l) {
+    /**
+     * Sets the home location for this guild to the specified location.
+     * @param location The location to set as the new home.
+     */
+    public void setHome(Location location) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
-        this.home = l;
-        configGuild.set("home.world", l.getWorld().getName());
-        configGuild.set("home.x", Double.toString(l.getX()));
-        configGuild.set("home.y", Double.toString(l.getY()));
-        configGuild.set("home.z", Double.toString(l.getZ()));
-        configGuild.set("home.yaw", Float.toString(l.getYaw()));
-        configGuild.set("home.pitch", Float.toString(l.getPitch()));
+        this.home = location;
+        configGuild.set("home.world", location.getWorld().getName());
+        configGuild.set("home.x", Double.toString(location.getX()));
+        configGuild.set("home.y", Double.toString(location.getY()));
+        configGuild.set("home.z", Double.toString(location.getZ()));
+        configGuild.set("home.yaw", Float.toString(location.getYaw()));
+        configGuild.set("home.pitch", Float.toString(location.getPitch()));
         try {
             configGuild.save(this.configFileGuild);
         } catch (Exception ignored) {
         }
     }
 
+    /**
+     * Checks if the specified guild is an ally to the current guild.
+     * @param ally The guild to check for allyship.
+     * @return True if the specified guild is an ally, false otherwise.
+     */
     public boolean isAlly(Guild ally) {
         return ally != null && this.allies.contains(ally.getName());
     }
 
+    /**
+     * Checks if the specified guild is an enemy to the current guild.
+     * @param enemy The guild to check if it is an enemy.
+     * @return True if the specified guild is an enemy, false otherwise.
+     */
     public boolean isEnemy(Guild enemy) {
         return enemy != null && this.enemies.contains(enemy.getName());
     }
 
+    /**
+     * Retrieves how many chunks the guild has claimed.
+     * @return The number of chunks this guild has claimed.
+     */
     public int getLand() {
         return this.claims.size();
     }
 
+    /**
+     * Retrieves if PVP is allowed in this guild's territory.
+     * @return True if PVP is enabled, false otherwise.
+     */
     public boolean canPVP() {
         return this.pvp;
     }
 
+    /**
+     * Retrieves the number of members in the guild.
+     * @return The number of members in the guild.
+     */
     public int getTotal() {
-        return totalMembers;
+        return this.totalMembers;
     }
 
+    /**
+     * Retrieves the maximum power of the guild.
+     * @return The maximum power of the guild.
+     */
     public int getMaxPower() {
-        if (this.power == -1)
-            return -1;
-        return getTotal() * 20;
+        return this.power == -1 ? -1 : getTotal() * 20;
     }
 
+    /**
+     * Retrieves the list of online members.
+     * @param countHidden True to include members that are in hide, false otherwise.
+     * @return The list of online members of the guild.
+     */
     public String onlineMembers(boolean countHidden) {
         CmdHide hide = Necessities.getHide();
-        String member = "";
+        StringBuilder memberBuilder = new StringBuilder();
         if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) != null &&
                 (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(this.leader)))))
-            member += Bukkit.getPlayer(UUID.fromString(this.leader)).getName() + ", ";
+            memberBuilder.append(Bukkit.getPlayer(UUID.fromString(this.leader)).getName()).append(", ");
         if (!this.mods.isEmpty())
             for (String id : this.mods)
                 if (Bukkit.getPlayer(UUID.fromString(id)) != null && (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(id)))))
-                    member += Bukkit.getPlayer(UUID.fromString(id)).getName() + ", ";
+                    memberBuilder.append(Bukkit.getPlayer(UUID.fromString(id)).getName()).append(", ");
         if (!this.members.isEmpty())
             for (String id : this.members)
                 if (Bukkit.getPlayer(UUID.fromString(id)) != null && (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(id)))))
-                    member += Bukkit.getPlayer(UUID.fromString(id)).getName() + ", ";
+                    memberBuilder.append(Bukkit.getPlayer(UUID.fromString(id)).getName()).append(", ");
+        String member = memberBuilder.toString();
         if (member.contains(", "))
             member = member.substring(0, member.length() - 2);
         return member;
     }
 
+    /**
+     * Retrieves the list of offline members.
+     * @param countHidden False to include members that are in hide, true otherwise.
+     * @return The list of offline members of the guild.
+     */
     public String offlineMember(boolean countHidden) {
         CmdHide hide = Necessities.getHide();
-        String member = "";
+        StringBuilder memberBuilder = new StringBuilder();
         if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet") && (Bukkit.getPlayer(UUID.fromString(this.leader)) == null ||
                 (!countHidden && hide.isHidden(Bukkit.getPlayer(UUID.fromString(this.leader))))))
-            member += Bukkit.getOfflinePlayer(UUID.fromString(this.leader)).getName() + ", ";
+            memberBuilder.append(Bukkit.getOfflinePlayer(UUID.fromString(this.leader)).getName()).append(", ");
         if (!this.mods.isEmpty())
             for (String id : this.mods)
                 if (Bukkit.getPlayer(UUID.fromString(id)) == null || (!countHidden && hide.isHidden(Bukkit.getPlayer(UUID.fromString(id)))))
-                    member += Bukkit.getOfflinePlayer(UUID.fromString(id)).getName() + ", ";
+                    memberBuilder.append(Bukkit.getOfflinePlayer(UUID.fromString(id)).getName()).append(", ");
         if (!this.members.isEmpty())
             for (String id : this.members)
                 if (Bukkit.getPlayer(UUID.fromString(id)) == null || (!countHidden && hide.isHidden(Bukkit.getPlayer(UUID.fromString(id)))))
-                    member += Bukkit.getOfflinePlayer(UUID.fromString(id)).getName() + ", ";
+                    memberBuilder.append(Bukkit.getOfflinePlayer(UUID.fromString(id)).getName()).append(", ");
+        String member = memberBuilder.toString();
         if (member.contains(", "))
             member = member.substring(0, member.length() - 2);
         return member;
     }
 
+    /**
+     * Retrieves the number of online players in the guild.
+     * @param countHidden True to include hidden players in the count, false otherwise.
+     * @return The number of online players in the guild.
+     */
     public int getOnline(boolean countHidden) {
         CmdHide hide = Necessities.getHide();
         int online = 0;
@@ -329,26 +432,27 @@ public class Guild {
                 (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(this.leader)))))
             online++;
         if (!this.mods.isEmpty())
-            for (String id : this.mods)
-                if (Bukkit.getPlayer(UUID.fromString(id)) != null && (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(id)))))
-                    online++;
+            online += this.mods.stream().filter(id -> Bukkit.getPlayer(UUID.fromString(id)) != null && (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(id))))).count();
         if (!this.members.isEmpty())
-            for (String id : this.members)
-                if (Bukkit.getPlayer(UUID.fromString(id)) != null && (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(id)))))
-                    online++;
+            online += this.members.stream().filter(id -> Bukkit.getPlayer(UUID.fromString(id)) != null && (countHidden || !hide.isHidden(Bukkit.getPlayer(UUID.fromString(id))))).count();
         return online;
     }
 
+    /**
+     * Gets the rank in the guild of the member with the specified uuid.
+     * @param uuid The uuid of the member to look for.
+     * @return The name of the rank the user has or null if they are not in the guild.
+     */
     public String getRank(UUID uuid) {
-        if (this.leader != null && !this.leader.equals("Janet") && this.leader.equals(uuid.toString()))
-            return "leader";
-        if (this.mods.contains(uuid.toString()))
-            return "mod";
-        if (this.members.contains(uuid.toString()))
-            return "member";
-        return null;
+        return this.leader != null && !this.leader.equals("Janet") && this.leader.equals(uuid.toString()) ? "leader" : this.mods.contains(uuid.toString()) ? "mod" : this.members.contains(uuid.toString()) ?
+                "member" : null;
     }
 
+    /**
+     * Gets the color that represents the relation between this guild and the specified one.
+     * @param other The guild to check the relationship of.
+     * @return The color that represents the relation between this guild and the specified one.
+     */
     public ChatColor relation(Guild other) {
         Variables var = Necessities.getVar();
         ChatColor col = var.getNeutral();
@@ -363,10 +467,18 @@ public class Guild {
         return col;
     }
 
+    /**
+     * Retrieves the list of allies.
+     * @return The list of allies.
+     */
     public ArrayList<String> getAllies() {
         return this.allies;
     }
 
+    /**
+     * Retrieves the list of enemies.
+     * @return The list of enemies.
+     */
     public ArrayList<String> getEnemies() {
         return this.enemies;
     }
@@ -381,6 +493,10 @@ public class Guild {
         }
     }
 
+    /**
+     * Claims the specified chunk.
+     * @param c The chunk to claim.
+     */
     public void claim(Chunk c) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         if (!this.claims.contains(c.getWorld().getName() + " " + c.getX() + " " + c.getZ()))
@@ -398,6 +514,10 @@ public class Guild {
         }
     }
 
+    /**
+     * Unclaims the specified chunk.
+     * @param c The chunk to unclaim.
+     */
     public void unclaim(Chunk c) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         this.claims.remove(c.getWorld().getName() + " " + c.getX() + " " + c.getZ());
@@ -414,6 +534,9 @@ public class Guild {
             delHome();
     }
 
+    /**
+     * Unclaims all the chunks that this guild has claimed.
+     */
     public void unclaimAll() {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         this.claims.clear();
@@ -425,42 +548,85 @@ public class Guild {
         }
     }
 
+    /**
+     * Checks if the specified player has been invited to the guild.
+     * @param uuid The uuid of the player to check.
+     * @return True if they have been invited, false otherwise.
+     */
     public boolean isInvited(UUID uuid) {
         return this.invited.contains(uuid);
     }
 
+    /**
+     * Invites a player to join the guild.
+     * @param uuid The uuid of the player to invite.
+     */
     public void invite(UUID uuid) {
         this.invited.add(uuid);
     }
 
+    /**
+     * Revoke the invite from the specified player.
+     * @param uuid The uuid of the player to revoke the invite from.
+     */
     public void uninvite(UUID uuid) {
         this.invited.remove(uuid);
     }
 
+    /**
+     * Checks if the specified guild has been invited to be an ally.
+     * @param g The guild to check if they have been invited as an ally.
+     * @return True if the specified guild has been invited to be an ally, false otherwise.
+     */
     public boolean isInvitedAlly(Guild g) {
         return this.allyInvites.contains(g);
     }
 
+    /**
+     * Invites the specified guild to become an ally.
+     * @param g The guild to invite to become an ally.
+     */
     public void addAllyInvite(Guild g) {
         this.allyInvites.add(g);
     }
 
+    /**
+     * Removes an invite to be allies from the specified guild.
+     * @param g The guild to revoke the offer of allyship from.
+     */
     public void removeAllyInvite(Guild g) {
         this.allyInvites.remove(g);
     }
 
+    /**
+     * Checks if the specified guild has been invited to be neutral.
+     * @param g The guild to check.
+     * @return True if the specified guild has been invited to be neutral, false otherwise.
+     */
     public boolean isInvitedNeutral(Guild g) {
         return this.neutralInvites.contains(g);
     }
 
+    /**
+     * Invites the specified guild to be neutral.
+     * @param g The guild to invite.
+     */
     public void addNeutralInvite(Guild g) {
         this.neutralInvites.add(g);
     }
 
+    /**
+     * Removes the invite to the specified guild about becoming neutral.
+     * @param g The guild to remove the invite from.
+     */
     public void removeNeutralInvite(Guild g) {
         this.neutralInvites.remove(g);
     }
 
+    /**
+     * Adds the specified guild as an enemy.
+     * @param g The guild to add as an enemy.
+     */
     public void addEnemy(Guild g) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         setNeutral(g);
@@ -476,6 +642,10 @@ public class Guild {
         }
     }
 
+    /**
+     * Adds the specified guild as an ally.
+     * @param g The guild to add as an ally.
+     */
     public void addAlly(Guild g) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         this.allyInvites.remove(g);
@@ -492,6 +662,10 @@ public class Guild {
         }
     }
 
+    /**
+     * Sets the specified guild as neutral.
+     * @param g The guild to set as neutral.
+     */
     public void setNeutral(Guild g) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         if (this.allies.contains(g.getName())) {
@@ -517,10 +691,19 @@ public class Guild {
         this.neutralInvites.remove(g);
     }
 
+    /**
+     * Checks if the specified guild is neutral.
+     * @param g The guild to check.
+     * @return True if the guilds are neutral towards one another, false otherwise.
+     */
     public boolean isNeutral(Guild g) {
         return !this.allies.contains(g.getName()) && !this.enemies.contains(g.getName());
     }
 
+    /**
+     * Kicks a specified player from the guild
+     * @param uuid The uuid of the player to kick.
+     */
     public void kick(UUID uuid) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         String name = uuid.toString();
@@ -559,6 +742,10 @@ public class Guild {
         }
     }
 
+    /**
+     * Makes a specified player join the guild.
+     * @param uuid The uuid of the player to have join the guild.
+     */
     public void join(UUID uuid) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         String name = uuid.toString();
@@ -581,6 +768,10 @@ public class Guild {
         }
     }
 
+    /**
+     * Sends a message to the mods of the guild.
+     * @param message The message to send.
+     */
     public void sendMods(String message) {
         if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet") && Bukkit.getPlayer(UUID.fromString(this.leader)) != null)
             Bukkit.getPlayer(UUID.fromString(this.leader)).sendMessage(message);
@@ -590,6 +781,10 @@ public class Guild {
                     Bukkit.getPlayer(UUID.fromString(id)).sendMessage(message);
     }
 
+    /**
+     * Sets whether or not explosions are allowed in this guild's territory.
+     * @param exp True to allow explosions, false otherwise.
+     */
     public void setExplode(boolean exp) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         this.explosions = exp;
@@ -600,6 +795,10 @@ public class Guild {
         }
     }
 
+    /**
+     * Sets whether or not PVP is allowed in this guild's territory.
+     * @param canPVP True to allow pvp, false otherwise.
+     */
     public void setPVP(boolean canPVP) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         this.pvp = canPVP;
@@ -610,6 +809,9 @@ public class Guild {
         }
     }
 
+    /**
+     * Toggles whether or not this guild can claim infinite number of chunks.
+     */
     public void toggleInfinite() {
         if (this.power != -1) {
             YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
@@ -634,6 +836,10 @@ public class Guild {
         this.configFileGuild.delete();
     }
 
+    /**
+     * Removes the specified player from being a mod of the guild.
+     * @param uuid The uuid of the player to remove.
+     */
     public void removeMod(UUID uuid) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         String name = uuid.toString();
@@ -655,6 +861,10 @@ public class Guild {
         }
     }
 
+    /**
+     * Adds a specified player as a mod for the guild.
+     * @param uuid The uuid of the player to add.
+     */
     public void addMod(UUID uuid) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
         String name = uuid.toString();

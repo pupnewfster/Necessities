@@ -17,7 +17,7 @@ public class Rank {
     private int maxHomes = 1, tpdelay = 0;
     private Rank previous, next;
 
-    public Rank(String name) {
+    Rank(String name) {
         this.name = name;
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         if (configRanks.contains(getName() + ".rankTitle"))
@@ -38,10 +38,18 @@ public class Rank {
         setPerms();
     }
 
+    /**
+     * Gets the rank above this one.
+     * @return The rank that is above this one.
+     */
     public Rank getNext() {
         return this.next;
     }
 
+    /**
+     * Sets the rank above this one.
+     * @param r The rank to set as the next rank.
+     */
     public void setNext(Rank r) {
         this.next = r;
     }
@@ -52,16 +60,13 @@ public class Rank {
 
     private void setPerms() {
         if (this.previous != null)
-            for (String node : this.previous.getNodes())
-                this.permissions.add(node);
+            this.permissions.addAll(this.previous.getNodes());
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
         for (String subrank : configRanks.getStringList(getName() + ".subranks"))
             if (!subrank.equals("") && configSubranks.contains(subrank))
-                for (String node : configSubranks.getStringList(subrank))
-                    this.permissions.add(node);
-        for (String node : configRanks.getStringList(getName() + ".permissions"))
-            this.permissions.add(node);
+                this.permissions.addAll(configSubranks.getStringList(subrank));
+        this.permissions.addAll(configRanks.getStringList(getName() + ".permissions"));
     }
 
     void refreshPerms() {
@@ -81,6 +86,10 @@ public class Rank {
         refreshPerms();
     }
 
+    /**
+     * Gets the maximum number of homes for this rank.
+     * @return The maximum number of homes for this rank.
+     */
     public int getMaxHomes() {
         return this.maxHomes;
     }
@@ -89,14 +98,26 @@ public class Rank {
         return this.permissions;
     }
 
+    /**
+     * Gets the name of this rank.
+     * @return The name of this rank.
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Gets the title for this rank.
+     * @return The title for this rank.
+     */
     public String getTitle() {
         return this.title;
     }
 
+    /**
+     * Gets the rank below this one.
+     * @return The rank that is below this one.
+     */
     public Rank getPrevious() {
         return this.previous;
     }
@@ -105,20 +126,29 @@ public class Rank {
         this.previous = r;
     }
 
+    /**
+     * Gets the color of this rank.
+     * @return The color of this rank.
+     */
     public String getColor() {
         return ChatColor.translateAlternateColorCodes('&', this.title.split("]")[1]).trim();
     }
 
+    /**
+     * Gets the list of commands that this rank has access to.
+     * @return The list of commands that this rank has access to.
+     */
     public String getCommands() {
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
-        String commands = "";
+        StringBuilder commandsBuilder = new StringBuilder();
         for (String subrank : configRanks.getStringList(getName() + ".subranks"))
             if (!subrank.equals("") && configSubranks.contains(subrank))
                 for (String node : configSubranks.getStringList(subrank))
-                    commands += cmdName(node) + ", ";
+                    commandsBuilder.append(cmdName(node)).append(", ");
         for (String node : configRanks.getStringList(getName() + ".permissions"))
-            commands += cmdName(node) + ", ";
+            commandsBuilder.append(cmdName(node)).append(", ");
+        String commands = commandsBuilder.toString();
         return commands.equals("") ? "" : commands.trim().substring(0, commands.length() - 2);
     }
 

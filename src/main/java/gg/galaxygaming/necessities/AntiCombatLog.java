@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
-public class AntiCombatLog {
+class AntiCombatLog {
     private final HashMap<Player, Long> inCombat = new HashMap<>();
 
     void addToCombat(Player p, Player other) {
@@ -20,7 +20,7 @@ public class AntiCombatLog {
         this.inCombat.put(other, time);
     }
 
-    public boolean contains(Player p) {
+    boolean contains(Player p) {
         return this.inCombat.containsKey(p);
     }
 

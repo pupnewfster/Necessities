@@ -25,6 +25,10 @@ public class ScoreBoards {
         }
     }
 
+    /**
+     * Adds a user to the scoreboard.
+     * @param u The user to add.
+     */
     public void addPlayer(User u) {
         if (u.getRank() == null || u.getPlayer() == null)
             return;
@@ -39,6 +43,10 @@ public class ScoreBoards {
         u.getPlayer().setScoreboard(b);
     }
 
+    /**
+     * Removes a user from the scoreboard.
+     * @param u The user to remove.
+     */
     public void delPlayer(User u) {
         if (u.getRank() == null || u.getPlayer() == null)
             return;
