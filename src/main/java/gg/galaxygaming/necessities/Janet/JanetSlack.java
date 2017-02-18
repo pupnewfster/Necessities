@@ -490,7 +490,7 @@ public class JanetSlack {
                 page -= 1;
                 StringBuilder mBuilder = new StringBuilder(m);
                 for (String bal : balTop)
-                    mBuilder.append(ChatColor.GOLD).append(Integer.toString((page * 10) + time++ + 1)).append(". ").append(Utils.nameFromString(bal.split(" ")[0])).append(" has: ").append(Economy.format(Double.parseDouble(bal.split(" ")[1]))).append("\n");
+                    mBuilder.append(Integer.toString((page * 10) + time++ + 1)).append(". ").append(Utils.nameFromString(bal.split(" ")[0])).append(" has: ").append(Economy.format(Double.parseDouble(bal.split(" ")[1]))).append("\n");
                 m = mBuilder.toString();
             } else if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && (message.startsWith("!bal ") || message.startsWith("!balance ") || message.startsWith("!money "))) {
                 if (message.split(" ").length == 1) {

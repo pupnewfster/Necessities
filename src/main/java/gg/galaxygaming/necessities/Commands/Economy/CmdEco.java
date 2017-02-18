@@ -50,11 +50,11 @@ public class CmdEco implements EconomyCmd {
             double amount = Double.parseDouble(args[2]);
             double intBal = eco.getBalance(uuid);
             amount = Double.parseDouble(Utils.roundTwoDecimals(amount));
-            if (args[0].equalsIgnoreCase("give")) {
+            if (args[0].equalsIgnoreCase("give") || args[0].equalsIgnoreCase("add")) {
                 eco.addMoney(uuid, amount);
                 sender.sendMessage(var.getMessages() + "Your successfully gave " + var.getMoney() + " " + Economy.format(amount) + var.getMessages() + " to " + var.getObj() + targetsName +
                         var.getMessages() + ".");
-            } else if (args[0].equalsIgnoreCase("take") && intBal - amount >= 0) {
+            } else if ((args[0].equalsIgnoreCase("take") || args[0].equalsIgnoreCase("remove")) && intBal - amount >= 0) {
                 eco.removeMoney(uuid, amount);
                 sender.sendMessage(var.getMessages() + "Your successfully took " + var.getMoney() + " " + Economy.format(amount) + var.getMessages() + " from " + var.getObj() + targetsName +
                         var.getMessages() + ".");

@@ -673,8 +673,18 @@ class Listeners implements Listener {
                 }
             }
         }
-        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (e.getClickedBlock().getType().equals(Material.CHEST) || e.getClickedBlock().getType().equals(Material.TRAPPED_CHEST)) && hide.isHidden(e.getPlayer()))
+        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && hide.isHidden(e.getPlayer()) && (e.getClickedBlock().getType().equals(Material.CHEST) ||
+                e.getClickedBlock().getType().equals(Material.TRAPPED_CHEST) || isShulker(e.getClickedBlock().getType()))) {
             e.getPlayer().openInventory(((InventoryHolder) e.getClickedBlock().getState()).getInventory());
+            e.getPlayer().closeInventory();
+        }
+    }
+
+    private boolean isShulker(Material type) {
+        return type.equals(Material.WHITE_SHULKER_BOX) || type.equals(Material.ORANGE_SHULKER_BOX) || type.equals(Material.MAGENTA_SHULKER_BOX) || type.equals(Material.LIGHT_BLUE_SHULKER_BOX) ||
+                type.equals(Material.YELLOW_SHULKER_BOX) || type.equals(Material.LIME_SHULKER_BOX) || type.equals(Material.PINK_SHULKER_BOX) || type.equals(Material.GRAY_SHULKER_BOX) ||
+                type.equals(Material.SILVER_SHULKER_BOX) || type.equals(Material.CYAN_SHULKER_BOX) || type.equals(Material.PURPLE_SHULKER_BOX) || type.equals(Material.BLUE_SHULKER_BOX) ||
+                type.equals(Material.BROWN_SHULKER_BOX) || type.equals(Material.GREEN_SHULKER_BOX) || type.equals(Material.RED_SHULKER_BOX) || type.equals(Material.BLACK_SHULKER_BOX);
     }
 
     @SuppressWarnings("deprecation")

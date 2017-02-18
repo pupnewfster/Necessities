@@ -41,6 +41,8 @@ public class User {
     private final UUID userUUID;
     private Guild guild;
     private Rank rank;
+    //TODO: Add methods such as "allowTeleport" that take a lambda expression that disallows tpa and such for example for ls to now allow when in lava or in active water
+    //Or for paintball to not allow teleporting to different teams
 
     User(Player p) {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);

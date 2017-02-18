@@ -111,7 +111,9 @@ public class Necessities extends JavaPlugin {
         getDevInfo();
         getLogger().info("Necessities enabled.");
         GameProfile janetProfile = new GameProfile(UUID.randomUUID(), "Janet");
-        janetProfile.getProperties().put("textures", getSkin());
+        Property skin = getSkin();
+        if (skin != null)
+            janetProfile.getProperties().put("textures", skin);
         MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
         WorldServer world = server.getWorldServer(0);
         PlayerInteractManager manager = new PlayerInteractManager(world);
@@ -635,8 +637,7 @@ public class Necessities extends JavaPlugin {
                 if (dev != null)
                     this.devs.add(new DevInfo(dev));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
     }
 
@@ -651,14 +652,26 @@ public class Necessities extends JavaPlugin {
             this.name = dev.getString("name");
         }
 
+        /**
+         * Gets the preferred name of the dev.
+         * @return The preferred name of the dev.
+         */
         public String getName() {
             return this.name;
         }
 
+        /**
+         * Gets the dev's Minecraft UUID.
+         * @return The dev's Minecraft UUID.
+         */
         public UUID getMCUUID() {
             return this.mcUUID;
         }
 
+        /**
+         * Gets the dev's Slack ID.
+         * @return The dev's Slack ID.
+         */
         public String getSlackID() {
             return this.slackID;
         }
