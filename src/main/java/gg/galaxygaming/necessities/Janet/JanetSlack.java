@@ -433,7 +433,7 @@ public class JanetSlack {
                     m += " - Visible: " + (Necessities.getHide().isHidden(p) ? "false" : "true") + "\n";
                 } else
                     m += " - Banned: " + (Bukkit.getOfflinePlayer(u.getUUID()).isBanned() ? "true" : "false") + "\n";
-            } else if (message.startsWith("!who")) {
+            } else if (message.startsWith("!who") || message.startsWith("!players")) {
                 RankManager rm = Necessities.getRM();
                 int numbOnline = Bukkit.getOnlinePlayers().size() + 1;
                 HashMap<Rank, String> online = new HashMap<>();
@@ -470,7 +470,7 @@ public class JanetSlack {
                 m += d + "\n";
             } else if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && (message.startsWith("!baltop") || message.startsWith("!moneytop") || message.startsWith("!balancetop"))) {
                 int page = 0;
-                if (message.split(" ").length > 2) {
+                if (message.split(" ").length > 1) {
                     if (!Utils.legalInt(message.split(" ")[1])) {
                         sendMessage("Error: You must enter a valid baltop page.", isPM, info);
                         return;
@@ -785,7 +785,7 @@ public class JanetSlack {
                 Bukkit.broadcast(var.getMessages() + "From Slack - " + ChatColor.WHITE + name + ": " + message, "Necessities.slack");
                 return;
             }
-            sendMessage(m, isPM, info);
+            sendMessage(ChatColor.stripColor(m), isPM, info);
         } else if (!isPM)
             Bukkit.broadcast(var.getMessages() + "From Slack - " + ChatColor.WHITE + name + ": " + message, "Necessities.slack");
         Necessities.getAI().parseMessage(message, JanetAI.Source.Slack, isPM, info);

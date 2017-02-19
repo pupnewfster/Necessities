@@ -20,6 +20,7 @@ class Initialization {
         dirCreate("plugins/Necessities/WorldManager");
         dirCreate("plugins/Necessities/Creative");
         dirCreate("plugins/Necessities/Guilds");
+        dirCreate("plugins/Necessities/Backup");
         fileCreate("plugins/Necessities/motd.txt");
         fileCreate("plugins/Necessities/rules.txt");
         fileCreate("plugins/Necessities/faq.txt");
@@ -77,6 +78,8 @@ class Initialization {
         Necessities.getSlack().init();
         Necessities.getAI().initiate();
         Necessities.getAnnouncer().init();
+
+        Backup.tryBackup();
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

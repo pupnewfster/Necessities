@@ -101,6 +101,7 @@ class Listeners implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
+        Backup.tryBackup(); //Call before the UserManager tries to add the user in case it happens to be the time that messes up the users file.
         final Player p = e.getPlayer();
         UserManager um = Necessities.getUM();
         um.addUser(p);

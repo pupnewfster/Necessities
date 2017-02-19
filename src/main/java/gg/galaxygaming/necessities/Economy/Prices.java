@@ -102,7 +102,7 @@ public class Prices {
      * @return The number of pages of the price list.
      */
     public int priceListPages() {
-        return price.size() % 10 != 0 ? (price.size() / 10) + 1 : (price.size() / 10);
+        return price.size() % 10 != 0 ? price.size() / 10 + 1 : price.size() / 10;
     }
 
     /**
@@ -113,6 +113,9 @@ public class Prices {
      */
     public String priceLists(int page, int time) {//TODO: Make this more efficient
         page *= 10;
-        return (price.size() < time + page + 1 || time == 10) ? null : price.keySet().toArray()[page + time] + " " + price.get(price.keySet().toArray()[page + time]);
+        if (price.size() < time + page + 1 || time == 10)
+            return null;
+        String item = (String) price.keySet().toArray()[page + time];
+        return item + " " + price.get(item);
     }
 }
