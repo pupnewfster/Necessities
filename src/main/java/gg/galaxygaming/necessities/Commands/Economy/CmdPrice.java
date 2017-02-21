@@ -35,11 +35,7 @@ public class CmdPrice implements EconomyCmd {
                 data = Short.parseShort(temp[1]);
             }
         }
-        Material mat;
-        if (Utils.legalInt(itemName))
-            mat = Material.fromID(Integer.parseInt(itemName));
-        else
-            mat = Material.fromString(itemName);
+        Material mat = Utils.legalInt(itemName) ? Material.fromID(Integer.parseInt(itemName)) : Material.fromString(itemName);
         if (mat == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist");
             return true;

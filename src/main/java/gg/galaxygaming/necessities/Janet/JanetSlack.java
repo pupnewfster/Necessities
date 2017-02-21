@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class JanetSlack {
     private final HashMap<String, SlackUser> userMap = new HashMap<>();
     private final HashMap<Integer, ArrayList<String>> helpLists = new HashMap<>();
-    private boolean isConnected = false;
+    private boolean isConnected;
     private String token;
     private URL hookURL;
     private WebSocket ws;
@@ -793,12 +793,12 @@ public class JanetSlack {
 
     @SuppressWarnings("unused")
     class SlackUser {
-        private boolean justLoaded = true, viewingChat = false, isBot = false;
+        private boolean justLoaded = true, viewingChat, isBot;
         private final String id;
         private final String name;
         private String latest;
         private String channel;
-        private int rank = 0;
+        private int rank;
 
         SlackUser(JsonObject json) {
             this.id = json.getString("id");

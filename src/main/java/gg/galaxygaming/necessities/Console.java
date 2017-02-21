@@ -6,8 +6,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.util.UUID;
 
 public class Console {
-    private boolean toggleChat = false;
-    private UUID lastContact = null;
+    private boolean toggleChat;
+    private UUID lastContact;
 
     /**
      * Retrieves the name of the console.

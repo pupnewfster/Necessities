@@ -23,10 +23,10 @@ public class Guild {
     private final ArrayList<Guild> allyInvites = new ArrayList<>();
     private final ArrayList<Guild> neutralInvites = new ArrayList<>();
     private final ArrayList<UUID> invited = new ArrayList<>();
-    private boolean pvp = true, permanent = false, explosions = true, interact = false, hostileSpawn = true;
+    private boolean pvp = true, permanent, explosions = true, interact, hostileSpawn = true;
     private String description = "", leader, name;
-    private int totalMembers = 0;
-    private double power = 0.0;
+    private int totalMembers;
+    private double power;
     private Location home;
 
     Guild(String name) {

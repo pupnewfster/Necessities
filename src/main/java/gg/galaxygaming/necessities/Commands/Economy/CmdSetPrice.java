@@ -63,10 +63,7 @@ public class CmdSetPrice implements EconomyCmd {
             itemName = temp[0];
             data = Short.parseShort(temp[1]);
         }
-        if (Utils.legalInt(itemName))
-            mat = Material.fromID(Integer.parseInt(itemName));
-        else
-            mat = Material.fromString(itemName);
+        mat = Utils.legalInt(itemName) ? Material.fromID(Integer.parseInt(itemName)) : Material.fromString(itemName);
         if (!Utils.legalDouble(args[1]) && !args[1].equalsIgnoreCase("null")) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a the price you want to set the item at.");
             return true;

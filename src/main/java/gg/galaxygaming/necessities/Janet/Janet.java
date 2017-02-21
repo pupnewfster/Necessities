@@ -385,13 +385,9 @@ public class Janet {//TODO: Make the logic run async for performance reasons
      * @param message The message sent.
      */
     public void logConsole(String message) {
-        if (message.startsWith("say"))
-            message = "Console:" + message.replaceFirst("say", "");
-        else
-            message = "Console issued command: " + message;
         YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.log") && config.getBoolean("Necessities.log"))
-            Necessities.getLog().log(message);
+            Necessities.getLog().log(message.startsWith("say") ? "Console:" + message.replaceFirst("say", "") : "Console issued command: " + message);
     }
 
     /**

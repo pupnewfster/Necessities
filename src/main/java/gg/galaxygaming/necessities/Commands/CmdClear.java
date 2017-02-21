@@ -22,11 +22,7 @@ public class CmdClear implements Cmd {
                 p.sendMessage(var.getMessages() + "Inventory cleared.");
                 return true;
             }
-            Material mat;
-            if (Utils.legalInt(args[0]))
-                mat = Material.fromID(Integer.parseInt(args[0]));
-            else
-                mat = Material.fromString(args[0]);
+            Material mat = Utils.legalInt(args[0]) ? Material.fromID(Integer.parseInt(args[0])) : Material.fromString(args[0]);
             if (mat == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist.");
                 return true;

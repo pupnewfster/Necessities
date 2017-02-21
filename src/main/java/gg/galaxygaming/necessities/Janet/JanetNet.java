@@ -136,8 +136,8 @@ public class JanetNet {
     }
 
     private class WordScore {
-        private double score = 0;
-        private String word = null;
+        private double score;
+        private String word;
 
         private WordScore(double score, String word) {
             this.score = score;

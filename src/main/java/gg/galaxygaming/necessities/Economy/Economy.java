@@ -100,10 +100,7 @@ public class Economy {//TODO add OpenAnalytics
             Connection conn = DriverManager.getConnection(this.dbURL, this.properties);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT balance FROM economy WHERE uuid = '" + uuid + "' AND currencyType=" + this.type);
-            if (rs.next())
-                bal = rs.getDouble("balance");
-            else
-                bal = -1.0;
+            bal = rs.next() ? rs.getDouble("balance") : -1.0;
             rs.close();
             stmt.close();
             conn.close();

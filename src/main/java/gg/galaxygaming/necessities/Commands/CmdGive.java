@@ -23,11 +23,7 @@ public class CmdGive implements Cmd {
             return true;
         }
         Player t = Bukkit.getPlayer(uuid);
-        Material mat;
-        if (Utils.legalInt(args[1]))
-            mat = Material.fromID(Integer.parseInt(args[1]));
-        else
-            mat = Material.fromString(args[1]);
+        Material mat = Utils.legalInt(args[1]) ? Material.fromID(Integer.parseInt(args[1])) : Material.fromString(args[1]);
         if (mat == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist.");
             return true;
