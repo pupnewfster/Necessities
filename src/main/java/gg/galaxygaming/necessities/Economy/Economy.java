@@ -31,6 +31,8 @@ public class Economy {//TODO add OpenAnalytics
         this.properties.setProperty("password", config.getString("Economy.DBPassword"));
         this.properties.setProperty("useSSL", "false");
         this.properties.setProperty("autoReconnect", "true");
+        this.properties.setProperty("useLegacyDatetimeCode", "false");
+        this.properties.setProperty("serverTimezone", "EST");
         this.type = config.getInt("Economy.currencyType");
         Bukkit.getOnlinePlayers().forEach(p -> addPlayerIfNotExists(p.getUniqueId()));
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Economy loaded.");
@@ -131,7 +133,7 @@ public class Economy {//TODO add OpenAnalytics
                 try {
                     Connection conn = DriverManager.getConnection(dbURL, properties);
                     Statement stmt = conn.createStatement();
-                    stmt.execute("UPDATE economy SET balance = balance - " + amount + " WHERE uuid = '" + uuid + "' AND currencyType=" + type);
+                    stmt.executeUpdate("UPDATE economy SET balance = balance - " + amount + " WHERE uuid = '" + uuid + "' AND currencyType=" + type);
                     stmt.close();
                     conn.close();
                 } catch (Exception ignored) {
@@ -154,7 +156,7 @@ public class Economy {//TODO add OpenAnalytics
                 try {
                     Connection conn = DriverManager.getConnection(dbURL, properties);
                     Statement stmt = conn.createStatement();
-                    stmt.execute("UPDATE economy SET balance = balance + " + amount + " WHERE uuid = '" + uuid + "' AND currencyType=" + type);
+                    stmt.executeUpdate("UPDATE economy SET balance = balance + " + amount + " WHERE uuid = '" + uuid + "' AND currencyType=" + type);
                     stmt.close();
                     conn.close();
                 } catch (Exception ignored) {
@@ -177,7 +179,7 @@ public class Economy {//TODO add OpenAnalytics
                 try {
                     Connection conn = DriverManager.getConnection(dbURL, properties);
                     Statement stmt = conn.createStatement();
-                    stmt.execute("UPDATE economy SET balance = " + amount + " WHERE uuid = '" + uuid + "' AND currencyType=" + type);
+                    stmt.executeUpdate("UPDATE economy SET balance = " + amount + " WHERE uuid = '" + uuid + "' AND currencyType=" + type);
                     stmt.close();
                     conn.close();
                 } catch (Exception ignored) {

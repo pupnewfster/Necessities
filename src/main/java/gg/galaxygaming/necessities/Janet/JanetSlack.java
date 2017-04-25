@@ -161,7 +161,7 @@ public class JanetSlack {
         if (isConnected)
             return;
         try {
-            URL url = new URL("https://slack.com/api/rtm.start?token=" + token + "&simple_latest=true&no_unreads=true");
+            URL url = new URL("https://slack.com/api/rtm.connect?token=" + token);
             HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
             con.setRequestMethod("POST");
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
