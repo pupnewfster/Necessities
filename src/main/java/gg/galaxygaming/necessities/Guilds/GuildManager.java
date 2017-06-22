@@ -150,9 +150,11 @@ public class GuildManager {
      */
     public void disband(Guild g) {
         String name = g.getName();
-        for (String key : guilds.keySet())
-            if (guilds.get(key).isAlly(g) || guilds.get(key).isEnemy(g))
-                guilds.get(key).setNeutral(g);
+        for (Map.Entry<String, Guild> stringGuildEntry : guilds.entrySet()) {
+            Guild value = stringGuildEntry.getValue();
+            if (value.isAlly(g) || value.isEnemy(g))
+                value.setNeutral(g);
+        }
         g.disband();
         guilds.remove(name.toLowerCase());
         YamlConfiguration configGuilds = YamlConfiguration.loadConfiguration(configFileGuilds);

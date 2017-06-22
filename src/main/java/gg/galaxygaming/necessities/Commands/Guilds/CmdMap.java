@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class CmdMap implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
@@ -106,8 +107,8 @@ public class CmdMap implements GuildCmd {
 
             }
             StringBuilder keyBuilder = new StringBuilder();
-            for (Guild g : symbols.keySet())
-                keyBuilder.append(u.getGuild() == null ? var.getNeutral() + symbols.get(g) + ": " + g.getName() + ", " : u.getGuild().relation(g) + symbols.get(g) + ": " + g.getName() + ", ");
+            for (Map.Entry<Guild, String> guildEntry : symbols.entrySet())
+                keyBuilder.append(u.getGuild() == null ? var.getNeutral() + guildEntry.getValue() + ": " + guildEntry.getKey().getName() + ", " : u.getGuild().relation(guildEntry.getKey()) + guildEntry.getValue() + ": " + guildEntry.getKey().getName() + ", ");
             String key = keyBuilder.toString();
             if (!key.equals(""))
                 sender.sendMessage(key.substring(0, key.length() - 2));

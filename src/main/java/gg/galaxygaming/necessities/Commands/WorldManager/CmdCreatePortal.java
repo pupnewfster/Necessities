@@ -30,7 +30,15 @@ public class CmdCreatePortal implements WorldCmd {
                 return true;
             }
             if (!Necessities.getWM().worldExists(args[1])) {
-                if (args[1].startsWith("-") && Necessities.getWarps().isWarp(args[1].replaceFirst("-", ""))) {
+                if (args[1].startsWith("~")) {
+                    pm.create(args[0], args[1], left, right);
+                    String server = args[1].replaceFirst("~", "");
+                    sender.sendMessage(var.getMessages() + "Created portal " + var.getObj() + args[0] + var.getMessages() + " from " + var.getObj() +
+                            left.getWorld().getName() + var.getMessages() + " to server " + var.getObj() + server + var.getMessages() + ".");
+                    sender.sendMessage(var.getMessages() + "This portal is between " + var.getObj() + left.getBlockX() + var.getMessages() + ", " + var.getObj() +
+                            left.getBlockY() + var.getMessages() + ", " + var.getObj() + left.getBlockZ() + var.getMessages() + " and the server " + var.getObj() + server + var.getMessages() + ".");
+                    return true;
+                } else if (args[1].startsWith("-") && Necessities.getWarps().isWarp(args[1].replaceFirst("-", ""))) {
                     pm.create(args[0], args[1], left, right);//TODO messages below
                     sender.sendMessage(var.getMessages() + "Created portal " + var.getObj() + args[0] + var.getMessages() + " from " + var.getObj() +
                             left.getWorld().getName() + var.getMessages() + " to the warp " + var.getObj() + args[1].replaceFirst("-", "") + var.getMessages() + ".");
@@ -39,7 +47,7 @@ public class CmdCreatePortal implements WorldCmd {
                             var.getMessages() + ", " + var.getObj() + right.getBlockY() + var.getMessages() + ", " + var.getObj() + right.getBlockZ() + var.getMessages() + ".");
                     return true;
                 }
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Destination world or warp is invalid.");
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Destination server, world, or warp is invalid.");
                 return true;
             }
             pm.create(args[0], Bukkit.getWorld(args[1]).getName(), left, right);

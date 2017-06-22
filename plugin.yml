@@ -1,6 +1,6 @@
 name: Necessities
 main: gg.galaxygaming.necessities.Necessities
-version: 3.1.0
+version: 3.1.1
 description: Adds the necessities a server needs
 authors: [Galaxy Gaming Development Team]
 softdepend: [Vault, OpenAnalytics]

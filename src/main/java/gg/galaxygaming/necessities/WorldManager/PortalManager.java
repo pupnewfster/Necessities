@@ -1,12 +1,18 @@
 package gg.galaxygaming.necessities.WorldManager;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import gg.galaxygaming.necessities.Necessities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 public class PortalManager {//TODO: add a method to update the things when a world is unloaded or loaded
     private final HashMap<String, Portal> portals = new HashMap<>();
@@ -23,22 +29,41 @@ public class PortalManager {//TODO: add a method to update the things when a wor
             portals.put(portal, new Portal(portal));
             lowerNames.put(portal.toLowerCase(), portal);
         }
+        Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(Necessities.getInstance(), "BungeeCord");
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "All portals loaded.");
     }
 
     /**
-     * Gets the destination of the portal at the given location.
-     * @param l The location to check if it is a portal and if so retrieve its destination.
-     * @return The destination of the portal.
+     * Teleports the given player to the destination of the portal at the given location.
+     * @param l      The location to check if it is a portal and if so retrieve its destination.
+     * @param player The player to teleport.
      */
-    public Location portalDestination(Location l) {
-        for (String key : portals.keySet())
-            if (portals.get(key).isPortal(l)) {
-                if (portals.get(key).isWarp())
-                    return portals.get(key).getWarp().getDestination();
-                return portals.get(key).getWorldTo().getSpawnLocation();
+    public void portalDestination(Location l, Player player) {
+        for (Map.Entry<String, Portal> stringPortalEntry : portals.entrySet()) {
+            Portal p = stringPortalEntry.getValue();
+            if (p.isPortal(l)) {
+                if (p.isWarp())
+                    player.teleport(p.getWarp().getDestination());
+                else if (p.isCrossServer()) {
+                    YamlConfiguration config = Necessities.getInstance().getConfig();
+                    if (config.contains("Spawn")) {
+                        World world = Bukkit.getWorld(config.getString("Spawn.world"));
+                        double x = Double.parseDouble(config.getString("Spawn.x"));
+                        double y = Double.parseDouble(config.getString("Spawn.y"));
+                        double z = Double.parseDouble(config.getString("Spawn.z"));
+                        float yaw = Float.parseFloat(config.getString("Spawn.yaw"));
+                        float pitch = Float.parseFloat(config.getString("Spawn.pitch"));
+                        player.teleport(new Location(world, x, y, z, yaw, pitch));
+                    } else
+                        player.teleport(player.getWorld().getSpawnLocation());//Teleport them back to spawn
+                    ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                    out.writeUTF("Connect");
+                    out.writeUTF(p.getServer());
+                    player.sendPluginMessage(Necessities.getInstance(), "BungeeCord", out.toByteArray());
+                } else
+                    player.teleport(p.getWorldTo().getSpawnLocation());
             }
-        return null;
+        }
     }
 
     /**

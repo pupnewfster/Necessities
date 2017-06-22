@@ -11,16 +11,16 @@ import gg.galaxygaming.necessities.RankManager.RankManager;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.WorldManager.WorldManager;
-import net.minecraft.server.v1_11_R1.IChatBaseComponent;
-import net.minecraft.server.v1_11_R1.PacketPlayOutTitle;
+import net.minecraft.server.v1_12_R1.IChatBaseComponent;
+import net.minecraft.server.v1_12_R1.PacketPlayOutTitle;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_11_R1.boss.CraftBossBar;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.boss.CraftBossBar;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -298,11 +298,8 @@ class Listeners implements Listener {
         if (locationChanged)
             u.setLastAction(System.currentTimeMillis());
         YamlConfiguration config = Necessities.getInstance().getConfig();
-        if (config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager") && locationChanged) {
-            Location destination = Necessities.getPM().portalDestination(to);
-            if (destination != null)
-                e.getPlayer().teleport(destination);
-        }
+        if (config.contains("Necessities.WorldManager") && config.getBoolean("Necessities.WorldManager") && locationChanged)
+            Necessities.getPM().portalDestination(to, e.getPlayer());
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !from.getChunk().equals(to.getChunk())) {
             if (u.isClaiming())
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> e.getPlayer().performCommand("guild claim"));

@@ -124,9 +124,9 @@ public class JanetNet {
         Map<String, Integer> cprofile = this.cosine.getProfile(word);
         double best = 0.0;
         String bestWord = null;
-        for (Map<String, Integer> profile : this.profiles.keySet()) {
-            String curWord = this.profiles.get(profile);
-            double cur = similarity(profile, cprofile, curWord, word);
+        for (Map.Entry<Map<String, Integer>, String> mapStringEntry : this.profiles.entrySet()) {
+            String curWord = this.profiles.get(mapStringEntry.getKey());
+            double cur = similarity(mapStringEntry.getKey(), cprofile, curWord, word);
             if (cur > best) {
                 best = cur;
                 bestWord = curWord;
@@ -136,8 +136,8 @@ public class JanetNet {
     }
 
     private class WordScore {
-        private double score;
-        private String word;
+        private final double score;
+        private final String word;
 
         private WordScore(double score, String word) {
             this.score = score;

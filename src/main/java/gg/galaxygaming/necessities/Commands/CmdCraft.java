@@ -12,6 +12,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class CmdCraft implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
@@ -38,8 +39,8 @@ public class CmdCraft implements Cmd {
             } else if (r instanceof ShapelessRecipe)
                 for (ItemStack i : ((ShapelessRecipe) r).getIngredientList())
                     items.put(i, items.containsKey(i) ? items.get(i) + 1 : 1);
-            for (ItemStack i : items.keySet())
-                Bukkit.broadcastMessage(items.get(i) + " " + i.getType().toString());
+            for (Map.Entry<ItemStack, Integer> itemStackIntegerEntry : items.entrySet())
+                Bukkit.broadcastMessage(itemStackIntegerEntry.getValue() + " " + itemStackIntegerEntry.getKey().getType().toString());
             Bukkit.broadcastMessage("results in " + r.getResult().getAmount() + " " + r.getResult().getType().toString());
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to craft items.");

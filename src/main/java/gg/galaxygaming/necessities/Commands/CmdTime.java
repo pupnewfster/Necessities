@@ -25,8 +25,7 @@ public class CmdTime implements Cmd {
                 }
             }
             if (args.length == 1) {
-                if (dim == null)
-                    dim = p.getWorld();
+                dim = p.getWorld();
                 if (args[0].equalsIgnoreCase("day") || args[0].equalsIgnoreCase("noon"))
                     dim.setTime(6000);
                 else if (args[0].equalsIgnoreCase("night") || args[0].equalsIgnoreCase("midnight"))
@@ -37,8 +36,7 @@ public class CmdTime implements Cmd {
                     dim.setTime(13000);
                 else if (Utils.legalLong(args[0]))
                     dim.setTime(Long.parseLong(args[0]));
-            }
-            if (args.length == 2) {
+            } else if (args.length == 2) {
                 dim = p.getWorld();
                 if (args[0].equalsIgnoreCase("add")) {
                     if (Utils.legalLong(args[1]))
@@ -65,33 +63,30 @@ public class CmdTime implements Cmd {
                 else if (Utils.legalLong(args[0]))
                     dim.setTime(Long.parseLong(args[0]));
             } else {
-                if (dim == null) {
-                    dim = p.getWorld();
-                    if (args[1].equalsIgnoreCase("add")) {
-                        if (Utils.legalLong(args[2]))
-                            dim.setTime(dim.getTime() + Long.parseLong(args[2]));
-                    } else if (args[1].equalsIgnoreCase("set")) {
-                        if (args[2].equalsIgnoreCase("day") || args[2].equalsIgnoreCase("noon"))
-                            dim.setTime(6000);
-                        else if (args[2].equalsIgnoreCase("night") || args[2].equalsIgnoreCase("midnight"))
-                            dim.setTime(18000);
-                        else if (args[2].equalsIgnoreCase("dawn"))
-                            dim.setTime(23000);
-                        else if (args[2].equalsIgnoreCase("dusk"))
-                            dim.setTime(13000);
-                        else if (Utils.legalLong(args[2]))
-                            dim.setTime(Long.parseLong(args[2]));
-                    } else if (args[1].equalsIgnoreCase("day") || args[1].equalsIgnoreCase("noon"))
+                if (args[1].equalsIgnoreCase("add")) {
+                    if (Utils.legalLong(args[2]))
+                        dim.setTime(dim.getTime() + Long.parseLong(args[2]));
+                } else if (args[1].equalsIgnoreCase("set")) {
+                    if (args[2].equalsIgnoreCase("day") || args[2].equalsIgnoreCase("noon"))
                         dim.setTime(6000);
-                    else if (args[1].equalsIgnoreCase("night") || args[1].equalsIgnoreCase("midnight"))
+                    else if (args[2].equalsIgnoreCase("night") || args[2].equalsIgnoreCase("midnight"))
                         dim.setTime(18000);
-                    else if (args[1].equalsIgnoreCase("dawn"))
+                    else if (args[2].equalsIgnoreCase("dawn"))
                         dim.setTime(23000);
-                    else if (args[1].equalsIgnoreCase("dusk"))
+                    else if (args[2].equalsIgnoreCase("dusk"))
                         dim.setTime(13000);
-                    else if (Utils.legalLong(args[1]))
-                        dim.setTime(Long.parseLong(args[1]));
-                }
+                    else if (Utils.legalLong(args[2]))
+                        dim.setTime(Long.parseLong(args[2]));
+                } else if (args[1].equalsIgnoreCase("day") || args[1].equalsIgnoreCase("noon"))
+                    dim.setTime(6000);
+                else if (args[1].equalsIgnoreCase("night") || args[1].equalsIgnoreCase("midnight"))
+                    dim.setTime(18000);
+                else if (args[1].equalsIgnoreCase("dawn"))
+                    dim.setTime(23000);
+                else if (args[1].equalsIgnoreCase("dusk"))
+                    dim.setTime(13000);
+                else if (Utils.legalLong(args[1]))
+                    dim.setTime(Long.parseLong(args[1]));
             }
         } else {
             if (args.length == 1) {

@@ -7,10 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class UserManager {
     private final File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
@@ -62,8 +59,8 @@ public class UserManager {
      * Unload the user manager.
      */
     public void unload() {
-        for (UUID uuid : players.keySet()) {
-            User u = players.get(uuid);
+        for (Map.Entry<UUID, User> uuidUserEntry : players.entrySet()) {
+            User u = uuidUserEntry.getValue();
             Hat h = u.getHat();
             if (h != null)
                 h.despawn();
@@ -74,23 +71,23 @@ public class UserManager {
 
     void addRankPerm(Rank r, String node) {
         RankManager rm = Necessities.getRM();
-        for (UUID uuid : players.keySet())
-            if (rm.hasRank(players.get(uuid).getRank(), r))
-                players.get(uuid).addPerm(node);
+        for (Map.Entry<UUID, User> uuidUserEntry : players.entrySet())
+            if (rm.hasRank(uuidUserEntry.getValue().getRank(), r))
+                uuidUserEntry.getValue().addPerm(node);
     }
 
     void delRankPerm(Rank r, String node) {
         RankManager rm = Necessities.getRM();
-        for (UUID uuid : players.keySet())
-            if (rm.hasRank(players.get(uuid).getRank(), r))
-                players.get(uuid).removePerm(node);
+        for (Map.Entry<UUID, User> uuidUserEntry : players.entrySet())
+            if (rm.hasRank(uuidUserEntry.getValue().getRank(), r))
+                uuidUserEntry.getValue().removePerm(node);
     }
 
     void refreshRankPerm(Rank r) {
         RankManager rm = Necessities.getRM();
-        for (UUID uuid : players.keySet())
-            if (rm.hasRank(players.get(uuid).getRank(), r))
-                players.get(uuid).refreshPerms();
+        for (Map.Entry<UUID, User> uuidUserEntry : players.entrySet())
+            if (rm.hasRank(uuidUserEntry.getValue().getRank(), r))
+                uuidUserEntry.getValue().refreshPerms();
     }
 
     /**

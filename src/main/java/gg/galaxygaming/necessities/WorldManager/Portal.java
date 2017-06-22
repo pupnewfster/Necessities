@@ -13,6 +13,7 @@ class Portal {
     private boolean validPortal;
     private Warp destination;
     private World from, to;
+    private String server;
     private final String name;
 
     Portal(String portalName) {
@@ -26,6 +27,8 @@ class Portal {
             String dest = configPM.getString(this.name + ".destination");
             if (dest.startsWith("-"))
                 this.destination = warps.getWarp(dest.replaceFirst("-", ""));
+            else if (dest.startsWith("~"))
+                this.server = dest.replaceFirst("~", "");
             else
                 this.to = Bukkit.getWorld(dest);
         }
@@ -41,7 +44,7 @@ class Portal {
             this.y2 = configPM.getDouble(this.name + ".location.y2");
         if (configPM.contains(this.name + ".location.z2"))
             this.z2 = configPM.getDouble(this.name + ".location.z2");
-        if (this.from != null && (this.to != null || this.destination != null)) {
+        if (this.from != null && (this.to != null || this.destination != null || this.server != null)) {
             this.validPortal = true;
             fixCoordinates();
         }
@@ -83,12 +86,21 @@ class Portal {
         return this.destination;
     }
 
+    String getServer() {
+        return this.server;
+    }
+
+    boolean isCrossServer() {
+        return this.server != null;
+    }
+
     boolean isWarp() {
         return (this.destination != null && this.destination.hasDestination());
     }
 
     boolean isPortal(Location l) {
-        return !((this.to == null && !isWarp()) || this.from == null) && this.validPortal && this.from.equals(l.getWorld()) && (isWarp() || Necessities.getWM().worldExists(this.to.getName())) &&
-                this.x1 <= l.getBlockX() && l.getBlockX() <= this.x2 && this.y1 <= l.getBlockY() && l.getBlockY() <= this.y2 && this.z1 <= l.getBlockZ() && l.getBlockZ() <= this.z2;
+        return !((this.to == null && !isWarp() && !isCrossServer()) || this.from == null) && this.validPortal && this.from.equals(l.getWorld()) && (isWarp() || isCrossServer() ||
+                Necessities.getWM().worldExists(this.to.getName())) && this.x1 <= l.getBlockX() && l.getBlockX() <= this.x2 && this.y1 <= l.getBlockY() && l.getBlockY() <= this.y2 &&
+                this.z1 <= l.getBlockZ() && l.getBlockZ() <= this.z2;
     }
 }

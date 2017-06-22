@@ -49,7 +49,7 @@ public class CmdL2M implements EconomyCmd {
         for (; currentLevel > destination; currentLevel--) {
             if (currentLevel <= 16)
                 exp += (2 * currentLevel) + 7;
-            else if (currentLevel >= 17 && currentLevel <= 31)
+            else if (currentLevel <= 31)
                 exp += (5 * currentLevel) - 38;
             else
                 exp += (9 * currentLevel) - 158;
