@@ -41,7 +41,7 @@ public class CmdHat implements Cmd {
                 return true;
             }
             u.setHat(h);
-            p.sendMessage(var.getMessages() + "You are now wearing a " + var.getObj() + type.getName().toLowerCase().replaceAll("_", " ") + var.getMessages() + ".");
+            p.sendMessage(var.getMessages() + "You are now wearing a " + var.getObj() + type.getName().toLowerCase().replaceAll("_", " ") + var.getMessages() + '.');
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to wear a hat.");
         return true;
@@ -52,6 +52,6 @@ public class CmdHat implements Cmd {
         for (String h : HatType.getTypes())
             typesBuilder.append(h.toLowerCase()).append(", ");
         String types = typesBuilder.toString();
-        return types.substring(0, types.length() - 2) + ".";
+        return types.substring(0, types.length() - 2) + '.';
     }
 }

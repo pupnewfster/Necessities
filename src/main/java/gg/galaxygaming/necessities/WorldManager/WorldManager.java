@@ -19,7 +19,7 @@ public class WorldManager {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loading worlds...");
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
         for (String world : configWM.getKeys(false)) {
-            if (!worldExists(world) && (new File(world + "/level.dat")).exists()) {
+            if (!worldExists(world) && new File(world + "/level.dat").exists()) {
                 WorldCreator creator = new WorldCreator(world);
                 if (configWM.contains(world + ".environment"))
                     creator.environment(getEnvironment(configWM.getString(world + ".environment")));
@@ -180,7 +180,7 @@ public class WorldManager {
      */
     public void loadWorld(String name) {
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
-        if (!worldExists(name) && (new File(name + "/level.dat")).exists()) {
+        if (!worldExists(name) && new File(name + "/level.dat").exists()) {
             WorldCreator creator = new WorldCreator(name);
             if (configWM.contains(name + ".environment"))
                 creator.environment(getEnvironment(configWM.getString(name + ".environment")));
@@ -221,7 +221,7 @@ public class WorldManager {
      */
     public void setSetting(String name, String setting, String value) {
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
-        configWM.set(name + "." + setting, value);
+        configWM.set(name + '.' + setting, value);
         try {
             configWM.save(configFileWM);
         } catch (Exception ignored) {
@@ -236,7 +236,7 @@ public class WorldManager {
      */
     public void setSetting(String name, String setting, boolean value) {
         YamlConfiguration configWM = YamlConfiguration.loadConfiguration(configFileWM);
-        configWM.set(name + "." + setting, value);
+        configWM.set(name + '.' + setting, value);
         try {
             configWM.save(configFileWM);
         } catch (Exception ignored) {

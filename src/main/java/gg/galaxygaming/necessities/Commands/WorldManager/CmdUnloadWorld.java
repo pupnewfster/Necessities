@@ -24,7 +24,7 @@ public class CmdUnloadWorld implements WorldCmd {
         }
         String name = Bukkit.getWorld(args[0]).getName();
         wm.unloadWorld(args[0]);
-        sender.sendMessage(var.getMessages() + "Unloaded " + var.getObj() + name + var.getMessages() + ".");
+        sender.sendMessage(var.getMessages() + "Unloaded " + var.getObj() + name + var.getMessages() + '.');
         return true;
     }
 }

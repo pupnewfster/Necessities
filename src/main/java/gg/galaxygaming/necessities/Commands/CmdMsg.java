@@ -32,10 +32,10 @@ public class CmdMsg implements Cmd {
             if (args[0].equalsIgnoreCase("console")) {
                 StringBuilder messageBuilder = new StringBuilder();
                 for (int i = 1; i < args.length; i++)
-                    messageBuilder.append(args[i]).append(" ");
+                    messageBuilder.append(args[i]).append(' ');
                 String message = ChatColor.WHITE + messageBuilder.toString().trim();
                 if (p.hasPermission("Necessities.colorchat"))
-                    message = ChatColor.translateAlternateColorCodes('&', (p.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", "")));
+                    message = ChatColor.translateAlternateColorCodes('&', p.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", ""));
                 self.setLastC("Console");
                 console.setLastContact(self.getUUID());
                 p.sendMessage(var.getMessages() + "[me -> " + console.getName().replaceAll(":", "") + "] " + message);
@@ -59,10 +59,10 @@ public class CmdMsg implements Cmd {
             Player t = Bukkit.getPlayer(uuid);
             StringBuilder messageBuilder = new StringBuilder();
             for (int i = 1; i < args.length; i++)
-                messageBuilder.append(args[i]).append(" ");
+                messageBuilder.append(args[i]).append(' ');
             String message = ChatColor.WHITE + messageBuilder.toString().trim();
             if (p.hasPermission("Necessities.colorchat"))
-                message = ChatColor.translateAlternateColorCodes('&', (p.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", "")));
+                message = ChatColor.translateAlternateColorCodes('&', p.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", ""));
             u.setLastC(self.getUUID().toString());
             self.setLastC(u.getUUID().toString());
             p.sendMessage(var.getMessages() + "[me -> " + t.getDisplayName() + var.getMessages() + "] " + message);
@@ -77,7 +77,7 @@ public class CmdMsg implements Cmd {
             Player t = Bukkit.getPlayer(uuid);
             StringBuilder messageBuilder = new StringBuilder();
             for (int i = 1; i < args.length; i++)
-                messageBuilder.append(args[i]).append(" ");
+                messageBuilder.append(args[i]).append(' ');
             String message = ChatColor.translateAlternateColorCodes('&', ChatColor.WHITE + messageBuilder.toString().trim());
             u.setLastC("Console");
             console.setLastContact(u.getUUID());

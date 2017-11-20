@@ -56,7 +56,7 @@ public class RankPrices {
     public void rCost(String rankName) {
         YamlConfiguration configPrices = YamlConfiguration.loadConfiguration(configFilePrices);
         rankName = rankName.toUpperCase();
-        rankPrices.remove(rankName + " " + cost(rankName));
+        rankPrices.remove(rankName + ' ' + cost(rankName));
         configPrices.set("ranks." + rankName, null);
         try {
             configPrices.save(configFilePrices);
@@ -85,7 +85,7 @@ public class RankPrices {
      * @return The number of pages of the price list.
      */
     public int priceListPages() {
-        return rankPrices.size() % 10 != 0 ? (rankPrices.size() / 10) + 1 : (rankPrices.size() / 10);
+        return rankPrices.size() % 10 != 0 ? rankPrices.size() / 10 + 1 : rankPrices.size() / 10;
     }
 
     /**
@@ -99,6 +99,6 @@ public class RankPrices {
         if (rankPrices.size() < time + page + 1 || time == 10)
             return null;
         Rank r = Necessities.getRM().getRank(page + time + 1);
-        return r == null ? null : r.getName() + " " + rankPrices.get(r.getName().toUpperCase());
+        return r == null ? null : r.getName() + ' ' + rankPrices.get(r.getName().toUpperCase());
     }
 }

@@ -23,7 +23,7 @@ public class CmdItem implements Cmd {
             }
             if (args.length == 1) {
                 p.getInventory().addItem(mat.getBukkitMaterial().toItemStack(64));
-                p.sendMessage(var.getMessages() + "Giving " + var.getObj() + "64 " + mat.getFriendlyName(64) + var.getMessages() + ".");
+                p.sendMessage(var.getMessages() + "Giving " + var.getObj() + "64 " + mat.getFriendlyName(64) + var.getMessages() + '.');
                 return true;
             }
             if (!Utils.legalInt(args[1])) {
@@ -33,7 +33,7 @@ public class CmdItem implements Cmd {
             int amount = Integer.parseInt(args[1]);
             if (args.length == 2) {
                 p.getInventory().addItem(mat.getBukkitMaterial().toItemStack(amount));
-                p.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.getFriendlyName(amount) + var.getMessages() + ".");
+                p.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + ' ' + mat.getFriendlyName(amount) + var.getMessages() + '.');
                 return true;
             }
             short data = 0;
@@ -41,7 +41,7 @@ public class CmdItem implements Cmd {
                 data = Short.parseShort(args[2]);
             mat = mat.getChild(data);
             p.getInventory().addItem(mat.getBukkitMaterial().toItemStack(amount));
-            p.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.getFriendlyName(amount) + var.getMessages() + ".");
+            p.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + ' ' + mat.getFriendlyName(amount) + var.getMessages() + '.');
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command.");
         return true;

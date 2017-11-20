@@ -74,7 +74,7 @@ class Initialization {
         }
 
         Necessities.getRev().init();
-        Necessities.getNet().readCustom();
+        //Necessities.getNet().readCustom();
         Necessities.getSlack().init();
         Necessities.getAI().initiate();
         Necessities.getAnnouncer().init();

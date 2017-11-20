@@ -24,7 +24,7 @@ public class CmdImp implements Cmd {
         if (args.length > 1 && p != null) {
             StringBuilder messageBuilder = new StringBuilder();
             for (String a : args)
-                messageBuilder.append(" ").append(a);
+                messageBuilder.append(' ').append(a);
             String message = ChatColor.translateAlternateColorCodes('&', messageBuilder.toString().replaceFirst(args[0], "").trim());
             while (message.startsWith("/"))
                 message = message.replaceFirst("/", "");
@@ -33,7 +33,7 @@ public class CmdImp implements Cmd {
         }
         StringBuilder message = new StringBuilder();
         for (String a : args)
-            message.append(" ").append(a);
+            message.append(' ').append(a);
         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', message.toString().trim()));
         return true;
     }

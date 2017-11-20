@@ -23,7 +23,7 @@ public class CmdUnclaim implements GuildCmd {
                 return true;
             }
             Guild owner = Necessities.getGM().chunkOwner(p.getLocation().getChunk());
-            if (owner == null || (!p.hasPermission("Necessities.guilds.admin") && !owner.equals(u.getGuild()))) {
+            if (owner == null || !p.hasPermission("Necessities.guilds.admin") && !owner.equals(u.getGuild())) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Your guild does not own this chunk.");
                 return true;
             }

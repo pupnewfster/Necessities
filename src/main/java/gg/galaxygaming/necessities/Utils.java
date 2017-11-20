@@ -1,10 +1,8 @@
 package gg.galaxygaming.necessities;
 
-import net.minecraft.server.v1_12_R1.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
 import org.bukkit.entity.Player;
 import org.json.simple.JsonArray;
 import org.json.simple.JsonObject;
@@ -12,7 +10,6 @@ import org.json.simple.Jsoner;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.UUID;
@@ -102,7 +99,7 @@ public class Utils {
         matName = matName.replaceAll("_", " ").toLowerCase();
         String[] namePieces = matName.split(" ");
         for (String piece : namePieces)
-            name.append(uppercaseFirst(piece)).append(" ");
+            name.append(uppercaseFirst(piece)).append(' ');
         return name.toString().trim();
     }
 
@@ -123,7 +120,7 @@ public class Utils {
      * @return The string with an ', or 's at the end.
      */
     public static String ownerShip(String name) {
-        return name.endsWith("s") || name.endsWith("S") ? name + "'" : name + "'s";
+        return name.endsWith("s") || name.endsWith("S") ? name + '\'' : name + "'s";
     }
 
     /**
@@ -191,7 +188,7 @@ public class Utils {
                 response.append(inputLine);
             in.close();
             JsonArray json = Jsoner.deserialize(response.toString(), new JsonArray());
-            return ((JsonObject) json.get(json.size() - 1)).getString("name");
+            return ((JsonObject) json.get(json.size() - 1)).getString(Jsoner.mintJsonKey("name", null));
         } catch (Exception ignored) {
         }
         return null;
@@ -203,40 +200,13 @@ public class Utils {
      */
     public static String getTPS() {
         StringBuilder ticksBuilder = new StringBuilder(ChatColor.GOLD + "TPS from last 1m, 5m, 15m: ");
-        for (double tps : getNMSRecentTps())
+        for (double tps : Bukkit.getTPS())
             ticksBuilder.append(format(tps)).append(", ");
         String ticks = ticksBuilder.toString();
         return ticks.substring(0, ticks.length() - 2).trim();
     }
 
     private static String format(double tps) {
-        return ((tps > 18.0) ? ChatColor.GREEN : (tps > 16.0) ? ChatColor.YELLOW : ChatColor.RED).toString() + ((tps > 20.0) ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, 20.0);
-    }
-
-    private static final Field recentTpsField = makeField(MinecraftServer.class);
-
-    private static double[] getNMSRecentTps() {
-        if (recentTpsField == null)
-            return new double[0];
-        return getField(((CraftServer) Bukkit.getServer()).getServer());
-    }
-
-    private static Field makeField(Class<?> clazz) {
-        try {
-            return clazz.getDeclaredField("recentTps");
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T> T getField(Object instance) {
-        if (Utils.recentTpsField == null) throw new RuntimeException("No such field");
-        Utils.recentTpsField.setAccessible(true);
-        try {
-            return (T) Utils.recentTpsField.get(instance);
-        } catch (Exception ex) {
-            return null;
-        }
+        return (tps > 18.0 ? ChatColor.GREEN : tps > 16.0 ? ChatColor.YELLOW : ChatColor.RED).toString() + (tps > 20.0 ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, 20.0);
     }
 }

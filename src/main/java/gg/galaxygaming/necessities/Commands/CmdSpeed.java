@@ -18,7 +18,7 @@ public class CmdSpeed implements Cmd {
                     type = "flying";
                 } else
                     p.setWalkSpeed((float) 0.2);
-                p.sendMessage(var.getMessages() + "Set " + var.getObj() + type + var.getMessages() + " speed to " + var.getObj() + "1" + var.getMessages() + ".");
+                p.sendMessage(var.getMessages() + "Set " + var.getObj() + type + var.getMessages() + " speed to " + var.getObj() + '1' + var.getMessages() + '.');
             } else if (args.length == 1) {
                 if (!Utils.legalDouble(args[0])) {
                     p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid speed.");
@@ -32,7 +32,7 @@ public class CmdSpeed implements Cmd {
                     type = "flying";
                 } else
                     p.setWalkSpeed((float) (speed * .2));
-                p.sendMessage(var.getMessages() + "Set " + var.getObj() + type + var.getMessages() + " speed to " + var.getObj() + speed + var.getMessages() + ".");
+                p.sendMessage(var.getMessages() + "Set " + var.getObj() + type + var.getMessages() + " speed to " + var.getObj() + speed + var.getMessages() + '.');
             } else {
                 if (!Utils.legalDouble(args[1])) {
                     p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid speed.");
@@ -46,7 +46,7 @@ public class CmdSpeed implements Cmd {
                     type = "flying";
                 } else
                     p.setWalkSpeed((float) (speed * .2));
-                p.sendMessage(var.getMessages() + "Set " + var.getObj() + type + var.getMessages() + " speed to " + var.getObj() + speed + var.getMessages() + ".");
+                p.sendMessage(var.getMessages() + "Set " + var.getObj() + type + var.getMessages() + " speed to " + var.getObj() + speed + var.getMessages() + '.');
             }
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot change its speed.");

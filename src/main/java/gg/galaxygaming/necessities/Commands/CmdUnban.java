@@ -37,7 +37,7 @@ public class CmdUnban implements Cmd {
             return true;
         }
         bans.pardon(theirName);
-        Bukkit.broadcastMessage(var.getMessages() + name + " unbanned " + theirName + ".");
+        Bukkit.broadcastMessage(var.getMessages() + name + " unbanned " + theirName + '.');
         return true;
     }
 

@@ -82,7 +82,7 @@ public class CmdBuy implements EconomyCmd {
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have enough inventory space to buy that much of that item, buying the amount you have inventory space for.");
                 }
                 eco.removeMoney(player.getUniqueId(), cost);
-                player.sendMessage(var.getMessages() + "You bought " + var.getObj() + Integer.toString(amount) + " " + mat.getFriendlyName(amount) + var.getMessages() + ".");
+                player.sendMessage(var.getMessages() + "You bought " + var.getObj() + Integer.toString(amount) + ' ' + mat.getFriendlyName(amount) + var.getMessages() + '.');
                 player.sendMessage(var.getMoney() + Economy.format(cost) + var.getMessages() + " was removed from your account.");
             }
         } else

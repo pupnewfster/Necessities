@@ -34,7 +34,7 @@ public class CmdWho implements Cmd {
                         numbOnline++;
                     }
             }
-            sender.sendMessage(var.getMessages() + "There " + amount(numbOnline) + " " + var.getObj() + numbOnline + var.getMessages() + " out of a maximum " + var.getObj() + Bukkit.getMaxPlayers() +
+            sender.sendMessage(var.getMessages() + "There " + amount(numbOnline) + ' ' + var.getObj() + numbOnline + var.getMessages() + " out of a maximum " + var.getObj() + Bukkit.getMaxPlayers() +
                     var.getMessages() + " players online.");
             for (int i = rm.getOrder().size() - 1; i >= 0; i--) {
                 Rank r = rm.getRank(i);
@@ -44,7 +44,7 @@ public class CmdWho implements Cmd {
             return true;
         }
         int numbOnline = Bukkit.getOnlinePlayers().size() + 1;
-        sender.sendMessage(var.getMessages() + "There " + amount(numbOnline) + " " + var.getObj() + numbOnline + var.getMessages() + " out of a maximum " +
+        sender.sendMessage(var.getMessages() + "There " + amount(numbOnline) + ' ' + var.getObj() + numbOnline + var.getMessages() + " out of a maximum " +
                 var.getObj() + Bukkit.getMaxPlayers() + var.getMessages() + " players online.");
         HashMap<Rank, String> online = new HashMap<>();
         if (!rm.getOrder().isEmpty())

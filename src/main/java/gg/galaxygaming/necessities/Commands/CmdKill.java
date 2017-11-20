@@ -26,7 +26,7 @@ public class CmdKill implements Cmd {
         target.setHealth(0);
         StringBuilder reasonBuilder = new StringBuilder();
         for (int i = 1; i < args.length; i++)
-            reasonBuilder.append(args[i]).append(" ");
+            reasonBuilder.append(args[i]).append(' ');
         String reason = ChatColor.translateAlternateColorCodes('&', reasonBuilder.toString().trim());
         if (reason.equals(""))
             reason = "no reason.";

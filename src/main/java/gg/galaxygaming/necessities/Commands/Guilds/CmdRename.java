@@ -36,7 +36,7 @@ public class CmdRename implements GuildCmd {
                 return true;
             }
             gm.renameGuild(u.getGuild(), name);
-            sender.sendMessage(var.getMessages() + "Successfully renamed guild to " + var.getObj() + name + var.getMessages() + ".");
+            sender.sendMessage(var.getMessages() + "Successfully renamed guild to " + var.getObj() + name + var.getMessages() + '.');
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to transfer leadership to someone in your guild.");
         return true;

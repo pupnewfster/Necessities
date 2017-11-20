@@ -47,10 +47,10 @@ public class CmdPay implements EconomyCmd {
             payAmount = Double.parseDouble(Utils.roundTwoDecimals(payAmount));
             eco.removeMoney(player.getUniqueId(), payAmount);
             eco.addMoney(uuid, payAmount);
-            player.sendMessage(var.getMessages() + "You paid " + var.getObj() + targetsName + var.getMoney() + " " + Economy.format(payAmount));
+            player.sendMessage(var.getMessages() + "You paid " + var.getObj() + targetsName + var.getMoney() + ' ' + Economy.format(payAmount));
             if (target != null)
                 target.sendMessage(var.getMessages() + "You received " + var.getMoney() + Economy.format(payAmount) + var.getMessages() + " from " + var.getObj() +
-                        player.getName() + var.getMessages() + ".");
+                        player.getName() + var.getMessages() + '.');
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command or use cce");
         return true;

@@ -15,7 +15,9 @@ public class CmdWorlds implements WorldCmd {
         StringBuilder levelsBuilder = new StringBuilder();
         for (int i = 0; i < worlds.size() - 1; i++)
             levelsBuilder.append(worlds.get(i)).append(", ");
-        levelsBuilder.append("and ").append(worlds.get(worlds.size() - 1)).append(".");
+        if (worlds.size() > 1)
+            levelsBuilder.append("and ");
+        levelsBuilder.append(worlds.get(worlds.size() - 1)).append('.');
         sender.sendMessage(Necessities.getVar().getMessages() + "The worlds are: " + ChatColor.WHITE + levelsBuilder.toString());
         return true;
     }

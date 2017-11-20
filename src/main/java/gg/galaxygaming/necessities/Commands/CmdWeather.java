@@ -50,7 +50,7 @@ public class CmdWeather implements Cmd {
             dim.setWeatherDuration(1);
         else
             dim.setThundering(true);
-        sender.sendMessage(var.getMessages() + "Set weather in " + var.getObj() + dim.getName() + var.getMessages() + " to " + (thundering ? "stormy" : "clear") + ".");
+        sender.sendMessage(var.getMessages() + "Set weather in " + var.getObj() + dim.getName() + var.getMessages() + " to " + (thundering ? "stormy" : "clear") + '.');
         return true;
     }
 

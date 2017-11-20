@@ -30,7 +30,7 @@ public class CmdChat implements GuildCmd {
             if (args.length > 0) {
                 StringBuilder messageBuilder = new StringBuilder();
                 for (String arg : args)
-                    messageBuilder.append(arg).append(" ");
+                    messageBuilder.append(arg).append(' ');
                 message = messageBuilder.toString().trim();
             }
             if (args.length > 0)
@@ -59,7 +59,7 @@ public class CmdChat implements GuildCmd {
         send = send.replaceAll("\\{NAME}", player.getDisplayName());
         send = send.replaceAll("\\{MESSAGE}", "");
         if (player.hasPermission("Necessities.colorchat"))
-            message = ChatColor.translateAlternateColorCodes('&', (player.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", "")));
+            message = ChatColor.translateAlternateColorCodes('&', player.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", ""));
         for (Player p : Bukkit.getOnlinePlayers()) {
             User u = um.getUser(p.getUniqueId());
             if (u.getGuild() != null && sender.getGuild() == u.getGuild())

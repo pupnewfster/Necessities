@@ -37,7 +37,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         RankManager rm = Necessities.getRM();
         String rank = "";
         if (!rm.getOrder().isEmpty())
-            rank = rm.getRank(rm.getOrder().size() - 1).getTitle() + " ";
+            rank = rm.getRank(rm.getOrder().size() - 1).getTitle() + ' ';
         final String login = ChatColor.translateAlternateColorCodes('&', "&a + " + rank + "Janet&e joined the game.");
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> Bukkit.broadcastMessage(login));
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Janet initiated.");
@@ -50,7 +50,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         RankManager rm = Necessities.getRM();
         String rank = "";
         if (!rm.getOrder().isEmpty())
-            rank = rm.getRank(rm.getOrder().size() - 1).getTitle() + " ";
+            rank = rm.getRank(rm.getOrder().size() - 1).getTitle() + ' ';
         Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c - " + rank + "Janet&e Disconnected."));
     }
 
@@ -146,7 +146,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
             bad.addAll(s.stream().filter(w -> w.contains(badWord) && check(w, badWord) && !isGood(w)).collect(Collectors.toList()));
             for (String o : orig) {
                 String t = removeConsec(o);
-                if ((o.contains(badWord) && check(o, badWord) && !isGood(o)) || (t.contains(badWord) && check(t, badWord) && !isGood(t)))
+                if (o.contains(badWord) && check(o, badWord) && !isGood(o) || t.contains(badWord) && check(t, badWord) && !isGood(t))
                     bad.add(o);
             }
         }
@@ -158,7 +158,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
             for (String word : bad)
                 if (nonCapitalized[i].replaceAll("[^a-zA-Z]", "").equalsIgnoreCase(word))
                     nonCapitalized[i] = stars(nonCapitalized[i]);
-            censoredBuilder.append(nonCapitalized[i]).append(" ");
+            censoredBuilder.append(nonCapitalized[i]).append(' ');
         }
         String censored = censoredBuilder.toString();
         if (censored.equals(""))
@@ -192,7 +192,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         StringBuilder c = new StringBuilder();
         int noSpace = 0;
         for (int i = 0; i < temp.length(); i++) {
-            c.append((stars.containsKey(noSpace) && stars.get(noSpace) == temp.charAt(i)) ? "*" : temp.charAt(i));
+            c.append(stars.containsKey(noSpace) && stars.get(noSpace) == temp.charAt(i) ? "*" : temp.charAt(i));
             if (i + 1 < temp.length() && stars.containsKey(noSpace) && stars.get(noSpace) != temp.charAt(i + 1))
                 noSpace++;
         }
@@ -253,14 +253,14 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         String[] split = toStar.split(" ");
         StringBuilder star = new StringBuilder();
         for (String s : split)
-            star.append(starNoSpaces(s)).append(" ");
+            star.append(starNoSpaces(s)).append(' ');
         return star.toString().trim();
     }
 
     private String starNoSpaces(String toStar) {
         StringBuilder star = new StringBuilder();
         for (int i = 0; i < toStar.trim().length(); i++)
-            star.append("*");
+            star.append('*');
         return star.toString();
     }
 
@@ -273,10 +273,10 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         String[] ipPieces = toStar.trim().split("\\.");
         StringBuilder starBuilder = new StringBuilder();
         for (String i : ipPieces)
-            starBuilder.append(stars(i)).append(".");
+            starBuilder.append(stars(i)).append('.');
         String star = starBuilder.toString();
         star = star.substring(0, star.length() - 1);
-        return !port.equals("") ? star + ":" + port : star;
+        return !port.equals("") ? star + ':' + port : star;
     }
 
     private String adds(UUID uuid, String message, boolean warn) {
@@ -313,7 +313,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         }
         StringBuilder censored = new StringBuilder();
         for (String word : orig)
-            censored.append(word).append(" ");
+            censored.append(word).append(' ');
         return censored.toString().trim();
     }
 
@@ -377,7 +377,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
             censored = langCheck(uuid, censored, warn);
         if (config.getBoolean("Necessities.caps") && !p.hasPermission("Necessities.caps"))
             censored = caps(censored);
-        return messageOrig.split(" ")[0] + " " + censored;
+        return messageOrig.split(" ")[0] + ' ' + censored;
     }
 
     /**
@@ -407,7 +407,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
     public void logDeath(UUID uuid, String cause) {
         YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.log") && config.getBoolean("Necessities.log"))
-            Necessities.getLog().log(playerInfo(Bukkit.getPlayer(uuid)) + " " + cause);
+            Necessities.getLog().log(playerInfo(Bukkit.getPlayer(uuid)) + ' ' + cause);
     }
 
     /**
@@ -422,7 +422,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
     }
 
     private String playerInfo(Player p) {
-        return p.getName() + " (" + p.getAddress().toString().split("/")[1].split(":")[0] + " [" + p.getWorld().getName() + " " + p.getLocation().getBlockX() + "," + p.getLocation().getBlockY() + "," +
+        return p.getName() + " (" + p.getAddress().toString().split("/")[1].split(":")[0] + " [" + p.getWorld().getName() + ' ' + p.getLocation().getBlockX() + ',' + p.getLocation().getBlockY() + ',' +
                 p.getLocation().getBlockZ() + "])";
     }
 

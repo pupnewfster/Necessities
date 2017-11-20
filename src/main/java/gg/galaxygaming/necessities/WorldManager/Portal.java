@@ -95,11 +95,11 @@ class Portal {
     }
 
     boolean isWarp() {
-        return (this.destination != null && this.destination.hasDestination());
+        return this.destination != null && this.destination.hasDestination();
     }
 
     boolean isPortal(Location l) {
-        return !((this.to == null && !isWarp() && !isCrossServer()) || this.from == null) && this.validPortal && this.from.equals(l.getWorld()) && (isWarp() || isCrossServer() ||
+        return !(this.to == null && !isWarp() && !isCrossServer() || this.from == null) && this.validPortal && this.from.equals(l.getWorld()) && (isWarp() || isCrossServer() ||
                 Necessities.getWM().worldExists(this.to.getName())) && this.x1 <= l.getBlockX() && l.getBlockX() <= this.x2 && this.y1 <= l.getBlockY() && l.getBlockY() <= this.y2 &&
                 this.z1 <= l.getBlockZ() && l.getBlockZ() <= this.z2;
     }

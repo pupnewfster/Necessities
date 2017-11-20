@@ -53,17 +53,17 @@ public class Prices {
             return;
         if (price.equalsIgnoreCase("null")) {
             sellPrices.remove(itemName);
-            configPrices.set(direction + "." + itemName, null);
+            configPrices.set(direction + '.' + itemName, null);
         } else {
             sellPrices.put(itemName, Double.parseDouble(price));
-            configPrices.set(direction + "." + itemName, Double.parseDouble(price));
+            configPrices.set(direction + '.' + itemName, Double.parseDouble(price));
         }
         try {
             configPrices.save(configFilePrices);
         } catch (Exception ignored) {
         }
         if (buyPrices.containsKey(itemName) && sellPrices.containsKey(itemName))
-            this.price.put(itemName, Double.toString(buyPrices.get(itemName)) + " " + Double.toString(sellPrices.get(itemName)));
+            this.price.put(itemName, Double.toString(buyPrices.get(itemName)) + ' ' + Double.toString(sellPrices.get(itemName)));
         else if (buyPrices.containsKey(itemName))
             this.price.put(itemName, Double.toString(buyPrices.get(itemName)) + " null");
         else if (sellPrices.containsKey(itemName))
@@ -83,7 +83,7 @@ public class Prices {
                 String tempKey = key.replaceFirst("buy.", "");
                 buyPrices.put(tempKey, configPrices.getDouble(key));
                 if (price.containsKey(tempKey))
-                    price.put(tempKey, Double.toString(buyPrices.get(tempKey)) + " " + price.get(tempKey).replaceAll("null ", ""));
+                    price.put(tempKey, Double.toString(buyPrices.get(tempKey)) + ' ' + price.get(tempKey).replaceAll("null ", ""));
                 else
                     price.put(tempKey, Double.toString(buyPrices.get(tempKey)) + " null");
             } else if (key.startsWith("sell") && !key.equals("sell")) {
@@ -116,6 +116,6 @@ public class Prices {
         if (price.size() < time + page + 1 || time == 10)
             return null;
         String item = (String) price.keySet().toArray()[page + time];
-        return item + " " + price.get(item);
+        return item + ' ' + price.get(item);
     }
 }

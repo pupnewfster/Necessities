@@ -39,10 +39,10 @@ public class CmdIgnore implements Cmd {
             Player t = Bukkit.getPlayer(uuid);
             if (self.isIgnoring(uuid)) {
                 self.unignore(uuid);
-                sender.sendMessage(var.getMessages() + "No longer ignoring " + var.getObj() + t.getDisplayName() + var.getMessages() + ".");
+                sender.sendMessage(var.getMessages() + "No longer ignoring " + var.getObj() + t.getDisplayName() + var.getMessages() + '.');
             } else {
                 self.ignore(uuid);
-                sender.sendMessage(var.getMessages() + "Ignoring " + var.getObj() + t.getDisplayName() + var.getMessages() + ".");
+                sender.sendMessage(var.getMessages() + "Ignoring " + var.getObj() + t.getDisplayName() + var.getMessages() + '.');
             }
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot ignore anyone if you feel strongly about it try muting them.");

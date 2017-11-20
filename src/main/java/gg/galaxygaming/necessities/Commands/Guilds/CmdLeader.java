@@ -43,7 +43,7 @@ public class CmdLeader implements GuildCmd {
                 return true;
             }
             u.getGuild().setLeader(uuid);
-            sender.sendMessage(var.getMessages() + "Successfully transferred leadership to " + var.getObj() + them.getName() + var.getMessages() + ".");
+            sender.sendMessage(var.getMessages() + "Successfully transferred leadership to " + var.getObj() + them.getName() + var.getMessages() + '.');
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to transfer leadership to someone in your guild.");
         return true;

@@ -24,7 +24,7 @@ public class CmdWarp implements WorldCmd {
             if (!w.hasDestination())
                 return true;
             ((Player) sender).teleport(w.getDestination());
-            sender.sendMessage(var.getMessages() + "Teleporting to " + var.getObj() + args[0] + var.getMessages() + ".");
+            sender.sendMessage(var.getMessages() + "Teleporting to " + var.getObj() + args[0] + var.getMessages() + '.');
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to teleport warps.");
         return true;

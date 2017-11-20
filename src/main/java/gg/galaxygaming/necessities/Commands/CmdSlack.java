@@ -17,7 +17,7 @@ public class CmdSlack implements Cmd {
         if (args.length > 0) {
             StringBuilder messageBuilder = new StringBuilder();
             for (String arg : args)
-                messageBuilder.append(arg).append(" ");
+                messageBuilder.append(arg).append(' ');
             message = messageBuilder.toString().trim();
         }
         Variables var = Necessities.getVar();
@@ -50,16 +50,16 @@ public class CmdSlack implements Cmd {
         send = send.replaceAll("\\{NAME}", player.getDisplayName());
         send = send.replaceAll("\\{MESSAGE}", "");
         if (player.hasPermission("Necessities.colorchat"))
-            message = ChatColor.translateAlternateColorCodes('&', (player.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", "")));
+            message = ChatColor.translateAlternateColorCodes('&', player.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", ""));
         Bukkit.broadcast(send + message, "Necessities.slack");
         Necessities.getSlack().sendMessage(send.replaceFirst("To Slack - ", "") + message);
     }
 
     private void consoleToSlack(String message) {
         String cName = Necessities.getConsole().getName();
-        String send = Necessities.getVar().getMessages() + "To Slack - " + cName + ChatColor.WHITE + " " + ChatColor.translateAlternateColorCodes('&', message.trim());
+        String send = Necessities.getVar().getMessages() + "To Slack - " + cName + ChatColor.WHITE + ' ' + ChatColor.translateAlternateColorCodes('&', message.trim());
         Bukkit.broadcast(send, "Necessities.slack");
-        Necessities.getSlack().sendMessage(cName + " " + ChatColor.translateAlternateColorCodes('&', message.trim()));
+        Necessities.getSlack().sendMessage(cName + ' ' + ChatColor.translateAlternateColorCodes('&', message.trim()));
     }
 
     public boolean isPaintballEnabled() {

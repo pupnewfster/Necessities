@@ -52,7 +52,7 @@ public class CmdJoin implements GuildCmd {
             }
             g.join(p.getUniqueId());
             g.sendMods(var.getObj() + p.getDisplayName() + var.getMessages() + " joined your guild.");
-            sender.sendMessage(var.getMessages() + "Successfully joined " + var.getObj() + g.getName() + var.getMessages() + ".");
+            sender.sendMessage(var.getMessages() + "Successfully joined " + var.getObj() + g.getName() + var.getMessages() + '.');
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to join a guild.");
         return true;

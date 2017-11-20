@@ -62,6 +62,6 @@ public class ScoreBoards {
 
     private String fromInt(int toTranslate) {
         toTranslate -= 1;
-        return (toTranslate < 0 || ALPHABET.length <= toTranslate) ? "ERROR" : ALPHABET[toTranslate];
+        return toTranslate < 0 || ALPHABET.length <= toTranslate ? "ERROR" : ALPHABET[toTranslate];
     }
 }

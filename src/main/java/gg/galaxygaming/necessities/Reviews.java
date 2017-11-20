@@ -29,7 +29,7 @@ public class Reviews {
      * @return The number of pages of the reviews list.
      */
     public int reviewPages() {
-        return reviews.size() % 10 != 0 ? (reviews.size() / 10) + 1 : (reviews.size() / 10);
+        return reviews.size() % 10 != 0 ? reviews.size() / 10 + 1 : reviews.size() / 10;
     }
 
     /**
@@ -40,6 +40,6 @@ public class Reviews {
      */
     public String reviewLists(int page, int time) {
         page *= 10;
-        return (reviews.size() < time + page + 1 || time == 10) ? null : reviews.keySet().toArray()[page + time] + " " + reviews.get(reviews.keySet().toArray()[page + time]);
+        return reviews.size() < time + page + 1 || time == 10 ? null : reviews.keySet().toArray()[page + time] + " " + reviews.get(reviews.keySet().toArray()[page + time]);
     }
 }

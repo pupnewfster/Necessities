@@ -25,12 +25,12 @@ public class CmdCraft implements Cmd {
                 return true;
             }
             mat = Material.fromString(args[0]);
-            if (Bukkit.getRecipesFor(mat.getBukkitMaterial().toItemStack()).isEmpty()) {
+            if (Bukkit.getRecipesFor(mat.getBukkitMaterial().toItemStack(1)).isEmpty()) {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "There are no recipes to craft that item.");
                 return true;
             }
             HashMap<ItemStack, Integer> items = new HashMap<>();
-            Recipe r = Bukkit.getRecipesFor(mat.getBukkitMaterial().toItemStack()).get(0);
+            Recipe r = Bukkit.getRecipesFor(mat.getBukkitMaterial().toItemStack(1)).get(0);
             if (r instanceof ShapedRecipe) {
                 ShapedRecipe s = (ShapedRecipe) r;
                 for (Character c : s.getIngredientMap().keySet())
@@ -41,7 +41,7 @@ public class CmdCraft implements Cmd {
                     items.put(i, items.containsKey(i) ? items.get(i) + 1 : 1);
             for (Map.Entry<ItemStack, Integer> itemStackIntegerEntry : items.entrySet())
                 Bukkit.broadcastMessage(itemStackIntegerEntry.getValue() + " " + itemStackIntegerEntry.getKey().getType().toString());
-            Bukkit.broadcastMessage("results in " + r.getResult().getAmount() + " " + r.getResult().getType().toString());
+            Bukkit.broadcastMessage("results in " + r.getResult().getAmount() + ' ' + r.getResult().getType().toString());
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to craft items.");
         return true;

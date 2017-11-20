@@ -36,7 +36,7 @@ public class CmdClear implements Cmd {
                 int amount = Arrays.stream(p.getInventory().getContents()).filter(i -> i != null && i.getType().equals(bukkitMaterial.getItemType()) && (Material.isTool(i.getType()) ||
                         i.getDurability() == bukkitMaterial.getData())).mapToInt(ItemStack::getAmount).sum();
                 p.getInventory().remove(bukkitMaterial.toItemStack());
-                p.sendMessage(var.getMessages() + "Removed " + var.getObj() + amount + " " + mat.getFriendlyName(amount) + var.getMessages() + " from your inventory.");
+                p.sendMessage(var.getMessages() + "Removed " + var.getObj() + amount + ' ' + mat.getFriendlyName(amount) + var.getMessages() + " from your inventory.");
                 return true;
             }
             if (!Utils.legalInt(args[1])) {
@@ -50,7 +50,7 @@ public class CmdClear implements Cmd {
                     return true;
                 }
                 p.getInventory().remove(bukkitMaterial.toItemStack(amount));
-                p.sendMessage(var.getMessages() + "Removed " + var.getObj() + amount + " " + mat.getFriendlyName(amount) + var.getMessages() + " from your inventory.");
+                p.sendMessage(var.getMessages() + "Removed " + var.getObj() + amount + ' ' + mat.getFriendlyName(amount) + var.getMessages() + " from your inventory.");
                 return true;
             }
             short data = 0;
@@ -62,7 +62,7 @@ public class CmdClear implements Cmd {
                 return true;
             }
             p.getInventory().remove(bukkitMaterial.toItemStack(amount));
-            p.sendMessage(var.getMessages() + "Removed " + var.getObj() + amount + " " + mat.getFriendlyName(amount) + var.getMessages() + " from your inventory.");
+            p.sendMessage(var.getMessages() + "Removed " + var.getObj() + amount + ' ' + mat.getFriendlyName(amount) + var.getMessages() + " from your inventory.");
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command.");
         return true;

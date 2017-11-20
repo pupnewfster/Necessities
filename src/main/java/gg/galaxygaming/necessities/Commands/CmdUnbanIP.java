@@ -26,7 +26,7 @@ public class CmdUnbanIP implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid ip.");
             return true;
         }
-        String name = (sender instanceof Player ? sender.getName() : Necessities.getConsole().getName().replaceAll(":", ""));
+        String name = sender instanceof Player ? sender.getName() : Necessities.getConsole().getName().replaceAll(":", "");
         BanList bans = Bukkit.getBanList(BanList.Type.IP);
         String theirIP = args[0];
         if (!bans.isBanned(theirIP)) {
@@ -34,7 +34,7 @@ public class CmdUnbanIP implements Cmd {
             return true;
         }
         bans.pardon(theirIP);
-        Bukkit.broadcastMessage(var.getMessages() + name + " unbanned " + theirIP + ".");
+        Bukkit.broadcastMessage(var.getMessages() + name + " unbanned " + theirIP + '.');
         return true;
     }
 

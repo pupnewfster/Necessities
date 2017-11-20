@@ -28,7 +28,7 @@ public class CmdHighfive implements Cmd {
             return true;
         }
         Player target = Bukkit.getPlayer(uuid);
-        String name = ((sender instanceof Player) ? sender.getName() : Necessities.getConsole().getName().replaceAll(":", ""));
+        String name = sender instanceof Player ? sender.getName() : Necessities.getConsole().getName().replaceAll(":", "");
         target.sendMessage(var.getObj() + name + var.getMessages() + " just highfived you.");
         Bukkit.broadcastMessage(var.getMessages() + name + " just highfived " + target.getName());
         return true;

@@ -27,13 +27,13 @@ public class CmdList implements GuildCmd {
             User u = um.getUser(p.getUniqueId());
             guildList.add(var.getGuildMsgs() + "" + (int) um.getUsers().keySet().stream().map(um::getUser).filter(x -> x.getGuild() == null && x.getPlayer() != null && p.canSee(x.getPlayer())).count() + " guildless online");
             for (Guild g : gm.getGuilds())
-                guildList.add(g.relation(u.getGuild()) + g.getName() + " " + var.getGuildMsgs() + g.getOnline(p.hasPermission("Necessities.seehidden")) + "/" + g.getTotal() + " online, " + g.getLand() + "/" +
-                        Utils.roundTwoDecimals(g.getPower()) + "/" + g.getMaxPower() + ".00");
+                guildList.add(g.relation(u.getGuild()) + g.getName() + ' ' + var.getGuildMsgs() + g.getOnline(p.hasPermission("Necessities.seehidden")) + '/' + g.getTotal() + " online, " + g.getLand() + '/' +
+                        Utils.roundTwoDecimals(g.getPower()) + '/' + g.getMaxPower() + ".00");
         } else {
             guildList.add(var.getGuildMsgs() + "" + (int) um.getUsers().keySet().stream().filter(uuid -> um.getUser(uuid).getGuild() == null).count() + " guildless online");
             for (Guild g : gm.getGuilds())
-                guildList.add(var.getNeutral() + g.getName() + " " + var.getGuildMsgs() + g.getOnline(true) + "/" + g.getTotal() + " online, " + g.getLand() + "/" +
-                        Utils.roundTwoDecimals(g.getPower()) + "/" + g.getMaxPower() + ".00");
+                guildList.add(var.getNeutral() + g.getName() + ' ' + var.getGuildMsgs() + g.getOnline(true) + '/' + g.getTotal() + " online, " + g.getLand() + '/' +
+                        Utils.roundTwoDecimals(g.getPower()) + '/' + g.getMaxPower() + ".00");
         }
         int page = 0;
         if (args.length != 0 && !Utils.legalInt(args[0])) {
@@ -48,12 +48,12 @@ public class CmdList implements GuildCmd {
         int rounder = 0;
         if (guildList.size() % 10 != 0)
             rounder = 1;
-        int totalPages = (guildList.size() / 10) + rounder;
+        int totalPages = guildList.size() / 10 + rounder;
         if (page > totalPages) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer.toString(totalPages));
             return true;
         }
-        sender.sendMessage(var.getMessages() + "Guild list [" + Integer.toString(page) + "/" + Integer.toString(totalPages) + "]");
+        sender.sendMessage(var.getMessages() + "Guild list [" + Integer.toString(page) + '/' + Integer.toString(totalPages) + ']');
         page = page - 1;
         String message = getLine(page, time, guildList);
         while (message != null) {

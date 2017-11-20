@@ -25,7 +25,7 @@ public class Economy {//TODO add OpenAnalytics
     public void init() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loading Economy...");
         YamlConfiguration config = Necessities.getInstance().getConfig();
-        this.dbURL = "jdbc:mysql://" + config.getString("Economy.DBHost") + "/" + config.getString("Economy.DBName");
+        this.dbURL = "jdbc:mysql://" + config.getString("Economy.DBHost") + '/' + config.getString("Economy.DBName");
         this.properties = new Properties();
         this.properties.setProperty("user", config.getString("Economy.DBUser"));
         this.properties.setProperty("password", config.getString("Economy.DBPassword"));
@@ -52,7 +52,7 @@ public class Economy {//TODO add OpenAnalytics
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM economy WHERE uuid = '" + uuid + "' AND currencyType=" + this.type);
             if (!rs.next()) {
-                stmt.execute("INSERT INTO economy (uuid, currencyType, balance) VALUES ('" + uuid + "'," + this.type + "," + startBal + ")");
+                stmt.execute("INSERT INTO economy (uuid, currencyType, balance) VALUES ('" + uuid + "'," + this.type + ',' + startBal + ')');
                 added = true;
             } else if (!loadedBals.containsKey(uuid)) //Loads it into memory for temporary faster lookup
                 this.loadedBals.put(uuid, rs.getDouble("balance"));
@@ -200,7 +200,7 @@ public class Economy {//TODO add OpenAnalytics
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT uuid,balance FROM economy WHERE currencyType=" + this.type + " ORDER BY balance DESC LIMIT " + (page - 1) * 10 + ",10");
             while (rs.next())
-                balTop.add(rs.getString("uuid") + " " + rs.getDouble("balance"));
+                balTop.add(rs.getString("uuid") + ' ' + rs.getDouble("balance"));
             rs.close();
             stmt.close();
             conn.close();

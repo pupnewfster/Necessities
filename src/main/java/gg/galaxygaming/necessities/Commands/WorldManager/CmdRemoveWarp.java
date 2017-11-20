@@ -18,7 +18,7 @@ public class CmdRemoveWarp implements WorldCmd {
             return true;
         }
         warps.remove(args[0]);
-        sender.sendMessage(var.getMessages() + "Removed the warp named " + var.getObj() + args[0] + var.getMessages() + ".");
+        sender.sendMessage(var.getMessages() + "Removed the warp named " + var.getObj() + args[0] + var.getMessages() + '.');
         return true;
     }
 }

@@ -42,7 +42,7 @@ public class CmdJail implements Cmd {
         }
         SafeLocation safe = Necessities.getSafeLocations();
         if (!u.isJailed()) {
-            sender.sendMessage(var.getMessages() + "You jailed " + var.getObj() + u.getPlayer().getDisplayName() + var.getMessages() + ".");
+            sender.sendMessage(var.getMessages() + "You jailed " + var.getObj() + u.getPlayer().getDisplayName() + var.getMessages() + '.');
             u.getPlayer().sendMessage(var.getDemote() + "You have been jailed.");
             World world = Bukkit.getWorld(config.getString("Jail.world"));
             double x = Double.parseDouble(config.getString("Jail.x"));
@@ -53,7 +53,7 @@ public class CmdJail implements Cmd {
             u.getPlayer().teleport(safe.getSafe(new Location(world, x, y, z, yaw, pitch)));
             u.setJailed(true);
         } else {
-            sender.sendMessage(var.getMessages() + "You unjailed " + var.getObj() + u.getPlayer().getDisplayName() + var.getMessages() + ".");
+            sender.sendMessage(var.getMessages() + "You unjailed " + var.getObj() + u.getPlayer().getDisplayName() + var.getMessages() + '.');
             u.getPlayer().sendMessage(var.getPromote() + "You have been unjailed.");
             u.setJailed(false);
             if (u.getLastPos() == null) {

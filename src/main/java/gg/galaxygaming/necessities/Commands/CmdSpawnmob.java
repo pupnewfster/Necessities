@@ -42,7 +42,7 @@ public class CmdSpawnmob implements Cmd {
             }
             for (int i = 0; i < amount; i++)
                 l.getWorld().spawnEntity(l, type);
-            p.sendMessage(var.getMessages() + "Spawned " + var.getObj() + amount + var.getMessages() + " of " + var.getObj() + type.toString().replaceAll("_", " ").toLowerCase() + var.getMessages() + ".");
+            p.sendMessage(var.getMessages() + "Spawned " + var.getObj() + amount + var.getMessages() + " of " + var.getObj() + type.toString().replaceAll("_", " ").toLowerCase() + var.getMessages() + '.');
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot spawn mobs because you are... nice?");
         return true;

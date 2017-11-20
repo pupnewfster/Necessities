@@ -39,7 +39,7 @@ public class CmdEco implements EconomyCmd {
         }
         if (args[0].equalsIgnoreCase("reset")) {
             eco.setBalance(uuid, 0);
-            sender.sendMessage(var.getMessages() + "Your successfully reset the balance of " + var.getObj() + targetsName + var.getMessages() + ".");
+            sender.sendMessage(var.getMessages() + "Your successfully reset the balance of " + var.getObj() + targetsName + var.getMessages() + '.');
             return true;
         }
         if (args.length > 2) {
@@ -52,12 +52,12 @@ public class CmdEco implements EconomyCmd {
             amount = Double.parseDouble(Utils.roundTwoDecimals(amount));
             if (args[0].equalsIgnoreCase("give") || args[0].equalsIgnoreCase("add")) {
                 eco.addMoney(uuid, amount);
-                sender.sendMessage(var.getMessages() + "Your successfully gave " + var.getMoney() + " " + Economy.format(amount) + var.getMessages() + " to " + var.getObj() + targetsName +
-                        var.getMessages() + ".");
+                sender.sendMessage(var.getMessages() + "Your successfully gave " + var.getMoney() + ' ' + Economy.format(amount) + var.getMessages() + " to " + var.getObj() + targetsName +
+                        var.getMessages() + '.');
             } else if ((args[0].equalsIgnoreCase("take") || args[0].equalsIgnoreCase("remove")) && intBal - amount >= 0) {
                 eco.removeMoney(uuid, amount);
-                sender.sendMessage(var.getMessages() + "Your successfully took " + var.getMoney() + " " + Economy.format(amount) + var.getMessages() + " from " + var.getObj() + targetsName +
-                        var.getMessages() + ".");
+                sender.sendMessage(var.getMessages() + "Your successfully took " + var.getMoney() + ' ' + Economy.format(amount) + var.getMessages() + " from " + var.getObj() + targetsName +
+                        var.getMessages() + '.');
             } else if (args[0].equalsIgnoreCase("set")) {
                 eco.setBalance(uuid, amount);
                 sender.sendMessage(var.getMessages() + "Your successfully set the balance of " + var.getObj() + targetsName + var.getMessages() + " to " + var.getMoney() + Economy.format(amount));

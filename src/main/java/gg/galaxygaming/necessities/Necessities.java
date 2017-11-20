@@ -69,7 +69,7 @@ public class Necessities extends JavaPlugin {
     private JanetLog log = new JanetLog();
     private CmdHide hide = new CmdHide();
     private Janet bot = new Janet();
-    private JanetNet net = new JanetNet();
+    //private JanetNet net = new JanetNet();
     private JanetAI ai = new JanetAI();
     private JanetSlack slack = new JanetSlack();
     private Reviews rev = new Reviews();
@@ -118,7 +118,7 @@ public class Necessities extends JavaPlugin {
         WorldServer world = server.getWorldServer(0);
         PlayerInteractManager manager = new PlayerInteractManager(world);
         EntityPlayer player = new EntityPlayer(server, world, janetProfile, manager);
-        player.listName = formatMessage(ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") + "Janet");
+        player.listName = formatMessage(ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + ' ') + "Janet");
         this.janetInfo = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, player);
     }
 
@@ -164,7 +164,7 @@ public class Necessities extends JavaPlugin {
     public void addPlayer(Player p) {
         EntityPlayer ep = ((CraftPlayer) p).getHandle();
         User u = um.getUser(p.getUniqueId());
-        ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ") + p.getDisplayName());
+        ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
         PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ep);
         for (Player x : Bukkit.getOnlinePlayers())
             if (!x.hasPermission("Necessities.seehidden") && x.canSee(p) && !x.equals(p))
@@ -178,7 +178,7 @@ public class Necessities extends JavaPlugin {
     public void updateName(Player p) {
         EntityPlayer ep = ((CraftPlayer) p).getHandle();
         User u = um.getUser(p.getUniqueId());
-        ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ") + p.getDisplayName());
+        ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
         PacketPlayOutPlayerInfo tabList = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, ep);
         Bukkit.getOnlinePlayers().forEach(x -> ((CraftPlayer) x).getHandle().playerConnection.sendPacket(tabList));
     }
@@ -192,7 +192,7 @@ public class Necessities extends JavaPlugin {
         for (Player p : Bukkit.getOnlinePlayers()) {
             EntityPlayer ep = ((CraftPlayer) p).getHandle();
             User u = um.getUser(p.getUniqueId());
-            ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + " ") + p.getDisplayName());
+            ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
             players.add(ep);
         }
         ((CraftPlayer) x).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, players));
@@ -227,7 +227,7 @@ public class Necessities extends JavaPlugin {
             in.close();
             JsonObject json = Jsoner.deserialize(response.toString(), new JsonObject());
             JsonObject jo = (JsonObject) ((JsonArray) json.get("properties")).get(0);
-            String signature = jo.getString("signature"), value = jo.getString("value");
+            String signature = jo.getString(Jsoner.mintJsonKey("signature", null)), value = jo.getString(Jsoner.mintJsonKey("value", null));
             return new Property("textures", value, signature);
         } catch (Exception ignored) {
         }
@@ -615,6 +615,15 @@ public class Necessities extends JavaPlugin {
     }
 
     /**
+     * Checks if the player with the specified uuid is a dev.
+     * @param slackID The slack id of the player to check.
+     * @return True if the uuid is the uuid of a dev, false otherwise.
+     */
+    public boolean isDev(String slackID) {
+        return this.devs.stream().anyMatch(i -> slackID.equals(i.getSlackID()));
+    }
+
+    /**
      * Gets the list of devs.
      * @return The list of devs.
      */
@@ -636,7 +645,7 @@ public class Necessities extends JavaPlugin {
             JsonArray lsDevs = (JsonArray) ls.get("devs");
             for (int i = 0; i < lsDevs.size(); i++) {
                 int devID = lsDevs.getInteger(i);
-                JsonObject dev = (JsonObject) ar.stream().filter(a -> devID == ((JsonObject) a).getInteger("devID")).findFirst().orElse(null);
+                JsonObject dev = (JsonObject) ar.stream().filter(a -> devID == ((JsonObject) a).getInteger(Jsoner.mintJsonKey("devID", null))).findFirst().orElse(null);
                 if (dev != null)
                     this.devs.add(new DevInfo(dev));
             }
@@ -650,9 +659,9 @@ public class Necessities extends JavaPlugin {
         private final String name;
 
         private DevInfo(JsonObject dev) {
-            this.mcUUID = UUID.fromString(dev.getString("mcUUID"));
-            this.slackID = dev.getString("slackID");
-            this.name = dev.getString("name");
+            this.mcUUID = UUID.fromString(dev.getString(Jsoner.mintJsonKey("mcUUID", null)));
+            this.slackID = dev.getString(Jsoner.mintJsonKey("slackID", null));
+            this.name = dev.getString(Jsoner.mintJsonKey("name", null));
         }
 
         /**
@@ -702,9 +711,9 @@ public class Necessities extends JavaPlugin {
      * Gets JanetNet.
      * @return JanetNet.
      */
-    public static JanetNet getNet() {
+    /*public static JanetNet getNet() {
         return INSTANCE.net == null ? INSTANCE.net = new JanetNet() : INSTANCE.net;
-    }
+    }*/
 
     static CmdCommandSpy getSpy() {
         return INSTANCE.spy == null ? INSTANCE.spy = new CmdCommandSpy() : INSTANCE.spy;

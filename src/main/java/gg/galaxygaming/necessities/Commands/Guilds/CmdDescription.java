@@ -23,7 +23,7 @@ public class CmdDescription implements GuildCmd {
             }
             StringBuilder descriptionBuilder = new StringBuilder();
             for (String arg : args)
-                descriptionBuilder.append(arg).append(" ");
+                descriptionBuilder.append(arg).append(' ');
             String description = ChatColor.translateAlternateColorCodes('&', descriptionBuilder.toString().trim());
             u.getGuild().setDescription(description);
             sender.sendMessage(var.getMessages() + "Set guild description to: " + ChatColor.WHITE + description);

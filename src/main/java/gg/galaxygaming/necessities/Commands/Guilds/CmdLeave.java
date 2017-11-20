@@ -22,7 +22,7 @@ public class CmdLeave implements GuildCmd {
             }
             String name = u.getGuild().getName();
             u.getGuild().kick(p.getUniqueId());
-            sender.sendMessage(var.getMessages() + "Successfully left " + var.getObj() + name + var.getMessages() + ".");
+            sender.sendMessage(var.getMessages() + "Successfully left " + var.getObj() + name + var.getMessages() + '.');
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to leave a guild.");
         return true;

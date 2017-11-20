@@ -18,9 +18,16 @@ public class CmdWorld implements WorldCmd {
             return true;
         }
         if (sender instanceof Player) {
-            World dim = sender.getServer().getWorld(args[0]);
-            if (args.length > 1)
-                dim = sender.getServer().getWorld(args[1]);
+            String wName = args[args.length > 1 ? 1 : 0];
+            World dim = sender.getServer().getWorld(wName);
+            if (dim == null) {
+                for (World w : Bukkit.getWorlds())
+                    if (w.getName().startsWith(wName)) {
+                        dim = w;
+                        break;
+                    } else if (w.getName().contains(wName))
+                        dim = w;
+            }
             if (dim == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid world.");
                 return true;
@@ -32,21 +39,30 @@ public class CmdWorld implements WorldCmd {
                     return true;
                 }
                 Bukkit.getPlayer(uuid).teleport(dim.getSpawnLocation());
-                sender.sendMessage(var.getMessages() + "Teleported " + var.getObj() + Bukkit.getPlayer(uuid).getName() + var.getMessages() + " to " + var.getObj() + dim.getName() + var.getMessages() + ".");
+                sender.sendMessage(var.getMessages() + "Teleported " + var.getObj() + Bukkit.getPlayer(uuid).getName() + var.getMessages() + " to " + var.getObj() + dim.getName() + var.getMessages() + '.');
                 return true;
             }
             ((Player) sender).teleport(dim.getSpawnLocation());
-            sender.sendMessage(var.getMessages() + "Teleported to " + var.getObj() + dim.getName() + var.getMessages() + ".");
+            sender.sendMessage(var.getMessages() + "Teleported to " + var.getObj() + dim.getName() + var.getMessages() + '.');
         } else {
             if (args.length > 1) {
-                World dim = sender.getServer().getWorld(args[1]);
+                String wName = args[1];
+                World dim = sender.getServer().getWorld(wName);
+                if (dim == null) {
+                    for (World w : Bukkit.getWorlds())
+                        if (w.getName().startsWith(wName)) {
+                            dim = w;
+                            break;
+                        } else if (w.getName().contains(wName))
+                            dim = w;
+                }
                 UUID uuid = Utils.getID(args[0]);
                 if (uuid == null) {
                     sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");
                     return true;
                 }
                 Bukkit.getPlayer(uuid).teleport(dim.getSpawnLocation());
-                sender.sendMessage(var.getMessages() + "Teleported " + var.getObj() + Bukkit.getPlayer(uuid).getName() + var.getMessages() + " to " + var.getObj() + dim.getName() + var.getMessages() + ".");
+                sender.sendMessage(var.getMessages() + "Teleported " + var.getObj() + Bukkit.getPlayer(uuid).getName() + var.getMessages() + " to " + var.getObj() + dim.getName() + var.getMessages() + '.');
                 return true;
             }
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You can not teleport to other worlds because you are not a player.");

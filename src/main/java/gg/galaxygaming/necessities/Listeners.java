@@ -59,12 +59,12 @@ class Listeners implements Listener {
 
     Listeners() {
         RankManager rm = Necessities.getRM();
-        JanetName = (!rm.getOrder().isEmpty() ? ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") : "") + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
+        JanetName = (!rm.getOrder().isEmpty() ? ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + ' ') : "") + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
         welcomeBar = new CraftBossBar(ChatColor.GOLD + "Welcome to " + ChatColor.AQUA + "Galaxy Gaming", BarColor.GREEN, BarStyle.SOLID);
     }
 
     private String corTime(String time) {
-        return time.length() == 1 ? "0" + time : time;
+        return time.length() == 1 ? '0' + time : time;
     }
 
     private String getDateAndTime(Date d) {
@@ -79,7 +79,7 @@ class Listeners implements Listener {
         hour = corTime(hour);
         minute = corTime(minute);
         second = corTime(second);
-        return month + "/" + day + "/" + year + " at " + hour + ":" + minute + ":" + second;
+        return month + '/' + day + '/' + year + " at " + hour + ':' + minute + ':' + second;
     }
 
     @EventHandler
@@ -400,7 +400,7 @@ class Listeners implements Listener {
                         im.setDisplayName(s.split(" ")[6].replaceAll("`", " "));
                     im.setLore(lore);
                     i.setItemMeta(im);
-                    for (String loc : (s.split(" ")[0]).split(","))
+                    for (String loc : s.split(" ")[0].split(","))
                         inv.setItem(Integer.parseInt(loc), i);
                 }
         } else if (b.getType().equals(Material.MOB_SPAWNER) && meta.hasLore())
@@ -423,7 +423,7 @@ class Listeners implements Listener {
                 in++;
             else if (sub.charAt(i) == ']')
                 in--;
-            temp.append((in == 0 && sub.charAt(i) == '@') ? "," : sub.charAt(i));
+            temp.append(in == 0 && sub.charAt(i) == '@' ? "," : sub.charAt(i));
         }
         return temp.toString();
     }
@@ -441,7 +441,7 @@ class Listeners implements Listener {
         Variables var = Necessities.getVar();
         GuildManager gm = Necessities.getGM();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
-            if ((e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && ((e.getItem() != null && !e.getItem().getType().isEdible()/*.isBlock()*/) ||
+            if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (e.getItem() != null && !e.getItem().getType().isEdible() ||
                     e.getClickedBlock().getState() instanceof InventoryHolder || e.getClickedBlock().getType().equals(Material.WOODEN_DOOR) ||
                     e.getClickedBlock().getType().equals(Material.ACACIA_DOOR) || e.getClickedBlock().getType().equals(Material.BIRCH_DOOR) ||
                     e.getClickedBlock().getType().equals(Material.DARK_OAK_DOOR) || e.getClickedBlock().getType().equals(Material.JUNGLE_DOOR) ||
@@ -454,7 +454,7 @@ class Listeners implements Listener {
                     e.getClickedBlock().getType().equals(Material.IRON_PLATE) || e.getClickedBlock().getType().equals(Material.TRAP_DOOR) ||
                     e.getClickedBlock().getType().equals(Material.LEVER) || e.getClickedBlock().getType().equals(Material.BED_BLOCK) ||
                     e.getClickedBlock().getType().equals(Material.DIODE_BLOCK_OFF) || e.getClickedBlock().getType().equals(Material.DIODE_BLOCK_ON) ||
-                    e.getClickedBlock().getType().equals(Material.REDSTONE_COMPARATOR_ON) || e.getClickedBlock().getType().equals(Material.REDSTONE_COMPARATOR_OFF))) ||
+                    e.getClickedBlock().getType().equals(Material.REDSTONE_COMPARATOR_ON) || e.getClickedBlock().getType().equals(Material.REDSTONE_COMPARATOR_OFF)) ||
                     e.getAction().equals(Action.PHYSICAL)) {
                 Guild owner = gm.chunkOwner(e.getClickedBlock().getChunk());
                 if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -538,7 +538,7 @@ class Listeners implements Listener {
                     String itemName = economySigns.itemLine(sign);
                     int amount = economySigns.amount(sign);
                     Player p = e.getPlayer();
-                    p.performCommand(operation + " " + itemName + " " + Integer.toString(amount));
+                    p.performCommand(operation + ' ' + itemName + ' ' + Integer.toString(amount));
                 } else if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getItem() != null && e.getItem().hasItemMeta() && e.getItem().getItemMeta().hasLore() &&
                         e.getItem().getItemMeta().getLore().contains("Wrench")) {
                     Block b = e.getClickedBlock();
@@ -658,7 +658,7 @@ class Listeners implements Listener {
                         e.setCancelled(true);
                     } else if (b.getType().equals(Material.IRON_TRAPDOOR)) {
                         wrench.wrench(b);
-                        if (b.getData() < 4 || (b.getData() > 7 && b.getData() < 12))
+                        if (b.getData() < 4 || b.getData() > 7 && b.getData() < 12)
                             b.setData((byte) (b.getData() + 4));
                         else
                             b.setData((byte) (b.getData() - 4));
@@ -692,30 +692,30 @@ class Listeners implements Listener {
             if (inv.getItem(i) != null && !inv.getItem(i).getType().equals(Material.AIR)) {
                 StringBuilder enchantsBuilder = new StringBuilder();
                 for (Enchantment en : inv.getItem(i).getEnchantments().keySet())
-                    enchantsBuilder.append(en.getId()).append("-").append(inv.getItem(i).getEnchantments().get(en)).append(",");
+                    enchantsBuilder.append(en.getId()).append('-').append(inv.getItem(i).getEnchantments().get(en)).append(',');
                 String meta = "";
                 ItemMeta innerMeta = inv.getItem(i).getItemMeta();
                 if (innerMeta.hasLore()) {
                     StringBuilder metaBuilder = new StringBuilder();
                     for (String l : innerMeta.getLore())
-                        metaBuilder.append("[").append(l.replaceAll(" ", "~").replaceAll(",", "@")).append("]").append(",");
+                        metaBuilder.append('[').append(l.replaceAll(" ", "~").replaceAll(",", "@")).append(']').append(',');
                     meta = metaBuilder.toString();
                     if (meta.length() > 1)
                         meta = meta.substring(0, meta.length() - 1);
                 }
                 String disp = "";
                 if (innerMeta.hasDisplayName())
-                    disp = " " + innerMeta.getDisplayName().replaceAll(" ", "`");
+                    disp = ' ' + innerMeta.getDisplayName().replaceAll(" ", "`");
                 String enchants = enchantsBuilder.toString().trim();
                 if (enchants.equals(""))
                     enchants = "n";
                 if (meta.equals(""))
                     meta = "n";
-                String info = inv.getItem(i).getAmount() + " " + inv.getItem(i).getType().getId() + " " + inv.getItem(i).getDurability() + " " + enchants + " " + meta + disp;
-                condensedLore.put(info, condensedLore.containsKey(info) ? condensedLore.get(info) + "," + i : Integer.toString(i));
+                String info = inv.getItem(i).getAmount() + " " + inv.getItem(i).getType().getId() + ' ' + inv.getItem(i).getDurability() + ' ' + enchants + ' ' + meta + disp;
+                condensedLore.put(info, condensedLore.containsKey(info) ? condensedLore.get(info) + ',' + i : Integer.toString(i));
             }
         }
-        return condensedLore.keySet().stream().map(key -> condensedLore.get(key) + " " + key).collect(Collectors.toCollection(ArrayList::new));
+        return condensedLore.keySet().stream().map(key -> condensedLore.get(key) + ' ' + key).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private byte getDir(BlockFace f) {
@@ -740,7 +740,7 @@ class Listeners implements Listener {
             b.update(true);
         }
         if (Necessities.getWrench().isWrenched(e.getBlock()))
-            e.setNewCurrent(((e.getBlock().getType().equals(Material.IRON_DOOR_BLOCK) || e.getBlock().getType().equals(Material.IRON_TRAPDOOR)) && e.getOldCurrent() == 0) ? 0 : 1);
+            e.setNewCurrent((e.getBlock().getType().equals(Material.IRON_DOOR_BLOCK) || e.getBlock().getType().equals(Material.IRON_TRAPDOOR)) && e.getOldCurrent() == 0 ? 0 : 1);
     }
 
     @EventHandler
@@ -751,11 +751,11 @@ class Listeners implements Listener {
         if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
             final Player p = (Player) e.getEntity(), damager = (Player) e.getDamager();
             User u = um.getUser(p.getUniqueId()), d = um.getUser(damager.getUniqueId());
-            if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && (gm.chunkOwner(p.getLocation().getChunk()) != null &&
-                    !gm.chunkOwner(p.getLocation().getChunk()).canPVP()) ||
-                    (gm.chunkOwner(damager.getLocation().getChunk()) != null && !gm.chunkOwner(damager.getLocation().getChunk()).canPVP()))
+            if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && gm.chunkOwner(p.getLocation().getChunk()) != null &&
+                    !gm.chunkOwner(p.getLocation().getChunk()).canPVP() ||
+                    gm.chunkOwner(damager.getLocation().getChunk()) != null && !gm.chunkOwner(damager.getLocation().getChunk()).canPVP())
                 e.setCancelled(true);
-            else if (p.getWorld().getPVP() && !u.godMode() && !d.godMode() && ((config.contains("Necessities.Guilds") && !config.getBoolean("Necessities.Guilds")) ||
+            else if (p.getWorld().getPVP() && !u.godMode() && !d.godMode() && (config.contains("Necessities.Guilds") && !config.getBoolean("Necessities.Guilds") ||
                     (u.getGuild() == null || d.getGuild() == null || u.getGuild().equals(d.getGuild()) ||
                             u.getGuild().isAlly(d.getGuild())) && (gm.chunkOwner(p.getLocation().getChunk()) == null || gm.chunkOwner(p.getLocation().getChunk()).canPVP()) &&
                             (gm.chunkOwner(damager.getLocation().getChunk()) == null || gm.chunkOwner(damager.getLocation().getChunk()).canPVP()))) {
@@ -873,13 +873,13 @@ class Listeners implements Listener {
         final UUID uuid = player.getUniqueId();
         String m = e.getMessage();
         if (m.endsWith(">") && !m.equals(">")) {
-            String appended = u.getAppended() + " " + m.substring(0, m.length() - 1);
+            String appended = u.getAppended() + ' ' + m.substring(0, m.length() - 1);
             u.setAppended(appended.trim());
             player.sendMessage(ChatColor.GREEN + "Message appended.");
             e.setCancelled(true);
             return;
         } else if (!u.getAppended().equals("")) {
-            e.setMessage(u.getAppended() + " " + m);
+            e.setMessage(u.getAppended() + ' ' + m);
             u.setAppended("");
         }
         YamlConfiguration configTitles = YamlConfiguration.loadConfiguration(configFileTitles);
@@ -915,14 +915,14 @@ class Listeners implements Listener {
             e.setFormat(e.getFormat().replaceAll("\\{PREFIX} ", ""));
         }
         e.setFormat(e.getFormat().replaceAll("\\{GUILD} ", config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && u.getGuild() != null &&
-                u.getGuild().getRank(uuid) != null ? "{GCOLOR}" + Necessities.getGM().getPrefix(u.getGuild().getRank(uuid)) + u.getGuild().getName() + " " : ""));
+                u.getGuild().getRank(uuid) != null ? "{GCOLOR}" + Necessities.getGM().getPrefix(u.getGuild().getRank(uuid)) + u.getGuild().getName() + ' ' : ""));
         e.setFormat(e.getFormat().replaceFirst("\\{PREFIX}", u.getPrefix()));
         String fullTitle = "";
         if (configTitles.contains(player.getUniqueId() + ".title")) {
             ChatColor brackets = ChatColor.getByChar(configTitles.getString(player.getUniqueId() + ".color"));
             String title = configTitles.getString(player.getUniqueId() + ".title");
             title = ChatColor.translateAlternateColorCodes('&', title);
-            fullTitle = ChatColor.RESET + "" + brackets + "[" + ChatColor.RESET + title + ChatColor.RESET + "" + brackets + "] " + ChatColor.RESET;
+            fullTitle = ChatColor.RESET + "" + brackets + '[' + ChatColor.RESET + title + ChatColor.RESET + "" + brackets + "] " + ChatColor.RESET;
         }
         e.setFormat(e.getFormat().replaceAll("\\{TITLE} ", fullTitle));
         e.setFormat(e.getFormat().replaceAll("\\{NAME}", player.getDisplayName()));
@@ -935,15 +935,15 @@ class Listeners implements Listener {
         final String message = Necessities.getBot().logChat(uuid, e.getMessage());
         e.setMessage(message);//Why did it not previously setMessage?
         if (player.hasPermission("Necessities.colorchat"))
-            e.setMessage(ChatColor.translateAlternateColorCodes('&', (player.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", ""))));
+            e.setMessage(ChatColor.translateAlternateColorCodes('&', player.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", "")));
         if (u.isMuted())
             player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are muted.");
         else {
             if (!e.getRecipients().isEmpty()) {
                 ArrayList<Player> toRem = new ArrayList<>();
                 for (Player recip : e.getRecipients())
-                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || (isOp && !recip.hasPermission("Necessities.opBroadcast")) || (u.slackChat() &&
-                            !recip.hasPermission("Necessities.slack")) || (u.guildChat() && u.getGuild() != null && u.getGuild() != um.getUser(recip.getUniqueId()).getGuild()))
+                    if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || isOp && !recip.hasPermission("Necessities.opBroadcast") || u.slackChat() &&
+                            !recip.hasPermission("Necessities.slack") || u.guildChat() && u.getGuild() != null && u.getGuild() != um.getUser(recip.getUniqueId()).getGuild())
                         toRem.add(recip);
                 toRem.forEach(recip -> e.getRecipients().remove(recip));
             }
@@ -972,7 +972,7 @@ class Listeners implements Listener {
             BukkitRunnable aiTask = new BukkitRunnable() {
                 @Override
                 public void run() {
-                    Necessities.getAI().parseMessage(message, JanetAI.Source.Server, false, null);
+                    Necessities.getAI().parseMessage(uuid, message, JanetAI.Source.Server, false, null);
                 }
             };
             aiTask.runTaskLaterAsynchronously(Necessities.getInstance(), 1);
@@ -1259,8 +1259,8 @@ class Listeners implements Listener {
     }
 
     @EventHandler
-    public void onPickupItem(PlayerPickupItemEvent e) {
-        if (Necessities.getHide().isHidden(e.getPlayer()))
+    public void onPickupItem(EntityPickupItemEvent e) {
+        if (e.getEntity() instanceof Player && Necessities.getHide().isHidden((Player) e.getEntity()))
             e.setCancelled(true);
     }
 

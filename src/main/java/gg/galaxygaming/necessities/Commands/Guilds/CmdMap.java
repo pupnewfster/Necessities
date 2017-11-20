@@ -74,7 +74,7 @@ public class CmdMap implements GuildCmd {
                 }
             User u = Necessities.getUM().getUser(p.getUniqueId());
             Guild owner = gm.chunkOwner(c);
-            String name = "(" + c.getX() + "," + c.getZ() + ") ";
+            String name = "(" + c.getX() + ',' + c.getZ() + ") ";
             if (owner != null) {
                 name += owner.getName();
                 sender.sendMessage(var.getMessages() + parant(name.length() / 2) + ".[ " + owner.relation(u.getGuild()) + name + var.getMessages() + " ]." + parant(name.length() / 2));
@@ -89,7 +89,7 @@ public class CmdMap implements GuildCmd {
                     if (row == 0)
                         sender.sendMessage(line.toString() + var.getMessages() + "   " + up);
                     else if (row == 1)
-                        sender.sendMessage(line.toString() + var.getMessages() + " " + left(up) + var.getMessages() + "   " + right(up));
+                        sender.sendMessage(line.toString() + var.getMessages() + ' ' + left(up) + var.getMessages() + "   " + right(up));
                     else if (row == 2)
                         sender.sendMessage(line.toString() + var.getMessages() + "   " + down(up));
                     else
@@ -99,7 +99,7 @@ public class CmdMap implements GuildCmd {
                 }
                 Guild g = gm.chunkOwner(chunks.get(i));
                 if (i == 175)
-                    line.append(ChatColor.AQUA.toString()).append("+");
+                    line.append(ChatColor.AQUA.toString()).append('+');
                 else if (u.getGuild() == null)
                     line.append(var.getNeutral()).append(g == null ? "-" : symbols.get(g));
                 else
@@ -120,7 +120,7 @@ public class CmdMap implements GuildCmd {
     private String parant(int nameLength) {
         StringBuilder p = new StringBuilder();
         for (int i = 0; i < 21 - nameLength; i++)
-            p.append("_");
+            p.append('_');
         return p.toString();
     }
 

@@ -18,10 +18,10 @@ public class CmdFly implements Cmd {
                 if (p.getAllowFlight()) {
                     p.setAllowFlight(false);//are both needed?
                     p.setFlying(false);
-                    p.sendMessage(var.getMessages() + "Fly " + var.getObj() + "disabled" + var.getMessages() + ".");
+                    p.sendMessage(var.getMessages() + "Fly " + var.getObj() + "disabled" + var.getMessages() + '.');
                 } else {
                     p.setAllowFlight(true);
-                    p.sendMessage(var.getMessages() + "Fly " + var.getObj() + "enabled" + var.getMessages() + ".");
+                    p.sendMessage(var.getMessages() + "Fly " + var.getObj() + "enabled" + var.getMessages() + '.');
                 }
                 return true;
             }
@@ -43,11 +43,11 @@ public class CmdFly implements Cmd {
         if (target.getAllowFlight()) {
             target.setAllowFlight(false);
             target.setFlying(false);
-            target.sendMessage(var.getMessages() + "Fly " + var.getObj() + "disabled" + var.getMessages() + ".");
+            target.sendMessage(var.getMessages() + "Fly " + var.getObj() + "disabled" + var.getMessages() + '.');
             sender.sendMessage(var.getMessages() + "Fly " + var.getObj() + "disabled" + var.getMessages() + " for " + var.getObj() + target.getDisplayName());
         } else {
             target.setAllowFlight(true);
-            target.sendMessage(var.getMessages() + "Fly " + var.getObj() + "enabled" + var.getMessages() + ".");
+            target.sendMessage(var.getMessages() + "Fly " + var.getObj() + "enabled" + var.getMessages() + '.');
             sender.sendMessage(var.getMessages() + "Fly " + var.getObj() + "enabled" + var.getMessages() + " for " + var.getObj() + target.getDisplayName());
         }
         return true;

@@ -24,7 +24,7 @@ class Wrenched {
     void wrench(Block b) {
         YamlConfiguration wrenches = YamlConfiguration.loadConfiguration(configFileWrench);
         Location l = b.getLocation();
-        String blockForm = (l.getWorld().getName() + "," + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ()).toLowerCase();
+        String blockForm = (l.getWorld().getName() + ',' + l.getBlockX() + ',' + l.getBlockY() + ',' + l.getBlockZ()).toLowerCase();
         if (locations.contains(blockForm)) {
             locations.remove(blockForm);
             wrenches.set(blockForm, null);
@@ -40,6 +40,6 @@ class Wrenched {
 
     boolean isWrenched(Block b) {
         Location l = b.getLocation();
-        return locations.contains((l.getWorld().getName() + "," + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ()).toLowerCase());
+        return locations.contains((l.getWorld().getName() + ',' + l.getBlockX() + ',' + l.getBlockY() + ',' + l.getBlockZ()).toLowerCase());
     }
 }

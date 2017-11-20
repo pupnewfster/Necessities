@@ -43,9 +43,9 @@ public class CmdTp implements Cmd {
         }
         Player targetTo = Bukkit.getPlayer(uuidTo);
         target.teleport(Necessities.getSafeLocations().getSafe(targetTo.getLocation()));
-        String name = (sender instanceof Player ? sender.getName() : Necessities.getConsole().getName().replaceAll(":", ""));
-        target.sendMessage(var.getObj() + name + var.getMessages() + " teleported you to " + targetTo.getName() + ".");
-        sender.sendMessage(var.getMessages() + "You teleported " + var.getObj() + target.getName() + var.getMessages() + " to " + var.getObj() + targetTo.getName() + var.getMessages() + ".");
+        String name = sender instanceof Player ? sender.getName() : Necessities.getConsole().getName().replaceAll(":", "");
+        target.sendMessage(var.getObj() + name + var.getMessages() + " teleported you to " + targetTo.getName() + '.');
+        sender.sendMessage(var.getMessages() + "You teleported " + var.getObj() + target.getName() + var.getMessages() + " to " + var.getObj() + targetTo.getName() + var.getMessages() + '.');
         return true;
     }
 

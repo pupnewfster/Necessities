@@ -18,7 +18,7 @@ public class CmdRemovePortal implements WorldCmd {
             return true;
         }
         pm.remove(args[0]);
-        sender.sendMessage(var.getMessages() + "Removed portal named " + var.getObj() + args[0] + var.getMessages() + ".");
+        sender.sendMessage(var.getMessages() + "Removed portal named " + var.getObj() + args[0] + var.getMessages() + '.');
         return true;
     }
 }

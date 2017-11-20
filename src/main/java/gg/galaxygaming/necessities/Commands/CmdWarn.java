@@ -23,17 +23,17 @@ public class CmdWarn implements Cmd {
             return true;
         }
         Player target = Bukkit.getPlayer(uuid);
-        String name = (sender instanceof Player ? sender.getName() : Necessities.getConsole().getName().replaceAll(":", ""));
+        String name = sender instanceof Player ? sender.getName() : Necessities.getConsole().getName().replaceAll(":", "");
         if (sender instanceof Player && target.hasPermission("Necessities.antiPWarn")) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You may not warn someone who has Necessities.antiPWarn.");
             return true;
         }
         StringBuilder reasonBuilder = new StringBuilder();
         for (int i = 1; i < args.length; i++)
-            reasonBuilder.append(args[i]).append(" ");
+            reasonBuilder.append(args[i]).append(' ');
         String reason = reasonBuilder.toString().trim();
         if (sender instanceof Player && sender.hasPermission("Necessities.colorchat"))
-            reason = ChatColor.translateAlternateColorCodes('&', (sender.hasPermission("Necessities.magicchat") ? reason : reason.replaceAll("&k", "")));
+            reason = ChatColor.translateAlternateColorCodes('&', sender.hasPermission("Necessities.magicchat") ? reason : reason.replaceAll("&k", ""));
         else if (!(sender instanceof Player))
             reason = ChatColor.translateAlternateColorCodes('&', reason);
         Necessities.getWarns().warn(target.getUniqueId(), reason, name);

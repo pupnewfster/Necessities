@@ -18,7 +18,7 @@ public class CmdOpChat implements Cmd {
         if (args.length > 0) {
             StringBuilder messageBuilder = new StringBuilder();
             for (String arg : args)
-                messageBuilder.append(arg).append(" ");
+                messageBuilder.append(arg).append(' ');
             message = messageBuilder.toString().trim();
         }
         if (sender instanceof Player) {
@@ -52,12 +52,12 @@ public class CmdOpChat implements Cmd {
         send = send.replaceAll("\\{NAME}", player.getDisplayName());
         send = send.replaceAll("\\{MESSAGE}", "");
         if (player.hasPermission("Necessities.colorchat"))
-            message = ChatColor.translateAlternateColorCodes('&', (player.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", "")));
+            message = ChatColor.translateAlternateColorCodes('&', player.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", ""));
         Bukkit.broadcast(send + message, "Necessities.opBroadcast");
     }
 
     private void consoleToOps(String message) {
-        Bukkit.broadcast(Necessities.getVar().getMessages() + "To Ops - " + Necessities.getConsole().getName() + ChatColor.WHITE + " " +
+        Bukkit.broadcast(Necessities.getVar().getMessages() + "To Ops - " + Necessities.getConsole().getName() + ChatColor.WHITE + ' ' +
                 ChatColor.translateAlternateColorCodes('&', message.trim()), "Necessities.opBroadcast");
     }
 

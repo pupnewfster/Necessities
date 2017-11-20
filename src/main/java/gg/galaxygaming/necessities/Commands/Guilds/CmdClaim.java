@@ -68,8 +68,8 @@ public class CmdClaim implements GuildCmd {
                         }
                         Guild o = Necessities.getGM().chunkOwner(c);
                         if (o != null) {
-                            if (!o.equals(u.getGuild()) && o.getPower() != -1 && ((o.getLand() > o.getPower() && !o.isAlly(u.getGuild()) &&
-                                    !o.isNeutral(u.getGuild())) || p.hasPermission("Necessities.guilds.admin"))) {
+                            if (!o.equals(u.getGuild()) && o.getPower() != -1 && (o.getLand() > o.getPower() && !o.isAlly(u.getGuild()) && !o.isNeutral(u.getGuild()) ||
+                                    p.hasPermission("Necessities.guilds.admin"))) {
                                 u.getGuild().claim(c);
                                 o.unclaim(c);
                                 u.getGuild().sendMods(var.getMessages() + "Successfully claimed chunk " + var.getObj() + c.getX() + var.getMessages() + ", " +

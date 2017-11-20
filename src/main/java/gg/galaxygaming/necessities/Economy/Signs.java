@@ -61,7 +61,7 @@ public class Signs { //TODO Make sure this works, because some material names ar
         String line = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", ""));
         String itemName = line.replaceAll(":", " ").split(" ")[0];
         Material mat = Utils.legalInt(itemName) ? Material.fromID(Integer.parseInt(itemName)) : Material.fromString(itemName);
-        return mat.getName() + (line.replaceAll(":", " ").split(" ").length > 1 ? ":" + line.replaceAll(":", " ").split(" ")[1] : "");
+        return mat.getName() + (line.replaceAll(":", " ").split(" ").length > 1 ? ':' + line.replaceAll(":", " ").split(" ")[1] : "");
     }
 
     /**
@@ -91,7 +91,7 @@ public class Signs { //TODO Make sure this works, because some material names ar
 
     private void formatSign(Sign sign) {
         String operation = sign.getLine(0).trim();
-        operation = ChatColor.BLUE + "[" + Utils.capFirst(getOperation(operation)) + "]";
+        operation = ChatColor.BLUE + "[" + Utils.capFirst(getOperation(operation)) + ']';
         sign.setLine(0, operation);
         Variables var = Necessities.getVar();
         sign.setLine(1, var.getMessages() + Utils.capFirst(sign.getLine(1).trim()));

@@ -13,7 +13,7 @@ public class Rank {
     private final File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml");
     private final File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
     private final ArrayList<String> permissions = new ArrayList<>();
-    private String title = "", name = "";
+    private String title = "", name;
     private int maxHomes = 1, tpdelay;
     private Rank previous, next;
 

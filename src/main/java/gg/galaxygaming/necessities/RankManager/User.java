@@ -1,6 +1,9 @@
 package gg.galaxygaming.necessities.RankManager;
 
+import com.google.common.collect.Multimap;
 import com.google.common.io.Files;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import gg.galaxygaming.necessities.Commands.CmdHide;
 import gg.galaxygaming.necessities.Guilds.Guild;
 import gg.galaxygaming.necessities.Hats.Hat;
@@ -13,13 +16,21 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.util.BlockIterator;
+import org.json.simple.JsonArray;
+import org.json.simple.JsonObject;
+import org.json.simple.Jsoner;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.net.URL;
 import java.util.*;
 
 public class User {
@@ -57,7 +68,7 @@ public class User {
         if (configUsers.contains(getUUID().toString() + ".nick"))
             this.nick = ChatColor.translateAlternateColorCodes('&', configUsers.getString(getUUID().toString() + ".nick"));
         if (this.nick != null && !this.nick.startsWith("~"))
-            this.nick = "~" + this.nick;
+            this.nick = '~' + this.nick;
         if (configUsers.contains(getUUID().toString() + ".jailed"))
             this.jailed = configUsers.getBoolean(getUUID().toString() + ".jailed");
         if (configUsers.contains(getUUID().toString() + ".afk"))
@@ -107,7 +118,7 @@ public class User {
         if (configUsers.contains(getUUID().toString() + ".nick"))
             this.nick = ChatColor.translateAlternateColorCodes('&', configUsers.getString(getUUID().toString() + ".nick"));
         if (this.nick != null && !this.nick.startsWith("~"))
-            this.nick = "~" + this.nick;
+            this.nick = '~' + this.nick;
         if (configUsers.contains(getUUID().toString() + ".power"))
             this.power = configUsers.getDouble(getUUID().toString() + ".power");
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && configUsers.contains(getUUID().toString() + ".guild"))
@@ -304,6 +315,30 @@ public class User {
     private void tpSuccess() {
         this.teleporting = false;
         getPlayer().sendMessage(Necessities.getVar().getMessages() + "Teleportation successful.");
+    }
+
+    public void setSkin(UUID uuid) {//TODO make this refresh their skin. Currently changes their gameprofile to have correct skin... but doesn't refresh the player
+        if (bukkitPlayer == null)
+            return;
+        GameProfile profile = ((CraftPlayer) bukkitPlayer).getHandle().getProfile();
+        try {
+            Field prop = profile.getProperties().getClass().getDeclaredField("properties");
+            prop.setAccessible(true);
+            Multimap<String, Property> properties = (Multimap<String, Property>) prop.get(profile.getProperties());
+            BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString().replaceAll("-", "") + "?unsigned=false").openConnection().getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+            while ((inputLine = in.readLine()) != null)
+                response.append(inputLine);
+            in.close();
+            JsonObject json = Jsoner.deserialize(response.toString(), new JsonObject());
+            JsonObject jo = (JsonObject) ((JsonArray) json.get("properties")).get(0);
+            String signature = jo.getString(Jsoner.mintJsonKey("signature", null)), value = jo.getString(Jsoner.mintJsonKey("value", null));
+            properties.removeAll("textures");
+            properties.put("textures", new Property("textures", value, signature));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -632,7 +667,7 @@ public class User {
             this.bukkitPlayer.setSleepingIgnored(this.afk);
             Variables var = Necessities.getVar();
             if (Necessities.getHide().isHidden(this.bukkitPlayer))
-                Bukkit.broadcast(var.getMessages() + "To Ops - " + var.getMe() + "*" + getRank().getColor() + getPlayer().getDisplayName() + var.getMe() + " is " + (isAfk() ? "now" : "no longer") + " AFK",
+                Bukkit.broadcast(var.getMessages() + "To Ops - " + var.getMe() + '*' + getRank().getColor() + getPlayer().getDisplayName() + var.getMe() + " is " + (isAfk() ? "now" : "no longer") + " AFK",
                         "Necessities.opBroadcast");
             else
                 Bukkit.broadcastMessage(var.getMe() + "*" + getRank().getColor() + getPlayer().getDisplayName() + var.getMe() + " is " + (isAfk() ? "now" : "no longer") + " AFK");
@@ -1061,8 +1096,8 @@ public class User {
             return;
         this.bukkitPlayer.saveData();
         int ticks = this.bukkitPlayer.getTicksLived();
-        File dirFrom = new File("plugins/Necessities/WorldManager/" + from + "/");
-        File dir = new File("plugins/Necessities/WorldManager/" + s + "/");
+        File dirFrom = new File("plugins/Necessities/WorldManager/" + from + '/');
+        File dir = new File("plugins/Necessities/WorldManager/" + s + '/');
         if (!dirFrom.exists())
             dirFrom.mkdir();
         if (!dir.exists())
@@ -1130,23 +1165,23 @@ public class User {
         int sec = (int) (fifth % 60);
         String time = "";
         if (years != 0)
-            time = Integer.toString(years) + " year" + plural(years) + " ";
+            time = Integer.toString(years) + " year" + plural(years) + ' ';
         if (months != 0)
-            time += Integer.toString(months) + " month" + plural(months) + " ";
+            time += Integer.toString(months) + " month" + plural(months) + ' ';
         if (weeks != 0)
-            time += Integer.toString(weeks) + " week" + plural(weeks) + " ";
+            time += Integer.toString(weeks) + " week" + plural(weeks) + ' ';
         if (days != 0)
-            time += Integer.toString(days) + " day" + plural(days) + " ";
+            time += Integer.toString(days) + " day" + plural(days) + ' ';
         if (hours != 0)
-            time += Integer.toString(hours) + " hour" + plural(hours) + " ";
+            time += Integer.toString(hours) + " hour" + plural(hours) + ' ';
         if (min != 0)
-            time += Integer.toString(min) + " minute" + plural(min) + " ";
+            time += Integer.toString(min) + " minute" + plural(min) + ' ';
         if (sec != 0)
-            time += Integer.toString(sec) + " second" + plural(sec) + " ";
+            time += Integer.toString(sec) + " second" + plural(sec) + ' ';
         time = time.trim();
         if (time.equals(""))
             time = "This player has not spent any time on our server";
-        return time + ".";
+        return time + '.';
     }
 
     private String plural(int times) {

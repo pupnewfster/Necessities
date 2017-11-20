@@ -66,7 +66,7 @@ public class CmdPrices {
         this.co.clear();
         for (String key : configPrices.getKeys(true))
             if (key.startsWith("commands") && !key.equals("commands"))
-                this.co.add(key.replaceFirst("commands.", "") + " " + configPrices.getString(key));
+                this.co.add(key.replaceFirst("commands.", "") + ' ' + configPrices.getString(key));
         ArrayList<String> temp = new ArrayList<>();
         for (Rank r : Necessities.getRM().getOrder())
             for (String cmd : this.co)
@@ -86,7 +86,7 @@ public class CmdPrices {
         YamlConfiguration configPrices = YamlConfiguration.loadConfiguration(configFilePrices);
         rank = rank.toUpperCase();
         cmd = cmd.toUpperCase();
-        configPrices.set("commands" + cmd, rank + " " + price);
+        configPrices.set("commands" + cmd, rank + ' ' + price);
         try {
             configPrices.save(configFilePrices);
         } catch (Exception ignored) {
@@ -115,7 +115,7 @@ public class CmdPrices {
      * @return The number of pages of the price list.
      */
     public int priceListPages() {
-        return co.size() % 10 != 0 ? (co.size() / 10) + 1 : (co.size() / 10);
+        return co.size() % 10 != 0 ? co.size() / 10 + 1 : co.size() / 10;
     }
 
     /**

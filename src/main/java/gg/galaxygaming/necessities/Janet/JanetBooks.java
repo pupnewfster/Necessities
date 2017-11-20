@@ -44,18 +44,18 @@ public class JanetBooks {
             String[] lines = censored.split("\n");
             StringBuilder tempCensorBuilder = new StringBuilder();
             for (String line : lines)
-                tempCensorBuilder.append(bot.internalLang(line)).append("\n");
+                tempCensorBuilder.append(bot.internalLang(line)).append('\n');
             tempCensor = tempCensorBuilder.toString();
-            censored = tempCensor.substring(0, tempCensor.lastIndexOf("\n"));
+            censored = tempCensor.substring(0, tempCensor.lastIndexOf('\n'));
         }
         if (config.getBoolean("Necessities.advertise") && !p.hasPermission("Necessities.advertise")) {
             String tempCensor;
             String[] lines = censored.split("\n");
             StringBuilder tempCensorBuilder = new StringBuilder();
             for (String line : lines)
-                tempCensorBuilder.append(bot.internalAdds(line)).append("\n");
+                tempCensorBuilder.append(bot.internalAdds(line)).append('\n');
             tempCensor = tempCensorBuilder.toString();
-            censored = tempCensor.substring(0, tempCensor.lastIndexOf("\n"));
+            censored = tempCensor.substring(0, tempCensor.lastIndexOf('\n'));
         }
         return censored;
     }

@@ -64,11 +64,11 @@ public class JanetNet {
             }
             WordScore ws = getBestWordScore(m);
             if (isNick(m, ws))
-                result.append(m).append(" ");
+                result.append(m).append(' ');
             else if (ws.getWord() == null) {
-                result.append(m).append(" "); //TODO possibly figure out it should somehow be noted that it wasn't found
+                result.append(m).append(' '); //TODO possibly figure out it should somehow be noted that it wasn't found
             } else
-                result.append(ws.getWord()).append(" ");
+                result.append(ws.getWord()).append(' ');
         }
         return result.toString().trim();
     }

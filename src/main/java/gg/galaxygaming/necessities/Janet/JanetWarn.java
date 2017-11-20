@@ -18,7 +18,7 @@ public class JanetWarn {
      */
     public void initiate() {
         RankManager rm = Necessities.getRM();
-        JanetName = (!rm.getOrder().isEmpty() ? ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + " ") : "") + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
+        JanetName = (!rm.getOrder().isEmpty() ? ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + ' ') : "") + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
         warns = Necessities.getInstance().getConfig().getInt("Necessities.warns");
     }
 
@@ -113,16 +113,16 @@ public class JanetWarn {
 
     private String warnMessage(UUID uuid, String reason, String warner) {
         reason = ChatColor.translateAlternateColorCodes('&', reason);
-        Bukkit.getPlayer(uuid).sendMessage(JanetName + ChatColor.DARK_RED + "Warning, " + ChatColor.WHITE + "You were warned for " + reason + ".");
-        broadcast(JanetName + getName(uuid) + " was warned by " + warner + " for " + reason + ".", uuid);
-        return getName(uuid) + " was warned by " + warner + " for " + reason + ".";
+        Bukkit.getPlayer(uuid).sendMessage(JanetName + ChatColor.DARK_RED + "Warning, " + ChatColor.WHITE + "You were warned for " + reason + '.');
+        broadcast(JanetName + getName(uuid) + " was warned by " + warner + " for " + reason + '.', uuid);
+        return getName(uuid) + " was warned by " + warner + " for " + reason + '.';
     }
 
     private String other(UUID uuid, String reason) {
         String pname = getName(uuid);
-        Bukkit.broadcastMessage(JanetName + pname + " was kicked for " + reason + ".");
+        Bukkit.broadcastMessage(JanetName + pname + " was kicked for " + reason + '.');
         Bukkit.getPlayer(uuid).kickPlayer(ChatColor.WHITE + "You were kicked for " + reason);
-        return pname + " was kicked for " + reason + ".";
+        return pname + " was kicked for " + reason + '.';
     }
 
     private String chatSpam(UUID uuid) {

@@ -29,11 +29,11 @@ public class CmdBaltop implements EconomyCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer.toString(totalPages));
             return true;
         }
-        sender.sendMessage(ChatColor.GOLD + "Balance Top Page [" + Integer.toString(page) + "/" + Integer.toString(totalPages) + "]");
+        sender.sendMessage(ChatColor.GOLD + "Balance Top Page [" + Integer.toString(page) + '/' + Integer.toString(totalPages) + ']');
         List<String> balTop = eco.getBalTop(page);
         page -= 1;
         for (String bal : balTop)
-            sender.sendMessage(ChatColor.GOLD + Integer.toString((page * 10) + time++ + 1) + ". " + var.getCatalog() + Utils.nameFromString(bal.split(" ")[0]) + " has: " + var.getMoney() +
+            sender.sendMessage(ChatColor.GOLD + Integer.toString(page * 10 + time++ + 1) + ". " + var.getCatalog() + Utils.nameFromString(bal.split(" ")[0]) + " has: " + var.getMoney() +
                     Economy.format(Double.parseDouble(bal.split(" ")[1])));
         return true;
     }

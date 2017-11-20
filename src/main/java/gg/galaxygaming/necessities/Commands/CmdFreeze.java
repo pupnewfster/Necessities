@@ -26,8 +26,8 @@ public class CmdFreeze implements Cmd {
         String name = Necessities.getConsole().getName().replaceAll(":", "");
         if (sender instanceof Player)
             name = ((Player) sender).getDisplayName();
-        Bukkit.broadcastMessage(var.getObj() + name + var.getMessages() + (!u.isFrozen() ? " froze " : " defrosted ") + var.getObj() + u.getPlayer().getDisplayName() + var.getMessages() + ".");
-        u.getPlayer().sendMessage(var.getDemote() + "You have been " + var.getObj() + (!u.isFrozen() ? "frozen" : "defrosted") + var.getMessages() + ".");
+        Bukkit.broadcastMessage(var.getObj() + name + var.getMessages() + (!u.isFrozen() ? " froze " : " defrosted ") + var.getObj() + u.getPlayer().getDisplayName() + var.getMessages() + '.');
+        u.getPlayer().sendMessage(var.getDemote() + "You have been " + var.getObj() + (!u.isFrozen() ? "frozen" : "defrosted") + var.getMessages() + '.');
         u.setFrozen(!u.isFrozen());
         return true;
     }

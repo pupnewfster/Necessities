@@ -43,7 +43,7 @@ public class CmdBan implements Cmd {
         if (args.length > 1) {
             StringBuilder reasonBuilder = new StringBuilder();
             for (int i = 1; i < args.length; i++)
-                reasonBuilder.append(args[i]).append(" ");
+                reasonBuilder.append(args[i]).append(' ');
             reason = ChatColor.translateAlternateColorCodes('&', reasonBuilder.toString().trim());
         }
         BanList bans = Bukkit.getBanList(BanList.Type.NAME);
@@ -51,7 +51,7 @@ public class CmdBan implements Cmd {
         if (target.getPlayer() != null)
             target.getPlayer().kickPlayer(reason);
         bans.addBan(theirName, reason, null, name);
-        Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + (reason.equals("") ? "." : " for " + var.getObj() + reason + var.getMessages() + "."));
+        Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + (reason.equals("") ? "." : " for " + var.getObj() + reason + var.getMessages() + '.'));
         return true;
     }
 

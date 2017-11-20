@@ -33,7 +33,7 @@ public class CmdCreateWorld implements WorldCmd {
         if (args.length > 3)
             type = wm.getType(args[3]);
         wm.createWorld(args[0], environment, generator, type);
-        sender.sendMessage(var.getMessages() + "Created world named " + var.getObj() + args[0] + var.getMessages() + ".");
+        sender.sendMessage(var.getMessages() + "Created world named " + var.getObj() + args[0] + var.getMessages() + '.');
         return true;
     }
 }

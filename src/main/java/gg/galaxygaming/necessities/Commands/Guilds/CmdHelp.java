@@ -33,12 +33,12 @@ public class CmdHelp implements GuildCmd {
         setHelp(helpList, sender);
         if (helpList.size() % 10 != 0)
             rounder = 1;
-        int totalPages = (helpList.size() / 10) + rounder;
+        int totalPages = helpList.size() / 10 + rounder;
         if (page > totalPages) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer.toString(totalPages));
             return true;
         }
-        sender.sendMessage(var.getMessages() + "Guild help [" + Integer.toString(page) + "/" + Integer.toString(totalPages) + "]");
+        sender.sendMessage(var.getMessages() + "Guild help [" + Integer.toString(page) + '/' + Integer.toString(totalPages) + ']');
         page = page - 1;
         String message = getLine(page, time, helpList);
         while (message != null) {

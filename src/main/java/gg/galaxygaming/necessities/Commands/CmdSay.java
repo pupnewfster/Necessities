@@ -16,13 +16,13 @@ public class CmdSay implements Cmd {
         }
         StringBuilder messageBuilder = new StringBuilder();
         for (String arg : args)
-            messageBuilder.append(arg).append(" ");
+            messageBuilder.append(arg).append(' ');
         String message = messageBuilder.toString();
         if (ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', message.trim())).equals("")) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Must enter a message to send.");
             return true;
         }
-        Bukkit.broadcastMessage((sender instanceof Player ? "" : Necessities.getConsole().getName() + ChatColor.WHITE + " ") + ChatColor.translateAlternateColorCodes('&', message.trim()));
+        Bukkit.broadcastMessage((sender instanceof Player ? "" : Necessities.getConsole().getName() + ChatColor.WHITE + ' ') + ChatColor.translateAlternateColorCodes('&', message.trim()));
         return true;
     }
 

@@ -14,7 +14,7 @@ public class CmdTop implements Cmd {
             Location top = p.getLocation();
             double topY = 0;
             for (int i = 0; i < top.getWorld().getMaxHeight(); i++)
-                if ((new Location(top.getWorld(), top.getX(), i, top.getZ())).getBlock().getType().isSolid())
+                if (new Location(top.getWorld(), top.getX(), i, top.getZ()).getBlock().getType().isSolid())
                     topY = i + 1;
             p.teleport(new Location(top.getWorld(), top.getX(), topY, top.getZ(), top.getYaw(), top.getPitch()));
             p.sendMessage(var.getMessages() + "Teleporting to top.");

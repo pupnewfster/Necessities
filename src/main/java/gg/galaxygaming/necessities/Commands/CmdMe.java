@@ -12,7 +12,7 @@ public class CmdMe implements Cmd {
     public boolean commandUse(CommandSender sender, String[] args) {
         StringBuilder msgBuilder = new StringBuilder();
         for (String s : args)
-            msgBuilder.append(s).append(" ");
+            msgBuilder.append(s).append(' ');
         String msg = msgBuilder.toString().trim();
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
@@ -22,7 +22,7 @@ public class CmdMe implements Cmd {
                 return true;
             }
             if (self.getPlayer().hasPermission("Necessities.colorchat"))
-                msg = ChatColor.translateAlternateColorCodes('&', (self.getPlayer().hasPermission("Necessities.magicchat") ? msg : msg.replaceAll("&k", "")));
+                msg = ChatColor.translateAlternateColorCodes('&', self.getPlayer().hasPermission("Necessities.magicchat") ? msg : msg.replaceAll("&k", ""));
             sendMessage(self, msg);
         } else
             Bukkit.broadcastMessage(var.getMe() + "*" + Necessities.getConsole().getName().replaceAll(":", "") + var.getMe() + msg);
@@ -34,9 +34,9 @@ public class CmdMe implements Cmd {
         for (Player p : Bukkit.getOnlinePlayers()) {
             User u = Necessities.getUM().getUser(p.getUniqueId());
             if (u != null && !u.isIgnoring(sender.getUUID()))
-                p.sendMessage(var.getMe() + "*" + sender.getRank().getColor() + sender.getPlayer().getDisplayName() + var.getMe() + " " + msg);
+                p.sendMessage(var.getMe() + "*" + sender.getRank().getColor() + sender.getPlayer().getDisplayName() + var.getMe() + ' ' + msg);
         }
-        Bukkit.getConsoleSender().sendMessage(var.getMe() + "*" + sender.getRank().getColor() + sender.getPlayer().getDisplayName() + var.getMe() + " " + msg);
+        Bukkit.getConsoleSender().sendMessage(var.getMe() + "*" + sender.getRank().getColor() + sender.getPlayer().getDisplayName() + var.getMe() + ' ' + msg);
     }
 
     public boolean isPaintballEnabled() {

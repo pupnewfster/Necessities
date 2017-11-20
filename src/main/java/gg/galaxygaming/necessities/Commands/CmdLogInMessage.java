@@ -21,7 +21,7 @@ public class CmdLogInMessage implements Cmd {
             if (args.length != 0) {
                 StringBuilder loginMessageBuilder = new StringBuilder();
                 for (String arg : args)
-                    loginMessageBuilder.append(arg).append(" ");
+                    loginMessageBuilder.append(arg).append(' ');
                 loginMessage = loginMessageBuilder.toString();
                 if (!loginMessage.contains("{NAME}"))
                     loginMessage = "{RANK} {NAME}&r " + loginMessage;

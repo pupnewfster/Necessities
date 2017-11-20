@@ -8,7 +8,7 @@ import java.io.File;
 
 public class Warp {
     private Location loc;
-    private String name = "";
+    private String name;
 
     Warp(String name) {
         File configFileWarps = new File("plugins/Necessities/WorldManager", "warps.yml");

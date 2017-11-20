@@ -21,7 +21,7 @@ public class CmdLogOutMessage implements Cmd {
             if (args.length != 0) {
                 StringBuilder logoutMessageBuilder = new StringBuilder();
                 for (String arg : args)
-                    logoutMessageBuilder.append(arg).append(" ");
+                    logoutMessageBuilder.append(arg).append(' ');
                 logoutMessage = logoutMessageBuilder.toString();
                 if (!logoutMessage.contains("{NAME}"))
                     logoutMessage = "{RANK} {NAME}&r " + logoutMessage;

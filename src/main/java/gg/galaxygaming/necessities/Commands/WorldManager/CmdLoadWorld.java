@@ -4,6 +4,7 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
 import gg.galaxygaming.necessities.WorldManager.WorldManager;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
 public class CmdLoadWorld implements WorldCmd {
@@ -23,7 +24,11 @@ public class CmdLoadWorld implements WorldCmd {
             return true;
         }
         wm.loadWorld(args[0]);
-        sender.sendMessage(var.getMessages() + "Loaded world " + var.getObj() + Bukkit.getWorld(args[0]).getName() + var.getMessages() + ".");
+        World w = Bukkit.getWorld(args[0]);
+        if (w == null)
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "There was and error loading the world.");
+        else
+            sender.sendMessage(var.getMessages() + "Loaded world " + var.getObj() + w.getName() + var.getMessages() + '.');
         return true;
     }
 }

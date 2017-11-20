@@ -41,12 +41,12 @@ public class CmdHelp implements Cmd {
         for (Plugin p : Bukkit.getPluginManager().getPlugins()) {
             if (search.equals("") || p.getName().equalsIgnoreCase(search)) {
                 if (p.getName().equalsIgnoreCase(search))
-                    plugins.add(var.getMessages() + "Commands from " + p.getName() + ":");
+                    plugins.add(var.getMessages() + "Commands from " + p.getName() + ':');
                 try {
                     Map<String, Map<String, Object>> cmds = p.getDescription().getCommands();
                     if (cmds != null)
                         for (String k : cmds.keySet()) {
-                            PluginCommand pc = Bukkit.getPluginCommand(p.getName() + ":" + k);
+                            PluginCommand pc = Bukkit.getPluginCommand(p.getName() + ':' + k);
                             if (pc != null) {
                                 if (p instanceof Necessities && !Necessities.getInstance().isCommandEnabled(pc.getName()))
                                     continue;
@@ -66,7 +66,7 @@ public class CmdHelp implements Cmd {
                     Map<String, Map<String, Object>> cmds = p.getDescription().getCommands();
                     if (cmds != null)
                         for (String k : cmds.keySet()) {
-                            PluginCommand pc = Bukkit.getPluginCommand(p.getName() + ":" + k);
+                            PluginCommand pc = Bukkit.getPluginCommand(p.getName() + ':' + k);
                             if (pc != null) {
                                 if (p instanceof Necessities && !Necessities.getInstance().isCommandEnabled(pc.getName()))
                                     continue;
@@ -86,17 +86,17 @@ public class CmdHelp implements Cmd {
         int rounder = 0;
         if (helpList.size() % 10 != 0)
             rounder = 1;
-        int totalPages = (helpList.size() / 10) + rounder;
+        int totalPages = helpList.size() / 10 + rounder;
         if (page > totalPages) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer.toString(totalPages));
             return true;
         }
         if (search.equals(""))
             sender.sendMessage(ChatColor.YELLOW + " ---- " + var.getMessages() + "Help" + ChatColor.YELLOW + " -- " + var.getMessages() + "Page " +
-                    ChatColor.RED + Integer.toString(page) + var.getMessages() + "/" + ChatColor.RED + Integer.toString(totalPages) + ChatColor.YELLOW + " ----");
+                    ChatColor.RED + Integer.toString(page) + var.getMessages() + '/' + ChatColor.RED + Integer.toString(totalPages) + ChatColor.YELLOW + " ----");
         else
             sender.sendMessage(ChatColor.YELLOW + " ---- " + var.getMessages() + "Help: " + search + ChatColor.YELLOW + " -- " + var.getMessages() + "Page " +
-                    ChatColor.RED + Integer.toString(page) + var.getMessages() + "/" + ChatColor.RED + Integer.toString(totalPages) + ChatColor.YELLOW + " ----");
+                    ChatColor.RED + Integer.toString(page) + var.getMessages() + '/' + ChatColor.RED + Integer.toString(totalPages) + ChatColor.YELLOW + " ----");
         page = page - 1;
         String message = getHelp(page, time, helpList);
         while (message != null) {

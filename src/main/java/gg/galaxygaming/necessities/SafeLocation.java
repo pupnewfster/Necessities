@@ -3,7 +3,6 @@ package gg.galaxygaming.necessities;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 
 public class SafeLocation {
     boolean wouldFall(Location l) {
@@ -12,15 +11,17 @@ public class SafeLocation {
         boolean temp = false;
         if (l.getBlock().getType().equals(Material.AIR)) {
             temp = true;
-            if (l.getX() - l.getBlockX() > 0.5)
+            double xDif = l.getX() - l.getBlockX();
+            if (xDif > 0.5)
                 l.setX(l.getBlockX() + 1);
-            else if (l.getX() - l.getBlockX() < 0.5)
+            else if (xDif < 0.5)
                 l.setX(l.getBlockX() - 1);
             if (!l.getBlock().getType().equals(Material.AIR))
                 temp = false;
-            if (l.getZ() - l.getBlockZ() > 0.5)
+            double zDif = l.getZ() - l.getBlockZ();
+            if (zDif > 0.5)
                 l.setZ(l.getBlockZ() + 1);
-            else if (l.getZ() - l.getBlockZ() < 0.5)
+            else if (zDif < 0.5)
                 l.setZ(l.getBlockZ() - 1);
             if (!l.getBlock().getType().equals(Material.AIR))
                 temp = false;
@@ -28,7 +29,8 @@ public class SafeLocation {
             if (!l.getBlock().getType().equals(Material.AIR))
                 temp = false;
         }
-        l.setX(x);
+        //Set values back because it is original object, which means that getSafe needs it unmodified
+        //l.setX(x); //Already the same
         l.setY(y);
         l.setZ(z);
         return temp;
@@ -44,20 +46,24 @@ public class SafeLocation {
         if (l.getWorld().getEnvironment().equals(World.Environment.NETHER))
             maxHeight = 126;
         boolean overLava = false;
+        //TODO go out ~5 blocks from close to far as it goes up, and then create a private method of this??? because checking about falling does it need the aoe? probably
+        //CANNOT just add extra for statements as the overLava would stop working properly
+        //TODO: Not check to see if type changed? and just check if it is on a solid block???
+        //Compare with https://github.com/drtshock/Essentials/blob/2.x/Essentials/src/com/earth2me/essentials/utils/LocationUtil.java to see about rough logic
         for (int i = l.getBlockY(); i < maxHeight; i++) {
-            Block b = (new Location(l.getWorld(), l.getX(), i, l.getZ())).getBlock();
-            if (b.getType().equals(Material.LAVA) || b.getType().equals(Material.STATIONARY_LAVA))
+            Material type = new Location(l.getWorld(), l.getX(), i, l.getZ()).getBlock().getType();
+            if (type.equals(Material.LAVA) || type.equals(Material.STATIONARY_LAVA))
                 overLava = true;
-            else if ((b.getType().isSolid() || b.getType().equals(Material.LEAVES) || b.getType().equals(Material.LEAVES_2)) && overLava)
+            else if ((type.isSolid() || type.equals(Material.LEAVES) || type.equals(Material.LEAVES_2)) && overLava)
                 overLava = false;
-            if (!b.getType().isSolid() && !b.getType().equals(Material.LEAVES) && !b.getType().equals(Material.LEAVES_2) && !overLava) {
+            if (!type.isSolid() && !type.equals(Material.LEAVES) && !type.equals(Material.LEAVES_2) && !overLava) {
                 l = new Location(l.getWorld(), l.getX(), i, l.getZ(), l.getYaw(), l.getPitch());
                 break;
             }
         }
         if (wouldFall(l))
             for (int i = l.getBlockY(); i > 0; i--)
-                if ((new Location(l.getWorld(), l.getX(), i, l.getZ())).getBlock().getType().isSolid()) {
+                if (new Location(l.getWorld(), l.getX(), i, l.getZ()).getBlock().getType().isSolid()) {
                     l = new Location(l.getWorld(), l.getX(), i + 1, l.getZ(), l.getYaw(), l.getPitch());
                     if (l.getBlock().getType().equals(Material.LAVA) || l.getBlock().getType().equals(Material.STATIONARY_LAVA))
                         l = getSafe(l);

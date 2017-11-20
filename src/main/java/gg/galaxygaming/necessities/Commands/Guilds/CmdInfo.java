@@ -60,7 +60,7 @@ public class CmdInfo implements GuildCmd {
         sender.sendMessage(var.getMessages() + "Description: " + var.getGuildMsgs() + g.getDescription());
         if (g.isPermanent())
             sender.sendMessage(var.getMessages() + "This guild is permanent - remaining even with no players.");
-        sender.sendMessage(var.getMessages() + "Land / Power / Max power: " + var.getGuildMsgs() + g.getLand() + "/" + Utils.roundTwoDecimals(g.getPower()) + "/" + g.getMaxPower() + ".00");
+        sender.sendMessage(var.getMessages() + "Land / Power / Max power: " + var.getGuildMsgs() + g.getLand() + '/' + Utils.roundTwoDecimals(g.getPower()) + '/' + g.getMaxPower() + ".00");
         if (!g.getAllies().isEmpty()) {
             StringBuilder alliesBuilder = new StringBuilder();
             for (String ally : g.getAllies())
@@ -89,7 +89,7 @@ public class CmdInfo implements GuildCmd {
     private String parant(int nameLength) {
         StringBuilder p = new StringBuilder();
         for (int i = 0; i < 22 - nameLength; i++)
-            p.append("_");
+            p.append('_');
         return p.toString();
     }
 }

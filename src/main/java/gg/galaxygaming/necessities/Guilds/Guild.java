@@ -266,7 +266,7 @@ public class Guild {
     }
 
     boolean claimed(Chunk c) {
-        return this.claims.contains(c.getWorld().getName() + " " + c.getX() + " " + c.getZ());
+        return this.claims.contains(c.getWorld().getName() + ' ' + c.getX() + ' ' + c.getZ());
     }
 
     /**
@@ -404,15 +404,15 @@ public class Guild {
         CmdHide hide = Necessities.getHide();
         StringBuilder memberBuilder = new StringBuilder();
         if (this.leader != null && !this.leader.equals("") && !this.leader.equals("Janet") && (Bukkit.getPlayer(UUID.fromString(this.leader)) == null ||
-                (!countHidden && hide.isHidden(Bukkit.getPlayer(UUID.fromString(this.leader))))))
+                !countHidden && hide.isHidden(Bukkit.getPlayer(UUID.fromString(this.leader)))))
             memberBuilder.append(Bukkit.getOfflinePlayer(UUID.fromString(this.leader)).getName()).append(", ");
         if (!this.mods.isEmpty())
             for (String id : this.mods)
-                if (Bukkit.getPlayer(UUID.fromString(id)) == null || (!countHidden && hide.isHidden(Bukkit.getPlayer(UUID.fromString(id)))))
+                if (Bukkit.getPlayer(UUID.fromString(id)) == null || !countHidden && hide.isHidden(Bukkit.getPlayer(UUID.fromString(id))))
                     memberBuilder.append(Bukkit.getOfflinePlayer(UUID.fromString(id)).getName()).append(", ");
         if (!this.members.isEmpty())
             for (String id : this.members)
-                if (Bukkit.getPlayer(UUID.fromString(id)) == null || (!countHidden && hide.isHidden(Bukkit.getPlayer(UUID.fromString(id)))))
+                if (Bukkit.getPlayer(UUID.fromString(id)) == null || !countHidden && hide.isHidden(Bukkit.getPlayer(UUID.fromString(id))))
                     memberBuilder.append(Bukkit.getOfflinePlayer(UUID.fromString(id)).getName()).append(", ");
         String member = memberBuilder.toString();
         if (member.contains(", "))
@@ -499,11 +499,11 @@ public class Guild {
      */
     public void claim(Chunk c) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
-        if (!this.claims.contains(c.getWorld().getName() + " " + c.getX() + " " + c.getZ()))
-            this.claims.add(c.getWorld().getName() + " " + c.getX() + " " + c.getZ());
+        if (!this.claims.contains(c.getWorld().getName() + ' ' + c.getX() + ' ' + c.getZ()))
+            this.claims.add(c.getWorld().getName() + ' ' + c.getX() + ' ' + c.getZ());
         List<String> chunkList = configGuild.getStringList("claims");
-        if (!chunkList.contains(c.getWorld().getName() + " " + c.getX() + " " + c.getZ())) {
-            chunkList.add(c.getWorld().getName() + " " + c.getX() + " " + c.getZ());
+        if (!chunkList.contains(c.getWorld().getName() + ' ' + c.getX() + ' ' + c.getZ())) {
+            chunkList.add(c.getWorld().getName() + ' ' + c.getX() + ' ' + c.getZ());
             if (chunkList.contains(""))
                 chunkList.remove("");
         }
@@ -520,9 +520,9 @@ public class Guild {
      */
     public void unclaim(Chunk c) {
         YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
-        this.claims.remove(c.getWorld().getName() + " " + c.getX() + " " + c.getZ());
+        this.claims.remove(c.getWorld().getName() + ' ' + c.getX() + ' ' + c.getZ());
         List<String> chunkList = configGuild.getStringList("claims");
-        chunkList.remove(c.getWorld().getName() + " " + c.getX() + " " + c.getZ());
+        chunkList.remove(c.getWorld().getName() + ' ' + c.getX() + ' ' + c.getZ());
         if (chunkList.isEmpty())
             chunkList.add("");
         configGuild.set("claims", chunkList);

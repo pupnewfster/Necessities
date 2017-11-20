@@ -36,7 +36,7 @@ public class CmdEnchant implements Cmd {
                 if (ench.canEnchantItem(hand)) {
                     hand.addEnchantment(ench, level);
                     player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + " at level " + var.getObj() + Integer.toString(level) +
-                            var.getMessages() + ".");
+                            var.getMessages() + '.');
                     return true;
                 }
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "This item can not support given enchantment.");
@@ -71,7 +71,7 @@ public class CmdEnchant implements Cmd {
                         enchantAll(level, player, player.hasPermission("Necessities.unsafeEnchant"), true);
                     } else {
                         enchantAll(level, player, player.hasPermission("Necessities.unsafeEnchant"), false);
-                        player.sendMessage(var.getMessages() + "Added all enchantments at level " + var.getObj() + Integer.toString(level) + var.getMessages() + ".");
+                        player.sendMessage(var.getMessages() + "Added all enchantments at level " + var.getObj() + Integer.toString(level) + var.getMessages() + '.');
                     }
                     return true;
                 } else if (ench != null && (ench.canEnchantItem(hand) || player.hasPermission("Necessities.unsafeEnchant"))) {
@@ -81,11 +81,11 @@ public class CmdEnchant implements Cmd {
                     } else {
                         if (level == 0) {
                             hand.removeEnchantment(ench);
-                            player.sendMessage(var.getMessages() + "Removed enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + ".");
+                            player.sendMessage(var.getMessages() + "Removed enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + '.');
                         } else {
                             hand.addUnsafeEnchantment(ench, level);
                             player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + " at level " + var.getObj() + Integer.toString(level) +
-                                    var.getMessages() + ".");
+                                    var.getMessages() + '.');
                         }
                     }
                     return true;

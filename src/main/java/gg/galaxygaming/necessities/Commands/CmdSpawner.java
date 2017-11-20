@@ -24,7 +24,7 @@ public class CmdSpawner implements Cmd {
             if (l.getBlock().getState() instanceof CreatureSpawner) {
                 CreatureSpawner spawner = (CreatureSpawner) l.getBlock().getState();
                 if (args.length == 0) {
-                    p.sendMessage(var.getMessages() + "Spawner type is " + spawner.getSpawnedType().toString().replaceAll("_", " ").toLowerCase() + ".");
+                    p.sendMessage(var.getMessages() + "Spawner type is " + spawner.getSpawnedType().toString().replaceAll("_", " ").toLowerCase() + '.');
                     return true;
                 }
                 EntityType spawnerType = getType(args[0]);
@@ -34,7 +34,7 @@ public class CmdSpawner implements Cmd {
                     return true;
                 }
                 spawner.setSpawnedType(spawnerType);
-                p.sendMessage(var.getMessages() + "Spawner type set to " + var.getObj() + spawner.getSpawnedType().toString().replaceAll("_", " ").toLowerCase() + var.getMessages() + ".");
+                p.sendMessage(var.getMessages() + "Spawner type set to " + var.getObj() + spawner.getSpawnedType().toString().replaceAll("_", " ").toLowerCase() + var.getMessages() + '.');
                 return true;
             }
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That block is not a spawner.");

@@ -44,10 +44,10 @@ public class CmdMod implements GuildCmd {
             }
             if (u.getGuild().getRank(uuid).equalsIgnoreCase("mod")) {
                 u.getGuild().removeMod(uuid);
-                sender.sendMessage(var.getMessages() + "Successfully demodded " + var.getObj() + them.getName() + var.getMessages() + ".");
+                sender.sendMessage(var.getMessages() + "Successfully demodded " + var.getObj() + them.getName() + var.getMessages() + '.');
             } else {
                 u.getGuild().addMod(uuid);
-                sender.sendMessage(var.getMessages() + "Successfully modded " + var.getObj() + them.getName() + var.getMessages() + ".");
+                sender.sendMessage(var.getMessages() + "Successfully modded " + var.getObj() + them.getName() + var.getMessages() + '.');
             }
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to kick someone out of a guild.");

@@ -251,7 +251,7 @@ public class RankManager {
         configRanks.set(name, Collections.singletonList(""));
         configRanks.set(name + ".permissions", Collections.singletonList(""));
         configRanks.set(name + ".subranks", Collections.singletonList(""));
-        configRanks.set(name + ".rankTitle", "[" + name + "]");
+        configRanks.set(name + ".rankTitle", '[' + name + ']');
         if (previous != null)
             configRanks.set(name + ".previousRank", previous.getName());
         else {

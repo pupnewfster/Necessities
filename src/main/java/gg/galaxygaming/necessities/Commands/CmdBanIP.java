@@ -37,7 +37,7 @@ public class CmdBanIP implements Cmd {
             if (args.length > 1) {
                 StringBuilder reasonBuilder = new StringBuilder();
                 for (int i = 1; i < args.length; i++)
-                    reasonBuilder.append(args[i]).append(" ");
+                    reasonBuilder.append(args[i]).append(' ');
                 reason = ChatColor.translateAlternateColorCodes('&', reasonBuilder.toString().trim());
             }
             BanList bans = Bukkit.getBanList(BanList.Type.IP);
@@ -45,7 +45,7 @@ public class CmdBanIP implements Cmd {
             String theirIP = target.getAddress().toString().split("/")[1].split(":")[0];
             target.kickPlayer(reason);
             bans.addBan(theirIP, reason, null, name);
-            Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + (reason.equals("") ? "." : " for " + var.getObj() + reason + var.getMessages() + "."));
+            Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirName + var.getMessages() + (reason.equals("") ? "." : " for " + var.getObj() + reason + var.getMessages() + '.'));
             return true;
         }
         boolean validIp = false;
@@ -64,7 +64,7 @@ public class CmdBanIP implements Cmd {
         if (args.length > 1) {
             StringBuilder reasonBuilder = new StringBuilder();
             for (int i = 1; i < args.length; i++)
-                reasonBuilder.append(args[i]).append(" ");
+                reasonBuilder.append(args[i]).append(' ');
             reason = ChatColor.translateAlternateColorCodes('&', reasonBuilder.toString().trim());
         }
         BanList bans = Bukkit.getBanList(BanList.Type.IP);
@@ -75,7 +75,7 @@ public class CmdBanIP implements Cmd {
                 break;
             }
         bans.addBan(theirIP, reason, null, name);
-        Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirIP + var.getMessages() + (reason.equals("") ? "." : " for " + var.getObj() + reason + var.getMessages() + "."));
+        Bukkit.broadcastMessage(var.getMessages() + name + " banned " + var.getObj() + theirIP + var.getMessages() + (reason.equals("") ? "." : " for " + var.getObj() + reason + var.getMessages() + '.'));
         return true;
     }
 

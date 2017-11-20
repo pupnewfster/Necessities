@@ -47,7 +47,7 @@ public class CmdCreate implements GuildCmd {
             u.joinGuild(g);
             g.setLeader(p.getUniqueId());
             eco.removeMoney(u.getUUID(), 800);
-            sender.sendMessage(var.getMessages() + "Successfully created guild " + var.getObj() + args[0] + var.getMessages() + ".");
+            sender.sendMessage(var.getMessages() + "Successfully created guild " + var.getObj() + args[0] + var.getMessages() + '.');
             sender.sendMessage(var.getMoney() + Economy.format(800) + var.getMessages() + " was removed from your account.");
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to create a guild.");

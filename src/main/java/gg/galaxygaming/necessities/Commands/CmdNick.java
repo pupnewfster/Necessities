@@ -48,9 +48,9 @@ public class CmdNick implements Cmd {
                 if (uuid == null) {
                     User u = um.getUser(p.getUniqueId());
                     String nick = args[0];
-                    nick = ChatColor.translateAlternateColorCodes('&', (p.hasPermission("Necessities.magicchat") ? nick : nick.replaceAll("&k", "")));
-                    u.setNick("~" + nick.trim() + "&r");
-                    p.setDisplayName("~" + ChatColor.translateAlternateColorCodes('&', nick + "&r").trim());
+                    nick = ChatColor.translateAlternateColorCodes('&', p.hasPermission("Necessities.magicchat") ? nick : nick.replaceAll("&k", ""));
+                    u.setNick('~' + nick.trim() + "&r");
+                    p.setDisplayName('~' + ChatColor.translateAlternateColorCodes('&', nick + "&r").trim());
                     p.sendMessage(var.getMessages() + "Nickname set to " + p.getDisplayName());
                     return true;
                 }
@@ -75,7 +75,7 @@ public class CmdNick implements Cmd {
         }
         Player target = Bukkit.getPlayer(uuid);
         if (sender instanceof Player && !sender.hasPermission("Necessities.nickOthers"))
-            target = ((Player) sender);
+            target = (Player) sender;
         if (args.length == 1) {
             target.setDisplayName(target.getName());
             User u = um.getUser(target.getUniqueId());
@@ -97,8 +97,8 @@ public class CmdNick implements Cmd {
                 eco.removeMoney(target.getUniqueId(), 2000);
                 target.sendMessage(var.getMoney() + Economy.format(2000) + var.getMessages() + " was removed from your account.");
             }
-            u.setNick("~" + args[1].trim() + "&r");
-            target.setDisplayName("~" + ChatColor.translateAlternateColorCodes('&', args[1] + "&r").trim());
+            u.setNick('~' + args[1].trim() + "&r");
+            target.setDisplayName('~' + ChatColor.translateAlternateColorCodes('&', args[1] + "&r").trim());
             target.sendMessage(var.getMessages() + "Nickname set to " + target.getDisplayName());
             sender.sendMessage(var.getMessages() + "Nickname for " + var.getObj() + target.getName() + var.getMessages() + " set to " + target.getDisplayName());
         }

@@ -18,24 +18,24 @@ public class JanetLog {
         String day = Integer.toString(c.get(Calendar.DATE));
         String month = Integer.toString(c.get(Calendar.MONTH) + 1);
         String year = Integer.toString(c.get(Calendar.YEAR));
-        String date = month + "-" + day + "-" + year;
+        String date = month + '-' + day + '-' + year;
         hour = corTime(hour);
         minute = corTime(minute);
         second = corTime(second);
-        String time = "(" + hour + ":" + minute + ":" + second + ")";
+        String time = '(' + hour + ':' + minute + ':' + second + ')';
         String file = "plugins/Necessities/Logs/" + date + ".txt";
         File f = new File(file);
         if (!f.exists())
             fileCreate(file);
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
-            bw.write(time + " " + message);
+            bw.write(time + ' ' + message);
             bw.newLine();
         } catch (Exception ignored) {
         }
     }
 
     private String corTime(String time) {
-        return time.length() == 1 ? "0" + time : time;
+        return time.length() == 1 ? '0' + time : time;
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

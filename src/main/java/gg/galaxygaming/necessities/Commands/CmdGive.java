@@ -30,7 +30,7 @@ public class CmdGive implements Cmd {
         }
         if (args.length == 2) {
             t.getInventory().addItem(mat.getBukkitMaterial().toItemStack(64));
-            sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + "64 " + mat.getFriendlyName(64) + " to " + t.getDisplayName() + var.getMessages() + ".");
+            sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + "64 " + mat.getFriendlyName(64) + " to " + t.getDisplayName() + var.getMessages() + '.');
             return true;
         }
         if (!Utils.legalInt(args[2])) {
@@ -43,7 +43,7 @@ public class CmdGive implements Cmd {
             data = Short.parseShort(args[3]);
         mat = mat.getChild(data);
         t.getInventory().addItem(mat.getBukkitMaterial().toItemStack(amount));
-        sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + " " + mat.getFriendlyName(amount) + " to " + t.getDisplayName() + var.getMessages() + ".");
+        sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + ' ' + mat.getFriendlyName(amount) + " to " + t.getDisplayName() + var.getMessages() + '.');
         return true;
     }
 }

@@ -26,7 +26,7 @@ public class CmdRename implements Cmd {
             ItemMeta handMeta = hand.getItemMeta();
             StringBuilder nameBuilder = new StringBuilder();
             for (String arg : args)
-                nameBuilder.append(arg).append(" ");
+                nameBuilder.append(arg).append(' ');
             String name = ChatColor.translateAlternateColorCodes('&', nameBuilder.toString()).trim();
             if (ChatColor.stripColor(name).trim().equals("")) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a name to rename your item to.");

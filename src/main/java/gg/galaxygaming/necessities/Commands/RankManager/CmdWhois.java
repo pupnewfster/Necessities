@@ -46,11 +46,12 @@ public class CmdWhois implements RankCmd {
             hour = corTime(hour);
             minute = corTime(minute);
             second = corTime(second);
-            sender.sendMessage(var.getMessages() + " - Seen last on " + ChatColor.RESET + month + "/" + day + "/" + year + " at " + hour + ":" + minute + " and " + second + " " +
+            sender.sendMessage(var.getMessages() + " - Seen last on " + ChatColor.RESET + month + '/' + day + '/' + year + " at " + hour + ':' + minute + " and " + second + ' ' +
                     (Integer.parseInt(second) > 1 ? "seconds" : "second"));
         }
         sender.sendMessage(var.getMessages() + " - Time played: " + ChatColor.RESET + u.getTimePlayed());
-        sender.sendMessage(var.getMessages() + " - Rank: " + ChatColor.RESET + u.getRank().getName());
+        if (u.getRank() != null) //Have had issues in past (probably with a corrupted player where rank was null)
+            sender.sendMessage(var.getMessages() + " - Rank: " + ChatColor.RESET + u.getRank().getName());
         String subranks = u.getSubranks();
         if (subranks != null)
             sender.sendMessage(var.getMessages() + " - Subranks: " + ChatColor.RESET + subranks);
@@ -59,10 +60,10 @@ public class CmdWhois implements RankCmd {
             sender.sendMessage(var.getMessages() + " - Permission nodes: " + ChatColor.RESET + permissions);
         if (u.getPlayer() != null) {
             Player p = u.getPlayer();
-            sender.sendMessage(var.getMessages() + " - Health: " + ChatColor.RESET + (int) p.getHealth() + "/" + (int) p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+            sender.sendMessage(var.getMessages() + " - Health: " + ChatColor.RESET + (int) p.getHealth() + '/' + (int) p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
             sender.sendMessage(var.getMessages() + " - Hunger: " + ChatColor.RESET + p.getFoodLevel() + "/20 (+" + (int) p.getSaturation() + " saturation)");
-            sender.sendMessage(var.getMessages() + " - Exp: " + ChatColor.RESET + Utils.addCommas(p.getTotalExperience()) + " (Level " + p.getLevel() + ")");
-            String location = "(" + p.getWorld().getName() + ", " + p.getLocation().getBlockX() + ", " + p.getLocation().getBlockY() + ", " + p.getLocation().getBlockZ() + ")";
+            sender.sendMessage(var.getMessages() + " - Exp: " + ChatColor.RESET + Utils.addCommas(p.getTotalExperience()) + " (Level " + p.getLevel() + ')');
+            String location = '(' + p.getWorld().getName() + ", " + p.getLocation().getBlockX() + ", " + p.getLocation().getBlockY() + ", " + p.getLocation().getBlockZ() + ')';
             sender.sendMessage(var.getMessages() + " - Location: " + ChatColor.RESET + location);
         }
         if (u.getPlayer() != null) {
@@ -93,6 +94,6 @@ public class CmdWhois implements RankCmd {
     }
 
     private String corTime(String time) {
-        return time.length() == 1 ? "0" + time : time;
+        return time.length() == 1 ? '0' + time : time;
     }
 }

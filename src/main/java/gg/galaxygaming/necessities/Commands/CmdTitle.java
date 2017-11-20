@@ -47,7 +47,7 @@ public class CmdTitle implements Cmd {
         }
         StringBuilder titleBuilder = new StringBuilder();
         for (String arg : args)
-            titleBuilder.append(arg).append(" ");
+            titleBuilder.append(arg).append(' ');
         YamlConfiguration config = Necessities.getInstance().getConfig();
         String title = titleBuilder.toString().replaceFirst(args[0], "").trim();
         if (ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', title + "&r")).length() > 24) {
