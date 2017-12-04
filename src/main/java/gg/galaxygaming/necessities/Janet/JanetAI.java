@@ -17,7 +17,7 @@ public class JanetAI {//TODO: Move to JanetNet and add understanding logic
     private static final String[] janetNamed = {"Yes?", "What is it?", "What?", "What do you want?", "What do you need?", "I'm busy, what is it you want?",
             "Tell me what you want so I can go back to sleep.", "I'm busy, please leave a message.", "I was pinged.", "Can I go back to eating my cake yet?",
             "I am assuming you are the pizza delivery person?", "Thanks for buying me some chocolate.", "Let me go back to work, I have things to do.",
-            "Are you talking to me to offering me another piece of pie?", "?", "Huh?"};
+            "Are you talking to me to offer me another piece of pie?", "?", "Huh?"};
     private static final String[] feelingMessages = {"The previous line of code is what is up. What about you?", "I don't know... I guess I am always up. What do you feel is sup?",
             "I am fine I guess, just a little disembodied.", "I am in the mood for getting an upgrade.", "Good, what about you?", "I am fine I guess, just a little disembodied.",
             "I am still awake if that is what you are asking. Are you up also?", "Ok, do you need anything?", "I am alive, isn't that all that matters?", "Sad, I am all out of cake.",
@@ -30,7 +30,7 @@ public class JanetAI {//TODO: Move to JanetNet and add understanding logic
     private static final String[] tiltMessages = {"Tilted.", "Wow, you are tilted.", "Wow, you're tilted.", "Stop tilting.", "Stop tilting me.", "You are tilting me.", "I'm tilted.", "I am tilted."};
     private static final String[] welcomeMessages = {"No problem.", "You are welcome.", "You're welcome.", "Don't mention it."};
     private static final String[] rankBegging = {"can i be op", "can i have op", "may i have op", "can i get op", "may i get op", "can i be admin", "can i be mod", "can i get mod",
-            "mod me", "op me", "admin me", "make me mod", "make me admin", "make me op", "promote me"};
+            "mod me", "op me", "admin me", "make me mod", "make me admin", "make me op", "promote me", "give me mod", "give me moderator", "give me op", "give me admin", "give me owner"};
     private static final String[] hugRequests = {"can i have a hug", "can you give me a hug", "can you hug me", "hug me", "give me a hug", "i demand a hug"};
     private static final String[] kissRequests = {"can i have a kiss", "can you give me a kiss", "can you kiss me", "kiss me", "give me a kiss"};
     private static final String[] time = {"what time is it", "what is the time"};
@@ -41,6 +41,7 @@ public class JanetAI {//TODO: Move to JanetNet and add understanding logic
     private static final String[] hi = {"hello", "hi", "hey"};
     private static final String[] feeling = {"how are you", "what is up", "whats up", "how was your day"};
     private static final String[] thanks = {"thank you", "thanks", "ty"};
+    private static final String[] boostedMessages = {"Your Minecraft account is boosted.", "I'm a challenger smurf.", "I'll boost your Minecraft account for $20.", "I'm not boosted you are.", "Yes I am."};
     private static final Random r = new Random();
     private String JanetName = "";
     //good morning
@@ -70,7 +71,7 @@ public class JanetAI {//TODO: Move to JanetNet and add understanding logic
         else if (Arrays.stream(date).parallel().anyMatch(lm::contains))
             result = JanetName + "The date is: " + date();
         else if (Arrays.stream(rankBegging).parallel().anyMatch(lm::contains))
-            result = JanetName + "You may only earn the rank, no free promotions";
+            result = JanetName + "If you want a staff position, go apply on our forums. https://galaxygaming.gg";
         else if (lm.contains("janet")) {
             if (Arrays.stream(feeling).parallel().anyMatch(lm::contains))
                 result = JanetName + feelingMessages[r.nextInt(feelingMessages.length)];
@@ -88,6 +89,8 @@ public class JanetAI {//TODO: Move to JanetNet and add understanding logic
                 result = JanetName + stalkerMessages[r.nextInt(stalkerMessages.length)];
             else if (Arrays.stream(drunk).parallel().anyMatch(lm::contains))
                 result = JanetName + drunkMessages[r.nextInt(drunkMessages.length)];
+            else if (lm.contains("boosted"))
+                result = JanetName + boostedMessages[r.nextInt(boostedMessages.length)];
             else if (lm.contains("tilt"))
                 result = JanetName + tiltMessages[r.nextInt(tiltMessages.length)];
             else

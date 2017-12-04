@@ -560,7 +560,7 @@ commands:
       description: Displays the list of warps.
       usage: /<command>
       permission: Necessities.worldmanager.warps
-      aliases: [nwarps, locations, nlocations]
+      aliases: [nwarps, locations, nlocations, warplist, nwarplist, wlist, nwlist]
    warp:
       description: Teleports you to given warp.
       usage: /<command> <name>

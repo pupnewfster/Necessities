@@ -51,11 +51,20 @@ public class Prices {
         itemName = itemName.toUpperCase().replaceAll("_", "");
         if (Material.fromString(itemName) == null)
             return;
+        boolean isSell = false;
+        if (direction.equals("sell"))
+            isSell = true;
         if (price.equalsIgnoreCase("null")) {
-            sellPrices.remove(itemName);
+            if (isSell)
+                sellPrices.remove(itemName);
+            else
+                buyPrices.remove(itemName);
             configPrices.set(direction + '.' + itemName, null);
         } else {
-            sellPrices.put(itemName, Double.parseDouble(price));
+            if (isSell)
+                sellPrices.put(itemName, Double.parseDouble(price));
+            else
+                buyPrices.put(itemName, Double.parseDouble(price));
             configPrices.set(direction + '.' + itemName, Double.parseDouble(price));
         }
         try {

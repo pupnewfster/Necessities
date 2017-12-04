@@ -47,6 +47,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
@@ -872,6 +873,8 @@ class Listeners implements Listener {
         final Player player = e.getPlayer();
         final UUID uuid = player.getUniqueId();
         String m = e.getMessage();
+        m = Matcher.quoteReplacement(m);
+        e.setMessage(m);
         if (m.endsWith(">") && !m.equals(">")) {
             String appended = u.getAppended() + ' ' + m.substring(0, m.length() - 1);
             u.setAppended(appended.trim());

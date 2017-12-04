@@ -25,7 +25,10 @@ public class CmdSetPrice implements EconomyCmd {
                     sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a the price you want to set the item at.");
                     return true;
                 }
-                mat = Material.fromString(player.getInventory().getItemInMainHand().getType().toString());
+                String handType = player.getInventory().getItemInMainHand().getType().toString();
+                if (handType.equals("NETHER_BRICK") || handType.equals("BRICK"))
+                    handType += "_BLOCK";
+                mat = Material.fromString(handType);
                 if (mat == null) {
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist");
                     return true;

@@ -21,6 +21,8 @@ public class CmdPrice implements EconomyCmd {
         if (sender instanceof Player) {
             if (args.length == 1) {
                 itemName = ((Player) sender).getInventory().getItemInMainHand().getType().toString();
+                if (itemName.equals("NETHER_BRICK") || itemName.equals("BRICK"))
+                    itemName += "_BLOCK";
                 data = ((Player) sender).getInventory().getItemInMainHand().getDurability();
             }
         } else if (args.length < 2) {

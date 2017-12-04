@@ -51,7 +51,10 @@ public class CmdBuy implements EconomyCmd {
                 } else
                     mat = Material.fromData(itemName, data);
             } else {
-                mat = Material.fromString(inventory.getItemInMainHand().getType().toString());
+                String handType = inventory.getItemInMainHand().getType().toString();
+                if (handType.equals("NETHER_BRICK") || handType.equals("BRICK"))
+                    handType += "_BLOCK";
+                mat = Material.fromString(handType);
                 if (mat != null && !mat.isTool()) {
                     short data = inventory.getItemInMainHand().getDurability();
                     mat = Material.fromData(data != 0 ? mat.getParent() : mat, data);
