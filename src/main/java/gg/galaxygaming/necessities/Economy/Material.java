@@ -1,6 +1,7 @@
 package gg.galaxygaming.necessities.Economy;
 
 import gg.galaxygaming.necessities.Utils;
+import org.bukkit.entity.EntityType;
 import org.bukkit.material.MaterialData;
 
 import java.util.*;
@@ -94,7 +95,7 @@ public enum Material {//http://minecraft.gamepedia.com/Id
     WET_SPONGE("WET_SPONGE", "WET SPONGES", SPONGE, (short) 1),
     GLASS("GLASS", org.bukkit.Material.GLASS, 20),
     LAPIS_ORE("LAPIS_ORE", org.bukkit.Material.LAPIS_ORE, 21, "LAPIS LAZULI ORE", Collections.singletonList("LAPIS_LAZULI_ORE")),
-    LAPIS_BLOCK("LAPIS_BLOCK", org.bukkit.Material.LAPIS_BLOCK, "LAPIS LAZULI BLOCKS", 22, "LAPIS LAZULI BLOCK", Arrays.asList("LAPIS_LAZULI_BLOCK", "BLOCK_OF_LAPIS", "BLOCK_F_LAPIS_LAZULI")),
+    LAPIS_BLOCK("LAPIS_BLOCK", org.bukkit.Material.LAPIS_BLOCK, "LAPIS LAZULI BLOCKS", 22, "LAPIS LAZULI BLOCK", Arrays.asList("LAPIS_LAZULI_BLOCK", "BLOCK_OF_LAPIS", "BLOCK_OF_LAPIS_LAZULI")),
     DISPENSER("DISPENSER", org.bukkit.Material.DISPENSER, "DISPENSERS", 23),
     SANDSTONE("SANDSTONE", org.bukkit.Material.SANDSTONE, 24),
     CHISELED_SANDSTONE("CHISELED_SANDSTONE", SANDSTONE, (short) 1),
@@ -185,6 +186,51 @@ public enum Material {//http://minecraft.gamepedia.com/Id
     UP_TORCH("UP_TORCH", TORCH, (short) 5),
     FIRE("FIRE", org.bukkit.Material.FIRE, 51),//Unobtainable
     MOB_SPAWNER("MOB_SPAWNER", org.bukkit.Material.MOB_SPAWNER, "MONSTER SPAWNERS", 52, "MONSTER SPAWNER", Arrays.asList("SPAWNER", "MONSTER_SPAWNER")),
+    BAT_SPAWNER("BAT_SPAWNER", "BAT SPAWNERS", MOB_SPAWNER, EntityType.BAT.toString()),
+    BLAZE_SPAWNER("BLAZE_SPAWNER", "BLAZE SPAWNERS", MOB_SPAWNER, EntityType.BLAZE.toString()),
+    CAVE_SPIDER_SPAWNER("CAVE_SPIDER_SPAWNER", "CAVE SPIDER SPAWNERS", MOB_SPAWNER, EntityType.CAVE_SPIDER.toString()),
+    CHICKEN_SPAWNER("CHICKEN_SPAWNER", "CHICKEN SPAWNERS", MOB_SPAWNER, EntityType.CHICKEN.toString()),
+    COW_SPAWNER("COW_SPAWNER", "COW SPAWNERS", MOB_SPAWNER, EntityType.COW.toString()),
+    CREEPER_SPAWNER("CREEPER_SPAWNER", "CREEPER SPAWNERS", MOB_SPAWNER, EntityType.CREEPER.toString()),
+    DONKEY_SPAWNER("DONKEY_SPAWNER", "DONKEY SPAWNERS", MOB_SPAWNER, EntityType.DONKEY.toString()),
+    ELDER_GUARDIAN_SPAWNER("ELDER_GUARDIAN_SPAWNER", "ELDER GUARDIAN SPAWNERS", MOB_SPAWNER, EntityType.ELDER_GUARDIAN.toString()),
+    ENDERMAN_SPAWNER("ENDERMAN_SPAWNER", "ENDERMAN SPAWNERS", MOB_SPAWNER, EntityType.ENDERMAN.toString()),
+    ENDERMITE_SPAWNER("ENDERMITE_SPAWNER", "ENDERMITE SPAWNERS", MOB_SPAWNER, EntityType.ENDERMITE.toString()),
+    EVOKER_SPAWNER("EVOKER_SPAWNER", "EVOKER SPAWNERS", MOB_SPAWNER, EntityType.EVOKER.toString()),
+    GHAST_SPAWNER("GHAST_SPAWNER", "GHAST SPAWNERS", MOB_SPAWNER, EntityType.GHAST.toString()),
+    GUARDIAN_SPAWNER("GUARDIAN_SPAWNER", "GUARDIAN SPAWNERS", MOB_SPAWNER, EntityType.GUARDIAN.toString()),
+    HORSE_SPAWNER("HORSE_SPAWNER", "HORSE SPAWNERS", MOB_SPAWNER, EntityType.HORSE.toString()),
+    HUSK_SPAWNER("HUSK_SPAWNER", "HUSK SPAWNERS", MOB_SPAWNER, EntityType.HUSK.toString()),
+    LLAMA_SPAWNER("LLAMA_SPAWNER", "LLAMA SPAWNERS", MOB_SPAWNER, EntityType.LLAMA.toString()),
+    MAGMA_CUBE_SPAWNER("MAGMA_CUBE_SPAWNER", "MAGMA CUBE SPAWNERS", MOB_SPAWNER, EntityType.MAGMA_CUBE.toString()),
+    MUSHROOM_COW_SPAWNER("MUSHROOM_COW_SPAWNER", "MUSHROOM COW SPAWNERS", MOB_SPAWNER, EntityType.MUSHROOM_COW.toString()),
+    MULE_SPAWNER("MULE_SPAWNER", "MULE SPAWNERS", MOB_SPAWNER, EntityType.MULE.toString()),
+    OCELOT_SPAWNER("OCELOT_SPAWNER", "OCELOT SPAWNERS", MOB_SPAWNER, EntityType.OCELOT.toString()),
+    PARROT_SPAWNER("PARROT_SPAWNER", "PARROT SPAWNERS", MOB_SPAWNER, EntityType.PARROT.toString()),
+    PIG_SPAWNER("PIG_SPAWNER", "PIG SPAWNERS", MOB_SPAWNER, EntityType.PIG.toString()),
+    POLAR_BEAR_SPAWNER("POLAR_BEAR_SPAWNER", "POLAR BEAR SPAWNERS", MOB_SPAWNER, EntityType.POLAR_BEAR.toString()),
+    RABBIT_SPAWNER("RABBIT_SPAWNER", "RABBIT SPAWNERS", MOB_SPAWNER, EntityType.RABBIT.toString()),
+    SHEEP_SPAWNER("SHEEP_SPAWNER", "SHEEP SPAWNERS", MOB_SPAWNER, EntityType.SHEEP.toString()),
+    SHULKER_SPAWNER("SHULKER_SPAWNER", "SHULKER SPAWNERS", MOB_SPAWNER, EntityType.SHULKER.toString()),
+    SILVERFISH_SPAWNER("SILVERFISH_SPAWNER", "SILVERFISH SPAWNERS", MOB_SPAWNER, EntityType.SILVERFISH.toString()),
+    SKELETON_SPAWNER("SKELETON_SPAWNER", "SKELETON SPAWNERS", MOB_SPAWNER, EntityType.SKELETON.toString()),
+    SKELETON_HORSE_SPAWNER("SKELETON_HORSE_SPAWNER", "SKELETON HORSE SPAWNERS", MOB_SPAWNER, EntityType.SKELETON_HORSE.toString()),
+    SLIME_SPAWNER("SLIME_SPAWNER", "SLIME SPAWNERS", MOB_SPAWNER, EntityType.SLIME.toString()),
+    SPIDER_SPAWNER("SPIDER_SPAWNER", "SPIDER SPAWNERS", MOB_SPAWNER, EntityType.SPIDER.toString()),
+    SQUID_SPAWNER("SQUID_SPAWNER", "SQUID SPAWNERS", MOB_SPAWNER, EntityType.SQUID.toString()),
+    STRAY_SPAWNER("STRAY_SPAWNER", "STRAY SPAWNERS", MOB_SPAWNER, EntityType.STRAY.toString()),
+    VEX_SPAWNER("VEX_SPAWNER", "VEX SPAWNERS", MOB_SPAWNER, EntityType.VEX.toString()),
+    VILLAGER_SPAWNER("VILLAGER_SPAWNER", "VILLAGER SPAWNERS", MOB_SPAWNER, EntityType.VILLAGER.toString()),
+    VINDICATOR_SPAWNER("VINDICATOR_SPAWNER", "VINDICATOR SPAWNERS", MOB_SPAWNER, EntityType.VINDICATOR.toString()),
+    WITCH_SPAWNER("WITCH_SPAWNER", "WITCH SPAWNERS", MOB_SPAWNER, EntityType.WITCH.toString()),
+    WITHER_SKELETON_SPAWNER("WITHER_SKELETON_SPAWNER", "WITHER SKELETON SPAWNERS", MOB_SPAWNER, EntityType.WITHER_SKELETON.toString()),
+    WOLF_SPAWNER("WOLF_SPAWNER", "WOLF SPAWNERS", MOB_SPAWNER, EntityType.WOLF.toString()),
+    ZOMBIE_SPAWNER("ZOMBIE_SPAWNER", "ZOMBIE SPAWNERS", MOB_SPAWNER, EntityType.ZOMBIE.toString()),
+    ZOMBIE_HORSE_SPAWNER("ZOMBIE_HORSE_SPAWNER", "ZOMBIE HORSE SPAWNERS", MOB_SPAWNER, EntityType.ZOMBIE_HORSE.toString()),
+    ZOMBIE_PIGMAN_SPAWNER("ZOMBIE_PIGMAN_SPAWNER", "ZOMBIE PIGMAN SPAWNERS", MOB_SPAWNER, EntityType.PIG_ZOMBIE.toString(), Collections.singletonList("PIG_ZOMBIE_SPAWNER")),
+    ZOMBIE_VILLAGER_SPAWNER("ZOMBIE_VILLAGER_SPAWNER", "ZOMBIE VILLAGER SPAWNERS", MOB_SPAWNER, EntityType.ZOMBIE_VILLAGER.toString()),
+    IRON_GOLEM_SPAWNER("IRON_GOLEM_SPAWNER", "IRON GOLEM SPAWNERS", MOB_SPAWNER, EntityType.IRON_GOLEM.toString()),
+    SNOWMAN_SPAWNER("SNOWMAN_SPAWNER", "SNOWMAN SPAWNERS", MOB_SPAWNER, EntityType.SNOWMAN.toString()),
     OAK_STAIRS("OAK_STAIRS", org.bukkit.Material.WOOD_STAIRS, "OAK STAIRS", 53, "OAK STAIR", Collections.singletonList("WOOD_STAIRS")),
     CHEST("CHEST", org.bukkit.Material.CHEST, "CHESTS", 54, Collections.singletonList("CRATE")),
     REDSTONE_WIRE("REDSTONE_WIRE", org.bukkit.Material.REDSTONE_WIRE, 55),//Unobtainable
@@ -770,8 +816,8 @@ public enum Material {//http://minecraft.gamepedia.com/Id
     GOLDEN_LEGGINGS("GOLDEN_LEGGINGS", org.bukkit.Material.GOLD_LEGGINGS, "GOLDEN LEGGINGS", 316, "GOLDEN LEGGING", Arrays.asList("GOLDEN_PANTS", "GOLD_PANTS", "GOLD_LEGGINGS")),
     GOLDEN_BOOTS("GOLDEN_BOOTS", org.bukkit.Material.GOLD_BOOTS, "GOLDEN BOOTS", 317, "GOLDEN BOOT", Arrays.asList("GOLD_BOOTS", "GOLD_SHOES", "GOLDEN_SHOES")),
     FLINT("FLINT", org.bukkit.Material.FLINT, 318),
-    PORKCHOP("PORKCHOP", org.bukkit.Material.PORK, "RAW PORKCHOPS", 319, "RAW PORKCHOP", Arrays.asList("RAW_PORK", "RAW_PORKCHOP")),
-    COOKED_PORKCHOP("COOKED_PORKCHOP", org.bukkit.Material.GRILLED_PORK, "COOKED PORKCHOPS", 320, Arrays.asList("PORK", "GRILLED_PORK", "GRILLED_PORKCHOP", "COOKED_PORK")),
+    PORKCHOP("PORKCHOP", org.bukkit.Material.PORK, "RAW PORKCHOPS", 319, "RAW PORKCHOP", Arrays.asList("PORK", "RAW_PORK", "RAW_PORKCHOP")),
+    COOKED_PORKCHOP("COOKED_PORKCHOP", org.bukkit.Material.GRILLED_PORK, "COOKED PORKCHOPS", 320, Arrays.asList("GRILLED_PORK", "GRILLED_PORKCHOP", "COOKED_PORK")),
     PAINTING("PAINTING", org.bukkit.Material.PAINTING, "PAINTINGS", 321),
     GOLDEN_APPLE("GOLDEN_APPLE", org.bukkit.Material.GOLDEN_APPLE, "GOLDEN APPLES", 322, Collections.singletonList("GOLD_APPLE")),
     ENCHANTED_GOLDEN_APPLE("ENCHANTED_GOLDEN_APPLE", "ENCHANTED GOLDEN APPLES", GOLDEN_APPLE, (short) 1, Collections.singletonList("GOD_APPLE")),
@@ -1102,10 +1148,48 @@ public enum Material {//http://minecraft.gamepedia.com/Id
     private final String name;
     private final String plural;
     private final String friendlyName;
+    private final String lore;
     private final Integer id;
     private final short data;
     private final org.bukkit.Material bukkitMaterial;
     private final List<String> aliases;
+
+    Material(String name, Material parent, String lore) {
+        this(name, null, parent, lore, null, new ArrayList<>());
+    }
+
+    Material(String name, String plural, Material parent, String lore) {
+        this(name, plural, parent, lore, null, new ArrayList<>());
+    }
+
+    Material(String name, String plural, Material parent, String lore, String friendlyName) {
+        this(name, plural, parent, lore, friendlyName, new ArrayList<>());
+    }
+
+    Material(String name, Material parent, String lore, List<String> aliases) {
+        this(name, null, parent, lore, null, aliases);
+    }
+
+    Material(String name, String plural, Material parent, String lore, List<String> aliases) {
+        this(name, plural, parent, lore, null, aliases);
+    }
+
+    Material(String name, Material parent, String lore, String friendlyName, List<String> aliases) {
+        this(name, null, parent, lore, friendlyName, aliases);
+    }
+
+    Material(String name, String plural, Material parent, String lore, String friendlyName, List<String> aliases) {
+        this.name = name;
+        this.friendlyName = friendlyName;
+        this.plural = plural;
+        this.data = 0;
+        this.lore = lore;
+        this.id = null;
+        this.aliases = aliases;
+        this.parent = parent;
+        this.children = new HashMap<>();
+        this.bukkitMaterial = this.parent.bukkitMaterial;
+    }
 
     Material(String name, org.bukkit.Material bukkitMaterial, int id) {
         this(name, bukkitMaterial, id, new ArrayList<>());
@@ -1158,6 +1242,7 @@ public enum Material {//http://minecraft.gamepedia.com/Id
         this.bukkitMaterial = bukkitMaterial;
         this.id = id;
         this.data = 0;
+        this.lore = null;
         this.aliases = aliases;
         this.parent = this;
         this.children = new HashMap<>();
@@ -1181,6 +1266,7 @@ public enum Material {//http://minecraft.gamepedia.com/Id
         this.plural = plural;
         this.data = data;
         this.id = null;
+        this.lore = null;
         this.aliases = aliases;
         this.parent = parent;
         this.children = new HashMap<>();
@@ -1223,6 +1309,22 @@ public enum Material {//http://minecraft.gamepedia.com/Id
      */
     public String getFriendlyName(int amount) {
         return amount == 1 || this.plural == null ? getFriendlyName() : Utils.capFirst(this.plural);
+    }
+
+    /**
+     * Checks if this material has lore to include.
+     * @return True if there is lore to include, false otherwise.
+     */
+    public boolean hasLore() {
+        return this.lore != null;
+    }
+
+    /**
+     * Retrieves the lore for this material if it has any.
+     * @return The lore of this material.
+     */
+    public String getLore() {
+        return this.lore;
     }
 
     /**

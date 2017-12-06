@@ -49,6 +49,10 @@ public class CmdTempban implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid time, please enter a time in minutes.");
             return true;
         }
+        if (minutes > 20160) {
+            minutes = 20160;
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Maximum time is 20,160 minutes or 2 weeks. The time has been lowered to this number.");
+        }
         String reason = "";
         if (args.length > 2) {
             StringBuilder reasonBuilder = new StringBuilder();

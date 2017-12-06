@@ -688,7 +688,7 @@ public class User {
                     this.afkTask = Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
                         if (isAfk() && getPlayer() != null && (System.currentTimeMillis() - getLastAFK()) / 1000.0 >= 299.9)
                             bukkitPlayer.kickPlayer(ChatColor.RED + "AFK for too long!");
-                    }, 20 * 300);
+                    }, 20 * 1800);
                     Bukkit.getScheduler().cancelTask(temp);
                 } catch (Exception ignored) {
                 }

@@ -82,7 +82,7 @@ public class CmdHide implements Cmd {
      */
     public void playerJoined(Player p) {
         if (!p.hasPermission("Necessities.seehidden"))
-            hidden.stream().filter(uuid -> Bukkit.getPlayer(uuid) != null).forEach(uuid -> p.hidePlayer(Bukkit.getPlayer(uuid)));
+            hidden.stream().filter(uuid -> Bukkit.getPlayer(uuid) != null).forEach(uuid -> p.hidePlayer(Necessities.getInstance(), Bukkit.getPlayer(uuid)));
     }
 
     /**
@@ -90,7 +90,7 @@ public class CmdHide implements Cmd {
      * @param p The player to show the hidden players to.
      */
     public void playerLeft(Player p) {
-        hidden.stream().filter(uuid -> Bukkit.getPlayer(uuid) != null).forEach(uuid -> p.showPlayer(Bukkit.getPlayer(uuid)));
+        hidden.stream().filter(uuid -> Bukkit.getPlayer(uuid) != null).forEach(uuid -> p.showPlayer(Necessities.getInstance(), Bukkit.getPlayer(uuid)));
     }
 
     /**
@@ -98,12 +98,12 @@ public class CmdHide implements Cmd {
      * @param p The player to hide.
      */
     public void hidePlayer(Player p) {
-        Bukkit.getOnlinePlayers().stream().filter(x -> !x.equals(p) && x.canSee(p) && !x.hasPermission("Necessities.seehidden")).forEach(x -> x.hidePlayer(p));
+        Bukkit.getOnlinePlayers().stream().filter(x -> !x.equals(p) && x.canSee(p) && !x.hasPermission("Necessities.seehidden")).forEach(x -> x.hidePlayer(Necessities.getInstance(), p));
         Necessities.getInstance().removePlayer(p);
     }
 
     private void unhidePlayer(Player p) {
-        Bukkit.getOnlinePlayers().stream().filter(x -> !x.equals(p) && !x.canSee(p)).forEach(x -> x.showPlayer(p));
+        Bukkit.getOnlinePlayers().stream().filter(x -> !x.equals(p) && !x.canSee(p)).forEach(x -> x.showPlayer(Necessities.getInstance(), p));
         Necessities.getInstance().addPlayer(p);
     }
 

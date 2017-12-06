@@ -1,5 +1,7 @@
 package gg.galaxygaming.necessities;
 
+import gg.galaxygaming.necessities.Economy.Material;
+import net.minecraft.server.v1_12_R1.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -10,6 +12,7 @@ import org.json.simple.Jsoner;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.UUID;
@@ -208,5 +211,21 @@ public class Utils {
 
     private static String format(double tps) {
         return (tps > 18.0 ? ChatColor.GREEN : tps > 16.0 ? ChatColor.YELLOW : ChatColor.RED).toString() + (tps > 20.0 ? "*" : "") + Math.min(Math.round(tps * 100.0) / 100.0, 20.0);
+    }
+
+    /**
+     * Changes the max stack size the given material.
+     * @param material The material to change the stack size of.
+     * @param size     The new max stack size for the material.
+     */
+    public static void setStackSize(Material material, int size) {
+        Item item = Item.getById(material.getID());
+        try {
+            Field maxStackSize = Item.class.getDeclaredField("maxStackSize");
+            maxStackSize.setAccessible(true);
+            maxStackSize.setInt(item, size);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

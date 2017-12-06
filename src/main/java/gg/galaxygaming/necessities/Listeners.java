@@ -404,9 +404,11 @@ class Listeners implements Listener {
                     for (String loc : s.split(" ")[0].split(","))
                         inv.setItem(Integer.parseInt(loc), i);
                 }
-        } else if (b.getType().equals(Material.MOB_SPAWNER) && meta.hasLore())
-            ((CreatureSpawner) b.getState()).setCreatureTypeByName(meta.getLore().get(0));
-        else if ((b.getType().equals(Material.SIGN) || b.getType().equals(Material.SIGN_POST) || b.getType().equals(Material.WALL_SIGN)) && meta.hasLore()) {
+        } else if (b.getType().equals(Material.MOB_SPAWNER) && meta.hasLore()) {
+            CreatureSpawner spawner = ((CreatureSpawner) b.getState());
+            spawner.setCreatureTypeByName(meta.getLore().get(0));
+            spawner.update();
+        } else if ((b.getType().equals(Material.SIGN) || b.getType().equals(Material.SIGN_POST) || b.getType().equals(Material.WALL_SIGN)) && meta.hasLore()) {
             Sign s = (Sign) b.getState();
             s.setLine(0, meta.getLore().get(0));
             s.setLine(1, meta.getLore().get(1));

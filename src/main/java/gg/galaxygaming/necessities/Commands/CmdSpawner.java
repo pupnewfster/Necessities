@@ -34,6 +34,7 @@ public class CmdSpawner implements Cmd {
                     return true;
                 }
                 spawner.setSpawnedType(spawnerType);
+                spawner.update();
                 p.sendMessage(var.getMessages() + "Spawner type set to " + var.getObj() + spawner.getSpawnedType().toString().replaceAll("_", " ").toLowerCase() + var.getMessages() + '.');
                 return true;
             }

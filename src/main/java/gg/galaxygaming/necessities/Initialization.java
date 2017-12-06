@@ -80,6 +80,13 @@ class Initialization {
         Necessities.getAnnouncer().init();
 
         Backup.tryBackup();
+
+        File configFileStackSize = new File("plugins/Necessities", "stacksize.yml");
+        if (configFileStackSize.exists()) {
+            YamlConfiguration configStackSize = YamlConfiguration.loadConfiguration(configFileStackSize);
+            for (String key : configStackSize.getKeys(false))
+                Utils.setStackSize(Material.fromString(key), configStackSize.getInt(key));
+        }
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -122,6 +129,27 @@ class Initialization {
         addYML(new File("plugins/Necessities/WorldManager", "worlds.yml"));
         addYML(new File("plugins/Necessities/WorldManager", "portals.yml"));
         addYML(new File("plugins/Necessities/Creative", "reviews.yml"));
+        File configFileStackSize = new File("plugins/Necessities", "stacksize.yml");
+        if (!configFileStackSize.exists())
+            try {
+                configFileStackSize.createNewFile();
+                YamlConfiguration config = YamlConfiguration.loadConfiguration(configFileStackSize);
+                config.set("EGG", 64);
+                config.set("MINECART", 64);
+                config.set("HOPPERMINECART", 64);
+                config.set("CHESTMINECART", 64);
+                config.set("FURNACEMINECART", 64);
+                config.set("SNOWBALL", 64);
+                config.set("SIGN", 64);
+                config.set("BOAT", 64);
+                config.set("SPRUCEBOAT", 64);
+                config.set("BIRCHBOAT", 64);
+                config.set("JUNGLEBOAT", 64);
+                config.set("ACACIABOAT", 64);
+                config.set("DARKOAKBOAT", 64);
+                config.save(configFileStackSize);
+            } catch (Exception ignored) {
+            }
         File configFileCensors = new File("plugins/Necessities", "censors.yml");
         if (!configFileCensors.exists())
             try {
