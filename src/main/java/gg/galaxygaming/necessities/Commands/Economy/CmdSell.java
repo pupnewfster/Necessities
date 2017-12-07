@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.material.MaterialData;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -26,11 +27,11 @@ public class CmdSell implements EconomyCmd {
             }
             PlayerInventory inventory = player.getInventory();
             int amount = 0;
+            short data = 0;
             Material mat;
             if (args.length == 2) {
                 String temp = args[0].replaceAll(":", " ");
                 String itemName = temp.split(" ")[0];
-                short data = 0;
                 try {
                     data = Short.parseShort(temp.split(" ")[1]);
                 } catch (Exception ignored) {
@@ -59,9 +60,10 @@ public class CmdSell implements EconomyCmd {
                 if (handType.equals("NETHER_BRICK") || handType.equals("BRICK"))
                     handType += "_BLOCK";
                 mat = Material.fromString(handType);
-                if (mat != null && !mat.isTool()) {
-                    short data = inventory.getItemInMainHand().getDurability();
-                    mat = Material.fromData(data != 0 ? mat.getParent() : mat, data);
+                if (mat != null) {
+                    data = inventory.getItemInMainHand().getDurability();
+                    if (!mat.isTool())
+                        mat = Material.fromData(data != 0 ? mat.getParent() : mat, data);
                 }
                 if (!Utils.legalInt(args[0])) {
                     if (!args[0].equalsIgnoreCase("all")) {
@@ -77,19 +79,19 @@ public class CmdSell implements EconomyCmd {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist");
                 return true;
             }
-            double cost = Necessities.getPrices().getPrice("sell", mat.getName(), amount);
+            if (mat.isTool() && mat.getData() != 0)
+                data = mat.getData();
+            double cost = Necessities.getPrices().getPrice("sell", mat.getName(), mat.isTool() ? 1 : amount);
             if (cost == -1.00)
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + mat.getFriendlyName(2) + " cannot be sold to the server.");
             else {
                 MaterialData bukkitMaterial = mat.getBukkitMaterial();
-                if (inventory.containsAtLeast(bukkitMaterial.toItemStack(1), amount)) {
-                    if (mat.isTool() && bukkitMaterial.getItemType().getMaxDurability() != 0)
-                        cost = cost * (1.0 * bukkitMaterial.getItemType().getMaxDurability() - bukkitMaterial.getData()) / bukkitMaterial.getItemType().getMaxDurability();
+                if (!mat.isTool() && inventory.containsAtLeast(bukkitMaterial.toItemStack(1), amount)) {
                     Necessities.getEconomy().addMoney(player.getUniqueId(), cost);
                     inventory.removeItem(bukkitMaterial.toItemStack(amount));
                     player.sendMessage(var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + ' ' + mat.getFriendlyName(amount) + var.getMessages() + '.');
                     player.sendMessage(var.getMoney() + Economy.format(cost) + var.getMessages() + " was added to your account.");
-                } else if (mat.isTool() && inventory.contains(new ItemStack(bukkitMaterial.getItemType(), 1))) {
+                } else if (mat.isTool() && inventory.contains(new ItemStack(bukkitMaterial.getItemType(), 1, data))) {
                     cost = sell(inventory, amount, bukkitMaterial, player.getUniqueId(), cost);
                     if (cost != -1.00) {
                         player.sendMessage(var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + ' ' + mat.getFriendlyName(amount) + var.getMessages() + '.');
@@ -106,21 +108,25 @@ public class CmdSell implements EconomyCmd {
 
     private double sell(PlayerInventory inv, int cAmount, MaterialData matType, UUID uuid, double baseCost) {
         double totalCost = 0.0;
+        ArrayList<ItemStack> foundItems = new ArrayList<>();
         for (ItemStack s : inv.getContents()) {
             if (s == null)
                 continue;
             if (cAmount > 0 && s.getType().equals(matType.getItemType()) && s.getEnchantments().size() == 0 && s.getType().getMaxDurability() != 0) {
-                short maxDur = s.getType().getMaxDurability(), dur = s.getDurability();
-                cAmount = cAmount - 1;
-                double cost = baseCost * ((1.0 * maxDur - dur) / (maxDur * 2.0));//why does it not work if not also divided by two?
+                short maxDur = (short) (s.getType().getMaxDurability() + 1), dur = s.getDurability();
+                cAmount--;
+                double cost = s.getAmount() * baseCost * ((maxDur - 1.0 * dur) / maxDur);//why does it not work if not also divided by two?
+                System.out.println(dur + " " + maxDur + " " + cost);
                 ItemStack toRemove = s.clone();
                 toRemove.setAmount(1);
-                inv.removeItem(toRemove);
-                Necessities.getEconomy().addMoney(uuid, cost);
+                foundItems.add(toRemove);
                 totalCost += cost;
             }
-            if (cAmount == 0)
+            if (cAmount == 0) {
+                foundItems.forEach(inv::remove);
+                Necessities.getEconomy().addMoney(uuid, totalCost);
                 return totalCost;
+            }
         }
         return -1.00;
     }

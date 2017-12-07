@@ -1103,7 +1103,7 @@ class Listeners implements Listener {
             GuildManager gm = Necessities.getGM();
             for (int i = 0; i < e.blockList().size(); i++) {
                 Guild g = gm.chunkOwner(e.blockList().get(i).getChunk());
-                if (g != null && (!g.canExplode() || e.getEntity() instanceof Creeper))
+                if (g != null && !g.canExplode())
                     indexes.add(0, i);
             }
             for (int i : indexes)
