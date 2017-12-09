@@ -1166,7 +1166,7 @@ class Listeners implements Listener {
         Player p = (Player) e.getWhoClicked();
         if (inv instanceof PlayerInventory) {
             Player target = Necessities.getInvsee().getFromInv((PlayerInventory) inv);
-            if (target != null && target.hasPermission("Necessities.invseeonly"))
+            if (target != null && (target.hasPermission("Necessities.invseeonly") || !target.getUniqueId().equals(p.getUniqueId()) && !p.hasPermission("Necessities.invseeCanEdit")))
                 e.setCancelled(true);
         } else if (inv instanceof AnvilInventory && rawSlot == e.getView().convertSlot(rawSlot) && rawSlot == 2) {
             ItemStack item = e.getCurrentItem();

@@ -37,13 +37,14 @@ public class CmdPriceList implements EconomyCmd {
             price = formL(Material.fromString(price.split(" ")[0]).getFriendlyName(2), price.split(" ")[1], price.split(" ")[2], Integer.toString(page * 10 + time + 1) + '.');
             sender.sendMessage(price);
             time++;
-            price = pr.priceLists(page, time);
+            price = pr.priceLists(page, time);//TODO if I get all the prices for that page at once... then I can get the longest named item and try to line it up better
         }
         return true;
     }
 
     private String formL(String item, String buy, String sell, String numb) {
-        String selling = "  sell price: ", buying = "  buy price: ";
+        Variables var = Necessities.getVar();
+        String selling = var.getCatalog() + "  |  " + ChatColor.GREEN + "Sell: ", buying = ChatColor.GREEN + "  Buy: ";
         if (!numb.equalsIgnoreCase("10."))
             numb += " ";
         numb += " ";
@@ -57,7 +58,6 @@ public class CmdPriceList implements EconomyCmd {
             sell = "";
         } else
             sell = Economy.format(Double.parseDouble(sell));
-        Variables var = Necessities.getVar();
         return ChatColor.GOLD + numb + var.getCatalog() + item + buying + var.getMoney() + buy + var.getCatalog() + selling + var.getMoney() + sell;
     }
 }

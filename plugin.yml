@@ -778,6 +778,7 @@ permissions:
             Necessities.unsafeEnchant: true
             Necessities.logoutmessage: true
             Necessities.requestreview: true
+            Necessities.invseeCanEdit: true
             Necessities.unignoreable: true
             Necessities.spamcommands: true
             Necessities.canCombatLog: true
@@ -1432,6 +1433,9 @@ permissions:
         default: op
     Necessities.invseeonly:
         description: Allows you to not be stolen from.
+        default: op
+    Necessities.invseeCanEdit:
+        description: Allows you to edit the inventories you look at.
         default: op
     Necessities.top:
         description: Allows you to go to highest block.

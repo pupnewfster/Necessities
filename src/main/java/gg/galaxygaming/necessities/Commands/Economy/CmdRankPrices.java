@@ -54,10 +54,11 @@ public class CmdRankPrices implements EconomyCmd {
         Variables var = Necessities.getVar();
         if (curRank.equals("CONSOLE")) {
             cost = Economy.format(Double.parseDouble(cost));
-            price = ChatColor.GOLD + numb + var.getCatalog() + rank + " can be bought for " + var.getMoney() + cost;
+
+            price = ChatColor.GOLD + numb + Necessities.getRM().getRank(rank).getColor() + rank + ChatColor.GREEN + "  Buy: " + var.getMoney() + cost;
         } else {
             cost = Economy.format(Double.parseDouble(cost));
-            price = ChatColor.GOLD + numb + var.getCatalog() + rank + " can be bought for " + var.getMoney() + cost;
+            price = ChatColor.GOLD + numb + Necessities.getRM().getRank(rank).getColor() + rank + ChatColor.GREEN + "  Buy: " + var.getMoney() + cost;
             RankManager rm = Necessities.getRM();
             if (rm.hasRank(rm.getRank(curRank), rm.getRank(rank)))
                 price += var.getCatalog() + "   Already Acquired.";

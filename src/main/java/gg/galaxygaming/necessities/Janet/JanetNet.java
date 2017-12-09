@@ -1,4 +1,4 @@
-package gg.galaxygaming.necessities.Janet;
+/*package gg.galaxygaming.necessities.Janet;
 
 import info.debatty.java.stringsimilarity.Cosine;
 import info.debatty.java.stringsimilarity.MetricLCS;
@@ -39,7 +39,7 @@ public class JanetNet {
     /**
      * Reads the custom words.
      */
-    public void readCustom() {
+    /*public void readCustom() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Adding custom words to JanetNet.");
         try (BufferedReader read = new BufferedReader(new FileReader(new File("plugins/Necessities/customWords.txt")))) {
             String line;
@@ -152,4 +152,4 @@ public class JanetNet {
             return this.score;
         }
     }
-}
+}*/

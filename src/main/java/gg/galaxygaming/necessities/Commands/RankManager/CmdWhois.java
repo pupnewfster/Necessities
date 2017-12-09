@@ -30,7 +30,7 @@ public class CmdWhois implements RankCmd {
             return true;
         }
         User u = Necessities.getUM().getUser(uuid);
-        sender.sendMessage(var.getMessages() + "===== WhoIs: " + var.getObj() + u.getName() + var.getMessages() + " =====");
+        sender.sendMessage(var.getMessages() + "===== WhoIs: " + u.getRank().getColor() + u.getName() + var.getMessages() + " =====");
         if (u.getPlayer() != null)
             sender.sendMessage(var.getMessages() + " - Nick: " + ChatColor.RESET + u.getPlayer().getDisplayName());
         else {
@@ -51,7 +51,7 @@ public class CmdWhois implements RankCmd {
         }
         sender.sendMessage(var.getMessages() + " - Time played: " + ChatColor.RESET + u.getTimePlayed());
         if (u.getRank() != null) //Have had issues in past (probably with a corrupted player where rank was null)
-            sender.sendMessage(var.getMessages() + " - Rank: " + ChatColor.RESET + u.getRank().getName());
+            sender.sendMessage(var.getMessages() + " - Rank: " + u.getRank().getColor() + u.getRank().getName());
         String subranks = u.getSubranks();
         if (subranks != null)
             sender.sendMessage(var.getMessages() + " - Subranks: " + ChatColor.RESET + subranks);

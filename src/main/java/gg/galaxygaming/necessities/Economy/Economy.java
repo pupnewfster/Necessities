@@ -198,7 +198,7 @@ public class Economy {//TODO add OpenAnalytics
         try {
             Connection conn = DriverManager.getConnection(this.dbURL, this.properties);
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT uuid,balance FROM economy WHERE currencyType=" + this.type + " ORDER BY balance DESC LIMIT " + (page - 1) * 10 + ",10");
+            ResultSet rs = stmt.executeQuery("SELECT uuid,balance FROM economy WHERE currencyType=" + this.type + " ORDER BY balance DESC, uuid LIMIT " + (page - 1) * 10 + ",10");
             while (rs.next())
                 balTop.add(rs.getString("uuid") + ' ' + rs.getDouble("balance"));
             rs.close();

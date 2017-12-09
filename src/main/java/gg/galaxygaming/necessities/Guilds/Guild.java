@@ -815,6 +815,7 @@ public class Guild {
     public void toggleInfinite() {
         if (this.power != -1) {
             YamlConfiguration configGuild = YamlConfiguration.loadConfiguration(this.configFileGuild);
+            this.power = -1;
             configGuild.set("power", -1);
             try {
                 configGuild.save(this.configFileGuild);

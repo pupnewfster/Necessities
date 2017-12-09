@@ -49,39 +49,39 @@
             <version>1.6</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>info.debatty</groupId>
-            <artifactId>java-string-similarity</artifactId>
-            <version>RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>com.neovisionaries</groupId>
-            <artifactId>nv-websocket-client</artifactId>
-            <version>2.3</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.cliftonlabs</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.nyvaria</groupId>
-            <artifactId>OpenAnalytics-bukkit</artifactId>
-            <version>1.1.01-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+        <!--<dependency>
+           <groupId>info.debatty</groupId>
+           <artifactId>java-string-similarity</artifactId>
+           <version>RELEASE</version>
+       </dependency>-->
+       <dependency>
+           <groupId>com.neovisionaries</groupId>
+           <artifactId>nv-websocket-client</artifactId>
+           <version>2.3</version>
+       </dependency>
+       <dependency>
+           <groupId>com.github.cliftonlabs</groupId>
+           <artifactId>json-simple</artifactId>
+           <version>2.3.0</version>
+       </dependency>
+       <dependency>
+           <groupId>net.nyvaria</groupId>
+           <artifactId>OpenAnalytics-bukkit</artifactId>
+           <version>1.1.01-SNAPSHOT</version>
+           <scope>provided</scope>
+       </dependency>
+   </dependencies>
 
-    <distributionManagement>
-        <repository>
-            <id>ssh-repository</id>
-            <url>scpexe://root@galaxygaming.gg/maven</url>
-        </repository>
-    </distributionManagement>
+   <distributionManagement>
+       <repository>
+           <id>ssh-repository</id>
+           <url>scpexe://root@galaxygaming.gg/maven</url>
+       </repository>
+   </distributionManagement>
 
-    <build>
-        <extensions>
-            <!-- Enabling the use of SSH -->
+   <build>
+       <extensions>
+           <!-- Enabling the use of SSH -->
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ssh-external</artifactId>
@@ -93,8 +93,8 @@
                 <directory>${project.basedir}</directory>
                 <includes>
                     <include>plugin.yml</include>
-                    <include>englishWords.txt</include>
-                    <include>customWords.txt</include>
+                    <!--<include>englishWords.txt</include>
+                    <include>customWords.txt</include>-->
                 </includes>
             </resource>
         </resources>

@@ -44,8 +44,10 @@ public class CmdDemote implements RankCmd {
             }
             name = player.getName();
         }
+        String cOld = u.getRank().getColor();
         um.updateUserRank(u, u.getRank().getPrevious());
-        Bukkit.broadcastMessage(var.getDemote() + name + " demoted " + Utils.nameFromString(uuid.toString()) + " to " + u.getRank().getName() + '.');
+        String c = u.getRank().getColor();
+        Bukkit.broadcastMessage(var.getDemote() + name + " demoted " + cOld + Utils.nameFromString(uuid.toString()) + var.getDemote() + " to " + c + u.getRank().getName() + var.getDemote() + '.');
         return true;
     }
 }

@@ -5,13 +5,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Prices {
     private final File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
     private final HashMap<String, Double> sellPrices = new HashMap<>();
     private final HashMap<String, Double> buyPrices = new HashMap<>();
-    private final HashMap<String, String> price = new HashMap<>();
+    private final HashMap<String, Boolean> price = new HashMap<>();
+    private final ArrayList<String> priceOrder = new ArrayList<>();
+    //TODO should price be replaced with just checking sellPrices and buyPrices instead of duplicating the data. Probably
 
     /**
      * Gets the buy or sell price of an item.
@@ -59,26 +63,38 @@ public class Prices {
                 sellPrices.remove(itemName);
             else
                 buyPrices.remove(itemName);
+            boolean hasPrice = this.price.getOrDefault(itemName, false);
+            if (hasPrice)
+                this.price.put(itemName, false);
+            else {
+                this.price.remove(itemName);
+                this.priceOrder.remove(itemName);
+            }
             configPrices.set(direction + '.' + itemName, null);
         } else {
-            if (isSell)
+            if (isSell) {
                 sellPrices.put(itemName, Double.parseDouble(price));
-            else
+                if (buyPrices.containsKey(itemName)) {
+                    this.price.put(itemName, true);
+                } else
+                    this.price.put(itemName, false);
+            } else {
                 buyPrices.put(itemName, Double.parseDouble(price));
+                if (sellPrices.containsKey(itemName)) {
+                    this.price.put(itemName, true);
+                } else
+                    this.price.put(itemName, false);
+            }
+            if (!priceOrder.contains(itemName)) {
+                priceOrder.add(itemName);
+                Collections.sort(priceOrder);
+            }
             configPrices.set(direction + '.' + itemName, Double.parseDouble(price));
         }
         try {
             configPrices.save(configFilePrices);
         } catch (Exception ignored) {
         }
-        if (buyPrices.containsKey(itemName) && sellPrices.containsKey(itemName))
-            this.price.put(itemName, Double.toString(buyPrices.get(itemName)) + ' ' + Double.toString(sellPrices.get(itemName)));
-        else if (buyPrices.containsKey(itemName))
-            this.price.put(itemName, Double.toString(buyPrices.get(itemName)) + " null");
-        else if (sellPrices.containsKey(itemName))
-            this.price.put(itemName, "null " + Double.toString(sellPrices.get(itemName)));
-        else
-            this.price.remove(itemName);
     }
 
     /**
@@ -92,17 +108,22 @@ public class Prices {
                 String tempKey = key.replaceFirst("buy.", "");
                 buyPrices.put(tempKey, configPrices.getDouble(key));
                 if (price.containsKey(tempKey))
-                    price.put(tempKey, Double.toString(buyPrices.get(tempKey)) + ' ' + price.get(tempKey).replaceAll("null ", ""));
-                else
-                    price.put(tempKey, Double.toString(buyPrices.get(tempKey)) + " null");
+                    price.put(tempKey, true);
+                else {
+                    price.put(tempKey, false);
+                    priceOrder.add(tempKey);
+                }
             } else if (key.startsWith("sell") && !key.equals("sell")) {
                 String tempKey = key.replaceFirst("sell.", "");
                 sellPrices.put(tempKey, configPrices.getDouble(key));
                 if (price.containsKey(tempKey))
-                    price.put(tempKey, price.get(tempKey).replaceAll("null", "") + Double.toString(sellPrices.get(tempKey)));
-                else
-                    price.put(tempKey, "null " + Double.toString(sellPrices.get(tempKey)));
+                    price.put(tempKey, true);
+                else {
+                    price.put(tempKey, false);
+                    priceOrder.add(tempKey);
+                }
             }
+        Collections.sort(priceOrder);
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Item prices retrieved.");
     }
 
@@ -111,7 +132,7 @@ public class Prices {
      * @return The number of pages of the price list.
      */
     public int priceListPages() {
-        return price.size() % 10 != 0 ? price.size() / 10 + 1 : price.size() / 10;
+        return priceOrder.size() % 10 != 0 ? priceOrder.size() / 10 + 1 : priceOrder.size() / 10;
     }
 
     /**
@@ -120,11 +141,12 @@ public class Prices {
      * @param time The row number to retrieve.
      * @return Gets the message at the specific page and row.
      */
-    public String priceLists(int page, int time) {//TODO: Make this more efficient
+    public String priceLists(int page, int time) {
         page *= 10;
-        if (price.size() < time + page + 1 || time == 10)
+        if (priceOrder.size() < time + page + 1 || time == 10)
             return null;
-        String item = (String) price.keySet().toArray()[page + time];
-        return item + ' ' + price.get(item);
+        String item = priceOrder.get(page + time);
+        double buy = buyPrices.getOrDefault(item, -1.0), sell = sellPrices.getOrDefault(item, -1.0);
+        return item + ' ' + (buy == -1 ? "null" : Double.toString(buy)) + ' ' + (sell == -1 ? "null" : Double.toString(sell));
     }
 }

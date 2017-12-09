@@ -3,7 +3,9 @@ package gg.galaxygaming.necessities.Commands.Economy;
 import gg.galaxygaming.necessities.Economy.Economy;
 import gg.galaxygaming.necessities.Economy.RankPrices;
 import gg.galaxygaming.necessities.Necessities;
+import gg.galaxygaming.necessities.RankManager.Rank;
 import gg.galaxygaming.necessities.RankManager.RankManager;
+import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
@@ -40,8 +42,11 @@ public class CmdBuyRank implements EconomyCmd {
                 return true;
             }
             eco.removeMoney(player.getUniqueId(), cost);
-            um.updateUserRank(um.getUser(player.getUniqueId()), rm.getRank(Utils.capFirst(rankName)));
-            Bukkit.broadcastMessage(var.getMessages() + player.getName() + " bought the rank " + var.getObj() + rankName.toLowerCase());
+            User u = um.getUser(player.getUniqueId());
+            String cOld = u.getRank().getColor();
+            um.updateUserRank(u, rm.getRank(Utils.capFirst(rankName)));
+            String c = u.getRank().getColor();
+            Bukkit.broadcastMessage(var.getMessages() + cOld + player.getName() + var.getMessages() + " bought the rank " + c + rankName.toLowerCase());
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console may not buy ranks.");
         return true;

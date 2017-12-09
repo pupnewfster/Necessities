@@ -46,8 +46,10 @@ public class CmdPromote implements RankCmd {
             }
             name = player.getName();
         }
+        String cOld = u.getRank().getColor();
         um.updateUserRank(u, u.getRank().getNext());
-        Bukkit.broadcastMessage(var.getPromote() + name + " promoted " + Utils.nameFromString(uuid.toString()) + " to " + u.getRank().getName() + '.');
+        String c = u.getRank().getColor();
+        Bukkit.broadcastMessage(var.getPromote() + name + " promoted " + cOld + Utils.nameFromString(uuid.toString()) + var.getPromote() + " to " + c + u.getRank().getName() + var.getPromote() + '.');
         return true;
     }
 }
