@@ -1,5 +1,8 @@
 package gg.galaxygaming.necessities.Janet;
 
+import com.github.cliftonlabs.json_simple.JsonArray;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsoner;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketFactory;
@@ -15,9 +18,6 @@ import gg.galaxygaming.necessities.Variables;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.json.simple.JsonArray;
-import org.json.simple.JsonObject;
-import org.json.simple.Jsoner;
 import org.json.simple.parser.JSONParser;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -30,7 +30,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class JanetSlack {
+public class JanetSlack {//TODO: Even though this is not currently being used it probably should be updated with the latest Slack API I made for Janet.
     private final HashMap<String, SlackUser> userMap = new HashMap<>();
     private final HashMap<Integer, ArrayList<String>> helpLists = new HashMap<>();
     private boolean isConnected;

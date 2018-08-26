@@ -52,11 +52,11 @@ public class SafeLocation {
         //Compare with https://github.com/drtshock/Essentials/blob/2.x/Essentials/src/com/earth2me/essentials/utils/LocationUtil.java to see about rough logic
         for (int i = l.getBlockY(); i < maxHeight; i++) {
             Material type = new Location(l.getWorld(), l.getX(), i, l.getZ()).getBlock().getType();
-            if (type.equals(Material.LAVA) || type.equals(Material.STATIONARY_LAVA))
+            if (type.equals(Material.LAVA)/* || type.equals(Material.STATIONARY_LAVA)*/)
                 overLava = true;
-            else if ((type.isSolid() || type.equals(Material.LEAVES) || type.equals(Material.LEAVES_2)) && overLava)
+            else if ((type.isSolid() || isLeaves(type)) && overLava)
                 overLava = false;
-            if (!type.isSolid() && !type.equals(Material.LEAVES) && !type.equals(Material.LEAVES_2) && !overLava) {
+            if (!type.isSolid() && !isLeaves(type) && !overLava) {
                 l = new Location(l.getWorld(), l.getX(), i, l.getZ(), l.getYaw(), l.getPitch());
                 break;
             }
@@ -65,10 +65,15 @@ public class SafeLocation {
             for (int i = l.getBlockY(); i > 0; i--)
                 if (new Location(l.getWorld(), l.getX(), i, l.getZ()).getBlock().getType().isSolid()) {
                     l = new Location(l.getWorld(), l.getX(), i + 1, l.getZ(), l.getYaw(), l.getPitch());
-                    if (l.getBlock().getType().equals(Material.LAVA) || l.getBlock().getType().equals(Material.STATIONARY_LAVA))
+                    if (l.getBlock().getType().equals(Material.LAVA)/* || l.getBlock().getType().equals(Material.STATIONARY_LAVA)*/)
                         l = getSafe(l);
                     break;
                 }
         return l;
+    }
+
+    private boolean isLeaves(Material type) {
+        return type.equals(Material.ACACIA_LEAVES) || type.equals(Material.BIRCH_LEAVES) || type.equals(Material.DARK_OAK_LEAVES) || type.equals(Material.JUNGLE_LEAVES) ||
+                type.equals(Material.OAK_LEAVES) || type.equals(Material.SPRUCE_LEAVES);
     }
 }

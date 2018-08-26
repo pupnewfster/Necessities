@@ -1,5 +1,8 @@
 package gg.galaxygaming.necessities.RankManager;
 
+import com.github.cliftonlabs.json_simple.JsonArray;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsoner;
 import com.google.common.collect.Multimap;
 import com.google.common.io.Files;
 import com.mojang.authlib.GameProfile;
@@ -16,14 +19,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.util.BlockIterator;
-import org.json.simple.JsonArray;
-import org.json.simple.JsonObject;
-import org.json.simple.Jsoner;
 
 import java.io.BufferedReader;
 import java.io.File;

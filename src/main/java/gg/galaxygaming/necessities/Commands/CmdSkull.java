@@ -17,7 +17,7 @@ public class CmdSkull implements Cmd {
         }
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+            ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
             SkullMeta meta = (SkullMeta) skull.getItemMeta();
             meta.setOwner(args[0]);
             skull.setItemMeta(meta);

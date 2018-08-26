@@ -1,5 +1,8 @@
 package gg.galaxygaming.necessities;
 
+import com.github.cliftonlabs.json_simple.JsonArray;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsoner;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import gg.galaxygaming.necessities.Commands.*;
@@ -20,23 +23,17 @@ import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.WorldManager.PortalManager;
 import gg.galaxygaming.necessities.WorldManager.WarpManager;
 import gg.galaxygaming.necessities.WorldManager.WorldManager;
-import net.minecraft.server.v1_12_R1.*;
-import net.nyvaria.googleanalytics.hit.Hit;
-import net.nyvaria.openanalytics.bukkit.OpenAnalytics;
-import net.nyvaria.openanalytics.bukkit.OpenAnalyticsTracker;
+import net.minecraft.server.v1_13_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.json.simple.JsonArray;
-import org.json.simple.JsonObject;
-import org.json.simple.Jsoner;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -48,11 +45,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+/*import net.nyvaria.googleanalytics.hit.Hit;
+import net.nyvaria.openanalytics.bukkit.OpenAnalytics;
+import net.nyvaria.openanalytics.bukkit.OpenAnalyticsTracker;*/
+
 public class Necessities extends JavaPlugin {
     private static Necessities INSTANCE;
     private final List<DevInfo> devs = new ArrayList<>();
     private final File configFile = new File("plugins/Necessities", "config.yml");
-    private OpenAnalyticsTracker googleAnalyticsTracker;
+    //private OpenAnalyticsTracker googleAnalyticsTracker;
     private PacketPlayOutPlayerInfo janetInfo;
     private CmdCommandSpy spy = new CmdCommandSpy();
     private CmdInvsee invsee = new CmdInvsee();
@@ -98,8 +99,8 @@ public class Necessities extends JavaPlugin {
         getLogger().info("Enabling Necessities...");
         INSTANCE = this;
 
-        if (!hookGoogle())
-            getLogger().warning("Could not hook into Google Analytics!");
+        /*if (!hookGoogle())
+            getLogger().warning("Could not hook into Google Analytics!");*/
 
         Initialization init = new Initialization();
         init.initiateFiles();
@@ -122,25 +123,25 @@ public class Necessities extends JavaPlugin {
         this.janetInfo = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, player);
     }
 
-    private boolean hookGoogle() {
+    /*private boolean hookGoogle() {
         OpenAnalytics plugin;
         if ((plugin = (OpenAnalytics) getServer().getPluginManager().getPlugin("OpenAnalytics")) == null)
             return false;
         googleAnalyticsTracker = plugin.getTracker();
         return true;
-    }
+    }*/
 
     /**
      * Checks if Necessities is tracking.
      * @return True if Necessities is tracking, false otherwise.
      */
-    public static boolean isTracking() {
+    /*public static boolean isTracking() {
         return getTracker() != null;
     }
 
     private static OpenAnalyticsTracker getTracker() {
         return getInstance().googleAnalyticsTracker;
-    }
+    }*/
 
     private IChatBaseComponent formatMessage(String message) {
         return IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
@@ -693,11 +694,11 @@ public class Necessities extends JavaPlugin {
      * Tracks the given action.
      * @param hit The action to track.
      */
-    public static void trackAction(Hit hit) {
+    /*public static void trackAction(Hit hit) {
         OpenAnalyticsTracker tracker;
         if ((tracker = getTracker()) != null)
             tracker.trackHit(hit);
-    }
+    }*/
 
     /**
      * Gets the UserManager.

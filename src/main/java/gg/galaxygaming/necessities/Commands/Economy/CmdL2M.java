@@ -2,7 +2,6 @@ package gg.galaxygaming.necessities.Commands.Economy;
 
 import gg.galaxygaming.necessities.Economy.Economy;
 import gg.galaxygaming.necessities.Necessities;
-import gg.galaxygaming.necessities.OpenAnalyticsHook;
 import gg.galaxygaming.necessities.Variables;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -35,8 +34,8 @@ public class CmdL2M implements EconomyCmd {
             double money = 2 * levelToExp(p.getLevel(), p.getLevel() - level);
             p.setLevel(p.getLevel() - level);
             Necessities.getEconomy().addMoney(p.getUniqueId(), money);
-            if (Necessities.isTracking())
-                OpenAnalyticsHook.trackLevelConvert(p, level);
+            /*if (Necessities.isTracking())
+                OpenAnalyticsHook.trackLevelConvert(p, level);*/
             p.sendMessage("" + ChatColor.GREEN + ChatColor.BOLD + '+' + ChatColor.RESET + " Converted " + ChatColor.BOLD + level + ChatColor.RESET + " levels to " + var.getMoney() + Economy.format(money) +
                     ChatColor.RESET + '!');
         } else

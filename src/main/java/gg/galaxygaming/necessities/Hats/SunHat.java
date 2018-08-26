@@ -15,7 +15,7 @@ class SunHat extends Hat {
             spawnYaw(1, temp);
         }
         for (int i = 0; i < 360 / turn; i++) {
-            this.armorStands.get(i).setItemInHand(new ItemStack(Material.BIRCH_DOOR_ITEM, 1));
+            this.armorStands.get(i).setItemInHand(new ItemStack(Material.BIRCH_DOOR, 1));
             this.armorStands.get(i).setRightArmPose(new EulerAngle(Math.toRadians(135), Math.toRadians(90), 0));
             this.armorStands.get(i).setSmall(true);
         }
