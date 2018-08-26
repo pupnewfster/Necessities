@@ -256,330 +256,330 @@ public class Necessities extends JavaPlugin {
     }
 
     private Cmd getCmd(String name) {
-        Cmd com = null;
+        Cmd c = null;
         if (isEqual(name, "slap"))
-            com = new CmdSlap();
+            c = new CmdSlap();
         else if (isEqual(name, "warn"))
-            com = new CmdWarn();
+            c = new CmdWarn();
         else if (isEqual(name, "enchant"))
-            com = new CmdEnchant();
+            c = new CmdEnchant();
         else if (isEqual(name, "ragequit"))
-            com = new CmdRagequit();
+            c = new CmdRagequit();
         else if (isEqual(name, "highfive"))
-            com = new CmdHighfive();
+            c = new CmdHighfive();
         else if (isEqual(name, "devs"))
-            com = new CmdDevs();
+            c = new CmdDevs();
         else if (isEqual(name, "loginmessage"))
-            com = new CmdLogInMessage();
+            c = new CmdLogInMessage();
         else if (isEqual(name, "logoutmessage"))
-            com = new CmdLogOutMessage();
+            c = new CmdLogOutMessage();
         else if (isEqual(name, "imp"))
-            com = new CmdImp();
+            c = new CmdImp();
         else if (isEqual(name, "pants"))
-            com = new CmdPants();
+            c = new CmdPants();
         else if (isEqual(name, "boots"))
-            com = new CmdBoots();
+            c = new CmdBoots();
         else if (isEqual(name, "chest"))
-            com = new CmdChest();
+            c = new CmdChest();
         else if (isEqual(name, "blockhat"))
-            com = new CmdBlockHat();
+            c = new CmdBlockHat();
         else if (isEqual(name, "hat"))
-            com = new CmdHat();
+            c = new CmdHat();
         else if (isEqual(name, "workbench"))
-            com = new CmdWorkbench();
+            c = new CmdWorkbench();
         else if (isEqual(name, "hide"))
-            com = this.hide;
+            c = this.hide;
         else if (isEqual(name, "rename"))
-            com = new CmdRename();
+            c = new CmdRename();
         else if (isEqual(name, "title"))
-            com = new CmdTitle();
+            c = new CmdTitle();
         else if (isEqual(name, "table"))
-            com = new CmdTable();
+            c = new CmdTable();
         else if (isEqual(name, "tpdim"))
-            com = new CmdTpDim();
+            c = new CmdTpDim();
         else if (isEqual(name, "bracketcolor"))
-            com = new CmdBracketColor();
+            c = new CmdBracketColor();
         else if (isEqual(name, "commandspy"))
-            com = this.spy;
+            c = this.spy;
         else if (isEqual(name, "setspawn"))
-            com = new CmdSetspawn();
+            c = new CmdSetspawn();
         else if (isEqual(name, "spawn"))
-            com = new CmdSpawn();
+            c = new CmdSpawn();
         else if (isEqual(name, "time"))
-            com = new CmdTime();
+            c = new CmdTime();
         else if (isEqual(name, "weather"))
-            com = new CmdWeather();
+            c = new CmdWeather();
         else if (isEqual(name, "gamemode"))
-            com = new CmdGamemode();
+            c = new CmdGamemode();
         else if (isEqual(name, "god"))
-            com = new CmdGod();
+            c = new CmdGod();
         else if (isEqual(name, "heal"))
-            com = new CmdHeal();
+            c = new CmdHeal();
         else if (isEqual(name, "feed"))
-            com = new CmdFeed();
+            c = new CmdFeed();
         else if (isEqual(name, "fly"))
-            com = new CmdFly();
+            c = new CmdFly();
         else if (isEqual(name, "more"))
-            com = new CmdMore();
+            c = new CmdMore();
         else if (isEqual(name, "repair"))
-            com = new CmdRepair();
+            c = new CmdRepair();
         else if (isEqual(name, "afk"))
-            com = new CmdAfk();
+            c = new CmdAfk();
         else if (isEqual(name, "who"))
-            com = new CmdWho();
+            c = new CmdWho();
         else if (isEqual(name, "me"))
-            com = new CmdMe();
+            c = new CmdMe();
         else if (isEqual(name, "nick"))
-            com = new CmdNick();
+            c = new CmdNick();
         else if (isEqual(name, "kick"))
-            com = new CmdKick();
+            c = new CmdKick();
         else if (isEqual(name, "ext"))
-            com = new CmdExt();
+            c = new CmdExt();
         else if (isEqual(name, "enderchest"))
-            com = new CmdEnderChest();
+            c = new CmdEnderChest();
         else if (isEqual(name, "invsee"))
-            com = this.invsee;
+            c = this.invsee;
         else if (isEqual(name, "slack"))
-            com = new CmdSlack();
+            c = new CmdSlack();
         else if (isEqual(name, "requestmod"))
-            com = new CmdRequestMod();
+            c = new CmdRequestMod();
         else if (isEqual(name, "top"))
-            com = new CmdTop();
+            c = new CmdTop();
         else if (isEqual(name, "speed"))
-            com = new CmdSpeed();
+            c = new CmdSpeed();
         else if (isEqual(name, "suicide"))
-            com = new CmdSuicide();
+            c = new CmdSuicide();
         else if (isEqual(name, "back"))
-            com = new CmdBack();
+            c = new CmdBack();
         else if (isEqual(name, "setjail"))
-            com = new CmdSetJail();
+            c = new CmdSetJail();
         else if (isEqual(name, "jail"))
-            com = new CmdJail();
+            c = new CmdJail();
         else if (isEqual(name, "kill"))
-            com = new CmdKill();
+            c = new CmdKill();
         else if (isEqual(name, "mute"))
-            com = new CmdMute();
+            c = new CmdMute();
         else if (isEqual(name, "motd"))
-            com = new CmdMotd();
+            c = new CmdMotd();
         else if (isEqual(name, "rules"))
-            com = new CmdRules();
+            c = new CmdRules();
         else if (isEqual(name, "exp"))
-            com = new CmdExp();
+            c = new CmdExp();
         else if (isEqual(name, "lightning"))
-            com = new CmdLightning();
+            c = new CmdLightning();
         else if (isEqual(name, "skull"))
-            com = new CmdSkull();
+            c = new CmdSkull();
         else if (isEqual(name, "sethome"))
-            com = new CmdSetHome();
+            c = new CmdSetHome();
         else if (isEqual(name, "home"))
-            com = new CmdHome();
+            c = new CmdHome();
         else if (isEqual(name, "delhome"))
-            com = new CmdDelHome();
+            c = new CmdDelHome();
         else if (isEqual(name, "help"))
-            com = new CmdHelp();
+            c = new CmdHelp();
         else if (isEqual(name, "spawner"))
-            com = new CmdSpawner();
+            c = new CmdSpawner();
         else if (isEqual(name, "spawnmob"))
-            com = new CmdSpawnmob();
+            c = new CmdSpawnmob();
         else if (isEqual(name, "ignore"))
-            com = new CmdIgnore();
+            c = new CmdIgnore();
         else if (isEqual(name, "msg"))
-            com = new CmdMsg();
+            c = new CmdMsg();
         else if (isEqual(name, "reply"))
-            com = new CmdReply();
+            c = new CmdReply();
         else if (isEqual(name, "say"))
-            com = new CmdSay();
+            c = new CmdSay();
         else if (isEqual(name, "item"))
-            com = new CmdItem();
+            c = new CmdItem();
         else if (isEqual(name, "give"))
-            com = new CmdGive();
+            c = new CmdGive();
         else if (isEqual(name, "clear"))
-            com = new CmdClear();
+            c = new CmdClear();
         else if (isEqual(name, "killall"))
-            com = new CmdKillall();
+            c = new CmdKillall();
         else if (isEqual(name, "togglechat"))
-            com = new CmdToggleChat();
+            c = new CmdToggleChat();
         else if (isEqual(name, "ban"))
-            com = new CmdBan();
+            c = new CmdBan();
         else if (isEqual(name, "tempban"))
-            com = new CmdTempban();
+            c = new CmdTempban();
         else if (isEqual(name, "unban"))
-            com = new CmdUnban();
+            c = new CmdUnban();
         else if (isEqual(name, "banip"))
-            com = new CmdBanIP();
+            c = new CmdBanIP();
         else if (isEqual(name, "unbanip"))
-            com = new CmdUnbanIP();
+            c = new CmdUnbanIP();
         else if (isEqual(name, "jump"))
-            com = new CmdJump();
+            c = new CmdJump();
         else if (isEqual(name, "tp"))
-            com = new CmdTp();
+            c = new CmdTp();
         else if (isEqual(name, "tphere"))
-            com = new CmdTphere();
+            c = new CmdTphere();
         else if (isEqual(name, "tppos"))
-            com = new CmdTppos();
+            c = new CmdTppos();
         else if (isEqual(name, "tpall"))
-            com = new CmdTpall();
+            c = new CmdTpall();
         else if (isEqual(name, "tpa"))
-            com = new CmdTpa();
+            c = new CmdTpa();
         else if (isEqual(name, "tpahere"))
-            com = new CmdTpahere();
+            c = new CmdTpahere();
         else if (isEqual(name, "tpaccept"))
-            com = new CmdTpaccept();
+            c = new CmdTpaccept();
         else if (isEqual(name, "tpdeny"))
-            com = new CmdTpdeny();
+            c = new CmdTpdeny();
         else if (isEqual(name, "faq"))
-            com = new CmdFaq();
+            c = new CmdFaq();
         else if (isEqual(name, "opbroadcast"))
-            com = new CmdOpChat();
+            c = new CmdOpChat();
         else if (isEqual(name, "craft"))
-            com = new CmdCraft();
+            c = new CmdCraft();
         else if (isEqual(name, "machinegun"))
-            com = new CmdMachineGun();
+            c = new CmdMachineGun();
         else if (isEqual(name, "bazooka"))
-            com = new CmdBazooka();
+            c = new CmdBazooka();
         else if (isEqual(name, "wrench"))
-            com = new CmdWrench();
+            c = new CmdWrench();
         else if (isEqual(name, "tps"))
-            com = new CmdTps();
+            c = new CmdTps();
         else if (isEqual(name, "reloadannouncer"))
-            com = new CmdReloadAnnouncer();
+            c = new CmdReloadAnnouncer();
         else if (isEqual(name, "freeze"))
-            com = new CmdFreeze();
+            c = new CmdFreeze();
             //Economy
         else if (isEqual(name, "bal"))
-            com = new CmdBalance();
+            c = new CmdBalance();
         else if (isEqual(name, "baltop"))
-            com = new CmdBaltop();
+            c = new CmdBaltop();
         else if (isEqual(name, "pricelist"))
-            com = new CmdPriceList();
+            c = new CmdPriceList();
         else if (isEqual(name, "pay"))
-            com = new CmdPay();
+            c = new CmdPay();
         else if (isEqual(name, "eco"))
-            com = new CmdEco();
+            c = new CmdEco();
         else if (isEqual(name, "price"))
-            com = new CmdPrice();
+            c = new CmdPrice();
         else if (isEqual(name, "setprice"))
-            com = new CmdSetPrice();
+            c = new CmdSetPrice();
         else if (isEqual(name, "buy"))
-            com = new CmdBuy();
+            c = new CmdBuy();
         else if (isEqual(name, "sell"))
-            com = new CmdSell();
+            c = new CmdSell();
         else if (isEqual(name, "players"))
-            com = new CmdPlayers();
+            c = new CmdPlayers();
         else if (isEqual(name, "rankprices"))
-            com = new CmdRankPrices();
+            c = new CmdRankPrices();
         else if (isEqual(name, "setrankprice"))
-            com = new CmdSetRankPrice();
+            c = new CmdSetRankPrice();
         else if (isEqual(name, "buyrank"))
-            com = new CmdBuyRank();
+            c = new CmdBuyRank();
         else if (isEqual(name, "buycmd"))
-            com = new CmdBuyCmd();
+            c = new CmdBuyCmd();
         else if (isEqual(name, "l2m"))
-            com = new CmdL2M();
+            c = new CmdL2M();
         else if (isEqual(name, "commandprices"))
-            com = new CmdCmdPrices();
+            c = new CmdCmdPrices();
         else if (isEqual(name, "setcommandprice"))
-            com = new CmdSetCmdPrice();
+            c = new CmdSetCmdPrice();
             //RankManager
         else if (isEqual(name, "promote"))
-            com = new CmdPromote();
+            c = new CmdPromote();
         else if (isEqual(name, "demote"))
-            com = new CmdDemote();
+            c = new CmdDemote();
         else if (isEqual(name, "setrank"))
-            com = new CmdSetrank();
+            c = new CmdSetrank();
         else if (isEqual(name, "addpermission"))
-            com = new CmdAddPermission();
+            c = new CmdAddPermission();
         else if (isEqual(name, "delpermission"))
-            com = new CmdDelPermission();
+            c = new CmdDelPermission();
         else if (isEqual(name, "addpermsubrank"))
-            com = new CmdAddPermSubrank();
+            c = new CmdAddPermSubrank();
         else if (isEqual(name, "delpermsubrank"))
-            com = new CmdDelPermSubrank();
+            c = new CmdDelPermSubrank();
         else if (isEqual(name, "addpermissionuser"))
-            com = new CmdAddPermissionUser();
+            c = new CmdAddPermissionUser();
         else if (isEqual(name, "delpermissionuser"))
-            com = new CmdDelPermissionUser();
+            c = new CmdDelPermissionUser();
         else if (isEqual(name, "addsubrank"))
-            com = new CmdAddSubrank();
+            c = new CmdAddSubrank();
         else if (isEqual(name, "delsubrank"))
-            com = new CmdDelSubrank();
+            c = new CmdDelSubrank();
         else if (isEqual(name, "addsubrankuser"))
-            com = new CmdAddSubrankUser();
+            c = new CmdAddSubrankUser();
         else if (isEqual(name, "delsubrankuser"))
-            com = new CmdDelSubrankUser();
+            c = new CmdDelSubrankUser();
         else if (isEqual(name, "createsubrank"))
-            com = new CmdCreateSubrank();
+            c = new CmdCreateSubrank();
         else if (isEqual(name, "removesubrank"))
-            com = new CmdRemoveSubrank();
+            c = new CmdRemoveSubrank();
         else if (isEqual(name, "createrank"))
-            com = new CmdCreateRank();
+            c = new CmdCreateRank();
         else if (isEqual(name, "removerank"))
-            com = new CmdRemoveRank();
+            c = new CmdRemoveRank();
         else if (isEqual(name, "whois"))
-            com = new CmdWhois();
+            c = new CmdWhois();
         else if (isEqual(name, "ranks"))
-            com = new CmdRanks();
+            c = new CmdRanks();
         else if (isEqual(name, "subranks"))
-            com = new CmdSubranks();
+            c = new CmdSubranks();
         else if (isEqual(name, "rankcmds"))
-            com = new CmdRankCmds();
+            c = new CmdRankCmds();
         else if (isEqual(name, "reloadpermissions"))
-            com = new CmdReloadPermissions();
+            c = new CmdReloadPermissions();
             //WorldManager
         else if (isEqual(name, "createworld"))
-            com = new CmdCreateWorld();
+            c = new CmdCreateWorld();
         else if (isEqual(name, "worldspawn"))
-            com = new CmdWorldSpawn();
+            c = new CmdWorldSpawn();
         else if (isEqual(name, "loadworld"))
-            com = new CmdLoadWorld();
+            c = new CmdLoadWorld();
         else if (isEqual(name, "unloadworld"))
-            com = new CmdUnloadWorld();
+            c = new CmdUnloadWorld();
         else if (isEqual(name, "removeworld"))
-            com = new CmdRemoveWorld();
+            c = new CmdRemoveWorld();
         else if (isEqual(name, "worlds"))
-            com = new CmdWorlds();
+            c = new CmdWorlds();
         else if (isEqual(name, "world"))
-            com = new CmdWorld();
+            c = new CmdWorld();
         else if (isEqual(name, "setworldspawn"))
-            com = new CmdSetWorldSpawn();
+            c = new CmdSetWorldSpawn();
         else if (isEqual(name, "modifyworld"))
-            com = new CmdModifyWorld();
+            c = new CmdModifyWorld();
         else if (isEqual(name, "createportal"))
-            com = new CmdCreatePortal();
+            c = new CmdCreatePortal();
         else if (isEqual(name, "removeportal"))
-            com = new CmdRemovePortal();
+            c = new CmdRemovePortal();
         else if (isEqual(name, "warps"))
-            com = new CmdWarps();
+            c = new CmdWarps();
         else if (isEqual(name, "warp"))
-            com = new CmdWarp();
+            c = new CmdWarp();
         else if (isEqual(name, "createwarp"))
-            com = new CmdCreateWarp();
+            c = new CmdCreateWarp();
         else if (isEqual(name, "removewarp"))
-            com = new CmdRemoveWarp();
+            c = new CmdRemoveWarp();
             //Guilds
         else if (isEqual(name, "guild"))
-            com = new CmdGuild();
+            c = new CmdGuild();
             //Creative
         else if (isEqual(name, "requestreview"))
-            com = new CmdRequestReview();
+            c = new CmdRequestReview();
         else if (isEqual(name, "reviewlist"))
-            com = new CmdReviewList();
+            c = new CmdReviewList();
 
-        if (com == null)
+        if (c == null)
             return null;
 
         YamlConfiguration config = getConfig();
-        if (!com.isPaintballEnabled() && config.contains("Necessities.Paintball") && config.getBoolean("Necessities.Paintball"))
-            com = this.disabled;
-        else if (com instanceof WorldCmd && config.contains("Necessities.WorldManager") && !config.getBoolean("Necessities.WorldManager"))
-            com = this.disabled;
-        else if (com instanceof CmdGuild && config.contains("Necessities.Guilds") && !config.getBoolean("Necessities.Guilds"))
-            com = this.disabled;
-        else if (com instanceof EconomyCmd && config.contains("Necessities.Economy") && !config.getBoolean("Necessities.Economy"))
-            com = this.disabled;
-        else if (com instanceof CreativeCmd && config.contains("Necessities.Creative") && !config.getBoolean("Necessities.Creative"))
-            com = this.disabled;
-        return com;
+        if (!c.isPaintballEnabled() && config.contains("Necessities.Paintball") && config.getBoolean("Necessities.Paintball"))
+            c = this.disabled;
+        else if (c instanceof WorldCmd && config.contains("Necessities.WorldManager") && !config.getBoolean("Necessities.WorldManager"))
+            c = this.disabled;
+        else if (c instanceof CmdGuild && config.contains("Necessities.Guilds") && !config.getBoolean("Necessities.Guilds"))
+            c = this.disabled;
+        else if (c instanceof EconomyCmd && config.contains("Necessities.Economy") && !config.getBoolean("Necessities.Economy"))
+            c = this.disabled;
+        else if (c instanceof CreativeCmd && config.contains("Necessities.Creative") && !config.getBoolean("Necessities.Creative"))
+            c = this.disabled;
+        return c;
     }
 
     /**

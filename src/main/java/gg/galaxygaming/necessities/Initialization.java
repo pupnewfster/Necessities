@@ -13,18 +13,18 @@ import java.util.Collections;
 class Initialization {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     void initiateFiles() {
-        dirCreate("plugins/Necessities");
-        dirCreate("plugins/Necessities/Logs");
-        dirCreate("plugins/Necessities/Economy");
-        dirCreate("plugins/Necessities/RankManager");
-        dirCreate("plugins/Necessities/WorldManager");
-        dirCreate("plugins/Necessities/Creative");
-        dirCreate("plugins/Necessities/Guilds");
-        dirCreate("plugins/Necessities/Backup");
-        fileCreate("plugins/Necessities/motd.txt");
-        fileCreate("plugins/Necessities/rules.txt");
-        fileCreate("plugins/Necessities/faq.txt");
-        fileCreate("plugins/Necessities/announcements.txt");
+        Utils.dirCreate("plugins/Necessities");
+        Utils.dirCreate("plugins/Necessities/Logs");
+        Utils.dirCreate("plugins/Necessities/Economy");
+        Utils.dirCreate("plugins/Necessities/RankManager");
+        Utils.dirCreate("plugins/Necessities/WorldManager");
+        Utils.dirCreate("plugins/Necessities/Creative");
+        Utils.dirCreate("plugins/Necessities/Guilds");
+        Utils.dirCreate("plugins/Necessities/Backup");
+        Utils.fileCreate("plugins/Necessities/motd.txt");
+        Utils.fileCreate("plugins/Necessities/rules.txt");
+        Utils.fileCreate("plugins/Necessities/faq.txt");
+        Utils.fileCreate("plugins/Necessities/announcements.txt");
         File cWords = new File("plugins/Necessities", "customWords.txt");
         if (!cWords.exists())
             try {
@@ -90,45 +90,19 @@ class Initialization {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    private void dirCreate(String directory) {
-        File d = new File(directory);
-        if (!d.exists())
-            d.mkdir();
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    private void fileCreate(String file) {
-        File f = new File(file);
-        if (!f.exists())
-            try {
-                f.createNewFile();
-            } catch (Exception ignored) {
-            }
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    private void addYML(File file) {
-        if (!file.exists())
-            try {
-                file.createNewFile();
-            } catch (Exception ignored) {
-            }
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void createYaml() {
-        addYML(new File("plugins/Necessities", "logoutmessages.yml"));
-        addYML(new File("plugins/Necessities", "titles.yml"));
-        addYML(new File("plugins/Necessities", "wrenched.yml"));
-        addYML(new File("plugins/Necessities/Economy", "prices.yml"));
-        addYML(new File("plugins/Necessities", "spying.yml"));
-        addYML(new File("plugins/Necessities", "hiding.yml"));
-        addYML(new File("plugins/Necessities/WorldManager", "warps.yml"));
-        addYML(new File("plugins/Necessities", "loginmessages.yml"));
-        addYML(new File("plugins/Necessities/RankManager", "users.yml"));
-        addYML(new File("plugins/Necessities/WorldManager", "worlds.yml"));
-        addYML(new File("plugins/Necessities/WorldManager", "portals.yml"));
-        addYML(new File("plugins/Necessities/Creative", "reviews.yml"));
+        Utils.addYML(new File("plugins/Necessities", "logoutmessages.yml"));
+        Utils.addYML(new File("plugins/Necessities", "titles.yml"));
+        Utils.addYML(new File("plugins/Necessities", "wrenched.yml"));
+        Utils.addYML(new File("plugins/Necessities/Economy", "prices.yml"));
+        Utils.addYML(new File("plugins/Necessities", "spying.yml"));
+        Utils.addYML(new File("plugins/Necessities", "hiding.yml"));
+        Utils.addYML(new File("plugins/Necessities/WorldManager", "warps.yml"));
+        Utils.addYML(new File("plugins/Necessities", "loginmessages.yml"));
+        Utils.addYML(new File("plugins/Necessities/RankManager", "users.yml"));
+        Utils.addYML(new File("plugins/Necessities/WorldManager", "worlds.yml"));
+        Utils.addYML(new File("plugins/Necessities/WorldManager", "portals.yml"));
+        Utils.addYML(new File("plugins/Necessities/Creative", "reviews.yml"));
         File configFileStackSize = new File("plugins/Necessities", "stacksize.yml");
         if (!configFileStackSize.exists())
             try {

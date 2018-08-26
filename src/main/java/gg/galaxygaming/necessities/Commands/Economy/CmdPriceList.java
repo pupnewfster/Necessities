@@ -44,7 +44,7 @@ public class CmdPriceList implements EconomyCmd {
 
     private String formL(String item, String buy, String sell, String numb) {
         Variables var = Necessities.getVar();
-        String selling = var.getCatalog() + "  |  " + ChatColor.GREEN + "Sell: ", buying = ChatColor.GREEN + "  Buy: ";
+        String selling = "  " + ChatColor.GREEN + "Sell: ", buying = ChatColor.GREEN + "  Buy: ";
         if (!numb.equalsIgnoreCase("10."))
             numb += " ";
         numb += " ";
@@ -56,8 +56,11 @@ public class CmdPriceList implements EconomyCmd {
         if (sell.trim().equalsIgnoreCase("null")) {
             selling = "";
             sell = "";
-        } else
+        } else {
+            if (!buy.equals(""))
+                selling = "  |" + selling;
             sell = Economy.format(Double.parseDouble(sell));
+        }
         return ChatColor.GOLD + numb + var.getCatalog() + item + buying + var.getMoney() + buy + var.getCatalog() + selling + var.getMoney() + sell;
     }
 }

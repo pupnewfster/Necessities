@@ -11,6 +11,7 @@ import org.json.simple.JsonObject;
 import org.json.simple.Jsoner;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -227,5 +228,31 @@ public class Utils {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void dirCreate(String directory) {
+        File d = new File(directory);
+        if (!d.exists())
+            d.mkdir();
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void fileCreate(String file) {
+        File f = new File(file);
+        if (!f.exists())
+            try {
+                f.createNewFile();
+            } catch (Exception ignored) {
+            }
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void addYML(File file) {
+        if (!file.exists())
+            try {
+                file.createNewFile();
+            } catch (Exception ignored) {
+            }
     }
 }

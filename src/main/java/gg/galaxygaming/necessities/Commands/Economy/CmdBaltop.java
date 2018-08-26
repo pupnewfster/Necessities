@@ -32,7 +32,7 @@ public class CmdBaltop implements EconomyCmd {
         sender.sendMessage(ChatColor.GOLD + "Balance Top Page [" + Integer.toString(page) + '/' + Integer.toString(totalPages) + ']');
         List<String> balTop = eco.getBalTop(page);
         page -= 1;
-        for (String bal : balTop)
+        for (String bal : balTop)//TODO: Should users have their rank color for baltop. Is it even worth the extra calculations and loading of users?
             sender.sendMessage(ChatColor.GOLD + Integer.toString(page * 10 + time++ + 1) + ". " + var.getCatalog() + Utils.nameFromString(bal.split(" ")[0]) + " has: " + var.getMoney() +
                     Economy.format(Double.parseDouble(bal.split(" ")[1])));
         return true;
