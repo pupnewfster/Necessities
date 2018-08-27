@@ -15,13 +15,11 @@ import net.minecraft.server.v1_13_R1.IChatBaseComponent;
 import net.minecraft.server.v1_13_R1.PacketPlayOutTitle;
 import org.bukkit.*;
 import org.bukkit.block.*;
-import org.bukkit.block.data.type.Door;
-import org.bukkit.block.data.type.Repeater;
-import org.bukkit.block.data.type.TrapDoor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_13_R1.block.impl.*;
 import org.bukkit.craftbukkit.v1_13_R1.boss.CraftBossBar;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
@@ -41,7 +39,6 @@ import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.MaterialData;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -103,7 +100,7 @@ class Listeners implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
+    public void onPlayerJoin(PlayerJoinEvent e) {//TODO FIX economy mysql causing a crash
         Backup.tryBackup(); //Call before the UserManager tries to add the user in case it happens to be the time that messes up the users file.
         final Player p = e.getPlayer();
         UserManager um = Necessities.getUM();
@@ -354,7 +351,7 @@ class Listeners implements Listener {
         Block b = e.getBlock();
         if (b.getType().equals(Material.CHEST) || b.getType().equals(Material.TRAPPED_CHEST))
             inv = ((Chest) b.getState()).getBlockInventory();
-        else if (b.getType().equals(Material.FURNACE) || b.getType().equals(Material.LEGACY_BURNING_FURNACE))
+        else if (b.getType().equals(Material.FURNACE))
             inv = ((Furnace) b.getState()).getInventory();
         else if (b.getType().equals(Material.HOPPER))
             inv = ((Hopper) b.getState()).getInventory();
@@ -444,29 +441,32 @@ class Listeners implements Listener {
         CmdHide hide = Necessities.getHide();
         if (hide.isHidden(u.getPlayer()) && e.getAction().equals(Action.PHYSICAL))//cancel crop breaking when hidden
             e.setCancelled(true);
+        Block b = e.getClickedBlock();
+        if (b == null)
+            return;
         YamlConfiguration config = Necessities.getInstance().getConfig();
         Variables var = Necessities.getVar();
         GuildManager gm = Necessities.getGM();
-        Material type = e.getClickedBlock().getType();
+        Material type = b.getType();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
             if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (e.getItem() != null && !e.getItem().getType().isEdible() ||
-                    e.getClickedBlock().getState() instanceof InventoryHolder || Utils.isWoodDoor(type) || Utils.isFenceGate(type) || Utils.isButton(type) || Utils.isPressurePlate(type) ||
+                    b.getState() instanceof InventoryHolder || Utils.isWoodDoor(type) || Utils.isFenceGate(type) || Utils.isButton(type) || Utils.isPressurePlate(type) ||
                     Utils.isWoodTrapdoor(type) || type.equals(Material.LEVER) || Utils.isBed(type) || type.equals(Material.REPEATER) || type.equals(Material.COMPARATOR)) ||
                     e.getAction().equals(Action.PHYSICAL)) {
-                Guild owner = gm.chunkOwner(e.getClickedBlock().getChunk());
+                Guild owner = gm.chunkOwner(b.getChunk());
                 if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
                     if (e.getBlockFace().equals(BlockFace.EAST))
-                        owner = gm.chunkOwner(new Location(e.getPlayer().getWorld(), e.getClickedBlock().getX() + 1, e.getClickedBlock().getY(),
-                                e.getClickedBlock().getZ()).getChunk());
+                        owner = gm.chunkOwner(new Location(e.getPlayer().getWorld(), b.getX() + 1, b.getY(),
+                                b.getZ()).getChunk());
                     else if (e.getBlockFace().equals(BlockFace.SOUTH))
-                        owner = gm.chunkOwner(new Location(e.getPlayer().getWorld(), e.getClickedBlock().getX(), e.getClickedBlock().getY(),
-                                e.getClickedBlock().getZ() + 1).getChunk());
+                        owner = gm.chunkOwner(new Location(e.getPlayer().getWorld(), b.getX(), b.getY(),
+                                b.getZ() + 1).getChunk());
                     else if (e.getBlockFace().equals(BlockFace.WEST))
-                        owner = gm.chunkOwner(new Location(e.getPlayer().getWorld(), e.getClickedBlock().getX() - 1, e.getClickedBlock().getY(),
-                                e.getClickedBlock().getZ()).getChunk());
+                        owner = gm.chunkOwner(new Location(e.getPlayer().getWorld(), b.getX() - 1, b.getY(),
+                                b.getZ()).getChunk());
                     else if (e.getBlockFace().equals(BlockFace.NORTH))
-                        owner = gm.chunkOwner(new Location(e.getPlayer().getWorld(), e.getClickedBlock().getX(), e.getClickedBlock().getY(),
-                                e.getClickedBlock().getZ() - 1).getChunk());
+                        owner = gm.chunkOwner(new Location(e.getPlayer().getWorld(), b.getX(), b.getY(),
+                                b.getZ() - 1).getChunk());
                 }
                 if (owner != null && u.getGuild() != owner) {
                     if ((Utils.isWoodDoor(type) || Utils.isFenceGate(type)) && owner.allowInteract()) {
@@ -476,151 +476,115 @@ class Listeners implements Listener {
                     else {
                         e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
                         if (Utils.isWoodDoor(type) || Utils.isFenceGate(type)) {
-                            e.getClickedBlock().getState().update();
-                            if (e.getClickedBlock().getLocation().getBlockY() > 0)
-                                e.getClickedBlock().getRelative(BlockFace.DOWN).getState().update();
+                            b.getState().update();
+                            if (b.getLocation().getBlockY() > 0)
+                                b.getRelative(BlockFace.DOWN).getState().update();
                         }
                         e.setCancelled(true);
                     }
                 }
             } else if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
-                Block b = e.getClickedBlock();
-                if (e.getBlockFace().equals(BlockFace.EAST) && b.getRelative(BlockFace.EAST).getType().equals(Material.FIRE))
-                    b = e.getClickedBlock().getRelative(BlockFace.EAST);
-                else if (e.getBlockFace().equals(BlockFace.SOUTH) && b.getRelative(BlockFace.SOUTH).getType().equals(Material.FIRE))
-                    b = e.getClickedBlock().getRelative(BlockFace.SOUTH);
-                else if (e.getBlockFace().equals(BlockFace.WEST) && b.getRelative(BlockFace.WEST).getType().equals(Material.FIRE))
-                    b = e.getClickedBlock().getRelative(BlockFace.WEST);
-                else if (e.getBlockFace().equals(BlockFace.NORTH) && b.getRelative(BlockFace.NORTH).getType().equals(Material.FIRE))
-                    b = e.getClickedBlock().getRelative(BlockFace.NORTH);
-                else if (e.getBlockFace().equals(BlockFace.UP) && b.getRelative(BlockFace.UP).getType().equals(Material.FIRE))
-                    b = e.getClickedBlock().getRelative(BlockFace.UP);
-                else if (e.getBlockFace().equals(BlockFace.DOWN) && b.getRelative(BlockFace.DOWN).getType().equals(Material.FIRE))
-                    b = e.getClickedBlock().getRelative(BlockFace.DOWN);
-                Guild owner = gm.chunkOwner(b.getChunk());
-                if (owner != null && u.getGuild() != owner && b.getType().equals(Material.FIRE)) {
+                Block br = b;
+                if (e.getBlockFace().equals(BlockFace.EAST) && br.getRelative(BlockFace.EAST).getType().equals(Material.FIRE))
+                    br = br.getRelative(BlockFace.EAST);
+                else if (e.getBlockFace().equals(BlockFace.SOUTH) && br.getRelative(BlockFace.SOUTH).getType().equals(Material.FIRE))
+                    br = br.getRelative(BlockFace.SOUTH);
+                else if (e.getBlockFace().equals(BlockFace.WEST) && br.getRelative(BlockFace.WEST).getType().equals(Material.FIRE))
+                    br = br.getRelative(BlockFace.WEST);
+                else if (e.getBlockFace().equals(BlockFace.NORTH) && br.getRelative(BlockFace.NORTH).getType().equals(Material.FIRE))
+                    br = br.getRelative(BlockFace.NORTH);
+                else if (e.getBlockFace().equals(BlockFace.UP) && br.getRelative(BlockFace.UP).getType().equals(Material.FIRE))
+                    br = br.getRelative(BlockFace.UP);
+                else if (e.getBlockFace().equals(BlockFace.DOWN) && br.getRelative(BlockFace.DOWN).getType().equals(Material.FIRE))
+                    br = br.getRelative(BlockFace.DOWN);
+                Guild owner = gm.chunkOwner(br.getChunk());
+                if (owner != null && u.getGuild() != owner && br.getType().equals(Material.FIRE)) {
                     e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
                     e.setCancelled(true);
                 }
             }
         }
-        Wrenched wrench = Necessities.getWrench();
         if (e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (e.getAction() == Action.LEFT_CLICK_BLOCK)
-                u.setLeft(e.getClickedBlock().getLocation());
+                u.setLeft(b.getLocation());
             else if (e.getAction() == Action.RIGHT_CLICK_BLOCK)
-                u.setRight(e.getClickedBlock().getLocation());
+                u.setRight(b.getLocation());
             if (u.isJailed())
                 e.setCancelled(true);
             else {
                 if (e.getAction() == Action.RIGHT_CLICK_BLOCK && Utils.isBed(type)) {
-                    e.getPlayer().setBedSpawnLocation(e.getClickedBlock().getLocation());
+                    e.getPlayer().setBedSpawnLocation(b.getLocation());
                     e.getPlayer().sendMessage(var.getMessages() + "Bed spawn set.");
                 }
                 u.setLastAction(System.currentTimeMillis());
                 Signs economySigns = Necessities.getEconomySigns();
-                Sign sign = economySigns.sign(e.getClickedBlock().getLocation());
+                Sign sign = economySigns.sign(b.getLocation());
                 if (sign != null && e.getAction() == Action.LEFT_CLICK_BLOCK && economySigns.checkFormat(sign)) {
                     String operation = economySigns.operation(sign);
                     String itemName = economySigns.itemLine(sign);
                     int amount = economySigns.amount(sign);
                     Player p = e.getPlayer();
                     p.performCommand(operation + ' ' + itemName + ' ' + Integer.toString(amount));
-                } else if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getItem() != null && e.getItem().hasItemMeta() && e.getItem().getItemMeta().hasLore() &&
-                        e.getItem().getItemMeta().getLore().contains("Wrench")) {
-                    Block b = e.getClickedBlock();
-                    if (b.getType().equals(Material.LEGACY_REDSTONE_LAMP_OFF)) {//TODO: Add more things wrench works on
-                        final Block up = b.getRelative(BlockFace.UP);
-                        final Material upType = up.getType();
-                        final byte metadata = up.getData();
-                        final byte raw = up.getState().getRawData();
-                        final MaterialData data = up.getState().getData();
-                        final ItemStack[] contents;
-                        if (up.getState() instanceof InventoryHolder) {
-                            InventoryHolder i = (InventoryHolder) up.getState();
-                            contents = i.getInventory().getContents();
-                            i.getInventory().clear();
-                        } else
-                            contents = null;
-                        up.setType(Material.REDSTONE_BLOCK);
-                        wrench.wrench(b);
+                } else if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getHand().equals(EquipmentSlot.HAND) && e.getItem() != null && e.getItem().hasItemMeta() &&
+                        e.getItem().getItemMeta().hasLore() && e.getItem().getItemMeta().getLore().contains("Wrench")) {
+                    Wrenched wrench = Necessities.getWrench();
+                    BlockState state = b.getState();
+                    if (type.equals(Material.REDSTONE_LAMP)) {//TODO: Add more things wrench works on
+                        CraftRedstoneLamp lamp = (CraftRedstoneLamp) state.getBlockData();
+                        lamp.setLit(!lamp.isLit());
+                        state.setBlockData(lamp);
                         e.setCancelled(true);
-                        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
-                            up.setType(upType);
-                            //up.setData(metadata);
-                            up.getState().setData(data);
-                            up.getState().setRawData(raw);
-                            if (up.getState() instanceof InventoryHolder)
-                                ((InventoryHolder) up.getState()).getInventory().setContents(contents);
-                        });
-                    } else if (b.getType().equals(Material.LEGACY_REDSTONE_LAMP_ON)) {
-                        wrench.wrench(b);
-                        b.setType(Material.LEGACY_REDSTONE_LAMP_OFF);
-                        e.setCancelled(true);
-                    } else if (b.getType().equals(Material.REPEATER)) {
-                        /*Diode d = (Diode) b.getState().getData();
-                        BlockFace facing = d.getFacing();
-                        d.getDelay();
-                        b.setType(Material.DIODE_BLOCK_ON);*/
-                        wrench.wrench(b);
-                        Repeater repeater = (Repeater) b.getState();
+                        state.update();
+                    } else if (type.equals(Material.REPEATER)) {
+                        CraftRepeater repeater = (CraftRepeater) state.getBlockData();
                         repeater.setPowered(!repeater.isPowered());
-                        /*Diode n = (Diode) b.getState().getData();
-                        n.setDelay(d.getDelay());
-                        n.setFacingDirection(facing);
-                        e.setCancelled(true);*/
-                    }/* else if (b.getType().equals(Material.DIODE_BLOCK_ON)) {
-                        Diode d = (Diode) b.getState().getData();
-                        BlockFace facing = d.getFacing();
-                        d.getDelay();
-                        b.setType(Material.DIODE_BLOCK_OFF);
-                        wrench.wrench(b);
-                        Diode n = (Diode) b.getState().getData();
-                        n.setDelay(d.getDelay());
-                        n.setFacingDirection(facing);
+                        state.setBlockData(repeater);
                         e.setCancelled(true);
-                    }*/ else if (b.getType().equals(Material.LEGACY_REDSTONE_TORCH_OFF))
-                        b.setType(Material.LEGACY_REDSTONE_TORCH_ON);
-                    else if (b.getType().equals(Material.LEGACY_REDSTONE_TORCH_ON))
-                        b.setType(Material.LEGACY_REDSTONE_TORCH_OFF);
-                    else if (b.getType().equals(Material.FURNACE) || b.getType().equals(Material.LEGACY_BURNING_FURNACE) || b.getType().equals(Material.HOPPER) ||
-                            b.getType().equals(Material.DISPENSER) || b.getType().equals(Material.CHEST) || b.getType().equals(Material.ENDER_CHEST) ||
-                            b.getType().equals(Material.DROPPER) || b.getType().equals(Material.LEGACY_PISTON_BASE) || b.getType().equals(Material.LEGACY_PISTON_STICKY_BASE) ||
-                            b.getType().equals(Material.TRAPPED_CHEST) || b.getType().equals(Material.BREWING_STAND) || b.getType().equals(Material.SPAWNER) ||
-                            b.getType().equals(Material.SIGN) || b.getType().equals(Material.WALL_SIGN)) {
+                        state.update();
+                    } else if (type.equals(Material.REDSTONE_TORCH)) {
+                        wrench.wrench(b);
+                        CraftRedstoneTorch torch = (CraftRedstoneTorch) state.getBlockData();
+                        torch.setLit(!torch.isLit());
+                        state.setBlockData(torch);
+                        e.setCancelled(true);
+                        state.update();
+                    } else if (type.equals(Material.FURNACE) || type.equals(Material.HOPPER) || type.equals(Material.DISPENSER) || type.equals(Material.CHEST) ||
+                            type.equals(Material.ENDER_CHEST) || type.equals(Material.DROPPER) || type.equals(Material.PISTON) ||
+                            type.equals(Material.STICKY_PISTON) || type.equals(Material.TRAPPED_CHEST) || type.equals(Material.BREWING_STAND) ||
+                            type.equals(Material.SPAWNER) || type.equals(Material.SIGN) || type.equals(Material.WALL_SIGN)) {
                         if (e.getPlayer().isSneaking()) {
-                            ItemStack contents = new ItemStack(b.getType(), 1);
-                            if (b.getType().equals(Material.BREWING_STAND))
+                            ItemStack contents = new ItemStack(type, 1);
+                            if (type.equals(Material.BREWING_STAND))
                                 contents = new ItemStack(Material.BREWING_STAND, 1);
-                            else if (b.getType().equals(Material.SIGN) || b.getType().equals(Material.WALL_SIGN))
+                            else if (type.equals(Material.SIGN) || type.equals(Material.WALL_SIGN))
                                 contents = new ItemStack(Material.SIGN, 1);
                             ItemMeta meta = contents.getItemMeta();
                             Inventory inv = null;
-                            if (b.getType().equals(Material.CHEST) || b.getType().equals(Material.TRAPPED_CHEST))
-                                inv = ((Chest) b.getState()).getBlockInventory();
-                            else if (b.getType().equals(Material.FURNACE)) //TODO: Allow toggling of lit state of furnace
-                                inv = ((Furnace) b.getState()).getInventory();
-                            else if (b.getType().equals(Material.HOPPER))
-                                inv = ((Hopper) b.getState()).getInventory();
-                            else if (b.getType().equals(Material.DISPENSER))
-                                inv = ((Dispenser) b.getState()).getInventory();
-                            else if (b.getType().equals(Material.DROPPER))
-                                inv = ((Dropper) b.getState()).getInventory();
-                            else if (b.getType().equals(Material.BREWING_STAND))
-                                inv = ((BrewingStand) b.getState()).getInventory();
+                            if (type.equals(Material.CHEST) || type.equals(Material.TRAPPED_CHEST))
+                                inv = ((Chest) state).getBlockInventory();
+                            else if (type.equals(Material.FURNACE)) //TODO: Allow toggling of lit state of furnace
+                                inv = ((Furnace) state).getInventory();
+                            else if (type.equals(Material.HOPPER))
+                                inv = ((Hopper) state).getInventory();
+                            else if (type.equals(Material.DISPENSER))
+                                inv = ((Dispenser) state).getInventory();
+                            else if (type.equals(Material.DROPPER))
+                                inv = ((Dropper) state).getInventory();
+                            else if (type.equals(Material.BREWING_STAND))
+                                inv = ((BrewingStand) state).getInventory();
                             if (inv != null) {
                                 meta.setLore(getLore(inv));
                                 contents.setItemMeta(meta);
                                 inv.getViewers().forEach(HumanEntity::closeInventory);
                                 inv.clear();
-                            } else if (b.getType().equals(Material.SPAWNER)) {
-                                CreatureSpawner cs = (CreatureSpawner) b.getState();
+                            } else if (type.equals(Material.SPAWNER)) {
+                                CreatureSpawner cs = (CreatureSpawner) state;
                                 ArrayList<String> lore = new ArrayList<>();
                                 lore.add(cs.getCreatureTypeName());
                                 meta.setLore(lore);
                                 contents.setItemMeta(meta);
-                            } else if (b.getType().equals(Material.SIGN) || b.getType().equals(Material.WALL_SIGN)) {
-                                Sign s = (Sign) b.getState();
+                            } else if (type.equals(Material.SIGN) || type.equals(Material.WALL_SIGN)) {
+                                Sign s = (Sign) state;
                                 ArrayList<String> lore = new ArrayList<>();
                                 lore.add(s.getLine(0));
                                 lore.add(s.getLine(1));
@@ -636,25 +600,27 @@ class Listeners implements Listener {
                             //TODO: Rotate the block
                         }
                         e.setCancelled(true);
-                    } else if (b.getType().equals(Material.IRON_DOOR)) {
-                        //TODO Make sure this and the trap door one have the proper hinge placement
-                        if (!b.getRelative(BlockFace.UP).getType().equals(Material.IRON_DOOR))
+                    } else if (type.equals(Material.IRON_DOOR)) {
+                        if (!b.getRelative(BlockFace.UP).getType().equals(Material.IRON_DOOR)) {
                             b = b.getRelative(BlockFace.DOWN);
+                            state = b.getState();
+                        }
                         wrench.wrench(b.getRelative(BlockFace.UP));
                         wrench.wrench(b);
-                        Door d = (Door) b.getState();
+                        CraftDoor d = (CraftDoor) b.getBlockData();
                         d.setOpen(!d.isOpen());
-
                         b.getWorld().playEffect(b.getLocation(), Effect.DOOR_TOGGLE, 0);
+                        state.setBlockData(d);
                         e.setCancelled(true);
-                    } else if (b.getType().equals(Material.IRON_TRAPDOOR)) {
+                        state.update();
+                    } else if (type.equals(Material.IRON_TRAPDOOR)) {
                         wrench.wrench(b);
-
-                        TrapDoor d = (TrapDoor) b.getState();
+                        CraftTrapdoor d = (CraftTrapdoor) b.getBlockData();
                         d.setOpen(!d.isOpen());
-
                         b.getWorld().playEffect(b.getLocation(), Effect.DOOR_TOGGLE, 0);
+                        state.setBlockData(d);
                         e.setCancelled(true);
+                        state.update();
                     } else
                         e.setCancelled(true);
                     if (!e.isCancelled())
@@ -664,7 +630,7 @@ class Listeners implements Listener {
         }
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && hide.isHidden(e.getPlayer()) && (type.equals(Material.CHEST) ||
                 type.equals(Material.TRAPPED_CHEST) || Utils.isShulker(type))) {
-            e.getPlayer().openInventory(((InventoryHolder) e.getClickedBlock().getState()).getInventory());
+            e.getPlayer().openInventory(((InventoryHolder) b.getState()).getInventory());
             e.getPlayer().closeInventory();
         }
     }
@@ -723,6 +689,7 @@ class Listeners implements Listener {
             b.setCommand(ChatColor.translateAlternateColorCodes('&', b.getCommand()));
             b.update(true);
         }
+        //TODO the redstone stopping code probably will have to be updated to just reset it as whatever state it was unfortunately
         if (Necessities.getWrench().isWrenched(e.getBlock()))
             e.setNewCurrent((e.getBlock().getType().equals(Material.IRON_DOOR) || e.getBlock().getType().equals(Material.IRON_TRAPDOOR)) && e.getOldCurrent() == 0 ? 0 : 1);
     }
