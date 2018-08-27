@@ -154,7 +154,7 @@ class Listeners implements Listener {
                 PlayerInventory i = p.getInventory();
                 for (String item : items)
                     if (item.contains(" ")) {
-                        i.addItem(Material.fromString(item.split(" ")[0]).toItemStack(Integer.parseInt(item.split(" ")[1])));
+                        i.addItem(gg.galaxygaming.necessities.Material.Material.fromString(item.split(" ")[0]).toItemStack(Integer.parseInt(item.split(" ")[1])));
                     }
             }
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
@@ -356,7 +356,7 @@ class Listeners implements Listener {
                 String[] splitSpace = s.split(" ");
                 if (splitSpace.length == 5 || splitSpace.length == 6) {
                     int amount = Integer.parseInt(splitSpace[1]);
-                    Material mat = Material.fromString(splitSpace[2]);
+                    gg.galaxygaming.necessities.Material.Material mat = gg.galaxygaming.necessities.Material.Material.fromString(splitSpace[2]);
                     if (mat == null) {
                         continue;
                     }
@@ -643,7 +643,7 @@ class Listeners implements Listener {
                     enchants = "n";
                 if (meta.equals(""))
                     meta = "n";
-                String info = item.getAmount() + " " + Material.fromBukkit(item.getType()) + ' ' + enchants + ' ' + meta + disp;
+                String info = item.getAmount() + " " + gg.galaxygaming.necessities.Material.Material.fromBukkit(item.getType()) + ' ' + enchants + ' ' + meta + disp;
                 condensedLore.put(info, condensedLore.containsKey(info) ? condensedLore.get(info) + ',' + i : Integer.toString(i));
             }
         }

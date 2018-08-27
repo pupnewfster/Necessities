@@ -1,6 +1,6 @@
 package gg.galaxygaming.necessities.Commands;
 
-import gg.galaxygaming.necessities.Material;
+import gg.galaxygaming.necessities.Material.Material;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;

@@ -217,7 +217,7 @@ public class Utils {
      * @param material The material to change the stack size of.
      * @param size     The new max stack size for the material.
      */
-    public static void setStackSize(gg.galaxygaming.necessities.Material material, int size) {
+    public static void setStackSize(gg.galaxygaming.necessities.Material.Material material, int size) {
         /*Item item = Item.getById(material.getID());
         try {
             Field maxStackSize = Item.class.getDeclaredField("maxStackSize");

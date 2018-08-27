@@ -2,6 +2,7 @@ package gg.galaxygaming.necessities;
 
 import gg.galaxygaming.necessities.Guilds.GuildManager;
 import gg.galaxygaming.necessities.Hats.HatType;
+import gg.galaxygaming.necessities.Material.Material;
 import gg.galaxygaming.necessities.RankManager.RankManager;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
