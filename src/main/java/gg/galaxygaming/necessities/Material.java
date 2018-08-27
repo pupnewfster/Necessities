@@ -1,6 +1,5 @@
-package gg.galaxygaming.necessities.Economy;
+package gg.galaxygaming.necessities;
 
-import gg.galaxygaming.necessities.Utils;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 

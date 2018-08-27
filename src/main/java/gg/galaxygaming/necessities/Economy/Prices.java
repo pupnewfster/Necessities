@@ -1,5 +1,6 @@
 package gg.galaxygaming.necessities.Economy;
 
+import gg.galaxygaming.necessities.Material;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;

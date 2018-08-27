@@ -154,7 +154,7 @@ class Listeners implements Listener {
                 PlayerInventory i = p.getInventory();
                 for (String item : items)
                     if (item.contains(" ")) {
-                        i.addItem(gg.galaxygaming.necessities.Economy.Material.fromString(item.split(" ")[0]).toItemStack(Integer.parseInt(item.split(" ")[1])));
+                        i.addItem(Material.fromString(item.split(" ")[0]).toItemStack(Integer.parseInt(item.split(" ")[1])));
                     }
             }
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
@@ -354,9 +354,13 @@ class Listeners implements Listener {
         if (inv != null && meta.hasLore()) {
             for (String s : meta.getLore()) {
                 String[] splitSpace = s.split(" ");
-                if (splitSpace.length == 6 || splitSpace.length == 7) {
+                if (splitSpace.length == 5 || splitSpace.length == 6) {
                     int amount = Integer.parseInt(splitSpace[1]);
-                    ItemStack i = gg.galaxygaming.necessities.Economy.Material.fromString(splitSpace[2]).toItemStack(amount);
+                    Material mat = Material.fromString(splitSpace[2]);
+                    if (mat == null) {
+                        continue;
+                    }
+                    ItemStack i = mat.toItemStack(amount);
                     for (String en : splitSpace[3].split(","))
                         if (!en.equals("n")) {
                             String[] split = en.split("-");
@@ -383,13 +387,13 @@ class Listeners implements Listener {
                                 } else
                                     subMeta = getSub(subMeta.replaceAll("~", " "));
                                 String newMeta = getSub(nonMeta.replaceAll("~", " ")) + subMeta;
-                                if (newMeta.trim().split(" ").length == 5)
+                                if (newMeta.trim().split(" ").length == 4)
                                     newMeta += " n";
                                 lore.add(newMeta.trim());
                             }
                         }
                     ItemMeta im = i.getItemMeta();
-                    if (splitSpace.length == 7)
+                    if (splitSpace.length == 6)
                         im.setDisplayName(splitSpace[5].replaceAll("`", " "));
                     im.setLore(lore);
                     i.setItemMeta(im);
@@ -639,7 +643,7 @@ class Listeners implements Listener {
                     enchants = "n";
                 if (meta.equals(""))
                     meta = "n";
-                String info = item.getAmount() + " " + gg.galaxygaming.necessities.Economy.Material.fromBukkit(item.getType()) + ' ' + enchants + ' ' + meta + disp;
+                String info = item.getAmount() + " " + Material.fromBukkit(item.getType()) + ' ' + enchants + ' ' + meta + disp;
                 condensedLore.put(info, condensedLore.containsKey(info) ? condensedLore.get(info) + ',' + i : Integer.toString(i));
             }
         }

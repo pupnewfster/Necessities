@@ -1,6 +1,5 @@
 package gg.galaxygaming.necessities;
 
-import gg.galaxygaming.necessities.Economy.Material;
 import gg.galaxygaming.necessities.Guilds.GuildManager;
 import gg.galaxygaming.necessities.Hats.HatType;
 import gg.galaxygaming.necessities.RankManager.RankManager;
