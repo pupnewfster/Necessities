@@ -163,8 +163,8 @@ public class Necessities extends JavaPlugin {
      */
     public void addPlayer(Player p) {
         EntityPlayer ep = ((CraftPlayer) p).getHandle();
-        User u = um.getUser(p.getUniqueId());
-        ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
+        //User u = um.getUser(p.getUniqueId());
+        //ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
         PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ep);
         for (Player x : Bukkit.getOnlinePlayers())
             if (!x.hasPermission("Necessities.seehidden") && x.canSee(p) && !x.equals(p))
@@ -188,12 +188,12 @@ public class Necessities extends JavaPlugin {
      * Shows the given player all the players on the tab list.
      * @param x The player to refresh their tab list.
      */
-    public void updateAll(Player x) {
+    public void updateAll(Player x) {//TODO: Is this even needed
         ArrayList<EntityPlayer> players = new ArrayList<>();
         for (Player p : Bukkit.getOnlinePlayers()) {
             EntityPlayer ep = ((CraftPlayer) p).getHandle();
-            User u = um.getUser(p.getUniqueId());
-            ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
+            //User u = um.getUser(p.getUniqueId());
+            //ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
             players.add(ep);
         }
         ((CraftPlayer) x).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, players));

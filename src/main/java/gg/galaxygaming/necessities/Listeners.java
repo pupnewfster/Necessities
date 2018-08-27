@@ -15,11 +15,14 @@ import net.minecraft.server.v1_13_R2.IChatBaseComponent;
 import net.minecraft.server.v1_13_R2.PacketPlayOutTitle;
 import org.bukkit.*;
 import org.bukkit.block.*;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Lightable;
+import org.bukkit.block.data.Openable;
+import org.bukkit.block.data.Powerable;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_13_R2.block.impl.*;
 import org.bukkit.craftbukkit.v1_13_R2.boss.CraftBossBar;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
@@ -529,23 +532,17 @@ class Listeners implements Listener {
                         e.getItem().getItemMeta().hasLore() && e.getItem().getItemMeta().getLore().contains("Wrench")) {
                     Wrenched wrench = Necessities.getWrench();
                     BlockState state = b.getState();
-                    if (type.equals(Material.REDSTONE_LAMP)) {//TODO: Add more things wrench works on
-                        CraftRedstoneLamp lamp = (CraftRedstoneLamp) state.getBlockData();
-                        lamp.setLit(!lamp.isLit());
-                        state.setBlockData(lamp);
-                        e.setCancelled(true);
+                    boolean isIronDoor;
+                    if (type.equals(Material.REDSTONE_LAMP) || type.equals(Material.REDSTONE_TORCH)) {
+                        Lightable lightable = (Lightable) state.getBlockData();
+                        lightable.setLit(!lightable.isLit());
+                        state.setBlockData(lightable);
                         state.update();
-                    } else if (type.equals(Material.REPEATER)) {
-                        CraftRepeater repeater = (CraftRepeater) state.getBlockData();
-                        repeater.setPowered(!repeater.isPowered());
-                        state.setBlockData(repeater);
-                        e.setCancelled(true);
-                        state.update();
-                    } else if (type.equals(Material.REDSTONE_TORCH)) {
+                    } else if (type.equals(Material.REPEATER) || type.equals(Material.COMPARATOR)) {
                         wrench.wrench(b);
-                        CraftRedstoneTorch torch = (CraftRedstoneTorch) state.getBlockData();
-                        torch.setLit(!torch.isLit());
-                        state.setBlockData(torch);
+                        Powerable powerable = (Powerable) state.getBlockData();
+                        powerable.setPowered(!powerable.isPowered());
+                        state.setBlockData(powerable);
                         e.setCancelled(true);
                         state.update();
                     } else if (type.equals(Material.FURNACE) || type.equals(Material.HOPPER) || type.equals(Material.DISPENSER) || type.equals(Material.CHEST) ||
@@ -595,30 +592,29 @@ class Listeners implements Listener {
                             }
                             e.getPlayer().getWorld().dropItem(b.getLocation(), contents);
                             b.setType(Material.AIR);
-                        } else {
-                            //b.setData(getDir(e.getBlockFace()));
-                            //TODO: Rotate the block
+                        } else if (b.getBlockData() instanceof Directional) { //This if statement should be last as this is the fallback
+                            Directional dir = (Directional) b.getBlockData();
+                            dir.setFacing(e.getBlockFace());
+                            state.setBlockData(dir);
+                            state.update();
                         }
                         e.setCancelled(true);
-                    } else if (type.equals(Material.IRON_DOOR)) {
-                        if (!b.getRelative(BlockFace.UP).getType().equals(Material.IRON_DOOR)) {
-                            b = b.getRelative(BlockFace.DOWN);
-                            state = b.getState();
+                    } else if ((isIronDoor = type.equals(Material.IRON_DOOR)) || type.equals(Material.IRON_TRAPDOOR)) {
+                        if (isIronDoor) {
+                            if (!b.getRelative(BlockFace.UP).getType().equals(Material.IRON_DOOR)) {
+                                b = b.getRelative(BlockFace.DOWN);
+                                state = b.getState();
+                            }
+                            wrench.wrench(b.getRelative(BlockFace.UP));
                         }
-                        wrench.wrench(b.getRelative(BlockFace.UP));
                         wrench.wrench(b);
-                        CraftDoor d = (CraftDoor) b.getBlockData();
-                        d.setOpen(!d.isOpen());
+                        Openable door = (Openable) b.getBlockData();
+                        door.setOpen(!door.isOpen());
+                        state.setBlockData(door);
+                        Powerable powerable = (Powerable) state.getBlockData();
+                        powerable.setPowered(!powerable.isPowered());
+                        state.setBlockData(powerable);
                         b.getWorld().playEffect(b.getLocation(), Effect.DOOR_TOGGLE, 0);
-                        state.setBlockData(d);
-                        e.setCancelled(true);
-                        state.update();
-                    } else if (type.equals(Material.IRON_TRAPDOOR)) {
-                        wrench.wrench(b);
-                        CraftTrapdoor d = (CraftTrapdoor) b.getBlockData();
-                        d.setOpen(!d.isOpen());
-                        b.getWorld().playEffect(b.getLocation(), Effect.DOOR_TOGGLE, 0);
-                        state.setBlockData(d);
                         e.setCancelled(true);
                         state.update();
                     } else
@@ -668,31 +664,17 @@ class Listeners implements Listener {
         return condensedLore.keySet().stream().map(key -> condensedLore.get(key) + ' ' + key).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private byte getDir(BlockFace f) {
-        if (f.equals(BlockFace.UP))
-            return 1;
-        else if (f.equals(BlockFace.NORTH))
-            return 2;
-        else if (f.equals(BlockFace.SOUTH))
-            return 3;
-        else if (f.equals(BlockFace.WEST))
-            return 4;
-        else if (f.equals(BlockFace.EAST))
-            return 5;
-        return 0;
-    }
-
     @EventHandler
     public void onRedstone(BlockRedstoneEvent e) {
-        if (e.getBlock().getState() instanceof CommandBlock) {
-            CommandBlock b = (CommandBlock) e.getBlock().getState();
+        Block block = e.getBlock();
+        if (block.getState() instanceof CommandBlock) {
+            CommandBlock b = (CommandBlock) block.getState();
             b.setCommand(ChatColor.translateAlternateColorCodes('&', b.getCommand()));
             b.update(true);
         }
-        //TODO the redstone stopping code probably will have to be updated to just reset it as whatever state it was unfortunately
-        Bukkit.broadcastMessage("TEST " + e.getOldCurrent() + " " + e.getNewCurrent());
-        if (Necessities.getWrench().isWrenched(e.getBlock()))
-            e.setNewCurrent((e.getBlock().getType().equals(Material.IRON_DOOR) || e.getBlock().getType().equals(Material.IRON_TRAPDOOR)) && e.getOldCurrent() == 0 ? 0 : 1);
+        if (Necessities.getWrench().isWrenched(block)) {
+            e.setNewCurrent(e.getOldCurrent());
+        }
     }
 
     @EventHandler
