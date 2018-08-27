@@ -8,51 +8,43 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class CmdKillall implements Cmd {
+    private final List<EntityType> hostile = Arrays.asList(EntityType.BLAZE, EntityType.CAVE_SPIDER, EntityType.CREEPER, EntityType.ENDER_DRAGON, EntityType.ENDERMAN,
+            EntityType.GHAST, EntityType.GIANT, EntityType.MAGMA_CUBE, EntityType.PIG_ZOMBIE, EntityType.SILVERFISH, EntityType.SKELETON, EntityType.SLIME, EntityType.SPIDER,
+            EntityType.WITCH, EntityType.WITHER, EntityType.ZOMBIE, EntityType.GUARDIAN, EntityType.ENDERMITE, EntityType.SHULKER, EntityType.SHULKER_BULLET, EntityType.HUSK,
+            EntityType.STRAY, EntityType.VINDICATOR, EntityType.EVOKER, EntityType.VEX, EntityType.PHANTOM, EntityType.DROWNED);
+    private final List<EntityType> passive = Arrays.asList(EntityType.CHICKEN, EntityType.COW, EntityType.HORSE, EntityType.IRON_GOLEM, EntityType.MUSHROOM_COW, EntityType.OCELOT,
+            EntityType.PIG, EntityType.SHEEP, EntityType.SNOWMAN, EntityType.SQUID, EntityType.VILLAGER, EntityType.WOLF, EntityType.RABBIT, EntityType.POLAR_BEAR, EntityType.LLAMA,
+            EntityType.DOLPHIN, EntityType.TROPICAL_FISH, EntityType.PUFFERFISH, EntityType.COD, EntityType.SALMON, EntityType.TURTLE);
+    private final List<EntityType> misc = Arrays.asList(EntityType.DROPPED_ITEM, EntityType.BOAT, EntityType.ENDER_CRYSTAL, EntityType.EXPERIENCE_ORB, EntityType.MINECART);
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (args.length == 0) {
                 int i = 0;
-                for (Entity t : p.getWorld().getEntities())
-                    if (t.getType().equals(EntityType.BLAZE) || t.getType().equals(EntityType.CAVE_SPIDER) || t.getType().equals(EntityType.CREEPER) ||
-                            t.getType().equals(EntityType.ENDER_DRAGON) || t.getType().equals(EntityType.ENDERMAN) || t.getType().equals(EntityType.GHAST) ||
-                            t.getType().equals(EntityType.GIANT) || t.getType().equals(EntityType.MAGMA_CUBE) || t.getType().equals(EntityType.PIG_ZOMBIE) ||
-                            t.getType().equals(EntityType.SILVERFISH) || t.getType().equals(EntityType.SKELETON) || t.getType().equals(EntityType.SLIME) ||
-                            t.getType().equals(EntityType.SPIDER) || t.getType().equals(EntityType.WITCH) || t.getType().equals(EntityType.WITHER) ||
-                            t.getType().equals(EntityType.ZOMBIE) || t.getType().equals(EntityType.GUARDIAN) || t.getType().equals(EntityType.ENDERMITE) ||
-                            t.getType().equals(EntityType.SHULKER) || t.getType().equals(EntityType.SHULKER_BULLET) || t.getType().equals(EntityType.HUSK) ||
-                            t.getType().equals(EntityType.STRAY) || t.getType().equals(EntityType.VINDICATOR) || t.getType().equals(EntityType.EVOKER) ||
-                            t.getType().equals(EntityType.VEX)) {
+                for (Entity t : p.getWorld().getEntities()) {
+                    if (hostile.contains(t.getType())) {
                         t.remove();
                         i++;
                     }
+                }
                 p.sendMessage(var.getMessages() + "Removed " + var.getObj() + i + var.getMessages() + " entities.");
                 return true;
             }
             int i = 0;
             if (args[0].equalsIgnoreCase("all")) {
-                for (Entity t : p.getWorld().getEntities())
-                    if (t.getType().equals(EntityType.BAT) || t.getType().equals(EntityType.BLAZE) || t.getType().equals(EntityType.CAVE_SPIDER) ||
-                            t.getType().equals(EntityType.CHICKEN) || t.getType().equals(EntityType.COW) || t.getType().equals(EntityType.CREEPER) ||
-                            t.getType().equals(EntityType.DROPPED_ITEM) || t.getType().equals(EntityType.ENDER_DRAGON) || t.getType().equals(EntityType.BOAT) ||
-                            t.getType().equals(EntityType.ENDER_CRYSTAL) || t.getType().equals(EntityType.ENDERMAN) || t.getType().equals(EntityType.EXPERIENCE_ORB) ||
-                            t.getType().equals(EntityType.GHAST) || t.getType().equals(EntityType.GIANT) || t.getType().equals(EntityType.HORSE) ||
-                            t.getType().equals(EntityType.IRON_GOLEM) || t.getType().equals(EntityType.MAGMA_CUBE) || t.getType().equals(EntityType.MINECART) ||
-                            t.getType().equals(EntityType.MUSHROOM_COW) || t.getType().equals(EntityType.OCELOT) || t.getType().equals(EntityType.PIG) ||
-                            t.getType().equals(EntityType.PIG_ZOMBIE) || t.getType().equals(EntityType.SHEEP) || t.getType().equals(EntityType.SILVERFISH) ||
-                            t.getType().equals(EntityType.SKELETON) || t.getType().equals(EntityType.SLIME) || t.getType().equals(EntityType.SNOWMAN) ||
-                            t.getType().equals(EntityType.SPIDER) || t.getType().equals(EntityType.SQUID) || t.getType().equals(EntityType.VILLAGER) ||
-                            t.getType().equals(EntityType.WITCH) || t.getType().equals(EntityType.WITHER) || t.getType().equals(EntityType.WOLF) ||
-                            t.getType().equals(EntityType.ZOMBIE) || t.getType().equals(EntityType.GUARDIAN) || t.getType().equals(EntityType.ENDERMITE) ||
-                            t.getType().equals(EntityType.RABBIT) || t.getType().equals(EntityType.POLAR_BEAR) || t.getType().equals(EntityType.SHULKER) ||
-                            t.getType().equals(EntityType.SHULKER_BULLET) || t.getType().equals(EntityType.HUSK) || t.getType().equals(EntityType.STRAY) ||
-                            t.getType().equals(EntityType.VINDICATOR) || t.getType().equals(EntityType.EVOKER) || t.getType().equals(EntityType.VEX) ||
-                            t.getType().equals(EntityType.LLAMA)) {
+                for (Entity t : p.getWorld().getEntities()) {
+                    EntityType type = t.getType();
+                    if (hostile.contains(type) || passive.contains(type) || misc.contains(type)) {
                         t.remove();
                         i++;
                     }
+                }
             } else if (args[0].equalsIgnoreCase("drops")) {
                 for (Entity t : p.getWorld().getEntities())
                     if (t.getType().equals(EntityType.DROPPED_ITEM)) {
@@ -60,49 +52,27 @@ public class CmdKillall implements Cmd {
                         i++;
                     }
             } else if (args[0].equalsIgnoreCase("monsters")) {
-                for (Entity t : p.getWorld().getEntities())
-                    if (t.getType().equals(EntityType.BLAZE) || t.getType().equals(EntityType.CAVE_SPIDER) || t.getType().equals(EntityType.CREEPER) ||
-                            t.getType().equals(EntityType.ENDER_DRAGON) || t.getType().equals(EntityType.ENDERMAN) || t.getType().equals(EntityType.GHAST) ||
-                            t.getType().equals(EntityType.GIANT) || t.getType().equals(EntityType.MAGMA_CUBE) || t.getType().equals(EntityType.PIG_ZOMBIE) ||
-                            t.getType().equals(EntityType.SILVERFISH) || t.getType().equals(EntityType.SKELETON) || t.getType().equals(EntityType.SLIME) ||
-                            t.getType().equals(EntityType.SPIDER) || t.getType().equals(EntityType.WITCH) || t.getType().equals(EntityType.WITHER) ||
-                            t.getType().equals(EntityType.ZOMBIE) || t.getType().equals(EntityType.GUARDIAN) || t.getType().equals(EntityType.ENDERMITE) ||
-                            t.getType().equals(EntityType.SHULKER) || t.getType().equals(EntityType.SHULKER_BULLET) || t.getType().equals(EntityType.HUSK) ||
-                            t.getType().equals(EntityType.STRAY) || t.getType().equals(EntityType.VINDICATOR) || t.getType().equals(EntityType.EVOKER) ||
-                            t.getType().equals(EntityType.VEX)) {
+                for (Entity t : p.getWorld().getEntities()) {
+                    if (hostile.contains(t.getType())) {
                         t.remove();
                         i++;
                     }
+                }
             } else if (args[0].equalsIgnoreCase("animals")) {
-                for (Entity t : p.getWorld().getEntities())
-                    if (t.getType().equals(EntityType.BAT) ||
-                            t.getType().equals(EntityType.CHICKEN) || t.getType().equals(EntityType.COW) || t.getType().equals(EntityType.HORSE) ||
-                            t.getType().equals(EntityType.IRON_GOLEM) || t.getType().equals(EntityType.MUSHROOM_COW) || t.getType().equals(EntityType.OCELOT) ||
-                            t.getType().equals(EntityType.PIG) || t.getType().equals(EntityType.SHEEP) || t.getType().equals(EntityType.SNOWMAN) ||
-                            t.getType().equals(EntityType.SQUID) || t.getType().equals(EntityType.VILLAGER) || t.getType().equals(EntityType.WOLF) ||
-                            t.getType().equals(EntityType.RABBIT) || t.getType().equals(EntityType.POLAR_BEAR) || t.getType().equals(EntityType.LLAMA)) {
+                for (Entity t : p.getWorld().getEntities()) {
+                    if (passive.contains(t.getType())) {
                         t.remove();
                         i++;
                     }
+                }
             } else if (args[0].equalsIgnoreCase("mobs")) {
-                for (Entity t : p.getWorld().getEntities())
-                    if (t.getType().equals(EntityType.BAT) || t.getType().equals(EntityType.BLAZE) || t.getType().equals(EntityType.CAVE_SPIDER) ||
-                            t.getType().equals(EntityType.CHICKEN) || t.getType().equals(EntityType.COW) || t.getType().equals(EntityType.CREEPER) ||
-                            t.getType().equals(EntityType.ENDER_DRAGON) || t.getType().equals(EntityType.BOAT) || t.getType().equals(EntityType.ENDER_CRYSTAL) ||
-                            t.getType().equals(EntityType.ENDERMAN) || t.getType().equals(EntityType.GHAST) || t.getType().equals(EntityType.GIANT) ||
-                            t.getType().equals(EntityType.HORSE) || t.getType().equals(EntityType.IRON_GOLEM) || t.getType().equals(EntityType.MAGMA_CUBE) ||
-                            t.getType().equals(EntityType.MUSHROOM_COW) || t.getType().equals(EntityType.OCELOT) || t.getType().equals(EntityType.PIG) ||
-                            t.getType().equals(EntityType.PIG_ZOMBIE) || t.getType().equals(EntityType.SHEEP) || t.getType().equals(EntityType.SILVERFISH) ||
-                            t.getType().equals(EntityType.SKELETON) || t.getType().equals(EntityType.SLIME) || t.getType().equals(EntityType.SNOWMAN) ||
-                            t.getType().equals(EntityType.SPIDER) || t.getType().equals(EntityType.SQUID) || t.getType().equals(EntityType.VILLAGER) ||
-                            t.getType().equals(EntityType.WITCH) || t.getType().equals(EntityType.WITHER) || t.getType().equals(EntityType.WOLF) ||
-                            t.getType().equals(EntityType.ZOMBIE) || t.getType().equals(EntityType.GUARDIAN) || t.getType().equals(EntityType.ENDERMITE) ||
-                            t.getType().equals(EntityType.RABBIT) || t.getType().equals(EntityType.POLAR_BEAR) || t.getType().equals(EntityType.HUSK) ||
-                            t.getType().equals(EntityType.STRAY) || t.getType().equals(EntityType.VINDICATOR) || t.getType().equals(EntityType.EVOKER) ||
-                            t.getType().equals(EntityType.VEX)) {
+                for (Entity t : p.getWorld().getEntities()) {
+                    EntityType type = t.getType();
+                    if (hostile.contains(type) || passive.contains(type)) {
                         t.remove();
                         i++;
                     }
+                }
             } else if (isMob(args[0]) != null) {
                 EntityType type = isMob(args[0]);
                 for (Entity t : p.getWorld().getEntities())
@@ -217,6 +187,22 @@ public class CmdKillall implements Cmd {
             return EntityType.VEX;
         if (name.equals("llama"))
             return EntityType.LLAMA;
+        if (name.equals("dolphin"))
+            return EntityType.DOLPHIN;
+        if (name.equals("tropicalfish") || name.equals("clownfish"))
+            return EntityType.TROPICAL_FISH;
+        if (name.equals("pufferfish"))
+            return EntityType.PUFFERFISH;
+        if (name.equals("cod") || name.equals("fish"))
+        return EntityType.COD;
+        if (name.equals("salmon"))
+        return EntityType.SALMON;
+        if (name.equals("turtle"))
+            return EntityType.TURTLE;
+        if (name.equals("phantom"))
+            return EntityType.PHANTOM;
+        if (name.equals("drowned"))
+            return EntityType.DROWNED;
         return null;
     }
 
