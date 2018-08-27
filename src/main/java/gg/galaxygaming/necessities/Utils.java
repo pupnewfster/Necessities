@@ -3,15 +3,18 @@ package gg.galaxygaming.necessities;
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
+import net.minecraft.server.v1_13_R2.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.UUID;
@@ -218,14 +221,14 @@ public class Utils {
      * @param size     The new max stack size for the material.
      */
     public static void setStackSize(gg.galaxygaming.necessities.Material.Material material, int size) {
-        /*Item item = Item.getById(material.getID());
+        Item item = CraftItemStack.asNMSCopy(material.toItemStack(1)).getItem();
         try {
             Field maxStackSize = Item.class.getDeclaredField("maxStackSize");
             maxStackSize.setAccessible(true);
             maxStackSize.setInt(item, size);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

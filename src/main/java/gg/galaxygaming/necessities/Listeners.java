@@ -579,9 +579,11 @@ class Listeners implements Listener {
                             b.setType(Material.AIR);
                         } else if (b.getBlockData() instanceof Directional) { //This if statement should be last as this is the fallback
                             Directional dir = (Directional) b.getBlockData();
-                            dir.setFacing(e.getBlockFace());
-                            state.setBlockData(dir);
-                            state.update();
+                            if (dir.getFaces().contains(e.getBlockFace())) {
+                                dir.setFacing(e.getBlockFace());
+                                state.setBlockData(dir);
+                                state.update();
+                            }
                         }
                         e.setCancelled(true);
                     } else if ((isIronDoor = type.equals(Material.IRON_DOOR)) || type.equals(Material.IRON_TRAPDOOR)) {
