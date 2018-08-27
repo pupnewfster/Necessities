@@ -11,17 +11,17 @@ import gg.galaxygaming.necessities.RankManager.RankManager;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.WorldManager.WorldManager;
-import net.minecraft.server.v1_13_R1.IChatBaseComponent;
-import net.minecraft.server.v1_13_R1.PacketPlayOutTitle;
+import net.minecraft.server.v1_13_R2.IChatBaseComponent;
+import net.minecraft.server.v1_13_R2.PacketPlayOutTitle;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_13_R1.block.impl.*;
-import org.bukkit.craftbukkit.v1_13_R1.boss.CraftBossBar;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.block.impl.*;
+import org.bukkit.craftbukkit.v1_13_R2.boss.CraftBossBar;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -690,6 +690,7 @@ class Listeners implements Listener {
             b.update(true);
         }
         //TODO the redstone stopping code probably will have to be updated to just reset it as whatever state it was unfortunately
+        Bukkit.broadcastMessage("TEST " + e.getOldCurrent() + " " + e.getNewCurrent());
         if (Necessities.getWrench().isWrenched(e.getBlock()))
             e.setNewCurrent((e.getBlock().getType().equals(Material.IRON_DOOR) || e.getBlock().getType().equals(Material.IRON_TRAPDOOR)) && e.getOldCurrent() == 0 ? 0 : 1);
     }

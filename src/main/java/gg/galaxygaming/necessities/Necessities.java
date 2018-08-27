@@ -23,14 +23,14 @@ import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.WorldManager.PortalManager;
 import gg.galaxygaming.necessities.WorldManager.WarpManager;
 import gg.galaxygaming.necessities.WorldManager.WorldManager;
-import net.minecraft.server.v1_13_R1.*;
+import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_13_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,7 +38,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -116,7 +115,7 @@ public class Necessities extends JavaPlugin {
         if (skin != null)
             janetProfile.getProperties().put("textures", skin);
         MinecraftServer server = ((CraftServer) Bukkit.getServer()).getServer();
-        WorldServer world = server.getWorldServer(0);
+        WorldServer world = server.getWorldServer(DimensionManager.OVERWORLD);
         PlayerInteractManager manager = new PlayerInteractManager(world);
         EntityPlayer player = new EntityPlayer(server, world, janetProfile, manager);
         player.listName = formatMessage(ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + ' ') + "Janet");
@@ -177,11 +176,12 @@ public class Necessities extends JavaPlugin {
      * @param p The player to update the tab list name of.
      */
     public void updateName(Player p) {
-        EntityPlayer ep = ((CraftPlayer) p).getHandle();
         User u = um.getUser(p.getUniqueId());
+        /*EntityPlayer ep = ((CraftPlayer) p).getHandle();
         ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
         PacketPlayOutPlayerInfo tabList = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, ep);
-        Bukkit.getOnlinePlayers().forEach(x -> ((CraftPlayer) x).getHandle().playerConnection.sendPacket(tabList));
+        Bukkit.getOnlinePlayers().forEach(x -> ((CraftPlayer) x).getHandle().playerConnection.sendPacket(tabList));*/
+        p.setPlayerListName(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
     }
 
     /**
@@ -205,17 +205,11 @@ public class Necessities extends JavaPlugin {
 
     void addHeader(Player p) {
         PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
-        try {
-            Field field = packet.getClass().getDeclaredField("a");
-            field.setAccessible(true);
-            field.set(packet, formatMessage(ChatColor.AQUA + "Galaxy Gaming"));
-            Field field2 = packet.getClass().getDeclaredField("b");
-            field2.setAccessible(true);
-            field2.set(packet, formatMessage(ChatColor.GREEN + "http://galaxygaming.gg"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        packet.header = formatMessage(ChatColor.AQUA + "Galaxy Gaming");
+        packet.footer = formatMessage(ChatColor.GREEN + "http://galaxygaming.gg");
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+        //TODO: See if below can be used instead has some formatting issues though
+        //p.setPlayerListHeaderFooter(new TextComponent(ChatColor.AQUA + "Galaxy Gaming"), new TextComponent(ChatColor.GREEN + "http://galaxygaming.gg"));
     }
 
     private Property getSkin() {

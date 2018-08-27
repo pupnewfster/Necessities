@@ -3,7 +3,7 @@ package gg.galaxygaming.necessities;
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
-import net.minecraft.server.v1_13_R1.Item;
+import net.minecraft.server.v1_13_R2.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
