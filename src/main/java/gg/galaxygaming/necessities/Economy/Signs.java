@@ -48,8 +48,7 @@ public class Signs { //TODO Make sure this works, because some material names ar
 
     private String itemName(Sign sign) {
         String itemName = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", "")).replaceAll(":", " ").split(" ")[0];
-        Material mat = Utils.legalInt(itemName) ? Material.fromID(Integer.parseInt(itemName)) : Material.fromString(itemName);
-        return mat.getName();
+        return Material.fromString(itemName).getName();
     }
 
     /**
@@ -60,8 +59,7 @@ public class Signs { //TODO Make sure this works, because some material names ar
     public String itemLine(Sign sign) {
         String line = ChatColor.stripColor(sign.getLine(1).trim().replaceAll(" ", ""));
         String itemName = line.replaceAll(":", " ").split(" ")[0];
-        Material mat = Utils.legalInt(itemName) ? Material.fromID(Integer.parseInt(itemName)) : Material.fromString(itemName);
-        return mat.getName() + (line.replaceAll(":", " ").split(" ").length > 1 ? ':' + line.replaceAll(":", " ").split(" ")[1] : "");
+        return Material.fromString(itemName).getName() + (line.replaceAll(":", " ").split(" ").length > 1 ? ':' + line.replaceAll(":", " ").split(" ")[1] : "");
     }
 
     /**
@@ -85,8 +83,7 @@ public class Signs { //TODO Make sure this works, because some material names ar
     private void setPrice(Sign sign) {
         String operation = getOperation(sign.getLine(0).trim());
         String itemName = sign.getLine(1).trim().replaceAll(" ", "").replaceAll(":", " ").split(" ")[0];
-        Material mat = Utils.legalInt(itemName) ? Material.fromID(Integer.parseInt(itemName)) : Material.fromString(itemName);
-        sign.setLine(3, Necessities.getVar().getMoney() + Economy.format(Necessities.getPrices().getPrice(operation, mat.getName(), Integer.parseInt(sign.getLine(2).trim()))));
+        sign.setLine(3, Necessities.getVar().getMoney() + Economy.format(Necessities.getPrices().getPrice(operation, Material.fromString(itemName).getName(), Integer.parseInt(sign.getLine(2).trim()))));
     }
 
     private void formatSign(Sign sign) {

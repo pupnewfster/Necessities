@@ -454,12 +454,12 @@ commands:
       aliases: [nr, r, nreply]
    item:
       description: Gives yourself <item>.
-      usage: /<command> <name|id> <amount> <data>
+      usage: /<command> <name> <amount>
       permission: Necessities.item
       aliases: [nitem, i, ni]
    give:
       description: Gives <player> the specified <item>.
-      usage: /<command> <player> <name|id> <amount> <data>
+      usage: /<command> <player> <name> <amount>
       permission: Necessities.give
       aliases: [ngive]
    togglechat:
@@ -474,7 +474,7 @@ commands:
       aliases: [nsay, broadcast, nbroadcast]
    clear:
       description: Clears your inventory.
-      usage: /<command> <item> <amount> <data>
+      usage: /<command> <item> <amount>
       permission: Necessities.clear
       aliases: [nclear, clearinventory, nclearinventory, ci, nci, clearinvent, nclearinvent]
    killall:
@@ -599,17 +599,17 @@ commands:
       aliases: [economy, neconomy, neco]
    setprice:
       description: Sets the sell price of <item>.
-      usage: /<command> <itemname|id|hand> <price> <sell|buy>
+      usage: /<command> <itemname|hand> <price> <sell|buy>
       permission: Necessities.economy.setprice
       aliases: [setcost, setworth, nsetcost, nsetworth, nsetprice]
    price:
       description: Shows how much money <itemname> is worth.
-      usage: /<command> <itemname|id|hand> <sell|buy>
+      usage: /<command> <itemname|hand> <sell|buy>
       permission: Necessities.economy.price
       aliases: [cost, worth, ncost, nworth, nprice]
    buy:
       description: Buys <amount> of <item>.
-      usage: /<command> <itemname|id|hand> <amount>
+      usage: /<command> <itemname|hand> <amount>
       permission: Necessities.economy.buy
       aliases: [nbuy]
    buycmd:
@@ -619,7 +619,7 @@ commands:
       aliases: [nbuycmd, buycommand, nbuycommand]
    sell:
       description: Sells <amount> of <item>. Default is all in inventory.
-      usage: /<command> <itemname|id|hand|all> <amount|all>
+      usage: /<command> <itemname|hand|all> <amount|all>
       permission: Necessities.economy.sell
       aliases: [nsell]
    pricelist:

@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class CmdRepair implements Cmd {
+public class CmdRepair implements Cmd {//TODO: Maybe use NMS to only have to update import for version changes instead of track down the new tools
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {

@@ -25,17 +25,10 @@ public class CmdSetPrice implements EconomyCmd {
                     sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a the price you want to set the item at.");
                     return true;
                 }
-                String handType = player.getInventory().getItemInMainHand().getType().toString();
-                if (handType.equals("NETHER_BRICK") || handType.equals("BRICK"))
-                    handType += "_BLOCK";
-                mat = Material.fromString(handType);
+                mat = Material.fromBukkit(player.getInventory().getItemInMainHand().getType());
                 if (mat == null) {
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist");
                     return true;
-                }
-                if (!mat.isTool()) {
-                    short data = player.getInventory().getItemInMainHand().getDurability();
-                    mat = Material.fromData(data != 0 ? mat.getParent() : mat, data);
                 }
                 String file;
                 if (args[1].equalsIgnoreCase("buy") || args[1].equalsIgnoreCase("sell"))
@@ -59,14 +52,8 @@ public class CmdSetPrice implements EconomyCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter the item and price for it and whether buying or selling price.");
             return true;
         }
-        String[] temp = args[0].split(":");
         String itemName = args[0];
-        short data = 0;
-        if (temp.length == 2 && Utils.legalInt(temp[1])) {
-            itemName = temp[0];
-            data = Short.parseShort(temp[1]);
-        }
-        mat = Utils.legalInt(itemName) ? Material.fromID(Integer.parseInt(itemName)) : Material.fromString(itemName);
+        mat = Material.fromString(itemName);
         if (!Utils.legalDouble(args[1]) && !args[1].equalsIgnoreCase("null")) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a the price you want to set the item at.");
             return true;
@@ -75,8 +62,6 @@ public class CmdSetPrice implements EconomyCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist");
             return true;
         }
-        if (!mat.isTool())
-            mat = Material.fromData(data != 0 ? mat.getParent() : mat, data);
         String file;
         if (args[2].equalsIgnoreCase("buy") || args[2].equalsIgnoreCase("sell"))
             file = args[2].toLowerCase();

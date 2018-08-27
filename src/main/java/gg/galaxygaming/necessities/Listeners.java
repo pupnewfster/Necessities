@@ -149,18 +149,12 @@ class Listeners implements Listener {
                 p.teleport(new Location(world, x, y, z, yaw, pitch));
             }
             List<String> items = config.getStringList("Necessities.firstItems");
-            if (items.contains(""))
-                items.remove("");
+            items.remove("");
             if (!items.isEmpty()) {
                 PlayerInventory i = p.getInventory();
                 for (String item : items)
                     if (item.contains(" ")) {
-                        String name = item.split(" ")[0];
-                        String data = "0";
-                        if (name.contains(":"))
-                            data = name.split(":")[1];
-                        name = name.split(":")[0];
-                        i.addItem(gg.galaxygaming.necessities.Economy.Material.fromData(Integer.parseInt(name), Short.parseShort(data)).getBukkitMaterial().toItemStack(Integer.parseInt(item.split(" ")[1])));
+                        i.addItem(gg.galaxygaming.necessities.Economy.Material.fromString(item.split(" ")[0]).toItemStack(Integer.parseInt(item.split(" ")[1])));
                     }
             }
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
@@ -352,30 +346,24 @@ class Listeners implements Listener {
         ItemMeta meta = e.getItemInHand().getItemMeta();
         Inventory inv = null;
         Block b = e.getBlock();
-        if (b.getType().equals(Material.CHEST) || b.getType().equals(Material.TRAPPED_CHEST))
-            inv = ((Chest) b.getState()).getBlockInventory();
-        else if (b.getType().equals(Material.FURNACE))
-            inv = ((Furnace) b.getState()).getInventory();
-        else if (b.getType().equals(Material.HOPPER))
-            inv = ((Hopper) b.getState()).getInventory();
-        else if (b.getType().equals(Material.DISPENSER))
-            inv = ((Dispenser) b.getState()).getInventory();
-        else if (b.getType().equals(Material.DROPPER))
-            inv = ((Dropper) b.getState()).getInventory();
-        else if (b.getType().equals(Material.BREWING_STAND))
-            inv = ((BrewingStand) b.getState()).getInventory();
+        Material type = b.getType();
+        if (type.equals(Material.CHEST) || type.equals(Material.TRAPPED_CHEST) || type.equals(Material.FURNACE) || type.equals(Material.HOPPER) ||
+                type.equals(Material.DISPENSER) || type.equals(Material.DROPPER) || type.equals(Material.BREWING_STAND)) {
+            inv = ((Container) b.getState()).getInventory();
+        }
         if (inv != null && meta.hasLore()) {
-            for (String s : meta.getLore())
-                if (s.split(" ").length == 6 || s.split(" ").length == 7) {
-                    int amount = Integer.parseInt(s.split(" ")[1]);
-                    ItemStack i = gg.galaxygaming.necessities.Economy.Material.fromData(Integer.parseInt(s.split(" ")[2]), Short.parseShort(s.split(" ")[3])).getBukkitMaterial().toItemStack(amount);
-                    for (String en : s.split(" ")[4].split(","))
+            for (String s : meta.getLore()) {
+                String[] splitSpace = s.split(" ");
+                if (splitSpace.length == 6 || splitSpace.length == 7) {
+                    int amount = Integer.parseInt(splitSpace[1]);
+                    ItemStack i = gg.galaxygaming.necessities.Economy.Material.fromString(splitSpace[2]).toItemStack(amount);
+                    for (String en : splitSpace[3].split(","))
                         if (!en.equals("n")) {
                             String[] split = en.split("-");
                             i.addUnsafeEnchantment(Enchantment.getByKey(new NamespacedKey(split[0], split[1])), Integer.parseInt(split[2]));
                         }
                     ArrayList<String> lore = new ArrayList<>();
-                    for (String l : s.split(" ")[5].split(","))
+                    for (String l : splitSpace[4].split(","))
                         if (!l.equals("n")) {
                             int lStart = l.indexOf('[');
                             if (lStart == -1) {
@@ -401,18 +389,19 @@ class Listeners implements Listener {
                             }
                         }
                     ItemMeta im = i.getItemMeta();
-                    if (s.split(" ").length == 7)
-                        im.setDisplayName(s.split(" ")[6].replaceAll("`", " "));
+                    if (splitSpace.length == 7)
+                        im.setDisplayName(splitSpace[5].replaceAll("`", " "));
                     im.setLore(lore);
                     i.setItemMeta(im);
-                    for (String loc : s.split(" ")[0].split(","))
+                    for (String loc : splitSpace[0].split(","))
                         inv.setItem(Integer.parseInt(loc), i);
                 }
-        } else if (b.getType().equals(Material.SPAWNER) && meta.hasLore()) {
+            }
+        } else if (type.equals(Material.SPAWNER) && meta.hasLore()) {
             CreatureSpawner spawner = ((CreatureSpawner) b.getState());
             spawner.setCreatureTypeByName(meta.getLore().get(0));
             spawner.update();
-        } else if ((b.getType().equals(Material.SIGN) || b.getType().equals(Material.WALL_SIGN)) && meta.hasLore()) {
+        } else if ((type.equals(Material.SIGN) || type.equals(Material.WALL_SIGN)) && meta.hasLore()) {
             Sign s = (Sign) b.getState();
             s.setLine(0, meta.getLore().get(0));
             s.setLine(1, meta.getLore().get(1));
@@ -557,18 +546,10 @@ class Listeners implements Listener {
                                 contents = new ItemStack(Material.SIGN, 1);
                             ItemMeta meta = contents.getItemMeta();
                             Inventory inv = null;
-                            if (type.equals(Material.CHEST) || type.equals(Material.TRAPPED_CHEST))
-                                inv = ((Chest) state).getBlockInventory();
-                            else if (type.equals(Material.FURNACE)) //TODO: Allow toggling of lit state of furnace
-                                inv = ((Furnace) state).getInventory();
-                            else if (type.equals(Material.HOPPER))
-                                inv = ((Hopper) state).getInventory();
-                            else if (type.equals(Material.DISPENSER))
-                                inv = ((Dispenser) state).getInventory();
-                            else if (type.equals(Material.DROPPER))
-                                inv = ((Dropper) state).getInventory();
-                            else if (type.equals(Material.BREWING_STAND))
-                                inv = ((BrewingStand) state).getInventory();
+                            if (type.equals(Material.CHEST) || type.equals(Material.TRAPPED_CHEST) || type.equals(Material.FURNACE) || type.equals(Material.HOPPER) ||
+                                    type.equals(Material.DISPENSER) || type.equals(Material.DROPPER) || type.equals(Material.BREWING_STAND)) {
+                                inv = ((Container) b.getState()).getInventory();
+                            }
                             if (inv != null) {
                                 meta.setLore(getLore(inv));
                                 contents.setItemMeta(meta);
@@ -635,12 +616,13 @@ class Listeners implements Listener {
     private ArrayList<String> getLore(Inventory inv) {
         HashMap<String, String> condensedLore = new HashMap<>();
         for (int i = 0; i < inv.getSize(); i++) {//loc amount type damage enchants meta name
-            if (inv.getItem(i) != null && !inv.getItem(i).getType().equals(Material.AIR)) {
+            ItemStack item = inv.getItem(i);
+            if (item != null && !item.getType().equals(Material.AIR)) {
                 StringBuilder enchantsBuilder = new StringBuilder();
-                for (Enchantment en : inv.getItem(i).getEnchantments().keySet())
-                    enchantsBuilder.append(en.getKey().getNamespace()).append('-').append(en.getKey().getKey()).append('-').append(inv.getItem(i).getEnchantments().get(en)).append(',');
+                for (Enchantment en : item.getEnchantments().keySet())
+                    enchantsBuilder.append(en.getKey().getNamespace()).append('-').append(en.getKey().getKey()).append('-').append(item.getEnchantments().get(en)).append(',');
                 String meta = "";
-                ItemMeta innerMeta = inv.getItem(i).getItemMeta();
+                ItemMeta innerMeta = item.getItemMeta();
                 if (innerMeta.hasLore()) {
                     StringBuilder metaBuilder = new StringBuilder();
                     for (String l : innerMeta.getLore())
@@ -657,7 +639,7 @@ class Listeners implements Listener {
                     enchants = "n";
                 if (meta.equals(""))
                     meta = "n";
-                String info = inv.getItem(i).getAmount() + " " + inv.getItem(i).getType().getId() + ' ' + inv.getItem(i).getDurability() + ' ' + enchants + ' ' + meta + disp;
+                String info = item.getAmount() + " " + gg.galaxygaming.necessities.Economy.Material.fromBukkit(item.getType()) + ' ' + enchants + ' ' + meta + disp;
                 condensedLore.put(info, condensedLore.containsKey(info) ? condensedLore.get(info) + ',' + i : Integer.toString(i));
             }
         }
