@@ -910,14 +910,6 @@ public enum Material {//http://minecraft.gamepedia.com/Id
     }
 
     /**
-     * Checks if the current material has a durability bar.
-     * @return True if the current material has a durability bar, false otherwise.
-     */
-    public boolean isTool() {
-        return MaterialHelper.isTool(this.bukkitMaterial);
-    }
-
-    /**
      * Creates an ItemStack of the given size.
      * @param amount The size of the ItemStack being created.
      * @return An ItemStack of size `amount` for the current material.

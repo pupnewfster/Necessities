@@ -87,58 +87,6 @@ public class MaterialHelper {
     }
 
     /**
-     * Checks if the specified bukkit material has a durability bar.
-     * @param type The bukkit material type to check.
-     * @return True if the specified bukkit material has a durability bar, false otherwise.
-     */
-    public static boolean isTool(Material type) {
-        //Wood tools
-        if (type.equals(Material.WOODEN_AXE) || type.equals(Material.WOODEN_HOE) || type.equals(Material.WOODEN_PICKAXE) ||
-                type.equals(Material.WOODEN_SWORD) || type.equals(Material.WOODEN_SHOVEL))
-            return true;
-        //Stone tools
-        if (type.equals(Material.STONE_AXE) || type.equals(Material.STONE_HOE) || type.equals(Material.STONE_PICKAXE) ||
-                type.equals(Material.STONE_SWORD) || type.equals(Material.STONE_SHOVEL))
-            return true;
-        //Iron tools
-        if (type.equals(Material.IRON_AXE) || type.equals(Material.IRON_HOE) || type.equals(Material.IRON_PICKAXE) ||
-                type.equals(Material.IRON_SWORD) || type.equals(Material.IRON_SHOVEL))
-            return true;
-        //Gold tools
-        if (type.equals(Material.GOLDEN_AXE) || type.equals(Material.GOLDEN_HOE) || type.equals(Material.GOLDEN_PICKAXE) ||
-                type.equals(Material.GOLDEN_SWORD) || type.equals(Material.GOLDEN_SHOVEL))
-            return true;
-        //Diamond tools
-        if (type.equals(Material.DIAMOND_AXE) || type.equals(Material.DIAMOND_HOE) || type.equals(Material.DIAMOND_PICKAXE) ||
-                type.equals(Material.DIAMOND_SWORD) || type.equals(Material.DIAMOND_SHOVEL))
-            return true;
-        //Leather Armor
-        if (type.equals(Material.LEATHER_BOOTS) || type.equals(Material.LEATHER_CHESTPLATE) ||
-                type.equals(Material.LEATHER_HELMET) || type.equals(Material.LEATHER_LEGGINGS))
-            return true;
-        //Chainmail Armor
-        if (type.equals(Material.CHAINMAIL_BOOTS) || type.equals(Material.CHAINMAIL_CHESTPLATE) ||
-                type.equals(Material.CHAINMAIL_HELMET) || type.equals(Material.CHAINMAIL_LEGGINGS))
-            return true;
-        //Iron Armor
-        if (type.equals(Material.IRON_BOOTS) || type.equals(Material.IRON_CHESTPLATE) ||
-                type.equals(Material.IRON_HELMET) || type.equals(Material.IRON_LEGGINGS))
-            return true;
-        //Gold Armor
-        if (type.equals(Material.GOLDEN_BOOTS) || type.equals(Material.GOLDEN_CHESTPLATE) ||
-                type.equals(Material.GOLDEN_HELMET) || type.equals(Material.GOLDEN_LEGGINGS))
-            return true;
-        //Diamond Armor
-        if (type.equals(Material.DIAMOND_BOOTS) || type.equals(Material.DIAMOND_CHESTPLATE) ||
-                type.equals(Material.DIAMOND_HELMET) || type.equals(Material.DIAMOND_LEGGINGS))
-            return true;
-        //Other things that can have data values
-        return type.equals(Material.ANVIL) || type.equals(Material.CARROT_ON_A_STICK) || type.equals(Material.FISHING_ROD) ||
-                type.equals(Material.FLINT_AND_STEEL) || type.equals(Material.SHEARS) || type.equals(Material.BOW) ||
-                type.equals(Material.ELYTRA);
-    }
-
-    /**
      * Changes the max stack size the given material.
      * @param material The material to change the stack size of.
      * @param size     The new max stack size for the material.

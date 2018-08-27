@@ -9,6 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,16 +60,17 @@ public class CmdSell implements EconomyCmd {
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That item does not exist");
                 return true;
             }
-            double cost = Necessities.getPrices().getPrice("sell", mat.getName(), mat.isTool() ? 1 : amount);
+            boolean isTool = new ItemStack(mat.getBukkitMaterial(), 1).getItemMeta() instanceof Damageable;
+            double cost = Necessities.getPrices().getPrice("sell", mat.getName(), isTool ? 1 : amount);
             if (cost == -1.00)
                 player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + mat.getFriendlyName(2) + " cannot be sold to the server.");
             else {
-                if (!mat.isTool() && inventory.containsAtLeast(mat.toItemStack(1), amount)) {
+                if (!isTool && inventory.containsAtLeast(mat.toItemStack(1), amount)) {
                     Necessities.getEconomy().addMoney(player.getUniqueId(), cost);
                     inventory.removeItem(mat.toItemStack(amount));
                     player.sendMessage(var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + ' ' + mat.getFriendlyName(amount) + var.getMessages() + '.');
                     player.sendMessage(var.getMoney() + Economy.format(cost) + var.getMessages() + " was added to your account.");
-                } else if (mat.isTool() && inventory.contains(mat.toItemStack(1))) {
+                } else if (isTool && inventory.contains(mat.toItemStack(1))) {
                     cost = sell(inventory, amount, mat, player.getUniqueId(), cost);
                     if (cost != -1.00) {
                         player.sendMessage(var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + ' ' + mat.getFriendlyName(amount) + var.getMessages() + '.');
@@ -88,8 +91,9 @@ public class CmdSell implements EconomyCmd {
         for (ItemStack s : inv.getContents()) {
             if (s == null)
                 continue;
-            if (cAmount > 0 && s.getType().equals(type.getBukkitMaterial()) && s.getEnchantments().size() == 0 && s.getType().getMaxDurability() != 0) {
-                short maxDur = (short) (s.getType().getMaxDurability() + 1), dur = s.getDurability();
+            ItemMeta meta = s.getItemMeta();
+            if (cAmount > 0 && s.getType().equals(type.getBukkitMaterial()) && s.getEnchantments().size() == 0 && meta instanceof Damageable) {
+                int maxDur = s.getType().getMaxDurability() + 1, dur = maxDur - ((Damageable) meta).getDamage();
                 cAmount--;
                 double cost = s.getAmount() * baseCost * ((maxDur - 1.0 * dur) / maxDur);//why does it not work if not also divided by two?
                 System.out.println(dur + " " + maxDur + " " + cost);
