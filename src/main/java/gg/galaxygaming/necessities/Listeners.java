@@ -720,15 +720,28 @@ class Listeners implements Listener {
     public void onPlayerInteractEntity(PlayerInteractAtEntityEvent e) {
         User u = Necessities.getUM().getUser(e.getPlayer().getUniqueId());
         YamlConfiguration config = Necessities.getInstance().getConfig();
-        if (e.getRightClicked() instanceof ItemFrame && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") &&
+        Entity entity = e.getRightClicked();
+        if (entity instanceof ItemFrame && config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") &&
                 !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
-            Guild owner = Necessities.getGM().chunkOwner(e.getRightClicked().getLocation().getChunk());
+            Guild owner = Necessities.getGM().chunkOwner(entity.getLocation().getChunk());
             if (owner != null && u.getGuild() != owner) {
                 Variables var = Necessities.getVar();
                 u.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
-                ItemFrame frame = (ItemFrame) e.getRightClicked();
+                ItemFrame frame = (ItemFrame) entity;
                 frame.setRotation(frame.getRotation().rotateCounterClockwise());
                 e.setCancelled(true);
+            }
+        }
+        if (!e.isCancelled()) {
+            ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
+            if (e.getHand().equals(EquipmentSlot.HAND) && item != null && item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore().contains("Wrench")) {
+                if (entity.getType().equals(EntityType.PRIMED_TNT)) {
+                    entity.getLocation().getBlock().setType(Material.TNT);
+                    entity.remove();
+                } else if (entity.getType().equals(EntityType.CREEPER)) {
+                    Creeper c = (Creeper) entity;
+                    c.setIgnited(!c.isIgnited());
+                }
             }
         }
     }
