@@ -1,5 +1,6 @@
 package gg.galaxygaming.necessities.Commands;
 
+import gg.galaxygaming.necessities.Material.MaterialHelper;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
 import org.bukkit.Material;
@@ -19,7 +20,7 @@ public class CmdRepair implements Cmd {//TODO: Maybe use NMS to only have to upd
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not holding an item.");
                     return true;
                 }
-                if (hand.getData().getItemType().equals(Material.ANVIL) || !gg.galaxygaming.necessities.Material.Material.isTool(hand.getType())) {
+                if (hand.getData().getItemType().equals(Material.ANVIL) || !MaterialHelper.isTool(hand.getType())) {
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot repair that item.");
                     return true;
                 }
@@ -27,7 +28,7 @@ public class CmdRepair implements Cmd {//TODO: Maybe use NMS to only have to upd
                 player.sendMessage(var.getMessages() + "Repaired item in hand.");
             } else if (args[0].equalsIgnoreCase("all")) {
                 for (ItemStack is : player.getInventory())
-                    if (is != null && gg.galaxygaming.necessities.Material.Material.isTool(is.getType()) && !is.getData().getItemType().equals(Material.ANVIL))
+                    if (is != null && MaterialHelper.isTool(is.getType()) && !is.getData().getItemType().equals(Material.ANVIL))
                         is.setDurability(dur);
                 player.sendMessage(var.getMessages() + "Repaired all items.");
             }

@@ -914,7 +914,7 @@ public enum Material {//http://minecraft.gamepedia.com/Id
      * @return True if the current material has a durability bar, false otherwise.
      */
     public boolean isTool() {
-        return isTool(this.bukkitMaterial);
+        return MaterialHelper.isTool(this.bukkitMaterial);
     }
 
     /**
@@ -967,60 +967,6 @@ public enum Material {//http://minecraft.gamepedia.com/Id
                 aliasMap.put(alias.replaceAll("_", ""), m.getName().replace("_", ""));
         }
     }
-
-    /**
-     * Checks if the specified bukkit material has a durability bar.
-     * @param type The bukkit material type to check.
-     * @return True if the specified bukkit material has a durability bar, false otherwise.
-     */
-    public static boolean isTool(org.bukkit.Material type) {
-        //Wood tools
-        if (type.equals(org.bukkit.Material.WOODEN_AXE) || type.equals(org.bukkit.Material.WOODEN_HOE) || type.equals(org.bukkit.Material.WOODEN_PICKAXE) ||
-                type.equals(org.bukkit.Material.WOODEN_SWORD) || type.equals(org.bukkit.Material.WOODEN_SHOVEL))
-            return true;
-        //Stone tools
-        if (type.equals(org.bukkit.Material.STONE_AXE) || type.equals(org.bukkit.Material.STONE_HOE) || type.equals(org.bukkit.Material.STONE_PICKAXE) ||
-                type.equals(org.bukkit.Material.STONE_SWORD) || type.equals(org.bukkit.Material.STONE_SHOVEL))
-            return true;
-        //Iron tools
-        if (type.equals(org.bukkit.Material.IRON_AXE) || type.equals(org.bukkit.Material.IRON_HOE) || type.equals(org.bukkit.Material.IRON_PICKAXE) ||
-                type.equals(org.bukkit.Material.IRON_SWORD) || type.equals(org.bukkit.Material.IRON_SHOVEL))
-            return true;
-        //Gold tools
-        if (type.equals(org.bukkit.Material.GOLDEN_AXE) || type.equals(org.bukkit.Material.GOLDEN_HOE) || type.equals(org.bukkit.Material.GOLDEN_PICKAXE) ||
-                type.equals(org.bukkit.Material.GOLDEN_SWORD) || type.equals(org.bukkit.Material.GOLDEN_SHOVEL))
-            return true;
-        //Diamond tools
-        if (type.equals(org.bukkit.Material.DIAMOND_AXE) || type.equals(org.bukkit.Material.DIAMOND_HOE) || type.equals(org.bukkit.Material.DIAMOND_PICKAXE) ||
-                type.equals(org.bukkit.Material.DIAMOND_SWORD) || type.equals(org.bukkit.Material.DIAMOND_SHOVEL))
-            return true;
-        //Leather Armor
-        if (type.equals(org.bukkit.Material.LEATHER_BOOTS) || type.equals(org.bukkit.Material.LEATHER_CHESTPLATE) ||
-                type.equals(org.bukkit.Material.LEATHER_HELMET) || type.equals(org.bukkit.Material.LEATHER_LEGGINGS))
-            return true;
-        //Chainmail Armor
-        if (type.equals(org.bukkit.Material.CHAINMAIL_BOOTS) || type.equals(org.bukkit.Material.CHAINMAIL_CHESTPLATE) ||
-                type.equals(org.bukkit.Material.CHAINMAIL_HELMET) || type.equals(org.bukkit.Material.CHAINMAIL_LEGGINGS))
-            return true;
-        //Iron Armor
-        if (type.equals(org.bukkit.Material.IRON_BOOTS) || type.equals(org.bukkit.Material.IRON_CHESTPLATE) ||
-                type.equals(org.bukkit.Material.IRON_HELMET) || type.equals(org.bukkit.Material.IRON_LEGGINGS))
-            return true;
-        //Gold Armor
-        if (type.equals(org.bukkit.Material.GOLDEN_BOOTS) || type.equals(org.bukkit.Material.GOLDEN_CHESTPLATE) ||
-                type.equals(org.bukkit.Material.GOLDEN_HELMET) || type.equals(org.bukkit.Material.GOLDEN_LEGGINGS))
-            return true;
-        //Diamond Armor
-        if (type.equals(org.bukkit.Material.DIAMOND_BOOTS) || type.equals(org.bukkit.Material.DIAMOND_CHESTPLATE) ||
-                type.equals(org.bukkit.Material.DIAMOND_HELMET) || type.equals(org.bukkit.Material.DIAMOND_LEGGINGS))
-            return true;
-        //Other things that can have data values
-        return type.equals(org.bukkit.Material.ANVIL) || type.equals(org.bukkit.Material.CARROT_ON_A_STICK) || type.equals(org.bukkit.Material.FISHING_ROD) ||
-                type.equals(org.bukkit.Material.FLINT_AND_STEEL) || type.equals(org.bukkit.Material.SHEARS) || type.equals(org.bukkit.Material.BOW) ||
-                type.equals(org.bukkit.Material.ELYTRA);
-    }
-
-
 
     private static class Lore {
         private final List<String> lore;

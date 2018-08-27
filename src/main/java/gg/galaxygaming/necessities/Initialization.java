@@ -3,6 +3,7 @@ package gg.galaxygaming.necessities;
 import gg.galaxygaming.necessities.Guilds.GuildManager;
 import gg.galaxygaming.necessities.Hats.HatType;
 import gg.galaxygaming.necessities.Material.Material;
+import gg.galaxygaming.necessities.Material.MaterialHelper;
 import gg.galaxygaming.necessities.RankManager.RankManager;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -85,7 +86,7 @@ class Initialization {
         if (configFileStackSize.exists()) {
             YamlConfiguration configStackSize = YamlConfiguration.loadConfiguration(configFileStackSize);
             for (String key : configStackSize.getKeys(false))
-                Utils.setStackSize(Material.fromString(key), configStackSize.getInt(key));
+                MaterialHelper.setStackSize(Material.fromString(key), configStackSize.getInt(key));
         }
     }
 

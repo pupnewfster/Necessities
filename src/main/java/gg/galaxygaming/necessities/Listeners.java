@@ -7,6 +7,7 @@ import gg.galaxygaming.necessities.Guilds.GuildManager;
 import gg.galaxygaming.necessities.Hats.Hat;
 import gg.galaxygaming.necessities.Janet.JanetAI;
 import gg.galaxygaming.necessities.Janet.JanetBooks;
+import gg.galaxygaming.necessities.Material.MaterialHelper;
 import gg.galaxygaming.necessities.RankManager.RankManager;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.RankManager.UserManager;
@@ -446,8 +447,9 @@ class Listeners implements Listener {
         Material type = b.getType();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !e.getPlayer().hasPermission("Necessities.guilds.admin")) {
             if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (e.getItem() != null && !e.getItem().getType().isEdible() ||
-                    b.getState() instanceof InventoryHolder || Utils.isWoodDoor(type) || Utils.isFenceGate(type) || Utils.isButton(type) || Utils.isPressurePlate(type) ||
-                    Utils.isWoodTrapdoor(type) || type.equals(Material.LEVER) || Utils.isBed(type) || type.equals(Material.REPEATER) || type.equals(Material.COMPARATOR)) ||
+                    b.getState() instanceof InventoryHolder || MaterialHelper.isWoodDoor(type) || MaterialHelper.isFenceGate(type) || MaterialHelper.isButton(type) ||
+                    MaterialHelper.isPressurePlate(type) || MaterialHelper.isWoodTrapdoor(type) || MaterialHelper.isBed(type) || type.equals(Material.LEVER) ||
+                    type.equals(Material.REPEATER) || type.equals(Material.COMPARATOR)) ||
                     e.getAction().equals(Action.PHYSICAL)) {
                 Guild owner = gm.chunkOwner(b.getChunk());
                 if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -465,13 +467,13 @@ class Listeners implements Listener {
                                 b.getZ() - 1).getChunk());
                 }
                 if (owner != null && u.getGuild() != owner) {
-                    if ((Utils.isWoodDoor(type) || Utils.isFenceGate(type)) && owner.allowInteract()) {
+                    if ((MaterialHelper.isWoodDoor(type) || MaterialHelper.isFenceGate(type)) && owner.allowInteract()) {
 
                     } else if (e.getAction().equals(Action.PHYSICAL))
                         e.setCancelled(true);
                     else {
                         e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
-                        if (Utils.isWoodDoor(type) || Utils.isFenceGate(type)) {
+                        if (MaterialHelper.isWoodDoor(type) || MaterialHelper.isFenceGate(type)) {
                             b.getState().update();
                             if (b.getLocation().getBlockY() > 0)
                                 b.getRelative(BlockFace.DOWN).getState().update();
@@ -508,7 +510,7 @@ class Listeners implements Listener {
             if (u.isJailed())
                 e.setCancelled(true);
             else {
-                if (e.getAction() == Action.RIGHT_CLICK_BLOCK && Utils.isBed(type)) {
+                if (e.getAction() == Action.RIGHT_CLICK_BLOCK && MaterialHelper.isBed(type)) {
                     e.getPlayer().setBedSpawnLocation(b.getLocation());
                     e.getPlayer().sendMessage(var.getMessages() + "Bed spawn set.");
                 }
@@ -612,7 +614,7 @@ class Listeners implements Listener {
             }
         }
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && hide.isHidden(e.getPlayer()) && (type.equals(Material.CHEST) ||
-                type.equals(Material.TRAPPED_CHEST) || Utils.isShulker(type))) {
+                type.equals(Material.TRAPPED_CHEST) || MaterialHelper.isShulker(type))) {
             e.getPlayer().openInventory(((InventoryHolder) b.getState()).getInventory());
             e.getPlayer().closeInventory();
         }
