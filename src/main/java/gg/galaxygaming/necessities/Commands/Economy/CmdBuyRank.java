@@ -3,7 +3,6 @@ package gg.galaxygaming.necessities.Commands.Economy;
 import gg.galaxygaming.necessities.Economy.Economy;
 import gg.galaxygaming.necessities.Economy.RankPrices;
 import gg.galaxygaming.necessities.Necessities;
-import gg.galaxygaming.necessities.RankManager.Rank;
 import gg.galaxygaming.necessities.RankManager.RankManager;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.RankManager.UserManager;

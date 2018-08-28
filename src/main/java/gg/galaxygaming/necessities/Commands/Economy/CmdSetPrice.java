@@ -1,8 +1,8 @@
 package gg.galaxygaming.necessities.Commands.Economy;
 
 import gg.galaxygaming.necessities.Economy.Economy;
-import gg.galaxygaming.necessities.Material.Material;
 import gg.galaxygaming.necessities.Economy.Prices;
+import gg.galaxygaming.necessities.Material.Material;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;

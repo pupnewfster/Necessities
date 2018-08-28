@@ -194,9 +194,9 @@ public class CmdKillall implements Cmd {
         if (name.equals("pufferfish"))
             return EntityType.PUFFERFISH;
         if (name.equals("cod") || name.equals("fish"))
-        return EntityType.COD;
+            return EntityType.COD;
         if (name.equals("salmon"))
-        return EntityType.SALMON;
+            return EntityType.SALMON;
         if (name.equals("turtle"))
             return EntityType.TURTLE;
         if (name.equals("phantom"))

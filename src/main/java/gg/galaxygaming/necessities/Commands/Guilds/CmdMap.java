@@ -104,7 +104,6 @@ public class CmdMap implements GuildCmd {
                     line.append(var.getNeutral()).append(g == null ? "-" : symbols.get(g));
                 else
                     line.append(g == null ? var.getNeutral() + "-" : u.getGuild().relation(g) + symbols.get(g));
-
             }
             StringBuilder keyBuilder = new StringBuilder();
             for (Map.Entry<Guild, String> guildEntry : symbols.entrySet())

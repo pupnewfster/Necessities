@@ -80,11 +80,11 @@ public class JanetAI {//TODO: Move to JanetNet and add understanding logic
             else if (Arrays.stream(thanks).parallel().anyMatch(lm::contains))
                 result = JanetName + welcomeMessages[r.nextInt(welcomeMessages.length)];
             else if (Arrays.stream(love).parallel().anyMatch(lm::contains))
-                result = JanetName + (isDev ?  "I love you " + name + '.' : "Well I can give you a hug... but I am rejecting your love.");
+                result = JanetName + (isDev ? "I love you " + name + '.' : "Well I can give you a hug... but I am rejecting your love.");
             else if (Arrays.stream(hugRequests).parallel().anyMatch(lm::contains))
                 result = JanetName + (isDev ? "Yey *hugs " + name + " while kissing them on the cheek*." : "Sure *hugs " + name + "*.");
             else if (Arrays.stream(kissRequests).parallel().anyMatch(lm::contains))
-                result = JanetName + (isDev ?  "Ok, *kisses " : "No, *slaps ") + name + "*.";
+                result = JanetName + (isDev ? "Ok, *kisses " : "No, *slaps ") + name + "*.";
             else if (Arrays.stream(stalker).parallel().anyMatch(lm::contains))
                 result = JanetName + stalkerMessages[r.nextInt(stalkerMessages.length)];
             else if (Arrays.stream(drunk).parallel().anyMatch(lm::contains))

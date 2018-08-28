@@ -155,7 +155,6 @@ public class UserManager {
             configUsers.set(uuid.toString() + ".permissions", perms);
             if (players.containsKey(uuid))
                 getUser(uuid).removePerm(permission);
-
         } else {
             perms.add(permission);
             configUsers.set(uuid.toString() + ".permissions", perms);

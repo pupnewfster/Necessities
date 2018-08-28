@@ -141,7 +141,6 @@ public class Necessities extends JavaPlugin {
     private static OpenAnalyticsTracker getTracker() {
         return getInstance().googleAnalyticsTracker;
     }*/
-
     private IChatBaseComponent formatMessage(String message) {
         return IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
     }
@@ -708,7 +707,6 @@ public class Necessities extends JavaPlugin {
     /*public static JanetNet getNet() {
         return INSTANCE.net == null ? INSTANCE.net = new JanetNet() : INSTANCE.net;
     }*/
-
     static CmdCommandSpy getSpy() {
         return INSTANCE.spy == null ? INSTANCE.spy = new CmdCommandSpy() : INSTANCE.spy;
     }
