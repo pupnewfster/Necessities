@@ -1,8 +1,8 @@
 package gg.galaxygaming.necessities.Commands.Economy;
 
 import gg.galaxygaming.necessities.Economy.Economy;
-import gg.galaxygaming.necessities.Material.Material;
 import gg.galaxygaming.necessities.Economy.Prices;
+import gg.galaxygaming.necessities.Material.Material;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
@@ -10,7 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
 
@@ -62,14 +61,7 @@ public class CmdBuy implements EconomyCmd {
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You don't have enough money to buy that item.");
                     return true;
                 }
-                ItemStack itemStack = mat.toItemStack(amount);
-                if (mat.hasLore()) {
-                    ItemMeta meta = itemStack.getItemMeta();
-                    meta.setDisplayName(mat.getFriendlyName(amount));
-                    meta.setLore(mat.getLore());
-                    itemStack.setItemMeta(meta);
-                }
-                HashMap<Integer, ItemStack> noFit = inventory.addItem(itemStack);
+                HashMap<Integer, ItemStack> noFit = inventory.addItem(mat.toItemStack(amount));
                 if (!noFit.isEmpty()) {
                     amount = amount - noFit.get(0).getAmount();
                     cost = pr.getPrice("buy", mat.getName(), amount);
