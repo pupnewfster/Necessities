@@ -7,6 +7,7 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.Variables;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class CmdCreate implements GuildCmd {
@@ -33,10 +34,14 @@ public class CmdCreate implements GuildCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are already in a guild.");
                 return true;
             }
-            Economy eco = Necessities.getEconomy();
-            if (eco.getBalance(u.getUUID()) < 800) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + Economy.format(800) + " to spend on creating a guild.");
-                return true;
+            YamlConfiguration config = Necessities.getInstance().getConfig();
+            Economy eco = null;
+            if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy")) {
+                eco = Necessities.getEconomy();
+                if (eco.getBalance(u.getUUID()) < 800) {
+                    sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have " + Economy.format(800) + " to spend on creating a guild.");
+                    return true;
+                }
             }
             if (args[0].length() > 20) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Your guild name is too long, the maximum length for a guild name is 20.");
@@ -46,7 +51,9 @@ public class CmdCreate implements GuildCmd {
             g = gm.getGuild(args[0]);
             u.joinGuild(g);
             g.setLeader(p.getUniqueId());
-            eco.removeMoney(u.getUUID(), 800);
+            if (eco != null) {
+                eco.removeMoney(u.getUUID(), 800);
+            }
             sender.sendMessage(var.getMessages() + "Successfully created guild " + var.getObj() + args[0] + var.getMessages() + '.');
             sender.sendMessage(var.getMoney() + Economy.format(800) + var.getMessages() + " was removed from your account.");
         } else
