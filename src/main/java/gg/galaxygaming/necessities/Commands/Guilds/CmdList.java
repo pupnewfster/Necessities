@@ -25,12 +25,12 @@ public class CmdList implements GuildCmd {
                 return true;
             }
             User u = um.getUser(p.getUniqueId());
-            guildList.add(var.getGuildMsgs() + "" + (int) um.getUsers().keySet().stream().map(um::getUser).filter(x -> x.getGuild() == null && x.getPlayer() != null && p.canSee(x.getPlayer())).count() + " guildless online");
+            guildList.add(var.getGuildMsgs().toString() + (int) um.getUsers().keySet().stream().map(um::getUser).filter(x -> x.getGuild() == null && x.getPlayer() != null && p.canSee(x.getPlayer())).count() + " guildless online");
             for (Guild g : gm.getGuilds())
                 guildList.add(g.relation(u.getGuild()) + g.getName() + ' ' + var.getGuildMsgs() + g.getOnline(p.hasPermission("Necessities.seehidden")) + '/' + g.getTotal() + " online, " + g.getLand() + '/' +
                         Utils.roundTwoDecimals(g.getPower()) + '/' + g.getMaxPower() + ".00");
         } else {
-            guildList.add(var.getGuildMsgs() + "" + (int) um.getUsers().keySet().stream().filter(uuid -> um.getUser(uuid).getGuild() == null).count() + " guildless online");
+            guildList.add(var.getGuildMsgs().toString() + (int) um.getUsers().keySet().stream().filter(uuid -> um.getUser(uuid).getGuild() == null).count() + " guildless online");
             for (Guild g : gm.getGuilds())
                 guildList.add(var.getNeutral() + g.getName() + ' ' + var.getGuildMsgs() + g.getOnline(true) + '/' + g.getTotal() + " online, " + g.getLand() + '/' +
                         Utils.roundTwoDecimals(g.getPower()) + '/' + g.getMaxPower() + ".00");

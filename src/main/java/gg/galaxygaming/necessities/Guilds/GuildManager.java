@@ -1,5 +1,8 @@
 package gg.galaxygaming.necessities.Guilds;
 
+import gg.galaxygaming.necessities.Necessities;
+import gg.galaxygaming.necessities.RankManager.UserManager;
+import gg.galaxygaming.necessities.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -129,6 +132,27 @@ public class GuildManager {
      */
     public Guild getGuild(String name) {
         return guilds.get(name.toLowerCase());
+    }
+
+    /**
+     * Retrieves the guild with the specified name or guild owner.
+     * @param name The name of the guild or guild owner to retrieve.
+     * @return The guild with the specified name or the guild of the player with the specified name.
+     */
+    public Guild getGuildVerbose(String name) {
+        Guild g = getGuild(name);
+        if (g == null) {
+            UUID uuid = Utils.getID(name);
+            if (uuid == null)
+                uuid = Utils.getOfflineID(name);
+            if (uuid == null) {
+                return null;
+            }
+            UserManager um = Necessities.getUM();
+            if (um.getUser(uuid) != null)
+                g = um.getUser(uuid).getGuild();
+        }
+        return g;
     }
 
     /**

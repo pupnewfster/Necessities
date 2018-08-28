@@ -3,13 +3,9 @@ package gg.galaxygaming.necessities.Commands.Guilds;
 import gg.galaxygaming.necessities.Guilds.Guild;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.User;
-import gg.galaxygaming.necessities.RankManager.UserManager;
-import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 public class CmdAlly implements GuildCmd {
     public boolean commandUse(CommandSender sender, String[] args) {
@@ -24,24 +20,12 @@ public class CmdAlly implements GuildCmd {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Must enter a name for the guild you wish to ally with.");
                 return true;
             }
-            Guild g = Necessities.getGM().getGuild(args[0]);
-            UserManager um = Necessities.getUM();
+            Guild g = Necessities.getGM().getGuildVerbose(args[0]);
             if (g == null) {
-                UUID uuid = Utils.getID(args[0]);
-                if (uuid == null)
-                    uuid = Utils.getOfflineID(args[0]);
-                if (uuid == null) {
-                    sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
-                    return true;
-                }
-                if (um.getUser(uuid) != null)
-                    g = um.getUser(uuid).getGuild();
-            }
-            if (g == null) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That guild does not exists.");
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That guild does not exists, or no guild owner found with that name.");
                 return true;
             }
-            User u = um.getUser(p.getUniqueId());
+            User u = Necessities.getUM().getUser(p.getUniqueId());
             if (u.getGuild() == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not in a guild.");
                 return true;

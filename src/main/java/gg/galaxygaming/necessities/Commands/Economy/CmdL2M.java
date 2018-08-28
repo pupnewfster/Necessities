@@ -36,7 +36,7 @@ public class CmdL2M implements EconomyCmd {
             Necessities.getEconomy().addMoney(p.getUniqueId(), money);
             /*if (Necessities.isTracking())
                 OpenAnalyticsHook.trackLevelConvert(p, level);*/
-            p.sendMessage("" + ChatColor.GREEN + ChatColor.BOLD + '+' + ChatColor.RESET + " Converted " + ChatColor.BOLD + level + ChatColor.RESET + " levels to " + var.getMoney() + Economy.format(money) +
+            p.sendMessage(ChatColor.GREEN.toString() + ChatColor.BOLD + '+' + ChatColor.RESET + " Converted " + ChatColor.BOLD + level + ChatColor.RESET + " levels to " + var.getMoney() + Economy.format(money) +
                     ChatColor.RESET + '!');
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command");

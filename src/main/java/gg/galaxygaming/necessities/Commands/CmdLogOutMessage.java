@@ -34,7 +34,7 @@ public class CmdLogOutMessage implements Cmd {
             }
             p.sendMessage("Logout message set to: " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes('&',
                     logoutMessage.replaceAll("\\{NAME}", p.getDisplayName()).replaceAll("\\{RANK}",
-                            Necessities.getUM().getUser(p.getUniqueId()).getRank().getTitle())).replaceAll(ChatColor.RESET + "", ChatColor.YELLOW + ""));
+                            Necessities.getUM().getUser(p.getUniqueId()).getRank().getTitle())).replaceAll(ChatColor.RESET.toString(), ChatColor.YELLOW.toString()));
         } else
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console does not have a logout message.");
         return true;

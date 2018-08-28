@@ -33,7 +33,7 @@ public class CmdHide implements Cmd {
                 YamlConfiguration configLogIn = YamlConfiguration.loadConfiguration(configFileLogIn);
                 Bukkit.broadcastMessage((ChatColor.GREEN + " + " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes('&',
                         configLogIn.getString(p.getUniqueId().toString()).replaceAll("\\{NAME}", p.getDisplayName()).replaceAll("\\{RANK}",
-                                um.getUser(p.getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET + "", ChatColor.YELLOW + ""));
+                                um.getUser(p.getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET.toString(), ChatColor.YELLOW.toString()));
                 hidden.remove(p.getUniqueId());
                 p.sendMessage(var.getMessages() + "You are now visible.");
                 Bukkit.broadcast(var.getMessages() + "To Ops - " + var.getObj() + p.getDisplayName() + var.getMessages() + " - is now " + ChatColor.DARK_GRAY + "visible" + var.getMessages() + '.',
@@ -52,7 +52,7 @@ public class CmdHide implements Cmd {
                 YamlConfiguration configLogOut = YamlConfiguration.loadConfiguration(configFileLogOut);
                 Bukkit.broadcastMessage((ChatColor.RED + " - " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes('&',
                         configLogOut.getString(p.getUniqueId().toString()).replaceAll("\\{NAME}", p.getDisplayName()).replaceAll("\\{RANK}",
-                                um.getUser(p.getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET + "", ChatColor.YELLOW + ""));
+                                um.getUser(p.getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET.toString(), ChatColor.YELLOW.toString()));
                 hidden.add(p.getUniqueId());
                 p.sendMessage(var.getMessages() + "You are now hidden.");
                 Bukkit.broadcast(var.getMessages() + "To Ops - " + var.getObj() + p.getDisplayName() + var.getMessages() + " - is now " + ChatColor.WHITE + "invisible" + var.getMessages() + '.',

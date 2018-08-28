@@ -51,8 +51,7 @@ public class WarpManager {
      * @return The list of warps in string form separated by commas.
      */
     public String getWarps() {
-        ArrayList<String> ws = new ArrayList<>();
-        ws.addAll(warps.keySet());
+        ArrayList<String> ws = new ArrayList<>(warps.keySet());
         Collections.sort(ws);
         StringBuilder warpsBuilder = new StringBuilder();
         for (String w : ws)

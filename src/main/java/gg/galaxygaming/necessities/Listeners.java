@@ -97,7 +97,7 @@ class Listeners implements Listener {
                 banEntry = Bukkit.getBanList(BanList.Type.IP).getBanEntry(e.getAddress().toString().split("/")[1].split(":")[0]);
             if (banEntry == null)
                 return;
-            e.setKickMessage("You were " + ChatColor.DARK_RED + "" + ChatColor.BOLD + "BANNED" + ChatColor.RESET + " on " + getDateAndTime(banEntry.getCreated()) + " by " +
+            e.setKickMessage("You were " + ChatColor.DARK_RED.toString() + ChatColor.BOLD + "BANNED" + ChatColor.RESET + " on " + getDateAndTime(banEntry.getCreated()) + " by " +
                     banEntry.getSource() + ChatColor.RESET + ".\n" + (banEntry.getExpiration() == null ? "" : "Your ban will expire on " + getDateAndTime(banEntry.getExpiration()) + ".\n") +
                     ChatColor.RESET + "Reason: " + banEntry.getReason() + ChatColor.RESET + "\nAppeal at galaxygaming.gg");
             e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
@@ -134,7 +134,7 @@ class Listeners implements Listener {
         Variables var = Necessities.getVar();
         e.setJoinMessage((ChatColor.GREEN + " + " + var.getGuildMsgs() + ChatColor.translateAlternateColorCodes('&',
                 configLogIn.getString(uuid.toString()).replaceAll("\\{NAME}", p.getDisplayName()).replaceAll("\\{RANK}",
-                        um.getUser(p.getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET + "", var.getGuildMsgs() + ""));
+                        um.getUser(p.getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET.toString(), var.getGuildMsgs().toString()));
         CmdHide hide = Necessities.getHide();
         if (!Bukkit.getOfflinePlayer(uuid).hasPlayedBefore()) {
             YamlConfiguration config = Necessities.getInstance().getConfig();
@@ -219,7 +219,7 @@ class Listeners implements Listener {
         Variables var = Necessities.getVar();
         e.setQuitMessage((ChatColor.RED + " - " + var.getGuildMsgs() + ChatColor.translateAlternateColorCodes('&',
                 configLogOut.getString(uuid.toString()).replaceAll("\\{NAME}", e.getPlayer().getDisplayName()).replaceAll("\\{RANK}",
-                        um.getUser(e.getPlayer().getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET + "", var.getGuildMsgs() + ""));
+                        um.getUser(e.getPlayer().getUniqueId()).getRank().getTitle()))).replaceAll(ChatColor.RESET.toString(), var.getGuildMsgs().toString()));
         User u = um.getUser(e.getPlayer().getUniqueId());
         CmdHide hide = Necessities.getHide();
         if (hide.isHidden(e.getPlayer())) {
@@ -868,7 +868,7 @@ class Listeners implements Listener {
             ChatColor brackets = ChatColor.getByChar(configTitles.getString(player.getUniqueId() + ".color"));
             String title = configTitles.getString(player.getUniqueId() + ".title");
             title = ChatColor.translateAlternateColorCodes('&', title);
-            fullTitle = ChatColor.RESET + "" + brackets + '[' + ChatColor.RESET + title + ChatColor.RESET + "" + brackets + "] " + ChatColor.RESET;
+            fullTitle = ChatColor.RESET.toString() + brackets + '[' + ChatColor.RESET + title + ChatColor.RESET.toString() + brackets + "] " + ChatColor.RESET;
         }
         e.setFormat(e.getFormat().replaceAll("\\{TITLE} ", fullTitle));
         e.setFormat(e.getFormat().replaceAll("\\{NAME}", player.getDisplayName()));
@@ -904,14 +904,14 @@ class Listeners implements Listener {
                     if (noGuilds)
                         recip.sendMessage(ngm);
                     else
-                        recip.sendMessage(msg.replaceFirst("\\{GCOLOR}", u.getGuild().relation(r.getGuild()) + ""));
+                        recip.sendMessage(msg.replaceFirst("\\{GCOLOR}", u.getGuild().relation(r.getGuild()).toString()));
                 }
             }
-            Bukkit.getConsoleSender().sendMessage(msg.replaceFirst("\\{GCOLOR}", var.getNeutral() + ""));
+            Bukkit.getConsoleSender().sendMessage(msg.replaceFirst("\\{GCOLOR}", var.getNeutral().toString()));
             if (u.slackChat())
-                Necessities.getSlack().sendMessage(msg.replaceFirst("\\{GCOLOR}", var.getNeutral() + "").replaceFirst("To Slack - ", ""));
+                Necessities.getSlack().sendMessage(msg.replaceFirst("\\{GCOLOR}", var.getNeutral().toString()).replaceFirst("To Slack - ", ""));
             else if (!u.guildChat())
-                Necessities.getSlack().handleInGameChat(msg.replaceFirst("\\{GCOLOR}", var.getNeutral() + ""));
+                Necessities.getSlack().handleInGameChat(msg.replaceFirst("\\{GCOLOR}", var.getNeutral().toString()));
         }
         e.setCancelled(true);
         if (config.contains("Necessities.AI") && config.getBoolean("Necessities.AI") && (!isOp || message.startsWith("!")) && !u.guildChat()) {

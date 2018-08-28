@@ -240,7 +240,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
     private String removeConsec(String message) {
         if (message.equals(""))
             return "";
-        StringBuilder temp = new StringBuilder("" + message.charAt(0));
+        StringBuilder temp = new StringBuilder(Character.toString(message.charAt(0)));
         for (int i = 1; i < message.length(); i++)
             if (message.charAt(i) != message.charAt(i - 1))
                 temp.append(message.charAt(i));

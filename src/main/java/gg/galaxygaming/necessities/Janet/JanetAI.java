@@ -137,7 +137,7 @@ public class JanetAI {//TODO: Move to JanetNet and add understanding logic
                 heyMessages.add(s + ", can you buy me some " + food + '?');
                 heyMessages.add(s + ", if your not giving me some " + food + " leave me alone.");
                 heyMessages.add(s + ", can I join you in eating that " + food + '?');
-                heyMessages.add(s + ", can I have " + (food.startsWith("a") || food.startsWith("e") || food.startsWith("i") || food.startsWith("o") || food.startsWith("u") ? "an" : "a") + " " + food + " as well?");
+                heyMessages.add(s + ", can I have " + (food.startsWith("a") || food.startsWith("e") || food.startsWith("i") || food.startsWith("o") || food.startsWith("u") ? "an" : "a") + ' ' + food + " as well?");
             }
             for (String drink : drinks) {//add drinks
                 heyMessages.add(s + ", can I have a sip of that " + drink + '?');

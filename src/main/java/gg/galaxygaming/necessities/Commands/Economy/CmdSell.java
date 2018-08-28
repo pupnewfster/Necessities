@@ -95,7 +95,6 @@ public class CmdSell implements EconomyCmd {
                 int maxDur = s.getType().getMaxDurability() + 1, dur = maxDur - ((Damageable) meta).getDamage();
                 cAmount--;
                 double cost = s.getAmount() * baseCost * ((maxDur - 1.0 * dur) / maxDur);//why does it not work if not also divided by two?
-                System.out.println(dur + " " + maxDur + " " + cost);
                 ItemStack toRemove = s.clone();
                 toRemove.setAmount(1);
                 foundItems.add(toRemove);

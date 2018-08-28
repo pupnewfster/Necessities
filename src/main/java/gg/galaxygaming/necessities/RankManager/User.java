@@ -823,8 +823,7 @@ public class User {
         if (this.homes.isEmpty())
             return "";
         String homeslist;
-        ArrayList<String> sortHomes = new ArrayList<>();
-        sortHomes.addAll(this.homes.keySet());
+        ArrayList<String> sortHomes = new ArrayList<>(this.homes.keySet());
         Collections.sort(sortHomes);
         StringBuilder homeslistBuilder = new StringBuilder();
         for (String name : sortHomes)
