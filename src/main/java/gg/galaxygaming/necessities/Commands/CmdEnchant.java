@@ -3,11 +3,14 @@ package gg.galaxygaming.necessities.Commands;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +30,7 @@ public class CmdEnchant implements Cmd {
                 return true;
             }
             if (args.length == 1) {
-                Enchantment ench = Enchantment.getByName(enchantFinder(args[0]));
+                Enchantment ench = Enchantment.getByKey(enchantFinder(args[0]));
                 if (ench == null) {
                     player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Enchantment not found.");
                     return true;
@@ -35,7 +38,7 @@ public class CmdEnchant implements Cmd {
                 int level = ench.getMaxLevel();
                 if (ench.canEnchantItem(hand)) {
                     hand.addEnchantment(ench, level);
-                    player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + " at level " + var.getObj() + Integer.toString(level) +
+                    player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getKey()) + var.getMessages() + " at level " + var.getObj() + Integer.toString(level) +
                             var.getMessages() + '.');
                     return true;
                 }
@@ -45,7 +48,7 @@ public class CmdEnchant implements Cmd {
             if (args.length == 2) {
                 Enchantment ench = null;
                 if (!args[0].equalsIgnoreCase("all")) {
-                    ench = Enchantment.getByName(enchantFinder(args[0]));
+                    ench = Enchantment.getByKey(enchantFinder(args[0]));
                     if (ench == null) {
                         player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Enchantment does not exist.");
                         return true;
@@ -77,14 +80,14 @@ public class CmdEnchant implements Cmd {
                 } else if (ench != null && (ench.canEnchantItem(hand) || player.hasPermission("Necessities.unsafeEnchant"))) {
                     if (level == -1) {
                         hand.addUnsafeEnchantment(ench, ench.getMaxLevel());
-                        player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + " at max level.");
+                        player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getKey()) + var.getMessages() + " at max level.");
                     } else {
                         if (level == 0) {
                             hand.removeEnchantment(ench);
-                            player.sendMessage(var.getMessages() + "Removed enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + '.');
+                            player.sendMessage(var.getMessages() + "Removed enchantment " + var.getObj() + trueName(ench.getKey()) + var.getMessages() + '.');
                         } else {
                             hand.addUnsafeEnchantment(ench, level);
-                            player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getName()) + var.getMessages() + " at level " + var.getObj() + Integer.toString(level) +
+                            player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getKey()) + var.getMessages() + " at level " + var.getObj() + Integer.toString(level) +
                                     var.getMessages() + '.');
                         }
                     }
@@ -119,14 +122,16 @@ public class CmdEnchant implements Cmd {
             if (args.length == 1) {
                 if ("ALL".startsWith(search))
                     complete.add("ALL");
-                for (Enchantment e : Enchantment.values())
-                    if (e.canEnchantItem(p.getInventory().getItemInMainHand()) && e.getName().startsWith(search))
-                        complete.add(e.getName());
+                for (Enchantment e : Enchantment.values()) {
+                    String key = e.getKey().toString();
+                    if (e.canEnchantItem(p.getInventory().getItemInMainHand()) && key.startsWith(search))
+                        complete.add(key);
+                }
             } else {
                 if ("MAX".startsWith(search))
                     complete.add("MAX");
                 for (Enchantment e : Enchantment.values())
-                    if (e.canEnchantItem(p.getInventory().getItemInMainHand()) && e.equals(Enchantment.getByName(enchantFinder(args[0]))) &&
+                    if (e.canEnchantItem(p.getInventory().getItemInMainHand()) && e.equals(Enchantment.getByKey(enchantFinder(args[0]))) &&
                             Integer.toString(e.getMaxLevel()).startsWith(search))
                         for (int i = 0; i < e.getMaxLevel(); i++)
                             complete.add(Integer.toString(i + 1));
@@ -135,132 +140,157 @@ public class CmdEnchant implements Cmd {
         return complete;
     }
 
-    private String enchantFinder(String enchant) {
+    private NamespacedKey enchantFinder(String enchant) {
         enchant = enchant.toUpperCase();
         switch (enchant) {
             case "POWER":
-                return "ARROW_DAMAGE";
+                return Enchantment.ARROW_DAMAGE.getKey();
             case "FLAME":
-                return "ARROW_FIRE";
+                return Enchantment.ARROW_FIRE.getKey();
             case "INFINITY":
-                return "ARROW_INFINITY";
+                return Enchantment.ARROW_INFINITE.getKey();
             case "PUNCH":
-                return "ARROW_KNOCKBACK";
+                return Enchantment.ARROW_KNOCKBACK.getKey();
             case "SHARPNESS":
-                return "DAMAGE_ALL";
+                return Enchantment.DAMAGE_ALL.getKey();
             case "BANEOFARTHROPODS":
-                return "DAMAGE_ARTHROPODS";
+                return Enchantment.DAMAGE_ARTHROPODS.getKey();
             case "BANE":
-                return "DAMAGE_ARTHROPODS";
+                return Enchantment.DAMAGE_ARTHROPODS.getKey();
             case "SMITE":
-                return "DAMAGE_UNDEAD";
+                return Enchantment.DAMAGE_UNDEAD.getKey();
             case "EFFICIENCY":
-                return "DIG_SPEED";
+                return Enchantment.DIG_SPEED.getKey();
             case "UNBREAKING":
-                return "DURABILITY";
+                return Enchantment.DURABILITY.getKey();
             case "FIREASPECT":
-                return "FIRE_ASPECT";
+                return Enchantment.FIRE_ASPECT.getKey();
             case "FORTUNE":
-                return "LOOT_BONUS_BLOCKS";
+                return Enchantment.LOOT_BONUS_BLOCKS.getKey();
             case "LOOTING":
-                return "LOOT_BONUS_MOBS";
+                return Enchantment.LOOT_BONUS_MOBS.getKey();
             case "RESPIRATION":
-                return "OXYGEN";
+                return Enchantment.OXYGEN.getKey();
             case "PROTECTION":
-                return "PROTECTION_ENVIRONMENTAL";
+                return Enchantment.PROTECTION_ENVIRONMENTAL.getKey();
             case "BLASTPROTECTION":
-                return "PROTECTION_EXPLOSIONS";
+                return Enchantment.PROTECTION_EXPLOSIONS.getKey();
             case "FEATHERFALLING":
-                return "PROTECTION_FALL";
+                return Enchantment.PROTECTION_FALL.getKey();
             case "FIREPROTECTION":
-                return "PROTECTION_FIRE";
+                return Enchantment.PROTECTION_FIRE.getKey();
             case "PROJECTILEPROTECTION":
-                return "PROTECTION_PROJECTILE";
+                return Enchantment.PROTECTION_PROJECTILE.getKey();
             case "SILKTOUCH":
-                return "SILK_TOUCH";
+                return Enchantment.SILK_TOUCH.getKey();
             case "AQUAINFINITY":
-                return "WATER_WORKER";
+                return Enchantment.WATER_WORKER.getKey();
             case "DEPTHSTRIDER":
-                return "DEPTH_STRIDER";
+                return Enchantment.DEPTH_STRIDER.getKey();
             case "LUCKOFTHESEAS":
-                return "LUCK";
+                return Enchantment.LUCK.getKey();
             case "LURE":
-                return "LURE";
+                return Enchantment.LURE.getKey();
             case "FROSTWALKER":
-                return "FROST_WALKER";
+                return Enchantment.FROST_WALKER.getKey();
             case "MENDING":
-                return "MENDING";
+                return Enchantment.MENDING.getKey();
             case "CURSEOFBINDING":
-                return "BINDING_CURSE";
+                return Enchantment.BINDING_CURSE.getKey();
             case "CURSEOFVANISHING":
-                return "VANISHING_CURSE";
+                return Enchantment.VANISHING_CURSE.getKey();
             case "SWEEPINGEDGE":
-                return "SWEEPING_EDGE";
+                return Enchantment.SWEEPING_EDGE.getKey();
+            case "CHANNELING":
+                return Enchantment.CHANNELING.getKey();
+            case "IMPALING":
+                return Enchantment.IMPALING.getKey();
+            case "LOYALTY":
+                return Enchantment.LOYALTY.getKey();
+            case "RIPTIDE":
+                return Enchantment.RIPTIDE.getKey();
             default:
-                return enchant;
+                String[] pieces = enchant.toLowerCase().split(":");
+                if (pieces.length == 0) {
+                    return null;
+                }
+                if (pieces.length == 1) {
+                    return NamespacedKey.minecraft(enchant.toLowerCase());
+                }
+                Plugin p = Bukkit.getPluginManager().getPlugin(pieces[0]);
+                return p == null ? null : new NamespacedKey(p, pieces[1]);
         }
     }
 
-    private String trueName(String enchant) {
-        switch (enchant) {
-            case "ARROW_DAMAGE":
-                return "power";
-            case "ARROW_FIRE":
-                return "flame";
-            case "ARROW_INFINITY":
-                return "infinity";
-            case "ARROW_KNOCKBACK":
-                return "punch";
-            case "DAMAGE_ALL":
-                return "sharpness";
-            case "DAMAGE_ARTHROPODS":
-                return "bane of arthropods";
-            case "DAMAGE_UNDEAD":
-                return "smite";
-            case "DIG_SPEED":
-                return "efficiency";
-            case "DURABILITY":
-                return "unbreaking";
-            case "FIRE_ASPECT":
-                return "fire aspect";
-            case "LOOT_BONUS_BLOCKS":
-                return "fortune";
-            case "LOOT_BONUS_MOBS":
-                return "looting";
-            case "OXYGEN":
-                return "respiration";
-            case "PROTECTION_ENVIRONMENTAL":
-                return "protection";
-            case "PROTECTION_EXPLOSIONS":
-                return "blast protection";
-            case "PROTECTION_FALL":
-                return "feather falling";
-            case "PROTECTION_FIRE":
-                return "fire protection";
-            case "PROTECTION_PROJECTILE":
-                return "projectile protection";
-            case "SILK_TOUCH":
-                return "silk touch";
-            case "WATER_WORKER":
-                return "aqua infinity";
-            case "DEPTH_STRIDER":
-                return "depth strider";
-            case "LURE":
-                return "lure";
-            case "LUCK":
-                return "luck";
-            case "FROST_WALKER":
-                return "frost walker";
-            case "MENDING":
-                return "mending";
-            case "BINDING_CURSE":
-                return "curse of binding";
-            case "VANISHING_CURSE":
-                return "curse of vanishing";
-            case "SWEEPING_EDGE":
-                return "sweeping edge";
-            default:
-                return enchant.toLowerCase();
+    private String trueName(NamespacedKey key) {
+        if (key == null) {
+            return null;
         }
+        if (Enchantment.ARROW_DAMAGE.getKey().equals(key)) {
+            return "power";
+        } else if (Enchantment.ARROW_FIRE.getKey().equals(key)) {
+            return "flame";
+        } else if (Enchantment.ARROW_INFINITE.getKey().equals(key)) {
+            return "infinity";
+        } else if (Enchantment.ARROW_KNOCKBACK.getKey().equals(key)) {
+            return "punch";
+        } else if (Enchantment.DAMAGE_ALL.getKey().equals(key)) {
+            return "sharpness";
+        } else if (Enchantment.DAMAGE_ARTHROPODS.getKey().equals(key)) {
+            return "bane of arthropods";
+        } else if (Enchantment.DAMAGE_UNDEAD.getKey().equals(key)) {
+            return "smite";
+        } else if (Enchantment.DIG_SPEED.getKey().equals(key)) {
+            return "efficiency";
+        } else if (Enchantment.DURABILITY.getKey().equals(key)) {
+            return "unbreaking";
+        } else if (Enchantment.FIRE_ASPECT.getKey().equals(key)) {
+            return "fire aspect";
+        } else if (Enchantment.LOOT_BONUS_BLOCKS.getKey().equals(key)) {
+            return "fortune";
+        } else if (Enchantment.LOOT_BONUS_MOBS.getKey().equals(key)) {
+            return "looting";
+        } else if (Enchantment.OXYGEN.getKey().equals(key)) {
+            return "respiration";
+        } else if (Enchantment.PROTECTION_ENVIRONMENTAL.getKey().equals(key)) {
+            return "protection";
+        } else if (Enchantment.PROTECTION_EXPLOSIONS.getKey().equals(key)) {
+            return "blast protection";
+        } else if (Enchantment.PROTECTION_FALL.getKey().equals(key)) {
+            return "feather falling";
+        } else if (Enchantment.PROTECTION_FIRE.getKey().equals(key)) {
+            return "fire protection";
+        } else if (Enchantment.PROTECTION_PROJECTILE.getKey().equals(key)) {
+            return "projectile protection";
+        } else if (Enchantment.SILK_TOUCH.getKey().equals(key)) {
+            return "silk touch";
+        } else if (Enchantment.WATER_WORKER.getKey().equals(key)) {
+            return "aqua infinity";
+        } else if (Enchantment.DEPTH_STRIDER.getKey().equals(key)) {
+            return "depth strider";
+        } else if (Enchantment.LURE.getKey().equals(key)) {
+            return "lure";
+        } else if (Enchantment.LUCK.getKey().equals(key)) {
+            return "luck";
+        } else if (Enchantment.FROST_WALKER.getKey().equals(key)) {
+            return "frost walker";
+        } else if (Enchantment.MENDING.getKey().equals(key)) {
+            return "mending";
+        } else if (Enchantment.BINDING_CURSE.getKey().equals(key)) {
+            return "curse of binding";
+        } else if (Enchantment.VANISHING_CURSE.getKey().equals(key)) {
+            return "curse of vanishing";
+        } else if (Enchantment.SWEEPING_EDGE.getKey().equals(key)) {
+            return "sweeping edge";
+        } else if (Enchantment.CHANNELING.getKey().equals(key)) {
+            return "channeling";
+        } else if (Enchantment.IMPALING.getKey().equals(key)) {
+            return "impaling";
+        } else if (Enchantment.LOYALTY.getKey().equals(key)) {
+            return "loyalty";
+        } else if (Enchantment.RIPTIDE.getKey().equals(key)) {
+            return "riptide";
+        }
+        return key.toString().toLowerCase();
     }
 }
