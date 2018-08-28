@@ -43,6 +43,7 @@ import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -364,7 +365,16 @@ class Listeners implements Listener {
                     for (String en : splitSpace[3].split(","))
                         if (!en.equals("n")) {
                             String[] split = en.split("-");
-                            i.addUnsafeEnchantment(Enchantment.getByKey(new NamespacedKey(split[0], split[1])), Integer.parseInt(split[2]));
+                            NamespacedKey key;
+                            if (split[0].equals("minecraft")) {
+                                key = NamespacedKey.minecraft(split[1]);
+                            } else {
+                                Plugin p = Bukkit.getPluginManager().getPlugin(split[0]);
+                                key = p == null ? null : new NamespacedKey(p, split[1]);
+                            }
+                            if (key != null) {
+                                i.addUnsafeEnchantment(Enchantment.getByKey(key), Integer.parseInt(split[2]));
+                            }
                         }
                     ArrayList<String> lore = new ArrayList<>();
                     for (String l : splitSpace[4].split(","))
@@ -403,7 +413,7 @@ class Listeners implements Listener {
             }
         } else if (type.equals(Material.SPAWNER) && meta.hasLore()) {
             CreatureSpawner spawner = ((CreatureSpawner) b.getState());
-            spawner.setCreatureTypeByName(meta.getLore().get(0));
+            spawner.setSpawnedType(EntityType.valueOf(meta.getLore().get(0)));
             spawner.update();
         } else if ((type.equals(Material.SIGN) || type.equals(Material.WALL_SIGN)) && meta.hasLore()) {
             Sign s = (Sign) b.getState();
@@ -562,7 +572,7 @@ class Listeners implements Listener {
                             } else if (type.equals(Material.SPAWNER)) {
                                 CreatureSpawner cs = (CreatureSpawner) state;
                                 ArrayList<String> lore = new ArrayList<>();
-                                lore.add(cs.getCreatureTypeName());
+                                lore.add(cs.getSpawnedType().toString());
                                 meta.setLore(lore);
                                 contents.setItemMeta(meta);
                             } else if (type.equals(Material.SIGN) || type.equals(Material.WALL_SIGN)) {
@@ -1156,14 +1166,6 @@ class Listeners implements Listener {
 
     @EventHandler
     public void onDropItem(PlayerDropItemEvent e) {
-        User u = Necessities.getUM().getUser(e.getPlayer().getUniqueId());
-        u.setLastAction(System.currentTimeMillis());
-        if (u.isAfk())
-            u.setAfk(false);
-    }
-
-    @EventHandler
-    public void onTabComplete(PlayerChatTabCompleteEvent e) {
         User u = Necessities.getUM().getUser(e.getPlayer().getUniqueId());
         u.setLastAction(System.currentTimeMillis());
         if (u.isAfk())

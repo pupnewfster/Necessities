@@ -1,5 +1,6 @@
 package gg.galaxygaming.necessities;
 
+import com.destroystokyo.paper.profile.ProfileProperty;
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
@@ -10,12 +11,17 @@ import org.bukkit.entity.Player;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class Utils {
+    private static Map<UUID, ProfileProperty> skins = new HashMap<>();
+
     /**
      * Checks if the given string is a valid double.
      * @param input The string to check.
@@ -167,6 +173,31 @@ public class Utils {
     }
 
     /**
+     * Gets a ProfileProperty representing the skin of the player with ths specified UUID.
+     * @param uuid The UUID of the player to get the skin of.
+     * @return The ProfileProperty representing the skin of the player with the given UUID.
+     */
+    public static ProfileProperty getPlayerSkin(UUID uuid) {
+        //TODO if the player is online grab it from their skin. If we end up supporting changing skins then also cache their old skin
+        if (skins.containsKey(uuid)) {//TODO: Should clear things from the cache after x amount of time in case their skin changes
+            return skins.get(uuid);
+        }
+        StringBuilder response = new StringBuilder();
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString().replaceAll("-", "") + "?unsigned=false").openConnection().getInputStream()))) {
+            String inputLine;
+            while ((inputLine = in.readLine()) != null)
+                response.append(inputLine);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        JsonObject jo = (JsonObject) ((JsonArray) Jsoner.deserialize(response.toString(), new JsonObject()).get("properties")).get(0);
+        ProfileProperty property;
+        skins.put(uuid, property = new ProfileProperty("textures", jo.getString(Jsoner.mintJsonKey("value", null)), jo.getString(Jsoner.mintJsonKey("signature", null))));
+        return property;
+    }
+
+    /**
      * Gets a players name based on the string representation of their uuid.
      * @param message The string representation of a players uuid.
      * @return A players name based on the string representation of their uuid.
@@ -236,4 +267,6 @@ public class Utils {
             } catch (Exception ignored) {
             }
     }
+
+    //TODO: Create a method to add items to a player inventory or just drop on ground if full
 }

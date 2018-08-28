@@ -1,17 +1,13 @@
 package gg.galaxygaming.necessities.RankManager;
 
-import com.github.cliftonlabs.json_simple.JsonArray;
-import com.github.cliftonlabs.json_simple.JsonObject;
-import com.github.cliftonlabs.json_simple.Jsoner;
-import com.google.common.collect.Multimap;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import com.google.common.io.Files;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import gg.galaxygaming.necessities.Commands.CmdHide;
 import gg.galaxygaming.necessities.Guilds.Guild;
 import gg.galaxygaming.necessities.Hats.Hat;
 import gg.galaxygaming.necessities.Hats.HatType;
 import gg.galaxygaming.necessities.Necessities;
+import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,18 +15,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.util.BlockIterator;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Field;
-import java.net.URL;
 import java.util.*;
 
 public class User {
@@ -320,7 +311,7 @@ public class User {
     public void setSkin(UUID uuid) {//TODO make this refresh their skin. Currently changes their gameprofile to have correct skin... but doesn't refresh the player
         if (bukkitPlayer == null)
             return;
-        GameProfile profile = ((CraftPlayer) bukkitPlayer).getHandle().getProfile();
+        /*GameProfile profile = ((CraftPlayer) bukkitPlayer).getHandle().getProfile();
         try {
             Field prop = profile.getProperties().getClass().getDeclaredField("properties");
             prop.setAccessible(true);
@@ -338,6 +329,11 @@ public class User {
             properties.put("textures", new Property("textures", value, signature));
         } catch (Exception e) {
             e.printStackTrace();
+        }*/
+        //TODO: Try below method in more detail
+        ProfileProperty textures = Utils.getPlayerSkin(uuid);
+        if (textures != null) {
+            bukkitPlayer.getPlayerProfile().setProperty(textures);
         }
     }
 
@@ -1078,7 +1074,8 @@ public class User {
         Iterator<Block> itr = new BlockIterator(this.bukkitPlayer, 140);
         while (itr.hasNext()) {
             Block block = itr.next();
-            if (block.getType().getId() != 0)
+            Material type = block.getType();
+            if (!type.equals(Material.AIR) && !type.equals(Material.CAVE_AIR)) //Do however stop at VOID_AIR because no blocks will be past that point anyways
                 return block.getLocation();
         }
         return null;

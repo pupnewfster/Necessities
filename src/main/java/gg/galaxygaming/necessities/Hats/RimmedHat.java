@@ -2,6 +2,7 @@ package gg.galaxygaming.necessities.Hats;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 
@@ -15,7 +16,7 @@ class RimmedHat extends Hat {
             spawnYaw(1, temp);
         }
         for (int i = 0; i < 360 / turn; i++) {
-            this.armorStands.get(i).setItemInHand(new ItemStack(Material.WOODEN_AXE, 1));
+            this.armorStands.get(i).setItem(EquipmentSlot.HAND, new ItemStack(Material.WOODEN_AXE, 1));
             this.armorStands.get(i).setRightArmPose(new EulerAngle(Math.toRadians(135), Math.toRadians(90), 0));
             this.armorStands.get(i).setSmall(true);
         }
