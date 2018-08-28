@@ -12,8 +12,6 @@ import gg.galaxygaming.necessities.RankManager.RankManager;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.WorldManager.WorldManager;
-import net.minecraft.server.v1_13_R2.IChatBaseComponent;
-import net.minecraft.server.v1_13_R2.PacketPlayOutTitle;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.data.Directional;
@@ -22,10 +20,9 @@ import org.bukkit.block.data.Openable;
 import org.bukkit.block.data.Powerable;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_13_R2.boss.CraftBossBar;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -60,12 +57,12 @@ class Listeners implements Listener {
     private final File configFileLogIn = new File("plugins/Necessities", "loginmessages.yml");
     private final File configFileTitles = new File("plugins/Necessities", "titles.yml");
     private static String JanetName = "";
-    private static CraftBossBar welcomeBar;
+    private static BossBar welcomeBar;
 
     Listeners() {
         RankManager rm = Necessities.getRM();
         JanetName = (!rm.getOrder().isEmpty() ? ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + ' ') : "") + "Janet" + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
-        welcomeBar = new CraftBossBar(ChatColor.GOLD + "Welcome to " + ChatColor.AQUA + "Galaxy Gaming", BarColor.GREEN, BarStyle.SOLID);
+        welcomeBar = Bukkit.createBossBar(ChatColor.GOLD + "Welcome to " + ChatColor.AQUA + "Galaxy Gaming", BarColor.GREEN, BarStyle.SOLID);
     }
 
     private String corTime(String time) {
@@ -305,10 +302,7 @@ class Listeners implements Listener {
             GuildManager gm = Necessities.getGM();
             Guild owner = gm.chunkOwner(to.getChunk());
             if (owner != gm.chunkOwner(from.getChunk())) {
-                Variables var = Necessities.getVar();
-                String m = owner == null ? var.getWild() + "Wilderness" : owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription();
-                IChatBaseComponent infoJSON = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + m + "\"}");
-                ((CraftPlayer) e.getPlayer()).getHandle().playerConnection.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.ACTIONBAR, infoJSON, 0, 60, 0));
+                e.getPlayer().sendActionBar(owner == null ? Necessities.getVar().getWild() + "Wilderness" : owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription());
             }
         }
     }
@@ -1029,9 +1023,7 @@ class Listeners implements Listener {
             GuildManager gm = Necessities.getGM();
             Guild owner = gm.chunkOwner(e.getTo().getChunk());
             if (owner != gm.chunkOwner(e.getFrom().getChunk())) {
-                String m = owner == null ? var.getWild() + "Wilderness" : owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription();
-                IChatBaseComponent infoJSON = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + m + "\"}");
-                ((CraftPlayer) e.getPlayer()).getHandle().playerConnection.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.ACTIONBAR, infoJSON, 0, 60, 0));
+                e.getPlayer().sendActionBar(owner == null ? Necessities.getVar().getWild() + "Wilderness" : owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription());
             }
         }
     }

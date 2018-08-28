@@ -2,6 +2,7 @@ package gg.galaxygaming.necessities;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.World;
 
 public class SafeLocation {
@@ -45,18 +46,13 @@ public class SafeLocation {
         int maxHeight = l.getWorld().getMaxHeight();
         if (l.getWorld().getEnvironment().equals(World.Environment.NETHER))
             maxHeight = 126;
-        boolean overLava = false;
         //TODO go out ~5 blocks from close to far as it goes up, and then create a private method of this??? because checking about falling does it need the aoe? probably
         //CANNOT just add extra for statements as the overLava would stop working properly
         //TODO: Not check to see if type changed? and just check if it is on a solid block???
         //Compare with https://github.com/drtshock/Essentials/blob/2.x/Essentials/src/com/earth2me/essentials/utils/LocationUtil.java to see about rough logic
         for (int i = l.getBlockY(); i < maxHeight; i++) {
             Material type = new Location(l.getWorld(), l.getX(), i, l.getZ()).getBlock().getType();
-            if (type.equals(Material.LAVA)/* || type.equals(Material.STATIONARY_LAVA)*/)
-                overLava = true;
-            else if ((type.isSolid() || isLeaves(type)) && overLava)
-                overLava = false;
-            if (!type.isSolid() && !isLeaves(type) && !overLava) {
+            if (!type.isSolid() && !isLeaves(type) && Tag.VALID_SPAWN.isTagged(type)) {
                 l = new Location(l.getWorld(), l.getX(), i, l.getZ(), l.getYaw(), l.getPitch());
                 break;
             }
@@ -65,7 +61,7 @@ public class SafeLocation {
             for (int i = l.getBlockY(); i > 0; i--)
                 if (new Location(l.getWorld(), l.getX(), i, l.getZ()).getBlock().getType().isSolid()) {
                     l = new Location(l.getWorld(), l.getX(), i + 1, l.getZ(), l.getYaw(), l.getPitch());
-                    if (l.getBlock().getType().equals(Material.LAVA)/* || l.getBlock().getType().equals(Material.STATIONARY_LAVA)*/)
+                    if (!Tag.VALID_SPAWN.isTagged(l.getBlock().getType()))
                         l = getSafe(l);
                     break;
                 }
