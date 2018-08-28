@@ -412,7 +412,7 @@ class Listeners implements Listener {
                 }
             }
         } else if (type.equals(Material.SPAWNER) && meta.hasLore()) {
-            CreatureSpawner spawner = ((CreatureSpawner) b.getState());
+            CreatureSpawner spawner = (CreatureSpawner) b.getState();
             spawner.setSpawnedType(EntityType.valueOf(meta.getLore().get(0)));
             spawner.update();
         } else if ((type.equals(Material.SIGN) || type.equals(Material.WALL_SIGN)) && meta.hasLore()) {
@@ -475,18 +475,18 @@ class Listeners implements Listener {
                                 b.getZ() - 1).getChunk());
                 }
                 if (owner != null && u.getGuild() != owner) {
-                    if ((MaterialHelper.isWoodDoor(type) || MaterialHelper.isFenceGate(type)) && owner.allowInteract()) {
-
-                    } else if (e.getAction().equals(Action.PHYSICAL))
-                        e.setCancelled(true);
-                    else {
-                        e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
-                        if (MaterialHelper.isWoodDoor(type) || MaterialHelper.isFenceGate(type)) {
-                            b.getState().update();
-                            if (b.getLocation().getBlockY() > 0)
-                                b.getRelative(BlockFace.DOWN).getState().update();
+                    if ((!MaterialHelper.isWoodDoor(type) && !MaterialHelper.isFenceGate(type)) || !owner.allowInteract()) {
+                        if (e.getAction().equals(Action.PHYSICAL))
+                            e.setCancelled(true);
+                        else {
+                            e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a part of that guild, and are not allowed to build there.");
+                            if (MaterialHelper.isWoodDoor(type) || MaterialHelper.isFenceGate(type)) {
+                                b.getState().update();
+                                if (b.getLocation().getBlockY() > 0)
+                                    b.getRelative(BlockFace.DOWN).getState().update();
+                            }
+                            e.setCancelled(true);
                         }
-                        e.setCancelled(true);
                     }
                 }
             } else if (e.getAction() == Action.LEFT_CLICK_BLOCK) {

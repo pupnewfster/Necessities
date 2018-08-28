@@ -682,7 +682,7 @@ public class Necessities extends JavaPlugin {
         }
     }
 
-    /**
+    /*
      * Tracks the given action.
      * @param hit The action to track.
      */

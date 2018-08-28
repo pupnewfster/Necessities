@@ -146,8 +146,7 @@ public class UserManager {
             return;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         List<String> perms = configUsers.getStringList(uuid.toString() + ".permissions");
-        if (perms.contains(""))
-            perms.remove("");
+        perms.remove("");
         if (remove) {
             perms.remove(permission);
             if (perms.isEmpty())
@@ -178,8 +177,7 @@ public class UserManager {
             return;
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         List<String> subranks = configUsers.getStringList(uuid.toString() + ".subranks");
-        if (subranks.contains(""))
-            subranks.remove("");
+        subranks.remove("");
         if (remove)
             subranks.remove(name);
         else

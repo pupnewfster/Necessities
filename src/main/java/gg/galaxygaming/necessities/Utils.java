@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class Utils {
-    private static Map<UUID, ProfileProperty> skins = new HashMap<>();
+    private static final Map<UUID, ProfileProperty> skins = new HashMap<>();
 
     /**
      * Checks if the given string is a valid double.

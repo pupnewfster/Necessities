@@ -1,9 +1,9 @@
-package gg.galaxygaming.necessities;
+//package gg.galaxygaming.necessities;
 
 //import net.nyvaria.googleanalytics.hit.EventHit;
 //import net.nyvaria.openanalytics.bukkit.client.Client;
-public class OpenAnalyticsHook {
-    /**
+//public class OpenAnalyticsHook {
+    /*
      * Tracks an economy action.
      * @param uuid   The uuid of the player that had their balance change.
      * @param change The change in the players balance.
@@ -20,7 +20,7 @@ public class OpenAnalyticsHook {
         Necessities.trackAction(hit);
     }*/
 
-    /**
+    /*
      * Tracks a L2M occurrence.
      * @param p     The player who performed the L2M.
      * @param level The number of levels the player converted.
@@ -30,4 +30,4 @@ public class OpenAnalyticsHook {
         hit.event_value = level;
         Necessities.trackAction(hit);
     }*/
-}
+//}

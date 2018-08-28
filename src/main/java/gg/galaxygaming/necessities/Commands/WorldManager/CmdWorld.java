@@ -56,6 +56,10 @@ public class CmdWorld implements WorldCmd {
                         } else if (w.getName().contains(wName))
                             dim = w;
                 }
+                if (dim == null) { //Should never be possible but just in case
+                    sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid dimension.");
+                    return true;
+                }
                 UUID uuid = Utils.getID(args[0]);
                 if (uuid == null) {
                     sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid player.");

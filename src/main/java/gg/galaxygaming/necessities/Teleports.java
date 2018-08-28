@@ -23,7 +23,7 @@ public class Teleports {
         if (teleportRequests.containsKey(to)) {
             if (teleportRequests.get(to).contains(from.split(" ")[0] + " toMe"))
                 teleportRequests.get(to).remove(from.split(" ")[0] + " toMe");
-            else if (teleportRequests.get(to).contains(from.split(" ")[0] + " toThem"))
+            else
                 teleportRequests.get(to).remove(from.split(" ")[0] + " toThem");
         } else
             teleportRequests.put(to, new ArrayList<>());

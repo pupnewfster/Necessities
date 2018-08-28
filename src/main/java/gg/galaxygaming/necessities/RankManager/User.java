@@ -181,8 +181,7 @@ public class User {
             if (!configUsers.contains(getUUID().toString()))
                 return;
             List<String> ign = configUsers.getStringList(uuid.toString() + ".ignored");
-            if (ign.contains(""))
-                ign.remove("");
+            ign.remove("");
             ign.add(uuid.toString());
             configUsers.set(uuid.toString() + ".ignored", ign);
             try {
@@ -776,8 +775,7 @@ public class User {
         if (homelist.isEmpty()) {
             configUsers.set(getUUID().toString() + ".homeslist", Collections.singletonList(name));
         } else {
-            if (homelist.contains(""))
-                homelist.remove("");
+            homelist.remove("");
             if (!homelist.contains(name))
                 homelist.add(name);
             configUsers.set(getUUID().toString() + ".homeslist", homelist);
@@ -909,8 +907,7 @@ public class User {
 
     void removePerm(String permission) {
         this.attachment.unsetPermission(permission);
-        if (this.permissions.contains(permission))
-            this.permissions.remove(permission);
+        this.permissions.remove(permission);
     }
 
     /**

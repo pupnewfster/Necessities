@@ -19,16 +19,10 @@ public class CmdWeather implements Cmd {
             Player p = (Player) sender;
             if (args.length > 1) {
                 dim = sender.getServer().getWorld(args[0]);
-                if (args[1].equalsIgnoreCase("sun") || args[1].equalsIgnoreCase("clear") || args[1].equalsIgnoreCase("nice"))
-                    thundering = false;
                 if (args[1].equalsIgnoreCase("storm") || args[1].equalsIgnoreCase("stormy") || args[1].equalsIgnoreCase("bad") || args[1].equalsIgnoreCase("rain"))
                     thundering = true;
-            } else {
-                if (args[0].equalsIgnoreCase("sun") || args[0].equalsIgnoreCase("clear") || args[0].equalsIgnoreCase("nice"))
-                    thundering = false;
-                if (args[0].equalsIgnoreCase("storm") || args[0].equalsIgnoreCase("stormy") || args[0].equalsIgnoreCase("bad") || args[0].equalsIgnoreCase("rain"))
-                    thundering = true;
-            }
+            } else if (args[0].equalsIgnoreCase("storm") || args[0].equalsIgnoreCase("stormy") || args[0].equalsIgnoreCase("bad") || args[0].equalsIgnoreCase("rain"))
+                thundering = true;
             if (dim == null)
                 dim = p.getWorld();
         } else {
@@ -37,8 +31,6 @@ public class CmdWeather implements Cmd {
                 return true;
             }
             dim = sender.getServer().getWorld(args[0]);
-            if (args[1].equalsIgnoreCase("sun") || args[1].equalsIgnoreCase("clear") || args[1].equalsIgnoreCase("nice"))
-                thundering = false;
             if (args[1].equalsIgnoreCase("storm") || args[1].equalsIgnoreCase("stormy") || args[1].equalsIgnoreCase("bad") || args[1].equalsIgnoreCase("rain"))
                 thundering = true;
             if (dim == null) {

@@ -71,8 +71,7 @@ public class GuildManager {
         YamlConfiguration guild = YamlConfiguration.loadConfiguration(fileGuild);
         List<String> guildList = configGuilds.getStringList("guilds");
         guildList.add(name);
-        if (guildList.contains(""))
-            guildList.remove("");
+        guildList.remove("");
         configGuilds.set("guilds", guildList);
         try {
             configGuilds.save(configFileGuilds);

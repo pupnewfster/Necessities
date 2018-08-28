@@ -60,36 +60,31 @@ public class Guild {
         }
         if (configGuild.contains("mods")) {
             List<String> mods = configGuild.getStringList("mods");
-            if (mods.contains(""))
-                mods.remove("");
+            mods.remove("");
             if (!mods.isEmpty())
                 this.mods.addAll(mods);
         }
         if (configGuild.contains("members")) {
             List<String> members = configGuild.getStringList("members");
-            if (members.contains(""))
-                members.remove("");
+            members.remove("");
             if (!members.isEmpty())
                 this.members.addAll(members);
         }
         if (configGuild.contains("allies")) {
             List<String> allies = configGuild.getStringList("allies");
-            if (allies.contains(""))
-                allies.remove("");
+            allies.remove("");
             if (!allies.isEmpty())
                 this.allies.addAll(allies);
         }
         if (configGuild.contains("enemies")) {
             List<String> enemies = configGuild.getStringList("enemies");
-            if (enemies.contains(""))
-                enemies.remove("");
+            enemies.remove("");
             if (!enemies.isEmpty())
                 this.enemies.addAll(enemies);
         }
         if (configGuild.contains("claims")) {
             List<String> claims = configGuild.getStringList("claims");
-            if (claims.contains(""))
-                claims.remove("");
+            claims.remove("");
             if (!claims.isEmpty())
                 for (String claim : claims)
                     if (claim.split(" ").length == 3 && Bukkit.getWorld(claim.split(" ")[0]) != null)
@@ -504,8 +499,7 @@ public class Guild {
         List<String> chunkList = configGuild.getStringList("claims");
         if (!chunkList.contains(c.getWorld().getName() + ' ' + c.getX() + ' ' + c.getZ())) {
             chunkList.add(c.getWorld().getName() + ' ' + c.getX() + ' ' + c.getZ());
-            if (chunkList.contains(""))
-                chunkList.remove("");
+            chunkList.remove("");
         }
         configGuild.set("claims", chunkList);
         try {
@@ -633,8 +627,7 @@ public class Guild {
         this.enemies.add(g.getName());
         List<String> enemyList = configGuild.getStringList("enemies");
         enemyList.add(g.getName());
-        if (enemyList.contains(""))
-            enemyList.remove("");
+        enemyList.remove("");
         configGuild.set("enemies", enemyList);
         try {
             configGuild.save(this.configFileGuild);
@@ -653,8 +646,7 @@ public class Guild {
         this.allies.add(g.getName());
         List<String> allyList = configGuild.getStringList("allies");
         allyList.add(g.getName());
-        if (allyList.contains(""))
-            allyList.remove("");
+        allyList.remove("");
         configGuild.set("allies", allyList);
         try {
             configGuild.save(this.configFileGuild);
@@ -752,8 +744,7 @@ public class Guild {
         this.members.add(name);
         List<String> memberList = configGuild.getStringList("members");
         memberList.add(name);
-        if (memberList.contains(""))
-            memberList.remove("");
+        memberList.remove("");
         configGuild.set("members", memberList);
         UserManager um = Necessities.getUM();
         um.getUser(uuid).joinGuild(this);
@@ -852,8 +843,7 @@ public class Guild {
         this.members.add(name);
         List<String> memberList = configGuild.getStringList("members");
         memberList.add(name);
-        if (memberList.contains(""))
-            memberList.remove("");
+        memberList.remove("");
         configGuild.set("members", memberList);
         try {
             configGuild.save(this.configFileGuild);
@@ -871,8 +861,7 @@ public class Guild {
         this.mods.add(name);
         List<String> modList = configGuild.getStringList("mods");
         modList.add(name);
-        if (modList.contains(""))
-            modList.remove("");
+        modList.remove("");
         configGuild.set("mods", modList);
         if (this.leader != null && this.leader.equalsIgnoreCase(name)) {
             this.leader = "";

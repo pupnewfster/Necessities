@@ -154,8 +154,7 @@ public class RankManager {
         UserManager um = Necessities.getUM();
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         List<String> perms = configRanks.getStringList(r.getName() + ".permissions");
-        if (perms.contains(""))
-            perms.remove("");
+        perms.remove("");
         if (remove) {
             perms.remove(permission);
             if (perms.isEmpty())
@@ -188,8 +187,7 @@ public class RankManager {
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         UserManager um = Necessities.getUM();
         List<String> perms = configSubranks.getStringList(subrank);
-        if (perms.contains(""))
-            perms.remove("");
+        perms.remove("");
         if (remove) {
             perms.remove(permission);
             if (perms.isEmpty())
@@ -221,8 +219,7 @@ public class RankManager {
             return;
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         List<String> subranks = configRanks.getStringList(r.getName() + ".subranks");
-        if (subranks.contains(""))
-            subranks.remove("");
+        subranks.remove("");
         if (remove)
             subranks.remove(name);
         else

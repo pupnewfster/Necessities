@@ -459,7 +459,7 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
                 for (int i = rm.getOrder().size() - 1; i >= 0; i--) {
                     Rank r = rm.getRank(i);
                     if (online.containsKey(r))
-                        mBuilder.append(r.getName()).append("s: ").append(online.get(r).trim().substring(0, online.get(r).length() - 2)).append('\n');
+                        mBuilder.append(r.getName()).append("s: ").append(online.get(r).trim(), 0, online.get(r).length() - 2).append('\n');
                 }
                 m = mBuilder.toString();
             } else if (message.startsWith("!devs")) {
