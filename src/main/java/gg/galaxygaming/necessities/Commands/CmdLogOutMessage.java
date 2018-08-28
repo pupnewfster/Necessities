@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 
-@SuppressWarnings("unused")
 public class CmdLogOutMessage implements Cmd {
     private final File configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml");
 

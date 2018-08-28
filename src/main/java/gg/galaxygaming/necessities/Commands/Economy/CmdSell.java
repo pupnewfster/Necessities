@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.UUID;
 
 public class CmdSell implements EconomyCmd {
-    @SuppressWarnings("deprecation")
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
@@ -111,7 +110,6 @@ public class CmdSell implements EconomyCmd {
         return -1.00;
     }
 
-    @SuppressWarnings("deprecation")
     private int itemAmount(PlayerInventory inv, Material type) {
         return Arrays.stream(inv.getContents()).filter(s -> !(s == null || s.getType() != type.getBukkitMaterial())).filter(s -> s.getEnchantments().size() == 0).mapToInt(ItemStack::getAmount).sum();
     }

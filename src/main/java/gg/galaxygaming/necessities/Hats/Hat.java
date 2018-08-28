@@ -64,7 +64,6 @@ public abstract class Hat {
         }
     }
 
-    @SuppressWarnings("SameParameterValue")
     void spawnYaw(int num, Location loc) {
         World w = loc.getWorld();
         for (int i = 0; i < num; i++) {

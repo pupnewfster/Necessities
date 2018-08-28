@@ -12,7 +12,6 @@ import java.io.File;
 import java.util.Collections;
 
 class Initialization {
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     void initiateFiles() {
         Utils.dirCreate("plugins/Necessities");
         Utils.dirCreate("plugins/Necessities/Logs");
@@ -90,7 +89,6 @@ class Initialization {
         }
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void createYaml() {
         Utils.addYML(new File("plugins/Necessities", "logoutmessages.yml"));
         Utils.addYML(new File("plugins/Necessities", "titles.yml"));

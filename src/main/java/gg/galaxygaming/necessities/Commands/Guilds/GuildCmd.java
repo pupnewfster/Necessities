@@ -9,6 +9,5 @@ interface GuildCmd {
      * @param args   The arguments of the command.
      * @return True.
      */
-    @SuppressWarnings("SameReturnValue")
     boolean commandUse(CommandSender sender, String[] args);
 }

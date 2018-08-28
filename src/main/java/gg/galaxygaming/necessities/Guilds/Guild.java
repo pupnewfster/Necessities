@@ -827,7 +827,6 @@ public class Guild {
         }
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     void disband() {
         UserManager um = Necessities.getUM();
         if (this.leader != null && !this.leader.equalsIgnoreCase("Janet") && !this.leader.equalsIgnoreCase(""))

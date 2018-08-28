@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 
 public class CmdClear implements Cmd {
-    @SuppressWarnings("deprecation")
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {

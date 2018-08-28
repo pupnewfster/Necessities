@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 
-@SuppressWarnings("unused")
 public class CmdLogInMessage implements Cmd {
     private final File configFileLogIn = new File("plugins/Necessities", "loginmessages.yml");
 

@@ -350,7 +350,6 @@ public class RankManager {
     /**
      * Sets the default subranks if they do not currently exist.
      */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void setSubranks() {
         if (!configFileSubranks.exists())
             try {
@@ -389,7 +388,6 @@ public class RankManager {
     /**
      * Sets the default ranks if they do not currently exist.
      */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void setRanks() {
         if (!configFileRanks.exists())
             try {

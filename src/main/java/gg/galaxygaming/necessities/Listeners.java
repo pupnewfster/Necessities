@@ -329,7 +329,6 @@ class Listeners implements Listener {
             wrench.wrench(e.getBlock());
     }
 
-    @SuppressWarnings("deprecation")
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         //Guild check
@@ -429,7 +428,6 @@ class Listeners implements Listener {
         return temp.toString();
     }
 
-    @SuppressWarnings("deprecation")
     @EventHandler
     public void onPlayerClick(PlayerInteractEvent e) {
         User u = Necessities.getUM().getUser(e.getPlayer().getUniqueId());
@@ -620,7 +618,6 @@ class Listeners implements Listener {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private ArrayList<String> getLore(Inventory inv) {
         HashMap<String, String> condensedLore = new HashMap<>();
         for (int i = 0; i < inv.getSize(); i++) {//loc amount type damage enchants meta name

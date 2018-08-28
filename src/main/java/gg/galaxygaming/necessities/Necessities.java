@@ -582,7 +582,6 @@ public class Necessities extends JavaPlugin {
      * @param cmd The command to check if it is enabled.
      * @return True if the command is enabled, false otherwise.
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isCommandEnabled(String cmd) {
         Cmd c = getCmd(cmd);
         return c != null && !c.equals(this.disabled);

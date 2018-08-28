@@ -269,7 +269,6 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
         return helpList.get(page + time);
     }
 
-    @SuppressWarnings("unchecked")
     private void setHelp() {
         YamlConfiguration config = Necessities.getInstance().getConfig();
         ArrayList<String> temp = new ArrayList<>();
@@ -791,7 +790,6 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
         Necessities.getAI().parseMessage(null, message, JanetAI.Source.Slack, isPM, info);
     }
 
-    @SuppressWarnings("unused")
     class SlackUser {
         private boolean justLoaded = true, viewingChat, isBot;
         private final String id;

@@ -1072,7 +1072,6 @@ public class User {
      * Gets the location the user is looking at.
      * @return The location the user is looking at.
      */
-    @SuppressWarnings("deprecation")
     public Location getLookingAt() {
         if (this.bukkitPlayer == null)
             return null;
@@ -1090,7 +1089,6 @@ public class User {
      * @param s    The inventory system to load their inventory from.
      * @param from The inventory system to save their current inventory to.
      */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void saveInventory(String s, String from) {
         if (this.bukkitPlayer == null)
             return;

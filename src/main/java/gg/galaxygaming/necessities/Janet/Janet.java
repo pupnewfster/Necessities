@@ -112,7 +112,6 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         l[1] = toPut;
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean isFull(Long[] l) {
         return !(l[0] == null || l[1] == null);
     }
@@ -171,7 +170,6 @@ public class Janet {//TODO: Make the logic run async for performance reasons
                 msg.replaceAll(bad, "").length() >= msg.length() * 3.0 / 5;
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean isGood(String msg) {
         return goodwords.stream().anyMatch(msg::startsWith);
     }

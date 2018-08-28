@@ -29,7 +29,6 @@ public class GuildManager {
     /**
      * Creates the default guild files.
      */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void createFiles() {
         if (!configFileProtected.exists())
             try {
@@ -66,7 +65,6 @@ public class GuildManager {
      * @param name The name of the guild to create.
      * @param uuid The uuid of the leader of the guild to create.
      */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void createGuild(String name, UUID uuid) {
         YamlConfiguration configGuilds = YamlConfiguration.loadConfiguration(configFileGuilds);
         File fileGuild = new File("plugins/Necessities/Guilds", name + ".yml");
@@ -107,7 +105,6 @@ public class GuildManager {
      * @param g    The guild to rename.
      * @param name The new name of the guild.
      */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void renameGuild(Guild g, String name) {
         String oldName = g.getName();
         File fileGuild = new File("plugins/Necessities/Guilds", g.getName() + ".yml");
