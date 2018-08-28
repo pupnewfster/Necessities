@@ -1,9 +1,10 @@
 name: Necessities
 main: gg.galaxygaming.necessities.Necessities
 version: 4.0.0
-description: Adds the necessities a server needs
-authors: [Galaxy Gaming Development Team]
 api-version: 1.13
+description: Adds the necessities a server needs.
+author: pupnewfster
+website: galaxygaming.gg
 softdepend: [Vault, OpenAnalytics]
 
 commands:
