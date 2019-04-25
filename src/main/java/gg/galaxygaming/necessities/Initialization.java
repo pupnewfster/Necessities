@@ -170,6 +170,7 @@ class Initialization {
                 config.set("Necessities.SlackToken", "token");
                 config.set("Necessities.WebHook", "webHook");
                 config.set("Necessities.MaxSingleTypeEntities", 100);
+                config.set("Necessities.sleepPercent", 0.33);
                 config.set("Console.AliveStatus", "Alive");
                 config.set("Announcements.frequency", 5);
                 config.set("Economy.DBHost", "127.0.0.1:3306");
@@ -253,6 +254,9 @@ class Initialization {
             }
             if (!config.contains("Necessities.MaxSingleTypeEntities")) {
                 config.set("Necessities.MaxSingleTypeEntities", 100);
+            }
+            if (!config.contains("Necessities.sleepPercent")) {
+                config.set("Necessities.sleepPercent", 0.33);
             }
             if (!config.contains("Announcements.frequency")) {
                 config.set("Announcements.frequency", 5);

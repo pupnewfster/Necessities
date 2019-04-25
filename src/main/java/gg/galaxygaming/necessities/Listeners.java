@@ -20,8 +20,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
@@ -30,6 +32,8 @@ import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.GameMode;
+import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -82,6 +86,9 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
+import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEditBookEvent;
@@ -1499,6 +1506,81 @@ class Listeners implements Listener {
                 e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg()
                       + "You are not a part of that guild, and are not allowed to build there.");
                 e.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBedEnter(PlayerBedEnterEvent e) {
+        if (e.getBedEnterResult().equals(BedEnterResult.OK)) {
+            //They entered the bed
+            YamlConfiguration config = Necessities.getInstance().getConfig();
+            double minPercent = config.getDouble("Necessities.sleepPercent");
+            if (minPercent == 1) {
+                //Skip it as it will check it anyways
+                return;
+            }
+            int sleeping = 0;
+            int ignored = 0;
+            Player p = e.getPlayer();
+            UUID uuid = p.getUniqueId();
+            World world = p.getWorld();
+            Set<Player> toInform = new HashSet<>();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (player.getGameMode().equals(GameMode.SPECTATOR) || !world.equals(player.getWorld()) || player
+                      .isSleepingIgnored()) {
+                    ignored++;
+                } else if (player.isSleeping() || player.getUniqueId().equals(p.getUniqueId())) {
+                    sleeping++;
+                    toInform.add(player);
+                } else {
+                    //Inform them if we are not ignoring them
+                    toInform.add(player);
+                }
+            }
+            if (toInform.isEmpty()) {
+                return;
+            }
+            Variables var = Necessities.getVar();
+            double percentSleeping = ((double) sleeping) / toInform.size();
+            if (percentSleeping >= minPercent) {
+                //Set to next morning
+                Boolean doDaylightCycle = world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE);
+                if (doDaylightCycle != null && doDaylightCycle) {
+                    long l = world.getFullTime() + 24000L;
+                    world.setFullTime(l - l % 24000L);
+                }
+
+                //Wake everyone up
+                Bukkit.getOnlinePlayers().stream().filter(Player::isSleeping).forEach(player -> player.wakeup(true));
+
+                //Change weather
+                Boolean doWeatherCycle = world.getGameRuleValue(GameRule.DO_WEATHER_CYCLE);
+                if (doWeatherCycle != null && doWeatherCycle) {
+                    world.setWeatherDuration(0);
+                    world.setThunderDuration(0);
+                }
+                //Send message
+                Bukkit.broadcastMessage(var.getMessages() + "Wakey, wakey, rise and shine... Good Morning everyone!");
+            } else {
+                Bukkit.broadcastMessage(var.getObj() + p.getDisplayName() + var.getMessages() + " is now sleeping. (" +
+                      var.getObj() + sleeping + var.getMessages() + " of " + var.getObj() + toInform.size() +
+                      var.getMessages() + ").");
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBedLeave(PlayerBedLeaveEvent e) {
+        YamlConfiguration config = Necessities.getInstance().getConfig();
+        double minPercent = config.getDouble("Necessities.sleepPercent");
+        if (minPercent < 1) {
+            long time = e.getPlayer().getWorld().getTime();
+            if (time > 12300) {
+                //Only send bed leave message during night
+                Variables var = Necessities.getVar();
+                Bukkit.broadcastMessage(
+                      var.getObj() + e.getPlayer().getDisplayName() + var.getMessages() + " has left their bed.");
             }
         }
     }
