@@ -41,6 +41,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.block.CommandBlock;
 import org.bukkit.block.Container;
 import org.bukkit.block.CreatureSpawner;
@@ -528,8 +529,17 @@ class Listeners implements Listener {
                     }
                     im.setLore(lore);
                     i.setItemMeta(im);
-                    for (String loc : splitSpace[0].split(",")) {
-                        inv.setItem(Integer.parseInt(loc), i);
+                    int size = inv.getSize();
+                    Variables var = Necessities.getVar();
+                    String[] locs = splitSpace[0].split(",");
+                    for (String loc : locs) {
+                        int slot = Integer.parseInt(loc);
+                        if (slot < size) {
+                            inv.setItem(slot, i);
+                        } else {
+                            e.getPlayer().sendMessage(var.getEr() + "Error: " + var.getErMsg() +
+                                  "Slot position to high: '" + slot + "' inventory size is: '" + size + "'.");
+                        }
                     }
                 }
             }
@@ -724,7 +734,12 @@ class Listeners implements Listener {
                                 meta.setLore(lore);
                                 contents.setItemMeta(meta);
                             } else if (MaterialHelper.isContainer(type)) {
-                                Inventory inv = ((Container) b.getState()).getInventory();
+                                Inventory inv;
+                                if (type.equals(Material.CHEST) || type.equals(Material.TRAPPED_CHEST)) {
+                                    inv = ((Chest) b.getState()).getBlockInventory();
+                                } else {
+                                    inv = ((Container) b.getState()).getInventory();
+                                }
                                 meta.setLore(getLore(inv));
                                 contents.setItemMeta(meta);
                                 inv.getViewers().forEach(HumanEntity::closeInventory);
