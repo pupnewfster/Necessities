@@ -4,6 +4,8 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.RankManager;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.command.CommandSender;
 
 public class CmdDelPermSubrank implements RankCmd {
@@ -27,5 +29,11 @@ public class CmdDelPermSubrank implements RankCmd {
               var.getMessages() + "Removed " + var.getObj() + node + var.getMessages() + " to " + var.getObj() + Utils
                     .ownerShip(Utils.capFirst(subrank)) + var.getMessages() + " permissions.");
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

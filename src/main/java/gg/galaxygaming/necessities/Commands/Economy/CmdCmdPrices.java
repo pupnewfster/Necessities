@@ -5,6 +5,8 @@ import gg.galaxygaming.necessities.Economy.Economy;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -94,5 +96,11 @@ public class CmdCmdPrices implements EconomyCmd {
             price += var.getCatalog() + (hasCmd ? "   Already Acquired." : " by " + Utils.ownerShip(rank));
         }
         return price;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

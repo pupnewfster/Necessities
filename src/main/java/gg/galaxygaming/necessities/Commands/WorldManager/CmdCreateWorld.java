@@ -3,6 +3,8 @@ package gg.galaxygaming.necessities.Commands.WorldManager;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
 import gg.galaxygaming.necessities.WorldManager.WorldManager;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.World;
 import org.bukkit.WorldType;
 import org.bukkit.command.CommandSender;
@@ -42,5 +44,11 @@ public class CmdCreateWorld implements WorldCmd {
         sender.sendMessage(
               var.getMessages() + "Created world named " + var.getObj() + args[0] + var.getMessages() + '.');
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

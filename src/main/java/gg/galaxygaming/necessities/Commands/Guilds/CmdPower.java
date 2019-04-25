@@ -5,6 +5,8 @@ import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -60,5 +62,11 @@ public class CmdPower implements GuildCmd {
                         + Utils.roundTwoDecimals(u.getPower()) + " / 20.0");
         }
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

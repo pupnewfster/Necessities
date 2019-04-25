@@ -3,6 +3,8 @@ package gg.galaxygaming.necessities.Commands.RankManager;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import org.bukkit.command.CommandSender;
 
@@ -30,5 +32,11 @@ public class CmdDelPermissionUser implements RankCmd {
               var.getMessages() + "Removed " + var.getObj() + node + var.getMessages() + " from " + var.getObj() + Utils
                     .ownerShip(Utils.nameFromString(uuid.toString())) + var.getMessages() + " permissions.");
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

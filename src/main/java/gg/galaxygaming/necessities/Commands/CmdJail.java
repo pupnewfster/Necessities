@@ -5,6 +5,8 @@ import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.SafeLocation;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -72,5 +74,11 @@ public class CmdJail implements Cmd {
             }
         }
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

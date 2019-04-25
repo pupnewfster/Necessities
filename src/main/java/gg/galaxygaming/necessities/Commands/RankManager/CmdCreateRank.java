@@ -5,6 +5,8 @@ import gg.galaxygaming.necessities.RankManager.Rank;
 import gg.galaxygaming.necessities.RankManager.RankManager;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.command.CommandSender;
 
 public class CmdCreateRank implements RankCmd {
@@ -52,5 +54,11 @@ public class CmdCreateRank implements RankCmd {
         }
         sender.sendMessage(var.getObj() + rank + var.getMessages() + " created and added to list of ranks.");
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

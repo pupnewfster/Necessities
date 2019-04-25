@@ -7,6 +7,8 @@ import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -59,5 +61,11 @@ public class CmdSetrank implements RankCmd {
               var.getMessages() + name + " set " + cOld + Utils.ownerShip(Utils.nameFromString(uuid.toString())) + var
                     .getMessages() + " rank to " + c + u.getRank().getName() + var.getMessages() + '.');
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

@@ -3,6 +3,8 @@ package gg.galaxygaming.necessities.Commands.RankManager;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.RankManager;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.command.CommandSender;
 
 public class CmdRemoveSubrank implements RankCmd {
@@ -23,5 +25,11 @@ public class CmdRemoveSubrank implements RankCmd {
         rm.removeSubrank(rm.getSub(subrank));
         sender.sendMessage(var.getObj() + subrank + var.getMessages() + " deleted and removed from list of subranks.");
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

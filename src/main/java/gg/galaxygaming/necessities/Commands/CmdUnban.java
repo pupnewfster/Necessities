@@ -4,6 +4,8 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
@@ -45,5 +47,11 @@ public class CmdUnban implements Cmd {
 
     public boolean isPaintballEnabled() {
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

@@ -3,6 +3,8 @@ package gg.galaxygaming.necessities.Commands;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.CreatureSpawner;
@@ -49,6 +51,12 @@ public class CmdSpawner implements Cmd {
                   + "You cannot change the type of spawner because you cannot look at the spawner.");
         }
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 
     private EntityType getType(String message) {

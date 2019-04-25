@@ -1,6 +1,8 @@
 package gg.galaxygaming.necessities.Commands.Guilds;
 
 import gg.galaxygaming.necessities.Commands.Cmd;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.command.CommandSender;
 
 public class CmdGuild implements Cmd {
@@ -72,5 +74,11 @@ public class CmdGuild implements Cmd {
             cmd = new CmdHelp();
         }
         return cmd.commandUse(sender, subArgs);
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

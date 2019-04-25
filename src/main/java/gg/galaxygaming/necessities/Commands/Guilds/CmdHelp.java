@@ -4,6 +4,7 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -225,5 +226,11 @@ public class CmdHelp implements GuildCmd {
             helpList.add(var.getMessages() + "/guild help [page]" + ChatColor.WHITE
                   + " - Shows help for guild commands.");
         }
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

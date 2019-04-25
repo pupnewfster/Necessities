@@ -4,6 +4,8 @@ import gg.galaxygaming.necessities.Guilds.Guild;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -58,5 +60,11 @@ public class CmdAlly implements GuildCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be in a guild to offer allyship.");
         }
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

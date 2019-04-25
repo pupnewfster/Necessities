@@ -4,6 +4,8 @@ import gg.galaxygaming.necessities.Economy.Economy;
 import gg.galaxygaming.necessities.Material.Material;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -56,5 +58,11 @@ public class CmdPrice implements EconomyCmd {
                     ? "bought" : "sold") + " for " + var.getMoney() +
                     Economy.format(Double.parseDouble(cost)));
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

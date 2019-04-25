@@ -2,6 +2,8 @@ package gg.galaxygaming.necessities.Commands;
 
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -45,5 +47,11 @@ public class CmdRepair implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You can do not have any items.");
         }
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

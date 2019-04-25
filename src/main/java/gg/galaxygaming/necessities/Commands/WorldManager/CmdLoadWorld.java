@@ -3,6 +3,8 @@ package gg.galaxygaming.necessities.Commands.WorldManager;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
 import gg.galaxygaming.necessities.WorldManager.WorldManager;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -33,5 +35,11 @@ public class CmdLoadWorld implements WorldCmd {
                   var.getMessages() + "Loaded world " + var.getObj() + w.getName() + var.getMessages() + '.');
         }
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

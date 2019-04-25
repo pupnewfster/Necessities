@@ -4,6 +4,8 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
 import gg.galaxygaming.necessities.WorldManager.Warp;
 import gg.galaxygaming.necessities.WorldManager.WarpManager;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -33,5 +35,11 @@ public class CmdWarp implements WorldCmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to teleport warps.");
         }
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

@@ -3,7 +3,9 @@ package gg.galaxygaming.necessities.Commands;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -61,5 +63,11 @@ public class CmdInvsee implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have an inventory.");
         }
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

@@ -6,6 +6,8 @@ import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.SafeLocation;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -82,5 +84,11 @@ public class CmdHome implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot goto any homes.");
         }
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

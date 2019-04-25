@@ -5,6 +5,8 @@ import gg.galaxygaming.necessities.RankManager.Rank;
 import gg.galaxygaming.necessities.RankManager.RankManager;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.command.CommandSender;
 
 public class CmdAddPermission implements RankCmd {
@@ -28,5 +30,11 @@ public class CmdAddPermission implements RankCmd {
               var.getMessages() + "Added " + var.getObj() + node + var.getMessages() + " to " + var.getObj() + Utils
                     .ownerShip(r.getName()) + var.getMessages() + " permissions.");
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

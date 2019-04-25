@@ -5,6 +5,8 @@ import gg.galaxygaming.necessities.RankManager.Rank;
 import gg.galaxygaming.necessities.RankManager.RankManager;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.command.CommandSender;
 
 public class CmdRemoveRank implements RankCmd {
@@ -26,5 +28,11 @@ public class CmdRemoveRank implements RankCmd {
               var.getObj() + rank.getName() + var.getMessages() + " deleted and removed from list of ranks.");
         rm.removeRank(rank);
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

@@ -4,6 +4,8 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.Variables;
 import gg.galaxygaming.necessities.WorldManager.PortalManager;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -85,5 +87,11 @@ public class CmdCreatePortal implements WorldCmd {
                   + "Login to perform this command because you have to click two locations.");
         }
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

@@ -2,7 +2,9 @@ package gg.galaxygaming.necessities.Commands;
 
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -101,6 +103,12 @@ public class CmdKillall implements Cmd {
                   + "You cannot kill all the mobs in your world, because you are not in a world");
         }
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 
     private EntityType isMob(String name) {//Also checks if entity sorta so not most proper name

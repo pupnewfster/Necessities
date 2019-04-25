@@ -4,6 +4,7 @@ import gg.galaxygaming.necessities.Economy.Economy;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
 import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -47,5 +48,11 @@ public class CmdBaltop implements EconomyCmd {
 
     public boolean isPaintballEnabled() {
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

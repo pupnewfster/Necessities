@@ -5,6 +5,8 @@ import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -125,5 +127,11 @@ public class CmdWhois implements RankCmd {
 
     private String corTime(String time) {
         return time.length() == 1 ? '0' + time : time;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

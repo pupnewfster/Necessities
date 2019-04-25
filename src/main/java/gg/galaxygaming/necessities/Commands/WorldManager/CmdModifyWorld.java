@@ -3,6 +3,8 @@ package gg.galaxygaming.necessities.Commands.WorldManager;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
 import gg.galaxygaming.necessities.WorldManager.WorldManager;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
@@ -121,5 +123,11 @@ public class CmdModifyWorld implements WorldCmd {
             return GameMode.CREATIVE;
         }
         return GameMode.SURVIVAL;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }

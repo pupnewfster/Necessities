@@ -7,6 +7,7 @@ import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.command.CommandSender;
@@ -138,5 +139,11 @@ public class CmdSell implements EconomyCmd {
     private int itemAmount(PlayerInventory inv, Material type) {
         return Arrays.stream(inv.getContents()).filter(s -> !(s == null || s.getType() != type.getBukkitMaterial()))
               .filter(s -> s.getEnchantments().size() == 0).mapToInt(ItemStack::getAmount).sum();
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        //TODO: TabComplete
+        return Collections.emptyList();
     }
 }
