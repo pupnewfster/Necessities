@@ -52,8 +52,8 @@ public class CmdHelp implements Cmd {
                         for (String k : cmds.keySet()) {
                             PluginCommand pc = Bukkit.getPluginCommand(p.getName() + ':' + k);
                             if (pc != null) {
-                                if (p instanceof Necessities && !Necessities.getInstance()
-                                      .isCommandEnabled(pc.getName())) {
+                                if (p instanceof Necessities && Necessities.getInstance()
+                                      .isCommandDisabled(pc.getName())) {
                                     continue;
                                 }
                                 if (isConsole || pc.testPermissionSilent(sender)) {
@@ -82,8 +82,8 @@ public class CmdHelp implements Cmd {
                         for (String k : cmds.keySet()) {
                             PluginCommand pc = Bukkit.getPluginCommand(p.getName() + ':' + k);
                             if (pc != null) {
-                                if (p instanceof Necessities && !Necessities.getInstance()
-                                      .isCommandEnabled(pc.getName())) {
+                                if (p instanceof Necessities && Necessities.getInstance()
+                                      .isCommandDisabled(pc.getName())) {
                                     continue;
                                 }
                                 if (isConsole || pc.testPermissionSilent(sender) && (
@@ -112,22 +112,21 @@ public class CmdHelp implements Cmd {
         }
         int totalPages = helpList.size() / 10 + rounder;
         if (page > totalPages) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer
-                  .toString(totalPages));
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + totalPages);
             return true;
         }
         if (search.equals("")) {
             sender.sendMessage(
                   ChatColor.YELLOW + " ---- " + var.getMessages() + "Help" + ChatColor.YELLOW + " -- " + var
                         .getMessages() + "Page " +
-                        ChatColor.RED + Integer.toString(page) + var.getMessages() + '/' + ChatColor.RED + Integer
-                        .toString(totalPages) + ChatColor.YELLOW + " ----");
+                        ChatColor.RED + page + var.getMessages() + '/' + ChatColor.RED + totalPages + ChatColor.YELLOW
+                        + " ----");
         } else {
             sender.sendMessage(
                   ChatColor.YELLOW + " ---- " + var.getMessages() + "Help: " + search + ChatColor.YELLOW + " -- " + var
                         .getMessages() + "Page " +
-                        ChatColor.RED + Integer.toString(page) + var.getMessages() + '/' + ChatColor.RED + Integer
-                        .toString(totalPages) + ChatColor.YELLOW + " ----");
+                        ChatColor.RED + page + var.getMessages() + '/' + ChatColor.RED + totalPages + ChatColor.YELLOW
+                        + " ----");
         }
         page = page - 1;
         String message = getHelp(page, time, helpList);
@@ -137,7 +136,7 @@ public class CmdHelp implements Cmd {
             message = getHelp(page, time, helpList);
         }
         if (page + 1 < totalPages) {
-            sender.sendMessage(var.getMessages() + "Type " + ChatColor.RED + "/help " + Integer.toString(page + 2) + var
+            sender.sendMessage(var.getMessages() + "Type " + ChatColor.RED + "/help " + (page + 2) + var
                   .getMessages() + " to read the next page.");
         }
         return true;

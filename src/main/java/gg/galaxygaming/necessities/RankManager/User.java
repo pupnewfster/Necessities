@@ -1296,25 +1296,25 @@ public class User {
         int sec = (int) (fifth % 60);
         String time = "";
         if (years != 0) {
-            time = Integer.toString(years) + " year" + plural(years) + ' ';
+            time = years + " year" + plural(years) + ' ';
         }
         if (months != 0) {
-            time += Integer.toString(months) + " month" + plural(months) + ' ';
+            time += months + " month" + plural(months) + ' ';
         }
         if (weeks != 0) {
-            time += Integer.toString(weeks) + " week" + plural(weeks) + ' ';
+            time += weeks + " week" + plural(weeks) + ' ';
         }
         if (days != 0) {
-            time += Integer.toString(days) + " day" + plural(days) + ' ';
+            time += days + " day" + plural(days) + ' ';
         }
         if (hours != 0) {
-            time += Integer.toString(hours) + " hour" + plural(hours) + ' ';
+            time += hours + " hour" + plural(hours) + ' ';
         }
         if (min != 0) {
-            time += Integer.toString(min) + " minute" + plural(min) + ' ';
+            time += min + " minute" + plural(min) + ' ';
         }
         if (sec != 0) {
-            time += Integer.toString(sec) + " second" + plural(sec) + ' ';
+            time += sec + " second" + plural(sec) + ' ';
         }
         time = time.trim();
         if (time.equals("")) {

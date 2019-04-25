@@ -24,7 +24,7 @@ public class CmdBazooka implements Cmd {
             ItemMeta handMeta = hand.getItemMeta();
             List<String> lore = new ArrayList<>();
             if (handMeta.hasLore()) {
-                lore = (ArrayList<String>) handMeta.getLore();
+                lore = handMeta.getLore();
             }
             if (lore.contains("Bazooka")) {
                 lore.remove("Bazooka");

@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -134,7 +135,7 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
             con.setRequestProperty("Accept", "application/json,text/plain");
             con.setRequestMethod("POST");
             OutputStream os = con.getOutputStream();
-            os.write(Jsoner.serialize(json).getBytes("UTF-8"));
+            os.write(Jsoner.serialize(json).getBytes(StandardCharsets.UTF_8));
             os.close();
             InputStream is = con.getInputStream();
             is.close();
@@ -307,7 +308,7 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
 
     private void setHelp() {
         YamlConfiguration config = Necessities.getInstance().getConfig();
-        ArrayList<String> temp = new ArrayList<>();
+        List<String> temp = new ArrayList<>();
         temp.add("!help <page> ~ View the help messages on <page>.");
         temp.add("!rank ~ Shows you what rank you have.");
         temp.add("!bans ~ Shows you the banlist.");
@@ -320,7 +321,7 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
         temp.add("!devs ~ View the devs.");
         temp.add("!warn <name> <reason> ~ Warn <name> for <reason>.");
         temp.add("!worlds ~ View the loaded worlds.");
-        helpLists.put(0, (ArrayList<String>) temp.clone());//Member
+        helpLists.put(0, new ArrayList<>(temp));//Member
         temp.add("!say <message> ~ Sends the message <message> to the players on the server.");
         temp.add("!kick <name> <reason> ~ Kicks <name> for an optional <reason>.");
         temp.add("!tempban <name> <time> <reason> ~ Tempbans <name> for <time> and an optional <reason>.");
@@ -335,9 +336,9 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
         temp.add("!reload ~ Reloads the server.");
         temp.add("!restart ~ Restarts the server.");
         temp.add("!consolecmd <command> ~ Perform a command through the console.");
-        helpLists.put(1, (ArrayList<String>) temp.clone());//Admin
-        helpLists.put(2, (ArrayList<String>) temp.clone());//Owner
-        helpLists.put(3, (ArrayList<String>) temp.clone());//Primary owner
+        helpLists.put(1, new ArrayList<>(temp));//Admin
+        helpLists.put(2, new ArrayList<>(temp));//Owner
+        helpLists.put(3, new ArrayList<>(temp));//Primary owner
         temp.clear();
     }
 
@@ -376,10 +377,10 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
                 }
                 int totalpages = helpList.size() / 10 + rounder;
                 if (page > totalpages) {
-                    sendMessage("Error: Input a number from 1 to " + Integer.toString(totalpages), isPM, info);
+                    sendMessage("Error: Input a number from 1 to " + totalpages, isPM, info);
                     return;
                 }
-                m += " ---- Help -- Page " + Integer.toString(page) + '/' + Integer.toString(totalpages) + " ---- \n";
+                m += " ---- Help -- Page " + page + '/' + totalpages + " ---- \n";
                 page = page - 1;
                 String msg = getLine(page, time, helpList);
                 StringBuilder mBuilder = new StringBuilder(m);
@@ -390,7 +391,7 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
                 }
                 m = mBuilder.toString();
                 if (page + 1 < totalpages) {
-                    m += "Type !help " + Integer.toString(page + 2) + " to read the next page.\n";
+                    m += "Type !help " + (page + 2) + " to read the next page.\n";
                 }
             } else if (message.startsWith("!rank")) {
                 m += info.getRankName() + '\n';
@@ -560,15 +561,15 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
                 int time = 0;
                 int totalpages = eco.baltopPages();
                 if (page > totalpages) {
-                    sendMessage("Error: Input a number from 1 to " + Integer.toString(totalpages), isPM, info);
+                    sendMessage("Error: Input a number from 1 to " + totalpages, isPM, info);
                     return;
                 }
-                m += "Balance Top Page [" + Integer.toString(page) + '/' + Integer.toString(totalpages) + "]\n";
+                m += "Balance Top Page [" + page + '/' + totalpages + "]\n";
                 List<String> balTop = eco.getBalTop(page);
                 page -= 1;
                 StringBuilder mBuilder = new StringBuilder(m);
                 for (String bal : balTop) {
-                    mBuilder.append(Integer.toString(page * 10 + time++ + 1)).append(". ")
+                    mBuilder.append((page * 10 + time++ + 1)).append(". ")
                           .append(Utils.nameFromString(bal.split(" ")[0])).append(" has: ")
                           .append(Economy.format(Double.parseDouble(bal.split(" ")[1]))).append('\n');
                 }
@@ -1064,7 +1065,7 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
                 con.setRequestProperty("Accept", "application/json,text/plain");
                 con.setRequestMethod("POST");
                 OutputStream os = con.getOutputStream();
-                os.write(Jsoner.serialize(json).getBytes("UTF-8"));
+                os.write(Jsoner.serialize(json).getBytes(StandardCharsets.UTF_8));
                 os.close();
                 InputStream is = con.getInputStream();
                 is.close();

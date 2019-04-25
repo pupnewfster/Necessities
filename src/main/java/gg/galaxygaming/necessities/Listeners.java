@@ -499,7 +499,7 @@ class Listeners implements Listener {
                                 if (l.lastIndexOf(']') == l.length() - 1) {
                                     l = l.substring(0, l.length() - 1);
                                 }
-                                String subMeta = l.substring(1, l.length());
+                                String subMeta = l.substring(1);
                                 int subStart = subMeta.indexOf('[');
                                 if (subStart != -1) {
                                     nonMeta = subMeta.substring(0, subStart);
@@ -667,7 +667,7 @@ class Listeners implements Listener {
                     String itemName = economySigns.itemLine(sign);
                     int amount = economySigns.amount(sign);
                     Player p = e.getPlayer();
-                    p.performCommand(operation + ' ' + itemName + ' ' + Integer.toString(amount));
+                    p.performCommand(operation + ' ' + itemName + ' ' + amount);
                 } else if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getHand().equals(EquipmentSlot.HAND)
                       && e.getItem() != null && e.getItem().hasItemMeta() &&
                       e.getItem().getItemMeta().hasLore() && e.getItem().getItemMeta().getLore().contains("Wrench")) {

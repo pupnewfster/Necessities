@@ -45,7 +45,10 @@ public class Reviews {
      */
     public String reviewLists(int page, int time) {
         page *= 10;
-        return reviews.size() < time + page + 1 || time == 10 ? null
-              : reviews.keySet().toArray()[page + time] + " " + reviews.get(reviews.keySet().toArray()[page + time]);
+        if (reviews.size() < time + page + 1 || time == 10) {
+            return null;
+        }
+        String name = reviews.keySet().toArray(new String[0])[page + time];
+        return name + " " + reviews.get(name);
     }
 }

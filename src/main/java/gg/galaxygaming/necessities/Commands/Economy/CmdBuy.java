@@ -74,8 +74,8 @@ public class CmdBuy implements EconomyCmd {
                 }
                 eco.removeMoney(player.getUniqueId(), cost);
                 player.sendMessage(
-                      var.getMessages() + "You bought " + var.getObj() + Integer.toString(amount) + ' ' + mat
-                            .getFriendlyName(amount) + var.getMessages() + '.');
+                      var.getMessages() + "You bought " + var.getObj() + amount + ' ' + mat.getFriendlyName(amount)
+                            + var.getMessages() + '.');
                 player.sendMessage(
                       var.getMoney() + Economy.format(cost) + var.getMessages() + " was removed from your account.");
             }

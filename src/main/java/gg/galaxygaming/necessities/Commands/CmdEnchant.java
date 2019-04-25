@@ -41,8 +41,7 @@ public class CmdEnchant implements Cmd {
                     hand.addEnchantment(ench, level);
                     player.sendMessage(
                           var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getKey()) + var
-                                .getMessages() + " at level " + var.getObj() + Integer.toString(level) +
-                                var.getMessages() + '.');
+                                .getMessages() + " at level " + var.getObj() + level + var.getMessages() + '.');
                     return true;
                 }
                 player.sendMessage(
@@ -84,8 +83,8 @@ public class CmdEnchant implements Cmd {
                     } else {
                         enchantAll(level, player, player.hasPermission("Necessities.unsafeEnchant"), false);
                         player.sendMessage(
-                              var.getMessages() + "Added all enchantments at level " + var.getObj() + Integer
-                                    .toString(level) + var.getMessages() + '.');
+                              var.getMessages() + "Added all enchantments at level " + var.getObj() + level + var
+                                    .getMessages() + '.');
                     }
                     return true;
                 } else if (ench != null && (ench.canEnchantItem(hand) || player
@@ -105,8 +104,8 @@ public class CmdEnchant implements Cmd {
                             hand.addUnsafeEnchantment(ench, level);
                             player.sendMessage(
                                   var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getKey())
-                                        + var.getMessages() + " at level " + var.getObj() + Integer.toString(level) +
-                                        var.getMessages() + '.');
+                                        + var.getMessages() + " at level " + var.getObj() + level + var.getMessages()
+                                        + '.');
                         }
                     }
                     return true;
@@ -185,7 +184,6 @@ public class CmdEnchant implements Cmd {
             case "SHARPNESS":
                 return Enchantment.DAMAGE_ALL.getKey();
             case "BANEOFARTHROPODS":
-                return Enchantment.DAMAGE_ARTHROPODS.getKey();
             case "BANE":
                 return Enchantment.DAMAGE_ARTHROPODS.getKey();
             case "SMITE":

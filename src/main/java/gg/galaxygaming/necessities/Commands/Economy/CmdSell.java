@@ -78,7 +78,7 @@ public class CmdSell implements EconomyCmd {
                     Necessities.getEconomy().addMoney(player.getUniqueId(), cost);
                     inventory.removeItem(mat.toItemStack(amount));
                     player.sendMessage(
-                          var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + ' ' + mat
+                          var.getMessages() + "You sold " + var.getObj() + amount + ' ' + mat
                                 .getFriendlyName(amount) + var.getMessages() + '.');
                     player.sendMessage(
                           var.getMoney() + Economy.format(cost) + var.getMessages() + " was added to your account.");
@@ -86,19 +86,19 @@ public class CmdSell implements EconomyCmd {
                     cost = sell(inventory, amount, mat, player.getUniqueId(), cost);
                     if (cost != -1.00) {
                         player.sendMessage(
-                              var.getMessages() + "You sold " + var.getObj() + Integer.toString(amount) + ' ' + mat
+                              var.getMessages() + "You sold " + var.getObj() + amount + ' ' + mat
                                     .getFriendlyName(amount) + var.getMessages() + '.');
                         player.sendMessage(var.getMoney() + Economy.format(cost) + var.getMessages()
                               + " was added to your account.");
                     } else {
                         player.sendMessage(
-                              var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + Integer
-                                    .toString(amount) + ' ' + mat.getFriendlyName(amount) + var.getMessages() + '.');
+                              var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + amount
+                                    + ' ' + mat.getFriendlyName(amount) + var.getMessages() + '.');
                     }
                 } else {
                     player.sendMessage(
-                          var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + Integer
-                                .toString(amount) + ' ' + mat.getFriendlyName(amount) + var.getMessages() + '.');
+                          var.getEr() + "Error: " + var.getErMsg() + "You do not have " + var.getObj() + amount + ' '
+                                + mat.getFriendlyName(amount) + var.getMessages() + '.');
                 }
             }
         } else {

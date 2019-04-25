@@ -28,13 +28,10 @@ public class CmdReviewList implements CreativeCmd {
         Reviews rev = Necessities.getRev();
         int totalPages = rev.reviewPages();
         if (page > totalPages) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer
-                  .toString(totalPages));
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + totalPages);
             return true;
         }
-        sender.sendMessage(
-              ChatColor.GOLD + "Review List Page [" + Integer.toString(page) + '/' + Integer.toString(totalPages)
-                    + ']');
+        sender.sendMessage(ChatColor.GOLD + "Review List Page [" + page + '/' + totalPages + ']');
         page = page - 1;
         review = rev.reviewLists(page, time);
         while (review != null) {

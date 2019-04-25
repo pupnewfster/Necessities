@@ -55,8 +55,7 @@ public class CmdModifyWorld implements WorldCmd {
             wm.setSetting(worldName, "structures",
                   value);//TODO: this doesn't actually set it without either reloading world or restarting server ._.
             sender.sendMessage(var.getMessages() + "Set structure generation in world " + var.getObj() + worldName + var
-                  .getMessages() + " to " + var.getObj() +
-                  Boolean.toString(value));
+                  .getMessages() + " to " + var.getObj() + value);
         } else if (args[1].equalsIgnoreCase("pvp")) {
             boolean value;
             if (args[2].equalsIgnoreCase("true")) {
@@ -72,8 +71,7 @@ public class CmdModifyWorld implements WorldCmd {
             Bukkit.getWorld(worldName).setPVP(value);
             sender.sendMessage(
                   var.getMessages() + "Set pvp in world " + var.getObj() + worldName + var.getMessages() + " to " + var
-                        .getObj() +
-                        Boolean.toString(value));
+                        .getObj() + value);
         } else if (args[1].equalsIgnoreCase("animals")) {
             boolean value;
             if (args[2].equalsIgnoreCase("true")) {
@@ -89,8 +87,7 @@ public class CmdModifyWorld implements WorldCmd {
             Bukkit.getWorld(worldName).setSpawnFlags(Bukkit.getWorld(worldName).getAllowMonsters(), value);
             sender.sendMessage(
                   var.getMessages() + "Set animal spawning in world " + var.getObj() + worldName + var.getMessages()
-                        + " to " + var.getObj() +
-                        Boolean.toString(value));
+                        + " to " + var.getObj() + value);
         } else if (args[1].equalsIgnoreCase("monsters")) {
             boolean value;
             if (args[2].equalsIgnoreCase("true")) {
@@ -106,8 +103,7 @@ public class CmdModifyWorld implements WorldCmd {
             Bukkit.getWorld(worldName).setSpawnFlags(value, Bukkit.getWorld(worldName).getAllowAnimals());
             sender.sendMessage(
                   var.getMessages() + "Set monster spawning in world " + var.getObj() + worldName + var.getMessages()
-                        + " to " + var.getObj() +
-                        Boolean.toString(value));
+                        + " to " + var.getObj() + value);
         } else {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid setting.");
             sender.sendMessage(var.getMessages() + "Valid settings are: " + ChatColor.WHITE

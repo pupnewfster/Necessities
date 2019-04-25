@@ -191,6 +191,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.Nonnull;
 import net.minecraft.server.v1_14_R1.DimensionManager;
 import net.minecraft.server.v1_14_R1.EntityPlayer;
 import net.minecraft.server.v1_14_R1.IChatBaseComponent;
@@ -417,15 +418,14 @@ public class Necessities extends JavaPlugin {
         return null;
     }
 
-    public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args) {
+    public boolean onCommand(@Nonnull CommandSender sender, Command cmd, @Nonnull String alias,
+          @Nonnull String[] args) {
         Cmd c = getCmd(cmd.getName());
         return c != null && c.commandUse(sender, args);
     }
 
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
-        if (sender == null || cmd == null) {
-            return null;
-        }
+    public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String alias,
+          @Nonnull String[] args) {
         Cmd c = getCmd(cmd.getName());
         if (c == null) {
             return null;
@@ -782,14 +782,14 @@ public class Necessities extends JavaPlugin {
     }
 
     /**
-     * Checks if the given command is enabled.
+     * Checks if the given command is disabled.
      *
-     * @param cmd The command to check if it is enabled.
-     * @return True if the command is enabled, false otherwise.
+     * @param cmd The command to check if it is disabled.
+     * @return True if the command is disabled, false otherwise.
      */
-    public boolean isCommandEnabled(String cmd) {
+    public boolean isCommandDisabled(String cmd) {
         Cmd c = getCmd(cmd);
-        return c != null && !c.equals(this.disabled);
+        return c == null || c.equals(this.disabled);
     }
 
     @Override

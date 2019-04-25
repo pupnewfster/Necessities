@@ -116,8 +116,13 @@ class Initialization {
                 config.set("CHESTMINECART", 64);
                 config.set("FURNACEMINECART", 64);
                 config.set("SNOWBALL", 64);
-                config.set("SIGN", 64);
-                config.set("BOAT", 64);
+                config.set("OAKSIGN", 64);
+                config.set("SPRUCESIGN", 64);
+                config.set("BIRCHSIGN", 64);
+                config.set("JUNGLESIGN", 64);
+                config.set("ACACIASIGN", 64);
+                config.set("DARKOAKSIGN", 64);
+                config.set("OAKBOAT", 64);
                 config.set("SPRUCEBOAT", 64);
                 config.set("BIRCHBOAT", 64);
                 config.set("JUNGLEBOAT", 64);

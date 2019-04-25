@@ -63,12 +63,10 @@ public class CmdList implements GuildCmd {
         }
         int totalPages = guildList.size() / 10 + rounder;
         if (page > totalPages) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer
-                  .toString(totalPages));
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + totalPages);
             return true;
         }
-        sender.sendMessage(
-              var.getMessages() + "Guild list [" + Integer.toString(page) + '/' + Integer.toString(totalPages) + ']');
+        sender.sendMessage(var.getMessages() + "Guild list [" + page + '/' + totalPages + ']');
         page = page - 1;
         String message = getLine(page, time, guildList);
         while (message != null) {
@@ -78,8 +76,8 @@ public class CmdList implements GuildCmd {
         }
         if (page + 1 < totalPages) {
             sender.sendMessage(
-                  var.getMessages() + "Type " + var.getObj() + "/guild list " + Integer.toString(page + 2) + var
-                        .getMessages() + " to read the next page.");
+                  var.getMessages() + "Type " + var.getObj() + "/guild list " + (page + 2) + var.getMessages()
+                        + " to read the next page.");
         }
         return true;
     }

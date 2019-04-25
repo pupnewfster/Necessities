@@ -10,8 +10,7 @@ class Backup {
     static void tryBackup() {
         Calendar c = Calendar.getInstance();
         String date =
-              Integer.toString(c.get(Calendar.MONTH) + 1) + '-' + Integer.toString(c.get(Calendar.DATE)) + '-' + Integer
-                    .toString(c.get(Calendar.YEAR));
+              Integer.toString(c.get(Calendar.MONTH) + 1) + '-' + c.get(Calendar.DATE) + '-' + c.get(Calendar.YEAR);
         File current = new File("plugins/Necessities/Backup/" + date + "-users.yml");
         if (!current.exists()) {
             try {

@@ -29,12 +29,11 @@ public class CmdPriceList implements EconomyCmd {
         Prices pr = Necessities.getPrices();
         int totalPages = pr.priceListPages();
         if (page > totalPages) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer
-                  .toString(totalPages));
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + totalPages);
             return true;
         }
         sender.sendMessage(
-              ChatColor.GOLD + "Price List Page [" + Integer.toString(page) + '/' + Integer.toString(totalPages) + ']');
+              ChatColor.GOLD + "Price List Page [" + page + '/' + totalPages + ']');
         page = page - 1;
         price = pr.priceLists(page, time);
         while (price != null) {

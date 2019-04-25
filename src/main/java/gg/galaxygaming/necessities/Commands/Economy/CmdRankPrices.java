@@ -31,13 +31,10 @@ public class CmdRankPrices implements EconomyCmd {
         RankPrices rp = Necessities.getRankPrices();
         int totalPages = rp.priceListPages();
         if (page > totalPages) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + Integer
-                  .toString(totalPages));
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Input a number from 1 to " + totalPages);
             return true;
         }
-        sender.sendMessage(
-              ChatColor.GOLD + "Rank Prices Page [" + Integer.toString(page) + '/' + Integer.toString(totalPages)
-                    + ']');
+        sender.sendMessage(ChatColor.GOLD + "Rank Prices Page [" + page + '/' + totalPages + ']');
         page = page - 1;
         price = rp.priceLists(page, time);
         String rank = "CONSOLE";

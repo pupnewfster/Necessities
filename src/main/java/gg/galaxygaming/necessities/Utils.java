@@ -35,7 +35,7 @@ public class Utils {
      * @param input The string to check.
      * @return True if the input is a valid double, false otherwise.
      */
-    @SuppressWarnings({"BooleanMethodIsAlwaysInverted", "ResultOfMethodCallIgnored"})
+    @SuppressWarnings({"BooleanMethodIsAlwaysInverted"})
     public static boolean legalDouble(String input) {
         try {
             Double.parseDouble(input);
@@ -51,7 +51,7 @@ public class Utils {
      * @param input The string to check.
      * @return True if the input is a valid integer, false otherwise.
      */
-    @SuppressWarnings({"BooleanMethodIsAlwaysInverted", "ResultOfMethodCallIgnored"})
+    @SuppressWarnings({"BooleanMethodIsAlwaysInverted"})
     public static boolean legalInt(String input) {
         try {
             Integer.parseInt(input);
@@ -67,7 +67,7 @@ public class Utils {
      * @param input The string to check.
      * @return True if the input is a valid long, false otherwise.
      */
-    @SuppressWarnings({"BooleanMethodIsAlwaysInverted", "ResultOfMethodCallIgnored"})
+    @SuppressWarnings({"BooleanMethodIsAlwaysInverted"})
     public static boolean legalLong(String input) {
         try {
             Long.parseLong(input);
@@ -220,6 +220,7 @@ public class Utils {
         profile.setProperty(textures);*/
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta meta = (SkullMeta) skull.getItemMeta();
+        //noinspection deprecation
         meta.setOwner(name);
         //TODO: Paper (Replace setOwner with setPlayerProfile
         //meta.setPlayerProfile(profile);
@@ -374,7 +375,7 @@ public class Utils {
     }
 
     //TODO: Paper (Start Delete)
-    private static final Field recentTpsField = makeField(MinecraftServer.class);
+    private static final Field recentTpsField = makeField();
 
     private static double[] getNMSRecentTps() {
         if (recentTpsField == null) {
@@ -383,9 +384,9 @@ public class Utils {
         return getField(((CraftServer) Bukkit.getServer()).getServer());
     }
 
-    private static Field makeField(Class<?> clazz) {
+    private static Field makeField() {
         try {
-            return clazz.getDeclaredField("recentTps");
+            return MinecraftServer.class.getDeclaredField("recentTps");
         } catch (Exception ex) {
             return null;
         }

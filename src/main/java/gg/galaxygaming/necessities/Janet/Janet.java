@@ -75,7 +75,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
             lastChat.put(uuid, t);
             return false;
         }
-        if (!isFull(lastChat.get(uuid))) {
+        if (notFull(lastChat.get(uuid))) {
             putProp(lastChat.get(uuid), time);
             return false;
         }
@@ -98,7 +98,7 @@ public class Janet {//TODO: Make the logic run async for performance reasons
             lastCmd.put(uuid, t);
             return false;
         }
-        if (!isFull(lastCmd.get(uuid))) {
+        if (notFull(lastCmd.get(uuid))) {
             putProp(lastCmd.get(uuid), time);
             return false;
         }
@@ -120,8 +120,8 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         l[1] = toPut;
     }
 
-    private boolean isFull(Long[] l) {
-        return !(l[0] == null || l[1] == null);
+    private boolean notFull(Long[] l) {
+        return l[0] == null || l[1] == null;
     }
 
     private String caps(String message) {
@@ -152,12 +152,12 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         List<String> bad = new ArrayList<>();
         for (String badWord : badwords) {
             List<String> s = removeSpaces(orig, badWord);
-            bad.addAll(s.stream().filter(w -> w.contains(badWord) && check(w, badWord) && !isGood(w))
+            bad.addAll(s.stream().filter(w -> w.contains(badWord) && check(w, badWord) && notGood(w))
                   .collect(Collectors.toList()));
             for (String o : orig) {
                 String t = removeConsec(o);
-                if (o.contains(badWord) && check(o, badWord) && !isGood(o) || t.contains(badWord) && check(t, badWord)
-                      && !isGood(t)) {
+                if (o.contains(badWord) && check(o, badWord) && notGood(o) || t.contains(badWord) && check(t, badWord)
+                      && notGood(t)) {
                     bad.add(o);
                 }
             }
@@ -188,8 +188,8 @@ public class Janet {//TODO: Make the logic run async for performance reasons
               msg.replaceAll(bad, "").length() >= msg.length() * 3.0 / 5;
     }
 
-    private boolean isGood(String msg) {
-        return goodwords.stream().anyMatch(msg::startsWith);
+    private boolean notGood(String msg) {
+        return goodwords.stream().noneMatch(msg::startsWith);
     }
 
     private String addSpaces(List<String> bad, String orig) {
