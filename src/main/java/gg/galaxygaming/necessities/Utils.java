@@ -1,8 +1,8 @@
 package gg.galaxygaming.necessities;
 
-import com.github.cliftonlabs.json_simple.JsonArray;
-import com.github.cliftonlabs.json_simple.JsonObject;
-import com.github.cliftonlabs.json_simple.Jsoner;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -195,7 +195,8 @@ public class Utils {
                 response.append(inputLine);
             }
             in.close();
-            return UUID.fromString(((String) Jsoner.deserialize(response.toString(), new JsonObject()).get("id"))
+
+            return UUID.fromString(new Gson().fromJson(response.toString(), JsonObject.class).get("id").getAsString()
                   .replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
         } catch (Exception ignored) {
         }
@@ -253,10 +254,10 @@ public class Utils {
             e.printStackTrace();
             return null;
         }
-        JsonObject jo = (JsonObject) ((JsonArray) Jsoner.deserialize(response.toString(), new JsonObject())
-              .get("properties")).get(0);
-        ProfileProperty property = new ProfileProperty("textures", jo.getString(Jsoner.mintJsonKey("value", null)),
-              jo.getString(Jsoner.mintJsonKey("signature", null)));
+        JsonObject json = new Gson().fromJson(response.toString(), JsonObject.class);
+        JsonObject jo = json.getAsJsonArray("properties").get(0).getAsJsonObject();
+        ProfileProperty property = new ProfileProperty("textures", jo.get("value").getAsString(),
+              jo.get("signature").getAsString());
         skins.put(uuid, property);
         return property;
     }*/
@@ -290,8 +291,8 @@ public class Utils {
                 response.append(inputLine);
             }
             in.close();
-            JsonArray json = Jsoner.deserialize(response.toString(), new JsonArray());
-            return ((JsonObject) json.get(json.size() - 1)).getString(Jsoner.mintJsonKey("name", null));
+            JsonArray json = new Gson().fromJson(response.toString(), JsonArray.class);
+            return json.get(json.size() - 1).getAsJsonObject().get("name").getAsString();
         } catch (Exception ignored) {
         }
         return null;
@@ -304,7 +305,6 @@ public class Utils {
      * @param message The message to send.
      */
     public static void sendActionBarMessage(Player player, String message) {
-
         IChatBaseComponent infoJSON = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
         ((CraftPlayer) player).getHandle().playerConnection
               .sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.ACTIONBAR, infoJSON, 0, 60, 0));

@@ -1,8 +1,9 @@
 package gg.galaxygaming.necessities;
 
-import com.github.cliftonlabs.json_simple.JsonArray;
-import com.github.cliftonlabs.json_simple.JsonObject;
-import com.github.cliftonlabs.json_simple.Jsoner;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import gg.galaxygaming.necessities.Commands.Cmd;
@@ -198,7 +199,6 @@ import net.minecraft.server.v1_14_R1.IChatBaseComponent;
 import net.minecraft.server.v1_14_R1.MinecraftServer;
 import net.minecraft.server.v1_14_R1.PacketPlayOutPlayerInfo;
 import net.minecraft.server.v1_14_R1.PacketPlayOutPlayerInfo.EnumPlayerInfoAction;
-import net.minecraft.server.v1_14_R1.PacketPlayOutPlayerListHeaderFooter;
 import net.minecraft.server.v1_14_R1.PlayerInteractManager;
 import net.minecraft.server.v1_14_R1.WorldServer;
 import org.bukkit.Bukkit;
@@ -389,12 +389,7 @@ public class Necessities extends JavaPlugin {
     }
 
     void addHeader(Player p) {
-        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
-        packet.header = formatMessage(ChatColor.AQUA + "Galaxy Gaming");
-        packet.footer = formatMessage(ChatColor.GREEN + "http://galaxygaming.gg");
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
-        //TODO: See if below can be used instead has some formatting issues though
-        //p.setPlayerListHeaderFooter(new TextComponent(ChatColor.AQUA + "Galaxy Gaming"), new TextComponent(ChatColor.GREEN + "http://galaxygaming.gg"));
+        p.setPlayerListHeaderFooter(ChatColor.AQUA + "Galaxy Gaming", ChatColor.GREEN + "https://galaxygaming.gg");
     }
 
     private Property getSkin() {
@@ -408,11 +403,12 @@ public class Necessities extends JavaPlugin {
                 response.append(inputLine);
             }
             in.close();
-            JsonObject json = Jsoner.deserialize(response.toString(), new JsonObject());
-            JsonObject jo = (JsonObject) ((JsonArray) json.get("properties")).get(0);
-            String signature = jo.getString(Jsoner.mintJsonKey("signature", null)), value = jo
-                  .getString(Jsoner.mintJsonKey("value", null));
-            return new Property("textures", value, signature);
+            JsonObject json = new Gson().fromJson(response.toString(), JsonObject.class);
+            JsonObject properties = json.getAsJsonArray("properties").get(0).getAsJsonObject();
+            JsonElement signature = properties.get("signature");
+            JsonElement value = properties.get("value");
+            return new Property("textures", value == null ? null : value.getAsString(),
+                  signature == null ? null : signature.getAsString());
         } catch (Exception ignored) {
         }
         return null;
@@ -431,9 +427,9 @@ public class Necessities extends JavaPlugin {
             return null;
         }
         List<String> tab = c.tabComplete(sender, args);
-        if (tab == null || tab.isEmpty()) {
+        /*if (tab == null || tab.isEmpty()) {
             return null;
-        }
+        }*/
         return tab;
     }
 
@@ -836,24 +832,26 @@ public class Necessities extends JavaPlugin {
     private void getDevInfo() {
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(
-                  new URL("http://galaxygaming.gg/staff.json").openConnection().getInputStream()));
+                  new URL("https://galaxygaming.gg/staff.json").openConnection().getInputStream()));
             String inputLine;
             StringBuilder response = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
             in.close();
-            JsonObject json = Jsoner.deserialize(response.toString(), new JsonObject());
-            JsonArray ar = (JsonArray) json.get("devs");
-            JsonObject ls = (JsonObject) json.get("Lavasurvival");
-            JsonArray lsDevs = (JsonArray) ls.get("devs");
+            JsonObject json = new Gson().fromJson(response.toString(), JsonObject.class);
+            JsonArray devs = json.getAsJsonArray("devs");
+            JsonObject ls = json.getAsJsonObject("Lavasurvival");
+            JsonArray lsDevs = ls.getAsJsonArray("devs");
             for (int i = 0; i < lsDevs.size(); i++) {
-                int devID = lsDevs.getInteger(i);
-                JsonObject dev = (JsonObject) ar.stream()
-                      .filter(a -> devID == ((JsonObject) a).getInteger(Jsoner.mintJsonKey("devID", null))).findFirst()
-                      .orElse(null);
-                if (dev != null) {
-                    this.devs.add(new DevInfo(dev));
+                int devID = lsDevs.get(i).getAsInt();
+                for (int j = 0; j < devs.size(); j++) {
+                    JsonObject dev = devs.get(j).getAsJsonObject();
+                    JsonElement id = dev.get("devID");
+                    if (id != null && devID == id.getAsInt()) {
+                        this.devs.add(new DevInfo(dev));
+                        break;
+                    }
                 }
             }
         } catch (Exception ignored) {
@@ -867,9 +865,9 @@ public class Necessities extends JavaPlugin {
         private final String name;
 
         private DevInfo(JsonObject dev) {
-            this.mcUUID = UUID.fromString(dev.getString(Jsoner.mintJsonKey("mcUUID", null)));
-            this.slackID = dev.getString(Jsoner.mintJsonKey("slackID", null));
-            this.name = dev.getString(Jsoner.mintJsonKey("name", null));
+            this.mcUUID = UUID.fromString(dev.get("mcUUID").getAsString());
+            this.slackID = dev.get("slackID").getAsString();
+            this.name = dev.get("name").getAsString();
         }
 
         /**

@@ -1,8 +1,9 @@
 package gg.galaxygaming.necessities.Janet;
 
-import com.github.cliftonlabs.json_simple.JsonArray;
-import com.github.cliftonlabs.json_simple.JsonObject;
-import com.github.cliftonlabs.json_simple.Jsoner;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketFactory;
@@ -41,7 +42,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.json.simple.parser.JSONParser;
 
 public class JanetSlack {//TODO: Even though this is not currently being used it probably should be updated with the latest Slack API I made for Janet.
     private final Map<String, SlackUser> userMap = new HashMap<>();
@@ -127,7 +127,8 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
             message = message.substring(0, message.length() - 1);
         }
         JsonObject json = new JsonObject();
-        json.put("text", message);
+
+        json.addProperty("text", message);
         try {
             HttpsURLConnection con = (HttpsURLConnection) hookURL.openConnection();
             con.setDoOutput(true);
@@ -135,7 +136,7 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
             con.setRequestProperty("Accept", "application/json,text/plain");
             con.setRequestMethod("POST");
             OutputStream os = con.getOutputStream();
-            os.write(Jsoner.serialize(json).getBytes(StandardCharsets.UTF_8));
+            os.write(new Gson().toJson(json).getBytes(StandardCharsets.UTF_8));
             os.close();
             InputStream is = con.getInputStream();
             is.close();
@@ -160,8 +161,7 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
                 response.append(inputLine);
             }
             in.close();
-            JSONParser jsonParser = new JSONParser();
-            userMap.put(id, new SlackUser((JsonObject) jsonParser.parse(response.toString())));
+            userMap.put(id, new SlackUser(new Gson().fromJson(response.toString(), JsonObject.class)));
         } catch (Exception ignored) {
         }
         return userMap.get(id);
@@ -194,10 +194,10 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
                 response.append(inputLine);
             }
             in.close();
-            JsonObject json = Jsoner.deserialize(response.toString(), new JsonObject());
-            String webSocketUrl = json.getString(Jsoner.mintJsonKey("url", null));
+            JsonObject json = new Gson().fromJson(response.toString(), JsonObject.class);
+            JsonElement webSocketUrl = json.get("url");
             if (webSocketUrl != null) {
-                openWebSocket(webSocketUrl);
+                openWebSocket(webSocketUrl.getAsString());
             }
         } catch (Exception ignored) {
         }
@@ -220,15 +220,17 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
                 response.append(inputLine);
             }
             in.close();
-            JsonObject json = Jsoner.deserialize(response.toString(), new JsonObject());
+            JsonObject json = new Gson().fromJson(response.toString(), JsonObject.class);
             //Map users
-            JsonArray users = (JsonArray) json.get("members");
-            for (Object u : users) {
-                JsonObject user = (JsonObject) u;
-                if (user.getBoolean(Jsoner.mintJsonKey("deleted", null))) {
+            JsonArray users = json.getAsJsonArray("members");
+            for (JsonElement u : users) {
+                JsonObject user = u.getAsJsonObject();
+                JsonElement deleted = user.get("deleted");
+                if (deleted != null && deleted.getAsBoolean()) {
                     continue;
                 }
-                String id = user.getString(Jsoner.mintJsonKey("id", null));
+                JsonElement jsonId = user.get("id");
+                String id = jsonId == null ? null : jsonId.getAsString();
                 if (!userMap.containsKey(id)) {
                     userMap.put(id, new SlackUser(user));
                 }
@@ -242,18 +244,19 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
             ws = new WebSocketFactory().createSocket(url).addListener(new WebSocketAdapter() {
                 @Override
                 public void onTextMessage(WebSocket websocket, String message) {
-                    JsonObject json = Jsoner.deserialize(message, new JsonObject());
-                    if (json.containsKey("type")) {
-                        if (json.getString(Jsoner.mintJsonKey("type", null)).equals("message")) {
+                    JsonObject json = new Gson().fromJson(message, JsonObject.class);
+                    if (json.has("type")) {
+                        JsonElement type = json.get("type");
+                        if (type != null && type.getAsString().equals("message")) {
                             //TODO: Figure out if there is a way to get the user id of a bot instead of just using janet's
-                            SlackUser info = json.containsKey("bot_id") ? getUserInfo("U2Y19AVNJ")
-                                  : getUserInfo(json.getString(Jsoner.mintJsonKey("user", null)));
-                            String text = json.getString(Jsoner.mintJsonKey("text", null));
+                            SlackUser info = json.has("bot_id") ? getUserInfo("U2Y19AVNJ")
+                                  : getUserInfo(json.get("user").getAsString());
+                            String text = json.get("text").getAsString();
                             while (text.contains("<") && text.contains(">")) {
                                 text = text.split("<@")[0] + '@' + getUserInfo(text.split("<@")[1].split(">:")[0])
                                       .getName() + ':' + text.split("<@")[1].split(">:")[1];
                             }
-                            String channel = json.getString(Jsoner.mintJsonKey("channel", null));
+                            String channel = json.get("channel").getAsString();
                             if (channel.startsWith("D")) //Direct Message
                             {
                                 sendSlackChat(info, text, true);
@@ -281,13 +284,17 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
                 response.append(inputLine);
             }
             in.close();
-            JsonObject json = Jsoner.deserialize(response.toString(), new JsonObject());
+            JsonObject json = new Gson().fromJson(response.toString(), JsonObject.class);
             //Map user channels
-            for (Object i : (JsonArray) json.get("ims")) {
-                JsonObject im = (JsonObject) i;
-                String userID = im.getString(Jsoner.mintJsonKey("user", null));
+            for (JsonElement i : json.getAsJsonArray("ims")) {
+                JsonObject im = i.getAsJsonObject();
+                JsonElement user = im.get("user");
+                String userID = user == null ? null : im.getAsString();
                 if (userMap.containsKey(userID)) {
-                    userMap.get(userID).setChannel(im.getString(Jsoner.mintJsonKey("id", null)));
+                    JsonElement id = im.get("id");
+                    if (id != null) {
+                        userMap.get(userID).setChannel(id.getAsString());
+                    }
                 }
             }
         } catch (Exception ignored) {
@@ -943,20 +950,20 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
         private int rank;
 
         SlackUser(JsonObject json) {
-            this.id = json.getString(Jsoner.mintJsonKey("id", null));
-            this.name = json.getString(Jsoner.mintJsonKey("name", null));
-            if (json.getBoolean(Jsoner.mintJsonKey("is_bot", null))) {
+            this.id = json.get("id").getAsString();
+            this.name = json.get("name").getAsString();
+            if (json.get("is_bot").getAsBoolean()) {
                 this.isBot = true;
                 this.rank = 2;
-            } else if (json.getBoolean(Jsoner.mintJsonKey("is_primary_owner", null))) {
+            } else if (json.get("is_primary_owner").getAsBoolean()) {
                 this.rank = 3;
-            } else if (json.getBoolean(Jsoner.mintJsonKey("is_owner", null))) {
+            } else if (json.get("is_owner").getAsBoolean()) {
                 this.rank = 2;
-            } else if (json.getBoolean(Jsoner.mintJsonKey("is_admin", null))) {
+            } else if (json.get("is_admin").getAsBoolean()) {
                 this.rank = 1;
-            } else if (json.getBoolean(Jsoner.mintJsonKey("is_ultra_restricted", null))) {
+            } else if (json.get("is_ultra_restricted").getAsBoolean()) {
                 this.rank = -2;
-            } else if (json.getBoolean(Jsoner.mintJsonKey("is_restricted", null))) {
+            } else if (json.get("is_restricted").getAsBoolean()) {
                 this.rank = -1;
             }
             //else leave it at 0 for member
@@ -1056,8 +1063,8 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
                 message = message.substring(0, message.length() - 1);
             }
             JsonObject json = new JsonObject();
-            json.put("text", message);
-            json.put("channel", this.channel);
+            json.addProperty("text", message);
+            json.addProperty("channel", this.channel);
             try {
                 HttpsURLConnection con = (HttpsURLConnection) hookURL.openConnection();
                 con.setDoOutput(true);
@@ -1065,7 +1072,7 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
                 con.setRequestProperty("Accept", "application/json,text/plain");
                 con.setRequestMethod("POST");
                 OutputStream os = con.getOutputStream();
-                os.write(Jsoner.serialize(json).getBytes(StandardCharsets.UTF_8));
+                os.write(new Gson().toJson(json).getBytes(StandardCharsets.UTF_8));
                 os.close();
                 InputStream is = con.getInputStream();
                 is.close();
