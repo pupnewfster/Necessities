@@ -409,7 +409,7 @@ class Listeners implements Listener {
             GuildManager gm = Necessities.getGM();
             Guild owner = gm.chunkOwner(to.getChunk());
             if (owner != gm.chunkOwner(from.getChunk())) {
-                e.getPlayer().sendActionBar(owner == null ? Necessities.getVar().getWild() + "Wilderness"
+                Utils.sendActionBarMessage(e.getPlayer(), owner == null ? Necessities.getVar().getWild() + "Wilderness"
                       : owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription());
             }
         }
@@ -905,14 +905,15 @@ class Listeners implements Listener {
         }
         if (!e.isCancelled()) {
             ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
-            if (e.getHand().equals(EquipmentSlot.HAND) && item != null && item.hasItemMeta() && item.getItemMeta()
-                  .hasLore() && item.getItemMeta().getLore().contains("Wrench")) {
-                if (entity.getType().equals(EntityType.PRIMED_TNT)) {
-                    entity.getLocation().getBlock().setType(Material.TNT);
-                    entity.remove();
-                } else if (entity.getType().equals(EntityType.CREEPER)) {
-                    Creeper c = (Creeper) entity;
-                    c.setIgnited(!c.isIgnited());
+            if (e.getHand().equals(EquipmentSlot.HAND) && item != null && item.hasItemMeta()) {
+                ItemMeta meta = item.getItemMeta();
+                if (meta.hasLore() && meta.getLore().contains("Wrench")) {
+                    if (entity.getType().equals(EntityType.PRIMED_TNT)) {
+                        entity.getLocation().getBlock().setType(Material.TNT);
+                        entity.remove();
+                    } else if (entity.getType().equals(EntityType.CREEPER)) {
+                        Utils.wrenchCreeper((Creeper) entity);
+                    }
                 }
             }
         }
@@ -1250,7 +1251,7 @@ class Listeners implements Listener {
             GuildManager gm = Necessities.getGM();
             Guild owner = gm.chunkOwner(e.getTo().getChunk());
             if (owner != gm.chunkOwner(e.getFrom().getChunk())) {
-                e.getPlayer().sendActionBar(owner == null ? Necessities.getVar().getWild() + "Wilderness"
+                Utils.sendActionBarMessage(e.getPlayer(), owner == null ? Necessities.getVar().getWild() + "Wilderness"
                       : owner.relation(u.getGuild()) + owner.getName() + " ~ " + owner.getDescription());
             }
         }

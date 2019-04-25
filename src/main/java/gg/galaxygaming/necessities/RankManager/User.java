@@ -363,37 +363,6 @@ public class User {
         getPlayer().sendMessage(Necessities.getVar().getMessages() + "Teleportation successful.");
     }
 
-    public void setSkin(UUID uuid) {
-        //TODO make this refresh their skin. Currently changes their gameprofile to have correct skin... but doesn't refresh the player
-        if (bukkitPlayer == null) {
-            return;
-        }
-        /*GameProfile profile = ((CraftPlayer) bukkitPlayer).getHandle().getProfile();
-        try {
-            Field prop = profile.getProperties().getClass().getDeclaredField("properties");
-            prop.setAccessible(true);
-            Multimap<String, Property> properties = (Multimap<String, Property>) prop.get(profile.getProperties());
-            BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString().replaceAll("-", "") + "?unsigned=false").openConnection().getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-            while ((inputLine = in.readLine()) != null)
-                response.append(inputLine);
-            in.close();
-            JsonObject json = Jsoner.deserialize(response.toString(), new JsonObject());
-            JsonObject jo = (JsonObject) ((JsonArray) json.get("properties")).get(0);
-            String signature = jo.getString(Jsoner.mintJsonKey("signature", null)), value = jo.getString(Jsoner.mintJsonKey("value", null));
-            properties.removeAll("textures");
-            properties.put("textures", new Property("textures", value, signature));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-        //TODO: Try below method in more detail
-        /*ProfileProperty textures = Utils.getPlayerSkin(uuid);
-        if (textures != null) {
-            bukkitPlayer.getPlayerProfile().setProperty(textures);
-        }*/
-    }
-
     /**
      * Teleports to the given location.
      *

@@ -15,8 +15,12 @@ import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 public class Utils {
 
@@ -196,15 +200,36 @@ public class Utils {
     }
 
     /**
+     * Retrieves the head of the player given by the specified uuid and name.
+     * @param uuid The uuid of the player.
+     * @param name The name of the player.
+     * @return The head of the player with the corresponding uuid and name.
+     * @throws PlayerNotFoundException When it failed to find the skin for the player.
+     */
+    public static ItemStack getPlayerHead(UUID uuid, String name) throws PlayerNotFoundException {
+        ProfileProperty textures = getPlayerSkin(uuid);
+        if (textures == null) {
+            throw new PlayerNotFoundException();
+        }
+        PlayerProfile profile = Bukkit.createProfile(uuid, name);
+        profile.setProperty(textures);
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
+        SkullMeta meta = (SkullMeta) skull.getItemMeta();
+        meta.setPlayerProfile(profile);
+        skull.setItemMeta(meta);
+        return skull;
+    }
+
+    /**
      * Gets a ProfileProperty representing the skin of the player with ths specified UUID.
      *
      * @param uuid The UUID of the player to get the skin of.
      * @return The ProfileProperty representing the skin of the player with the given UUID.
      */
-    public static ProfileProperty getPlayerSkin(UUID uuid) {
+    private static ProfileProperty getPlayerSkin(UUID uuid) {
         //TODO if the player is online grab it from their skin. If we end up supporting changing skins then also cache their old skin
-        if (skins.containsKey(
-              uuid)) {//TODO: Should clear things from the cache after x amount of time in case their skin changes
+        if (skins.containsKey(uuid)) {
+            //TODO: Should clear things from the cache after x amount of time in case their skin changes
             return skins.get(uuid);
         }
         StringBuilder response = new StringBuilder();
@@ -264,6 +289,21 @@ public class Utils {
     }
 
     /**
+     * Sends a message to a player's action bar.
+     * @param player The player to send the message to.
+     * @param message The message to send.
+     */
+    public static void sendActionBarMessage(Player player, String message) {
+        //TODO: Paper
+        player.sendActionBar(message);
+    }
+
+    public static void wrenchCreeper(Creeper creeper) {
+        //TODO: Paper
+        creeper.setIgnited(!creeper.isIgnited());
+    }
+
+    /**
      * Gets the server's TPS.
      *
      * @return The server's TPS.
@@ -275,6 +315,14 @@ public class Utils {
         }
         String ticks = ticksBuilder.toString();
         return ticks.substring(0, ticks.length() - 2).trim();
+    }
+
+    /**
+     * Restart the server
+     */
+    public static void restartServer() {
+        //TODO: Paper
+        //Bukkit.spigot().restart();
     }
 
     private static String format(double tps) {

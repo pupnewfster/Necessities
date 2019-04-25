@@ -903,7 +903,7 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
                 return;
             } else if (message.startsWith("!restart") && info.isAdmin()) {
                 sendMessage("Restarting...", isPM, info);
-                Bukkit.spigot().restart();
+                Utils.restartServer();
                 return;
             } else if ((message.startsWith("!consolecmd") || message.startsWith("!ccmd") || message
                   .startsWith("!consolecommand")) && info.isAdmin()) {//TODO Make it show the result to slack
