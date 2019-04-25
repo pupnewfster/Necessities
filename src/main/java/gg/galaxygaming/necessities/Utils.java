@@ -1,22 +1,24 @@
 package gg.galaxygaming.necessities;
 
-import com.destroystokyo.paper.profile.ProfileProperty;
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
+import net.minecraft.server.v1_14_R1.IChatBaseComponent;
+import net.minecraft.server.v1_14_R1.MinecraftServer;
+import net.minecraft.server.v1_14_R1.PacketPlayOutTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -24,7 +26,8 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 public class Utils {
 
-    private static final Map<UUID, ProfileProperty> skins = new HashMap<>();
+    //TODO: Paper
+    //private static final Map<UUID, ProfileProperty> skins = new HashMap<>();
 
     /**
      * Checks if the given string is a valid double.
@@ -201,21 +204,25 @@ public class Utils {
 
     /**
      * Retrieves the head of the player given by the specified uuid and name.
+     *
      * @param uuid The uuid of the player.
      * @param name The name of the player.
      * @return The head of the player with the corresponding uuid and name.
      * @throws PlayerNotFoundException When it failed to find the skin for the player.
      */
     public static ItemStack getPlayerHead(UUID uuid, String name) throws PlayerNotFoundException {
-        ProfileProperty textures = getPlayerSkin(uuid);
+        //TODO: Paper
+        /*ProfileProperty textures = getPlayerSkin(uuid);
         if (textures == null) {
             throw new PlayerNotFoundException();
         }
         PlayerProfile profile = Bukkit.createProfile(uuid, name);
-        profile.setProperty(textures);
+        profile.setProperty(textures);*/
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta meta = (SkullMeta) skull.getItemMeta();
-        meta.setPlayerProfile(profile);
+        meta.setOwner(name);
+        //TODO: Paper (Replace setOwner with setPlayerProfile
+        //meta.setPlayerProfile(profile);
         skull.setItemMeta(meta);
         return skull;
     }
@@ -226,7 +233,8 @@ public class Utils {
      * @param uuid The UUID of the player to get the skin of.
      * @return The ProfileProperty representing the skin of the player with the given UUID.
      */
-    private static ProfileProperty getPlayerSkin(UUID uuid) {
+    //TODO: Paper
+    /*private static ProfileProperty getPlayerSkin(UUID uuid) {
         //TODO if the player is online grab it from their skin. If we end up supporting changing skins then also cache their old skin
         if (skins.containsKey(uuid)) {
             //TODO: Should clear things from the cache after x amount of time in case their skin changes
@@ -250,7 +258,7 @@ public class Utils {
               jo.getString(Jsoner.mintJsonKey("signature", null)));
         skins.put(uuid, property);
         return property;
-    }
+    }*/
 
     /**
      * Gets a players name based on the string representation of their uuid.
@@ -290,17 +298,22 @@ public class Utils {
 
     /**
      * Sends a message to a player's action bar.
+     *
      * @param player The player to send the message to.
      * @param message The message to send.
      */
     public static void sendActionBarMessage(Player player, String message) {
-        //TODO: Paper
-        player.sendActionBar(message);
+
+        IChatBaseComponent infoJSON = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
+        ((CraftPlayer) player).getHandle().playerConnection
+              .sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.ACTIONBAR, infoJSON, 0, 60, 0));
+        //TODO: Paper (Replaces above NMS version)
+        //player.sendActionBar(message);
     }
 
     public static void wrenchCreeper(Creeper creeper) {
         //TODO: Paper
-        creeper.setIgnited(!creeper.isIgnited());
+        //creeper.setIgnited(!creeper.isIgnited());
     }
 
     /**
@@ -310,7 +323,8 @@ public class Utils {
      */
     public static String getTPS() {
         StringBuilder ticksBuilder = new StringBuilder(ChatColor.GOLD + "TPS from last 1m, 5m, 15m: ");
-        for (double tps : Bukkit.getTPS()) {
+        //TODO: Paper (Replace getNMSRecentTps with Bukkit.getTPS)
+        for (double tps : getNMSRecentTps()) {//Bukkit.getTPS()) {
             ticksBuilder.append(format(tps)).append(", ");
         }
         String ticks = ticksBuilder.toString();
@@ -358,6 +372,38 @@ public class Utils {
             }
         }
     }
+
+    //TODO: Paper (Start Delete)
+    private static final Field recentTpsField = makeField(MinecraftServer.class);
+
+    private static double[] getNMSRecentTps() {
+        if (recentTpsField == null) {
+            return new double[0];
+        }
+        return getField(((CraftServer) Bukkit.getServer()).getServer());
+    }
+
+    private static Field makeField(Class<?> clazz) {
+        try {
+            return clazz.getDeclaredField("recentTps");
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> T getField(Object instance) {
+        if (recentTpsField == null) {
+            throw new RuntimeException("No such field");
+        }
+        recentTpsField.setAccessible(true);
+        try {
+            return (T) recentTpsField.get(instance);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    //TODO: Paper (End Delete)
 
     //TODO: Create a method to add items to a player inventory or just drop on ground if full
 }
