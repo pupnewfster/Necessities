@@ -686,9 +686,11 @@ class Listeners implements Listener {
                         state.setBlockData(powerable);
                         e.setCancelled(true);
                         state.update();
-                    } else if (MaterialHelper.isContainer(type) || type.equals(Material.ENDER_CHEST) ||
+                    } else if (MaterialHelper.isContainer(type) || MaterialHelper.isSign(type) ||
+                          type.equals(Material.SPAWNER) || type.equals(Material.ENDER_CHEST) ||
                           type.equals(Material.PISTON) || type.equals(Material.STICKY_PISTON) ||
-                          type.equals(Material.SPAWNER) || MaterialHelper.isSign(type)) {
+                          type.equals(Material.GRINDSTONE) || type.equals(Material.LECTERN) ||
+                          type.equals(Material.STONECUTTER)) {
                         if (e.getPlayer().isSneaking()) {
                             ItemStack contents = new ItemStack(type, 1);
                             if (type.equals(Material.BREWING_STAND)) {
@@ -708,21 +710,18 @@ class Listeners implements Listener {
                                 contents = new ItemStack(Material.SPRUCE_SIGN, 1);
                             }
                             ItemMeta meta = contents.getItemMeta();
-                            Inventory inv = null;
-                            if (MaterialHelper.isContainer(type)) {
-                                inv = ((Container) b.getState()).getInventory();
-                            }
-                            if (inv != null) {
-                                meta.setLore(getLore(inv));
-                                contents.setItemMeta(meta);
-                                inv.getViewers().forEach(HumanEntity::closeInventory);
-                                inv.clear();
-                            } else if (type.equals(Material.SPAWNER)) {
+                            if (type.equals(Material.SPAWNER)) {
                                 CreatureSpawner cs = (CreatureSpawner) state;
                                 List<String> lore = new ArrayList<>();
                                 lore.add(cs.getSpawnedType().toString());
                                 meta.setLore(lore);
                                 contents.setItemMeta(meta);
+                            } else if (MaterialHelper.isContainer(type)) {
+                                Inventory inv = ((Container) b.getState()).getInventory();
+                                meta.setLore(getLore(inv));
+                                contents.setItemMeta(meta);
+                                inv.getViewers().forEach(HumanEntity::closeInventory);
+                                inv.clear();
                             } else if (MaterialHelper.isSign(type)) {
                                 Sign s = (Sign) state;
                                 List<String> lore = new ArrayList<>();
