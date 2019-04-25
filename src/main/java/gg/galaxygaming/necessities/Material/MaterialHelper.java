@@ -29,8 +29,8 @@ public class MaterialHelper {
      * @return True if type is a wooden trapdoor, false otherwise.
      */
     public static boolean isWoodTrapdoor(Material type) {
-        return type.equals(Material.ACACIA_TRAPDOOR) || type.equals(Material.BIRCH_TRAPDOOR) || type
-              .equals(Material.DARK_OAK_TRAPDOOR) || type.equals(Material.JUNGLE_TRAPDOOR) ||
+        return type.equals(Material.ACACIA_TRAPDOOR) || type.equals(Material.BIRCH_TRAPDOOR) ||
+              type.equals(Material.DARK_OAK_TRAPDOOR) || type.equals(Material.JUNGLE_TRAPDOOR) ||
               type.equals(Material.OAK_TRAPDOOR) || type.equals(Material.SPRUCE_TRAPDOOR);
     }
 
@@ -50,14 +50,27 @@ public class MaterialHelper {
     }
 
     /**
+     * Checks if a given material is a container.
+     *
+     * @param type The material to check.
+     * @return True if type is a container, false otherwise.
+     */
+    public static boolean isContainer(Material type) {
+        return type.equals(Material.CHEST) || type.equals(Material.TRAPPED_CHEST) || type.equals(Material.FURNACE) ||
+              type.equals(Material.HOPPER) || type.equals(Material.DISPENSER) || type.equals(Material.DROPPER) ||
+              type.equals(Material.BREWING_STAND) || type.equals(Material.BARREL) || type.equals(Material.SMOKER) ||
+              type.equals(Material.BLAST_FURNACE);
+    }
+
+    /**
      * Checks if a given material is a fence gate.
      *
      * @param type The material to check.
      * @return True if type is a fence gate, false otherwise.
      */
     public static boolean isFenceGate(Material type) {
-        return type.equals(Material.ACACIA_FENCE_GATE) || type.equals(Material.BIRCH_FENCE_GATE) || type
-              .equals(Material.DARK_OAK_FENCE_GATE) || type.equals(Material.OAK_FENCE_GATE) ||
+        return type.equals(Material.ACACIA_FENCE_GATE) || type.equals(Material.BIRCH_FENCE_GATE) ||
+              type.equals(Material.DARK_OAK_FENCE_GATE) || type.equals(Material.OAK_FENCE_GATE) ||
               type.equals(Material.JUNGLE_FENCE_GATE) || type.equals(Material.SPRUCE_FENCE_GATE);
     }
 
@@ -68,10 +81,10 @@ public class MaterialHelper {
      * @return True if type is a button, false otherwise.
      */
     public static boolean isButton(Material type) {
-        return type.equals(Material.BIRCH_BUTTON) || type.equals(Material.ACACIA_BUTTON) || type
-              .equals(Material.DARK_OAK_BUTTON) || type.equals(Material.JUNGLE_BUTTON) ||
-              type.equals(Material.OAK_BUTTON) || type.equals(Material.SPRUCE_BUTTON) || type
-              .equals(Material.STONE_BUTTON);
+        return type.equals(Material.BIRCH_BUTTON) || type.equals(Material.ACACIA_BUTTON) ||
+              type.equals(Material.DARK_OAK_BUTTON) || type.equals(Material.JUNGLE_BUTTON) ||
+              type.equals(Material.OAK_BUTTON) || type.equals(Material.SPRUCE_BUTTON) ||
+              type.equals(Material.STONE_BUTTON);
     }
 
     /**
@@ -81,10 +94,9 @@ public class MaterialHelper {
      * @return True if type is a pressure plate, false otherwise.
      */
     public static boolean isPressurePlate(Material type) {
-        return type.equals(Material.ACACIA_PRESSURE_PLATE) || type.equals(Material.BIRCH_PRESSURE_PLATE) || type
-              .equals(Material.DARK_OAK_PRESSURE_PLATE) ||
-              type.equals(Material.JUNGLE_PRESSURE_PLATE) || type.equals(Material.OAK_PRESSURE_PLATE) || type
-              .equals(Material.STONE_PRESSURE_PLATE) ||
+        return type.equals(Material.ACACIA_PRESSURE_PLATE) || type.equals(Material.BIRCH_PRESSURE_PLATE) ||
+              type.equals(Material.DARK_OAK_PRESSURE_PLATE) || type.equals(Material.JUNGLE_PRESSURE_PLATE) ||
+              type.equals(Material.OAK_PRESSURE_PLATE) || type.equals(Material.STONE_PRESSURE_PLATE) ||
               type.equals(Material.LIGHT_WEIGHTED_PRESSURE_PLATE) || type.equals(Material.HEAVY_WEIGHTED_PRESSURE_PLATE)
               || type.equals(Material.SPRUCE_PRESSURE_PLATE);
     }
@@ -98,11 +110,10 @@ public class MaterialHelper {
     public static boolean isBed(Material type) {
         return type.equals(Material.BLACK_BED) || type.equals(Material.BLUE_BED) || type.equals(Material.BROWN_BED) ||
               type.equals(Material.CYAN_BED) || type.equals(Material.GRAY_BED) || type.equals(Material.GREEN_BED) ||
-              type.equals(Material.LIGHT_BLUE_BED) || type.equals(Material.LIGHT_GRAY_BED) || type
-              .equals(Material.LIME_BED) ||
-              type.equals(Material.MAGENTA_BED) || type.equals(Material.ORANGE_BED) || type.equals(Material.PINK_BED) ||
-              type.equals(Material.PURPLE_BED) || type.equals(Material.RED_BED) || type.equals(Material.WHITE_BED)
-              || type.equals(Material.YELLOW_BED);
+              type.equals(Material.LIGHT_BLUE_BED) || type.equals(Material.LIGHT_GRAY_BED) ||
+              type.equals(Material.LIME_BED) || type.equals(Material.MAGENTA_BED) || type.equals(Material.ORANGE_BED) ||
+              type.equals(Material.PINK_BED) || type.equals(Material.PURPLE_BED) || type.equals(Material.RED_BED) ||
+              type.equals(Material.WHITE_BED) || type.equals(Material.YELLOW_BED);
     }
 
     /**
@@ -112,14 +123,14 @@ public class MaterialHelper {
      * @return True if type is a shulker box, false otherwise.
      */
     public static boolean isShulker(Material type) {
-        return type.equals(Material.WHITE_SHULKER_BOX) || type.equals(Material.ORANGE_SHULKER_BOX) || type
-              .equals(Material.MAGENTA_SHULKER_BOX) || type.equals(Material.LIGHT_BLUE_SHULKER_BOX) ||
-              type.equals(Material.YELLOW_SHULKER_BOX) || type.equals(Material.LIME_SHULKER_BOX) || type
-              .equals(Material.PINK_SHULKER_BOX) || type.equals(Material.GRAY_SHULKER_BOX) ||
-              type.equals(Material.LIGHT_GRAY_SHULKER_BOX) || type.equals(Material.CYAN_SHULKER_BOX) || type
-              .equals(Material.PURPLE_SHULKER_BOX) || type.equals(Material.BLUE_SHULKER_BOX) ||
-              type.equals(Material.BROWN_SHULKER_BOX) || type.equals(Material.GREEN_SHULKER_BOX) || type
-              .equals(Material.RED_SHULKER_BOX) || type.equals(Material.BLACK_SHULKER_BOX);
+        return type.equals(Material.WHITE_SHULKER_BOX) || type.equals(Material.ORANGE_SHULKER_BOX) ||
+              type.equals(Material.MAGENTA_SHULKER_BOX) || type.equals(Material.LIGHT_BLUE_SHULKER_BOX) ||
+              type.equals(Material.YELLOW_SHULKER_BOX) || type.equals(Material.LIME_SHULKER_BOX) ||
+              type.equals(Material.PINK_SHULKER_BOX) || type.equals(Material.GRAY_SHULKER_BOX) ||
+              type.equals(Material.LIGHT_GRAY_SHULKER_BOX) || type.equals(Material.CYAN_SHULKER_BOX) ||
+              type.equals(Material.PURPLE_SHULKER_BOX) || type.equals(Material.BLUE_SHULKER_BOX) ||
+              type.equals(Material.BROWN_SHULKER_BOX) || type.equals(Material.GREEN_SHULKER_BOX) ||
+              type.equals(Material.RED_SHULKER_BOX) || type.equals(Material.BLACK_SHULKER_BOX);
     }
 
     /**

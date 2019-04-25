@@ -455,9 +455,7 @@ class Listeners implements Listener {
         Inventory inv = null;
         Block b = e.getBlock();
         Material type = b.getType();
-        if (type.equals(Material.CHEST) || type.equals(Material.TRAPPED_CHEST) || type.equals(Material.FURNACE) || type
-              .equals(Material.HOPPER) ||
-              type.equals(Material.DISPENSER) || type.equals(Material.DROPPER) || type.equals(Material.BREWING_STAND)) {
+        if (MaterialHelper.isContainer(type)) {
             inv = ((Container) b.getState()).getInventory();
         }
         if (inv != null && meta.hasLore()) {
@@ -688,11 +686,8 @@ class Listeners implements Listener {
                         state.setBlockData(powerable);
                         e.setCancelled(true);
                         state.update();
-                    } else if (type.equals(Material.FURNACE) || type.equals(Material.HOPPER) ||
-                          type.equals(Material.DISPENSER) || type.equals(Material.CHEST) ||
-                          type.equals(Material.ENDER_CHEST) || type.equals(Material.DROPPER) ||
+                    } else if (MaterialHelper.isContainer(type) || type.equals(Material.ENDER_CHEST) ||
                           type.equals(Material.PISTON) || type.equals(Material.STICKY_PISTON) ||
-                          type.equals(Material.TRAPPED_CHEST) || type.equals(Material.BREWING_STAND) ||
                           type.equals(Material.SPAWNER) || MaterialHelper.isSign(type)) {
                         if (e.getPlayer().isSneaking()) {
                             ItemStack contents = new ItemStack(type, 1);
@@ -714,10 +709,7 @@ class Listeners implements Listener {
                             }
                             ItemMeta meta = contents.getItemMeta();
                             Inventory inv = null;
-                            if (type.equals(Material.CHEST) || type.equals(Material.TRAPPED_CHEST) || type
-                                  .equals(Material.FURNACE) || type.equals(Material.HOPPER) ||
-                                  type.equals(Material.DISPENSER) || type.equals(Material.DROPPER) || type
-                                  .equals(Material.BREWING_STAND)) {
+                            if (MaterialHelper.isContainer(type)) {
                                 inv = ((Container) b.getState()).getInventory();
                             }
                             if (inv != null) {
@@ -743,8 +735,8 @@ class Listeners implements Listener {
                             }
                             e.getPlayer().getWorld().dropItem(b.getLocation(), contents);
                             b.setType(Material.AIR);
-                        } else if (b
-                              .getBlockData() instanceof Directional) { //This if statement should be last as this is the fallback
+                        } else if (b.getBlockData() instanceof Directional) {
+                            //This if statement should be last as this is the fallback
                             Directional dir = (Directional) b.getBlockData();
                             if (dir.getFaces().contains(e.getBlockFace())) {
                                 dir.setFacing(e.getBlockFace());
@@ -781,8 +773,7 @@ class Listeners implements Listener {
             }
         }
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && hide.isHidden(e.getPlayer()) && (
-              type.equals(Material.CHEST) ||
-                    type.equals(Material.TRAPPED_CHEST) || MaterialHelper.isShulker(type))) {
+              type.equals(Material.CHEST) || type.equals(Material.TRAPPED_CHEST) || MaterialHelper.isShulker(type))) {
             e.getPlayer().openInventory(((InventoryHolder) b.getState()).getInventory());
             e.getPlayer().closeInventory();
         }
