@@ -192,6 +192,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import net.minecraft.server.v1_14_R1.DimensionManager;
 import net.minecraft.server.v1_14_R1.EntityPlayer;
@@ -338,8 +339,6 @@ public class Necessities extends JavaPlugin {
      */
     public void addPlayer(Player p) {
         EntityPlayer ep = ((CraftPlayer) p).getHandle();
-        //User u = um.getUser(p.getUniqueId());
-        //ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
         PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, ep);
         for (Player x : Bukkit.getOnlinePlayers()) {
             if (!x.hasPermission("Necessities.seehidden") && x.canSee(p) && !x.equals(p)) {
@@ -355,10 +354,6 @@ public class Necessities extends JavaPlugin {
      */
     public void updateName(Player p) {
         User u = um.getUser(p.getUniqueId());
-        /*EntityPlayer ep = ((CraftPlayer) p).getHandle();
-        ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
-        PacketPlayOutPlayerInfo tabList = new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, ep);
-        Bukkit.getOnlinePlayers().forEach(x -> Utils.getConnection(x).sendPacket(tabList));*/
         p.setPlayerListName(u.getRank() == null ? ""
               : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
     }
@@ -369,13 +364,8 @@ public class Necessities extends JavaPlugin {
      * @param x The player to refresh their tab list.
      */
     public void updateAll(Player x) {//TODO: Is this even needed
-        List<EntityPlayer> players = new ArrayList<>();
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            EntityPlayer ep = ((CraftPlayer) p).getHandle();
-            //User u = um.getUser(p.getUniqueId());
-            //ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
-            players.add(ep);
-        }
+        List<EntityPlayer> players = Bukkit.getOnlinePlayers().stream().map(p -> ((CraftPlayer) p).getHandle())
+              .collect(Collectors.toList());
         Utils.getConnection(x).sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, players));
     }
 
