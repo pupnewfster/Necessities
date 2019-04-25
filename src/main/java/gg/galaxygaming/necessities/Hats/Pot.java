@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 
 class Pot extends Hat {
+
     Pot(Location loc) {
         this.trueLoc = loc;
         int turn = 5;
@@ -22,7 +23,8 @@ class Pot extends Hat {
         }
         spawn(1, loc.clone().add(0, 0.75, 0));
         this.armorStands.get(360 / turn).setItem(EquipmentSlot.HAND, new ItemStack(Material.STICK, 1));
-        this.armorStands.get(360 / turn).setRightArmPose(new EulerAngle(Math.toRadians(90), Math.toRadians(90), Math.toRadians(90)));
+        this.armorStands.get(360 / turn)
+              .setRightArmPose(new EulerAngle(Math.toRadians(90), Math.toRadians(90), Math.toRadians(90)));
         this.armorStands.get(360 / turn).setSmall(true);
     }
 }

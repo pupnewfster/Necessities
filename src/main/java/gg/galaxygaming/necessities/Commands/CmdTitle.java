@@ -4,16 +4,16 @@ import gg.galaxygaming.necessities.Economy.Economy;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.io.File;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.util.UUID;
-
 public class CmdTitle implements Cmd {
+
     private final File configFileTitles = new File("plugins/Necessities", "titles.yml");
 
     public boolean commandUse(CommandSender sender, String[] args) {
@@ -31,8 +31,9 @@ public class CmdTitle implements Cmd {
         boolean free = !(sender instanceof Player);
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            if (target != p && !p.hasPermission("Necessities.bracketOthers"))
+            if (target != p && !p.hasPermission("Necessities.bracketOthers")) {
                 target = p;
+            }
             free = p.hasPermission("Necessities.freeCommand");
         }
         YamlConfiguration configTitles = YamlConfiguration.loadConfiguration(configFileTitles);
@@ -46,31 +47,38 @@ public class CmdTitle implements Cmd {
             return true;
         }
         StringBuilder titleBuilder = new StringBuilder();
-        for (String arg : args)
+        for (String arg : args) {
             titleBuilder.append(arg).append(' ');
+        }
         YamlConfiguration config = Necessities.getInstance().getConfig();
         String title = titleBuilder.toString().replaceFirst(args[0], "").trim();
         if (ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', title + "&r")).length() > 24) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Titles have a maximum of 24 characters.");
             return true;
         }
-        if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free && config.contains("Necessities.Creative") && !config.getBoolean("Necessities.Creative")) {
+        if (config.contains("Necessities.Economy") && config.getBoolean("Necessities.Economy") && !free && config
+              .contains("Necessities.Creative") && !config.getBoolean("Necessities.Creative")) {
             Economy eco = Necessities.getEconomy();
             if (eco.getBalance(target.getUniqueId()) < 1000) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must have " + Economy.format(1000) + " to change your title.");
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must have " + Economy.format(1000)
+                      + " to change your title.");
                 return true;
             }
             eco.removeMoney(target.getUniqueId(), 1000);
-            target.sendMessage(var.getMoney() + Economy.format(1000) + var.getMessages() + " was removed from your account.");
+            target.sendMessage(
+                  var.getMoney() + Economy.format(1000) + var.getMessages() + " was removed from your account.");
         }
         configTitles.set(target.getUniqueId() + ".title", title);
-        if (configTitles.get(target.getUniqueId() + ".color") == null)
+        if (configTitles.get(target.getUniqueId() + ".color") == null) {
             configTitles.set(target.getUniqueId() + ".color", "r");
+        }
         try {
             configTitles.save(configFileTitles);
         } catch (Exception ignored) {
         }
-        sender.sendMessage(var.getMessages() + "Title set to " + title + var.getMessages() + " for player " + var.getObj() + target.getName());
+        sender.sendMessage(
+              var.getMessages() + "Title set to " + title + var.getMessages() + " for player " + var.getObj() + target
+                    .getName());
         return true;
     }
 

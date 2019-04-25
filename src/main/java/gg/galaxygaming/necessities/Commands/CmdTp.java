@@ -3,17 +3,18 @@ package gg.galaxygaming.necessities.Commands;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class CmdTp implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length == 0) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a player to teleport to.");
+            sender.sendMessage(
+                  var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a player to teleport to.");
             return true;
         }
         UUID uuid = Utils.getID(args[0]);
@@ -33,7 +34,8 @@ public class CmdTp implements Cmd {
             return true;
         }
         if (args.length == 1) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a player to teleport, and a player to teleport them to.");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "Format requires you enter a player to teleport, and a player to teleport them to.");
             return true;
         }
         UUID uuidTo = Utils.getID(args[1]);
@@ -43,9 +45,12 @@ public class CmdTp implements Cmd {
         }
         Player targetTo = Bukkit.getPlayer(uuidTo);
         target.teleport(Necessities.getSafeLocations().getSafe(targetTo.getLocation()));
-        String name = sender instanceof Player ? sender.getName() : Necessities.getConsole().getName().replaceAll(":", "");
+        String name =
+              sender instanceof Player ? sender.getName() : Necessities.getConsole().getName().replaceAll(":", "");
         target.sendMessage(var.getObj() + name + var.getMessages() + " teleported you to " + targetTo.getName() + '.');
-        sender.sendMessage(var.getMessages() + "You teleported " + var.getObj() + target.getName() + var.getMessages() + " to " + var.getObj() + targetTo.getName() + var.getMessages() + '.');
+        sender.sendMessage(
+              var.getMessages() + "You teleported " + var.getObj() + target.getName() + var.getMessages() + " to " + var
+                    .getObj() + targetTo.getName() + var.getMessages() + '.');
         return true;
     }
 

@@ -4,14 +4,14 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class CmdLightning implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length > 0) {
@@ -34,11 +34,14 @@ public class CmdLightning implements Cmd {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Block out of range.");
                 return true;
             }
-            if (l.getBlock().getType().isSolid())
+            if (l.getBlock().getType().isSolid()) {
                 l.setY(l.getY() + 1);
+            }
             p.getWorld().strikeLightning(l);
-        } else
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot cast out lightning unless you direct it to a player.");
+        } else {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "You cannot cast out lightning unless you direct it to a player.");
+        }
         return true;
     }
 }

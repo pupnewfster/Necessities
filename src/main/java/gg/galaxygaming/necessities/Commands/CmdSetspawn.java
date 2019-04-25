@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class CmdSetspawn implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
@@ -23,8 +24,9 @@ public class CmdSetspawn implements Cmd {
             } catch (Exception ignored) {
             }
             p.sendMessage(var.getMessages() + "Spawn set.");
-        } else
+        } else {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot set the spawn.");
+        }
         return true;
     }
 

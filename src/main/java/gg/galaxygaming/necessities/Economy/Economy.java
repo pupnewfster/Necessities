@@ -2,16 +2,19 @@ package gg.galaxygaming.necessities.Economy;
 
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Properties;
+import java.util.UUID;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Economy {//TODO add OpenAnalytics
     private final HashMap<UUID, Double> loadedBals = new HashMap<>();
@@ -40,6 +43,7 @@ public class Economy {//TODO add OpenAnalytics
 
     /**
      * Adds a player with the specified UUID if they are not already in the table.
+     *
      * @param uuid The uuid of the player to check.
      * @return True if the player was added to the table, false otherwise.
      */
@@ -50,12 +54,17 @@ public class Economy {//TODO add OpenAnalytics
         try {
             Connection conn = DriverManager.getConnection(this.dbURL, this.properties);
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM economy WHERE uuid = '" + uuid + "' AND currencyType=" + this.type);
+            ResultSet rs = stmt
+                  .executeQuery("SELECT * FROM economy WHERE uuid = '" + uuid + "' AND currencyType=" + this.type);
             if (!rs.next()) {
-                stmt.execute("INSERT INTO economy (uuid, currencyType, balance) VALUES ('" + uuid + "'," + this.type + ',' + startBal + ')');
+                stmt.execute(
+                      "INSERT INTO economy (uuid, currencyType, balance) VALUES ('" + uuid + "'," + this.type + ','
+                            + startBal + ')');
                 added = true;
             } else if (!loadedBals.containsKey(uuid)) //Loads it into memory for temporary faster lookup
+            {
                 this.loadedBals.put(uuid, rs.getDouble("balance"));
+            }
             rs.close();
             stmt.close();
             conn.close();
@@ -66,19 +75,23 @@ public class Economy {//TODO add OpenAnalytics
 
     /**
      * Checks if the player with the specified UUID is in the table.
+     *
      * @param uuid The uuid of the player to check.
      * @return True if the player exists in the table, false otherwise.
      */
     public boolean doesPlayerExist(UUID uuid) {
-        if (loadedBals.containsKey(uuid))
+        if (loadedBals.containsKey(uuid)) {
             return true;
+        }
         boolean exists = false;
         try {
             Connection conn = DriverManager.getConnection(this.dbURL, this.properties);
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM economy WHERE uuid = '" + uuid + "' AND currencyType=" + this.type);
-            if (rs.next())
+            ResultSet rs = stmt
+                  .executeQuery("SELECT * FROM economy WHERE uuid = '" + uuid + "' AND currencyType=" + this.type);
+            if (rs.next()) {
                 exists = true;
+            }
             rs.close();
             stmt.close();
             conn.close();
@@ -89,19 +102,23 @@ public class Economy {//TODO add OpenAnalytics
 
     /**
      * Retrieves a player's balance.
+     *
      * @param uuid The uuid of the player to retrieve the balance of.
      * @return The balance of the specified player.
      */
     public double getBalance(UUID uuid) {
-        if (uuid == null)
+        if (uuid == null) {
             return 0.0;
-        if (this.loadedBals.containsKey(uuid))
+        }
+        if (this.loadedBals.containsKey(uuid)) {
             return this.loadedBals.get(uuid);
+        }
         double bal = 0.0;
         try {
             Connection conn = DriverManager.getConnection(this.dbURL, this.properties);
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT balance FROM economy WHERE uuid = '" + uuid + "' AND currencyType=" + this.type);
+            ResultSet rs = stmt.executeQuery(
+                  "SELECT balance FROM economy WHERE uuid = '" + uuid + "' AND currencyType=" + this.type);
             bal = rs.next() ? rs.getDouble("balance") : -1.0;
             rs.close();
             stmt.close();
@@ -113,6 +130,7 @@ public class Economy {//TODO add OpenAnalytics
 
     /**
      * Removes an account from active memory.
+     *
      * @param uuid The uuid of the account to unload from memory.
      */
     public void unloadAccount(UUID uuid) {
@@ -121,19 +139,22 @@ public class Economy {//TODO add OpenAnalytics
 
     /**
      * Removes a specified amount of money from the given player.
-     * @param uuid   The uuid of the player to remove the money from.
+     *
+     * @param uuid The uuid of the player to remove the money from.
      * @param amount The amount of money to remove.
      */
     public void removeMoney(UUID uuid, double amount) {
-        if (this.loadedBals.containsKey(uuid))
+        if (this.loadedBals.containsKey(uuid)) {
             this.loadedBals.put(uuid, this.loadedBals.get(uuid) - amount);
+        }
         new BukkitRunnable() {
             @Override
             public void run() {
                 try {
                     Connection conn = DriverManager.getConnection(dbURL, properties);
                     Statement stmt = conn.createStatement();
-                    stmt.executeUpdate("UPDATE economy SET balance = balance - " + amount + " WHERE uuid = '" + uuid + "' AND currencyType=" + type);
+                    stmt.executeUpdate("UPDATE economy SET balance = balance - " + amount + " WHERE uuid = '" + uuid
+                          + "' AND currencyType=" + type);
                     stmt.close();
                     conn.close();
                 } catch (Exception ignored) {
@@ -144,19 +165,22 @@ public class Economy {//TODO add OpenAnalytics
 
     /**
      * Adds a specified amount of money from the given player.
-     * @param uuid   The uuid of the player to add the money to.
+     *
+     * @param uuid The uuid of the player to add the money to.
      * @param amount The amount of money to add.
      */
     public void addMoney(UUID uuid, double amount) {
-        if (this.loadedBals.containsKey(uuid))
+        if (this.loadedBals.containsKey(uuid)) {
             this.loadedBals.put(uuid, this.loadedBals.get(uuid) + amount);
+        }
         new BukkitRunnable() {
             @Override
             public void run() {
                 try {
                     Connection conn = DriverManager.getConnection(dbURL, properties);
                     Statement stmt = conn.createStatement();
-                    stmt.executeUpdate("UPDATE economy SET balance = balance + " + amount + " WHERE uuid = '" + uuid + "' AND currencyType=" + type);
+                    stmt.executeUpdate("UPDATE economy SET balance = balance + " + amount + " WHERE uuid = '" + uuid
+                          + "' AND currencyType=" + type);
                     stmt.close();
                     conn.close();
                 } catch (Exception ignored) {
@@ -167,19 +191,23 @@ public class Economy {//TODO add OpenAnalytics
 
     /**
      * Sets a player's balanced to the given amount.
-     * @param uuid   The uuid of the player to change the balance of.
+     *
+     * @param uuid The uuid of the player to change the balance of.
      * @param amount The amount to set the player's balance to.
      */
     public void setBalance(UUID uuid, double amount) {
-        if (this.loadedBals.containsKey(uuid))
+        if (this.loadedBals.containsKey(uuid)) {
             this.loadedBals.put(uuid, amount);
+        }
         new BukkitRunnable() {
             @Override
             public void run() {
                 try {
                     Connection conn = DriverManager.getConnection(dbURL, properties);
                     Statement stmt = conn.createStatement();
-                    stmt.executeUpdate("UPDATE economy SET balance = " + amount + " WHERE uuid = '" + uuid + "' AND currencyType=" + type);
+                    stmt.executeUpdate(
+                          "UPDATE economy SET balance = " + amount + " WHERE uuid = '" + uuid + "' AND currencyType="
+                                + type);
                     stmt.close();
                     conn.close();
                 } catch (Exception ignored) {
@@ -190,6 +218,7 @@ public class Economy {//TODO add OpenAnalytics
 
     /**
      * Retrieve a page of baltop.
+     *
      * @param page The page number to retrieve.
      * @return The specified page of baltop.
      */
@@ -198,9 +227,11 @@ public class Economy {//TODO add OpenAnalytics
         try {
             Connection conn = DriverManager.getConnection(this.dbURL, this.properties);
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT uuid,balance FROM economy WHERE currencyType=" + this.type + " ORDER BY balance DESC, uuid LIMIT " + (page - 1) * 10 + ",10");
-            while (rs.next())
+            ResultSet rs = stmt.executeQuery("SELECT uuid,balance FROM economy WHERE currencyType=" + this.type
+                  + " ORDER BY balance DESC, uuid LIMIT " + (page - 1) * 10 + ",10");
+            while (rs.next()) {
                 balTop.add(rs.getString("uuid") + ' ' + rs.getDouble("balance"));
+            }
             rs.close();
             stmt.close();
             conn.close();
@@ -211,6 +242,7 @@ public class Economy {//TODO add OpenAnalytics
 
     /**
      * Gets the number of baltop pages there are.
+     *
      * @return The number of pages in baltop.
      */
     public int baltopPages() {
@@ -220,16 +252,19 @@ public class Economy {//TODO add OpenAnalytics
 
     /**
      * Formats a given balance based on the config.
+     *
      * @param balance The balance to format.
      * @return A formatted string of the given balance.
      */
     public static String format(double balance) {
         YamlConfiguration config = Necessities.getInstance().getConfig();
-        return config.getString("Economy.prefix") + Utils.addCommas(Utils.roundTwoDecimals(balance)) + config.getString("Economy.suffix");
+        return config.getString("Economy.prefix") + Utils.addCommas(Utils.roundTwoDecimals(balance)) + config
+              .getString("Economy.suffix");
     }
 
     /**
      * Gets the number of players who has joined the server.
+     *
      * @return The number of players who has joined the server.
      */
     public int playerCount() {
@@ -238,8 +273,9 @@ public class Economy {//TODO add OpenAnalytics
             Connection conn = DriverManager.getConnection(this.dbURL, this.properties);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM economy WHERE currencyType=" + this.type);
-            if (rs.next())
+            if (rs.next()) {
                 amount = rs.getInt(1);
+            }
             rs.close();
             stmt.close();
             conn.close();

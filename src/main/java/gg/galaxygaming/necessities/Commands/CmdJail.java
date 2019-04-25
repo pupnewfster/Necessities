@@ -5,15 +5,15 @@ import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.SafeLocation;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.util.UUID;
-
 public class CmdJail implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length == 0) {
@@ -42,7 +42,9 @@ public class CmdJail implements Cmd {
         }
         SafeLocation safe = Necessities.getSafeLocations();
         if (!u.isJailed()) {
-            sender.sendMessage(var.getMessages() + "You jailed " + var.getObj() + u.getPlayer().getDisplayName() + var.getMessages() + '.');
+            sender.sendMessage(
+                  var.getMessages() + "You jailed " + var.getObj() + u.getPlayer().getDisplayName() + var.getMessages()
+                        + '.');
             u.getPlayer().sendMessage(var.getDemote() + "You have been jailed.");
             World world = Bukkit.getWorld(config.getString("Jail.world"));
             double x = Double.parseDouble(config.getString("Jail.x"));
@@ -53,7 +55,8 @@ public class CmdJail implements Cmd {
             u.getPlayer().teleport(safe.getSafe(new Location(world, x, y, z, yaw, pitch)));
             u.setJailed(true);
         } else {
-            sender.sendMessage(var.getMessages() + "You unjailed " + var.getObj() + u.getPlayer().getDisplayName() + var.getMessages() + '.');
+            sender.sendMessage(var.getMessages() + "You unjailed " + var.getObj() + u.getPlayer().getDisplayName() + var
+                  .getMessages() + '.');
             u.getPlayer().sendMessage(var.getPromote() + "You have been unjailed.");
             u.setJailed(false);
             if (u.getLastPos() == null) {
@@ -64,8 +67,9 @@ public class CmdJail implements Cmd {
                 float yaw = Float.parseFloat(config.getString("Spawn.yaw"));
                 float pitch = Float.parseFloat(config.getString("Spawn.pitch"));
                 u.getPlayer().teleport(safe.getSafe(new Location(world, x, y, z, yaw, pitch)));
-            } else
+            } else {
                 u.getPlayer().teleport(safe.getSafe(u.getLastPos()));
+            }
         }
         return true;
     }

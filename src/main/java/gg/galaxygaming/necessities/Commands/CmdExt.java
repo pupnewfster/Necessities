@@ -3,13 +3,13 @@ package gg.galaxygaming.necessities.Commands;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class CmdExt implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
@@ -20,7 +20,8 @@ public class CmdExt implements Cmd {
                 return true;
             }
         } else if (args.length == 0) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console is not on fire. At least it shouldn't be...");
+            sender.sendMessage(
+                  var.getEr() + "Error: " + var.getErMsg() + "The console is not on fire. At least it shouldn't be...");
             return true;
         }
         UUID uuid = Utils.getID(args[0]);
@@ -30,8 +31,9 @@ public class CmdExt implements Cmd {
         }
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            if (!p.hasPermission("Necessities.extOthers"))
+            if (!p.hasPermission("Necessities.extOthers")) {
                 uuid = p.getUniqueId();
+            }
         }
         Player target = Bukkit.getPlayer(uuid);
         target.setFireTicks(0);

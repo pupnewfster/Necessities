@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 public class CmdReloadPermissions implements RankCmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         sender.sendMessage(ChatColor.AQUA + "Reloading all permissions.");
         Necessities.getRM().reloadPermissions();

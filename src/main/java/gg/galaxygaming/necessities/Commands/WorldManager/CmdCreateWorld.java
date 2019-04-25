@@ -8,6 +8,7 @@ import org.bukkit.WorldType;
 import org.bukkit.command.CommandSender;
 
 public class CmdCreateWorld implements WorldCmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length == 0) {
@@ -20,20 +21,26 @@ public class CmdCreateWorld implements WorldCmd {
             return true;
         }
         if (wm.worldUnloaded(args[0])) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That world already exists just use /loadworld.");
+            sender.sendMessage(
+                  var.getEr() + "Error: " + var.getErMsg() + "That world already exists just use /loadworld.");
             return true;
         }
         World.Environment environment = World.Environment.NORMAL;
-        if (args.length > 1)
-            wm.getEnvironment(args[1]);//would check if valid... but it auto changes to normal if not so that works fine I guess
+        if (args.length > 1) {
+            wm.getEnvironment(
+                  args[1]);//would check if valid... but it auto changes to normal if not so that works fine I guess
+        }
         String generator = null;
-        if (args.length > 2 && !args[2].equalsIgnoreCase("null"))
+        if (args.length > 2 && !args[2].equalsIgnoreCase("null")) {
             generator = args[2];//TODO: Check if valid generator somehow
+        }
         WorldType type = WorldType.NORMAL;
-        if (args.length > 3)
+        if (args.length > 3) {
             type = wm.getType(args[3]);
+        }
         wm.createWorld(args[0], environment, generator, type);
-        sender.sendMessage(var.getMessages() + "Created world named " + var.getObj() + args[0] + var.getMessages() + '.');
+        sender.sendMessage(
+              var.getMessages() + "Created world named " + var.getObj() + args[0] + var.getMessages() + '.');
         return true;
     }
 }

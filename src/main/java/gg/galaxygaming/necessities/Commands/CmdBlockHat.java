@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 public class CmdBlockHat implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
@@ -21,13 +22,15 @@ public class CmdBlockHat implements Cmd {
                 inv.setItemInMainHand(hat);
                 p.sendMessage(var.getMessages() + "Hat equipped.");
             } else {
-                if (hat != null)
+                if (hat != null) {
                     inv.setItemInMainHand(hat);
+                }
                 inv.setHelmet(new ItemStack(Material.AIR));
                 p.sendMessage(var.getMessages() + "Hat removed.");
             }
-        } else
+        } else {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have armor.");
+        }
         return true;
     }
 }

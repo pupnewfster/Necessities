@@ -8,6 +8,7 @@ import gg.galaxygaming.necessities.Variables;
 import org.bukkit.command.CommandSender;
 
 public class CmdSetCmdPrice implements EconomyCmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length >= 0) {
@@ -15,7 +16,8 @@ public class CmdSetCmdPrice implements EconomyCmd {
             return true;
         }
         if (args.length < 3) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you to enter the command you want to sell the price and the rank required.");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "Format requires you to enter the command you want to sell the price and the rank required.");
             return true;
         }
         String cmd = Utils.capFirst(args[0]);
@@ -32,8 +34,10 @@ public class CmdSetCmdPrice implements EconomyCmd {
         String price = Utils.roundTwoDecimals(Double.parseDouble(args[1]));
         String rank = args[2];
         cmdp.addCommand(rank, cmd, price);
-        sender.sendMessage(var.getMessages() + "Added " + var.getObj() + cmd + var.getMessages() + " to the commands of rank " + var.getObj() + rank + var.getMessages() + " at the price of " +
-                var.getMoney() + Economy.format(Double.parseDouble(price)));
+        sender.sendMessage(
+              var.getMessages() + "Added " + var.getObj() + cmd + var.getMessages() + " to the commands of rank " + var
+                    .getObj() + rank + var.getMessages() + " at the price of " +
+                    var.getMoney() + Economy.format(Double.parseDouble(price)));
         return true;
     }
 }

@@ -6,10 +6,12 @@ import gg.galaxygaming.necessities.Variables;
 import org.bukkit.command.CommandSender;
 
 public class CmdCreateSubrank implements RankCmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length == 0) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you to enter a name for the subrank you are creating.");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "Format requires you to enter a name for the subrank you are creating.");
             return true;
         }
         RankManager rm = Necessities.getRM();

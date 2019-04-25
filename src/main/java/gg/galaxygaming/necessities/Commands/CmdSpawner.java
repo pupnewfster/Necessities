@@ -11,6 +11,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class CmdSpawner implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
@@ -24,7 +25,8 @@ public class CmdSpawner implements Cmd {
             if (l.getBlock().getState() instanceof CreatureSpawner) {
                 CreatureSpawner spawner = (CreatureSpawner) l.getBlock().getState();
                 if (args.length == 0) {
-                    p.sendMessage(var.getMessages() + "Spawner type is " + spawner.getSpawnedType().toString().replaceAll("_", " ").toLowerCase() + '.');
+                    p.sendMessage(var.getMessages() + "Spawner type is " + spawner.getSpawnedType().toString()
+                          .replaceAll("_", " ").toLowerCase() + '.');
                     return true;
                 }
                 EntityType spawnerType = getType(args[0]);
@@ -35,32 +37,40 @@ public class CmdSpawner implements Cmd {
                 }
                 spawner.setSpawnedType(spawnerType);
                 spawner.update();
-                p.sendMessage(var.getMessages() + "Spawner type set to " + var.getObj() + spawner.getSpawnedType().toString().replaceAll("_", " ").toLowerCase() + var.getMessages() + '.');
+                p.sendMessage(
+                      var.getMessages() + "Spawner type set to " + var.getObj() + spawner.getSpawnedType().toString()
+                            .replaceAll("_", " ").toLowerCase() + var.getMessages() + '.');
                 return true;
             }
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That block is not a spawner.");
             return true;
-        } else
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot change the type of spawner because you cannot look at the spawner.");
+        } else {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "You cannot change the type of spawner because you cannot look at the spawner.");
+        }
         return true;
     }
 
     private EntityType getType(String message) {
         message = message.replaceAll("_", "");
-        for (EntityType type : EntityType.values())
+        for (EntityType type : EntityType.values()) {
             if (type.isSpawnable()) {
                 String name = type.toString();
-                if (message.equalsIgnoreCase(name.replaceAll("_", "")))
+                if (message.equalsIgnoreCase(name.replaceAll("_", ""))) {
                     return type;
+                }
             }
+        }
         return null;
     }
 
     private String validTypes() {
         StringBuilder typesBuilder = new StringBuilder();
-        for (EntityType type : EntityType.values())
-            if (type.isSpawnable())
+        for (EntityType type : EntityType.values()) {
+            if (type.isSpawnable()) {
                 typesBuilder.append(type.toString().replaceAll("_", " ").toLowerCase()).append(", ");
+            }
+        }
         String types = typesBuilder.toString();
         return types.trim().substring(0, types.length() - 2);
     }

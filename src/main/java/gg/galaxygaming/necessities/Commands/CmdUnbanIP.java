@@ -2,14 +2,14 @@ package gg.galaxygaming.necessities.Commands;
 
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
+import java.util.regex.Pattern;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.regex.Pattern;
-
 public class CmdUnbanIP implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length == 0) {
@@ -18,7 +18,9 @@ public class CmdUnbanIP implements Cmd {
         }
         boolean validIp = false;
         try {
-            Pattern ipAdd = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+            Pattern ipAdd = Pattern.compile(
+                  "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+                        + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
             validIp = ipAdd.matcher(args[0]).matches();
         } catch (Exception ignored) {
         }
@@ -26,7 +28,8 @@ public class CmdUnbanIP implements Cmd {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid ip.");
             return true;
         }
-        String name = sender instanceof Player ? sender.getName() : Necessities.getConsole().getName().replaceAll(":", "");
+        String name =
+              sender instanceof Player ? sender.getName() : Necessities.getConsole().getName().replaceAll(":", "");
         BanList bans = Bukkit.getBanList(BanList.Type.IP);
         String theirIP = args[0];
         if (!bans.isBanned(theirIP)) {

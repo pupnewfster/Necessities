@@ -3,15 +3,20 @@ package gg.galaxygaming.necessities.Guilds;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.Utils;
+import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-import java.util.*;
-
 public class GuildManager {
+
     private final HashMap<String, Guild> guilds = new HashMap<>();
     private final File configFileProtected = new File("plugins/Necessities/Guilds", "Protected.yml");
     private final File configFileGuilds = new File("plugins/Necessities/Guilds", "guilds.yml");
@@ -22,10 +27,13 @@ public class GuildManager {
     public void initiate() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loading all guilds...");
         YamlConfiguration configGuilds = YamlConfiguration.loadConfiguration(configFileGuilds);
-        if (configGuilds.contains("guilds"))
-            for (String guild : configGuilds.getStringList("guilds"))
-                if (guild != null)
+        if (configGuilds.contains("guilds")) {
+            for (String guild : configGuilds.getStringList("guilds")) {
+                if (guild != null) {
                     guilds.put(guild.toLowerCase(), new Guild(guild));
+                }
+            }
+        }
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "All guilds successfully loaded.");
     }
 
@@ -33,7 +41,7 @@ public class GuildManager {
      * Creates the default guild files.
      */
     public void createFiles() {
-        if (!configFileProtected.exists())
+        if (!configFileProtected.exists()) {
             try {
                 configFileProtected.createNewFile();
                 YamlConfiguration configProtected = YamlConfiguration.loadConfiguration(configFileProtected);
@@ -53,7 +61,8 @@ public class GuildManager {
                 configProtected.save(configFileProtected);
             } catch (Exception ignored) {
             }
-        if (!configFileGuilds.exists())
+        }
+        if (!configFileGuilds.exists()) {
             try {
                 configFileGuilds.createNewFile();
                 YamlConfiguration configGuilds = YamlConfiguration.loadConfiguration(configFileGuilds);
@@ -61,10 +70,12 @@ public class GuildManager {
                 configGuilds.save(configFileGuilds);
             } catch (Exception ignored) {
             }
+        }
     }
 
     /**
      * Creates a guild with the specified name and the leader with the given uuid.
+     *
      * @param name The name of the guild to create.
      * @param uuid The uuid of the leader of the guild to create.
      */
@@ -78,8 +89,9 @@ public class GuildManager {
         configGuilds.set("guilds", guildList);
         try {
             configGuilds.save(configFileGuilds);
-            if (!fileGuild.exists())
+            if (!fileGuild.exists()) {
                 fileGuild.createNewFile();
+            }
         } catch (Exception ignored) {
         }
         guild.set("power", 0);
@@ -104,7 +116,8 @@ public class GuildManager {
 
     /**
      * Renames a specified guild with the given name.
-     * @param g    The guild to rename.
+     *
+     * @param g The guild to rename.
      * @param name The new name of the guild.
      */
     public void renameGuild(Guild g, String name) {
@@ -127,6 +140,7 @@ public class GuildManager {
 
     /**
      * Retrieves the guild with the specified name.
+     *
      * @param name The name of the guild to retrieve.
      * @return The guild with the specified name.
      */
@@ -136,6 +150,7 @@ public class GuildManager {
 
     /**
      * Retrieves the guild with the specified name or guild owner.
+     *
      * @param name The name of the guild or guild owner to retrieve.
      * @return The guild with the specified name or the guild of the player with the specified name.
      */
@@ -143,20 +158,23 @@ public class GuildManager {
         Guild g = getGuild(name);
         if (g == null) {
             UUID uuid = Utils.getID(name);
-            if (uuid == null)
+            if (uuid == null) {
                 uuid = Utils.getOfflineID(name);
+            }
             if (uuid == null) {
                 return null;
             }
             UserManager um = Necessities.getUM();
-            if (um.getUser(uuid) != null)
+            if (um.getUser(uuid) != null) {
                 g = um.getUser(uuid).getGuild();
+            }
         }
         return g;
     }
 
     /**
      * Gets the owner of a given chunk if there is one.
+     *
      * @param c The chunk to look for the owner of.
      * @return The guild that owns the specified chunk, or null if there is not one.
      */
@@ -166,22 +184,25 @@ public class GuildManager {
 
     /**
      * Disbands the given guild.
+     *
      * @param g The guild to disband.
      */
     public void disband(Guild g) {
         String name = g.getName();
         for (Map.Entry<String, Guild> stringGuildEntry : guilds.entrySet()) {
             Guild value = stringGuildEntry.getValue();
-            if (value.isAlly(g) || value.isEnemy(g))
+            if (value.isAlly(g) || value.isEnemy(g)) {
                 value.setNeutral(g);
+            }
         }
         g.disband();
         guilds.remove(name.toLowerCase());
         YamlConfiguration configGuilds = YamlConfiguration.loadConfiguration(configFileGuilds);
         List<String> guildList = configGuilds.getStringList("guilds");
         guildList.remove(name);
-        if (guildList.isEmpty())
+        if (guildList.isEmpty()) {
             guildList.add("");
+        }
         configGuilds.set("guilds", guildList);
         try {
             configGuilds.save(configFileGuilds);
@@ -191,6 +212,7 @@ public class GuildManager {
 
     /**
      * Gets the guild prefix for the specified guild rank.
+     *
      * @param rank The rank either, leader, mod, or the empty string.
      * @return The prefix that corresponds to the given rank.
      */
@@ -200,6 +222,7 @@ public class GuildManager {
 
     /**
      * Gets the list of guilds.
+     *
      * @return The list of guilds.
      */
     public Collection<Guild> getGuilds() {

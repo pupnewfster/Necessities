@@ -2,15 +2,15 @@ package gg.galaxygaming.necessities.Commands;
 
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
+import java.util.ArrayList;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-
 public class CmdMachineGun implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
@@ -22,8 +22,9 @@ public class CmdMachineGun implements Cmd {
             }
             ItemMeta handMeta = hand.getItemMeta();
             ArrayList<String> lore = new ArrayList<>();
-            if (handMeta.hasLore())
+            if (handMeta.hasLore()) {
                 lore = (ArrayList<String>) handMeta.getLore();
+            }
             if (lore.contains("Machine gun")) {
                 lore.remove("Machine gun");
                 player.sendMessage(var.getMessages() + "Successfully turned your machine gun back into a bow.");
@@ -33,8 +34,10 @@ public class CmdMachineGun implements Cmd {
             }
             handMeta.setLore(lore);
             hand.setItemMeta(handMeta);
-        } else
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You can not rename your items because you do not have any.");
+        } else {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "You can not rename your items because you do not have any.");
+        }
         return true;
     }
 }

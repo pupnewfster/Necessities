@@ -5,13 +5,13 @@ import gg.galaxygaming.necessities.Hats.HatType;
 import gg.galaxygaming.necessities.Material.Material;
 import gg.galaxygaming.necessities.Material.MaterialHelper;
 import gg.galaxygaming.necessities.RankManager.RankManager;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.io.File;
 import java.util.Collections;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 
 class Initialization {
+
     void initiateFiles() {
         Utils.dirCreate("plugins/Necessities");
         Utils.dirCreate("plugins/Necessities/Logs");
@@ -26,15 +26,17 @@ class Initialization {
         Utils.fileCreate("plugins/Necessities/faq.txt");
         Utils.fileCreate("plugins/Necessities/announcements.txt");
         File cWords = new File("plugins/Necessities", "customWords.txt");
-        if (!cWords.exists())
+        if (!cWords.exists()) {
             try {
                 cWords.createNewFile();
                 FileUtils.copyURLToFile(getClass().getResource("/customWords.txt"), cWords);
             } catch (Exception ignored) {
             }
+        }
         createYaml();
         HatType.mapHats();
-        Material.mapMaterials();//This is not in the Economy section because it is useful to have even without economy being enabled
+        Material
+              .mapMaterials();//This is not in the Economy section because it is useful to have even without economy being enabled
 
         //RankManager
         RankManager rm = Necessities.getRM();
@@ -84,8 +86,9 @@ class Initialization {
         File configFileStackSize = new File("plugins/Necessities", "stacksize.yml");
         if (configFileStackSize.exists()) {
             YamlConfiguration configStackSize = YamlConfiguration.loadConfiguration(configFileStackSize);
-            for (String key : configStackSize.getKeys(false))
+            for (String key : configStackSize.getKeys(false)) {
                 MaterialHelper.setStackSize(Material.fromString(key), configStackSize.getInt(key));
+            }
         }
     }
 
@@ -103,7 +106,7 @@ class Initialization {
         Utils.addYML(new File("plugins/Necessities/WorldManager", "portals.yml"));
         Utils.addYML(new File("plugins/Necessities/Creative", "reviews.yml"));
         File configFileStackSize = new File("plugins/Necessities", "stacksize.yml");
-        if (!configFileStackSize.exists())
+        if (!configFileStackSize.exists()) {
             try {
                 configFileStackSize.createNewFile();
                 YamlConfiguration config = YamlConfiguration.loadConfiguration(configFileStackSize);
@@ -123,8 +126,9 @@ class Initialization {
                 config.save(configFileStackSize);
             } catch (Exception ignored) {
             }
+        }
         File configFileCensors = new File("plugins/Necessities", "censors.yml");
-        if (!configFileCensors.exists())
+        if (!configFileCensors.exists()) {
             try {
                 configFileCensors.createNewFile();
                 YamlConfiguration config = YamlConfiguration.loadConfiguration(configFileCensors);
@@ -134,7 +138,8 @@ class Initialization {
                 config.save(configFileCensors);
             } catch (Exception ignored) {
             }
-        if (!Necessities.getInstance().getConfigFile().exists())
+        }
+        if (!Necessities.getInstance().getConfigFile().exists()) {
             try {
                 Necessities.getInstance().getConfigFile().createNewFile();
                 YamlConfiguration config = Necessities.getInstance().getConfig();
@@ -173,72 +178,104 @@ class Initialization {
                 config.save(Necessities.getInstance().getConfigFile());
             } catch (Exception ignored) {
             }
-        else {
+        } else {
             YamlConfiguration config = Necessities.getInstance().getConfig();
-            if (!config.contains("Necessities.warns"))
+            if (!config.contains("Necessities.warns")) {
                 config.set("Necessities.warns", 3);
-            if (!config.contains("Necessities.caps"))
+            }
+            if (!config.contains("Necessities.caps")) {
                 config.set("Necessities.caps", true);
-            if (!config.contains("Necessities.language"))
+            }
+            if (!config.contains("Necessities.language")) {
                 config.set("Necessities.language", true);
-            if (!config.contains("Necessities.cmdSpam"))
+            }
+            if (!config.contains("Necessities.cmdSpam")) {
                 config.set("Necessities.cmdSpam", true);
-            if (!config.contains("Necessities.chatSpam"))
+            }
+            if (!config.contains("Necessities.chatSpam")) {
                 config.set("Necessities.chatSpam", true);
-            if (!config.contains("Necessities.advertise"))
+            }
+            if (!config.contains("Necessities.advertise")) {
                 config.set("Necessities.advertise", true);
-            if (!config.contains("Necessities.ChatFormat"))
+            }
+            if (!config.contains("Necessities.ChatFormat")) {
                 config.set("Necessities.ChatFormat", "{WORLD} {GUILD} {TITLE} {RANK} {NAME}: {MESSAGE}");
-            if (!config.contains("Necessities.firstTime"))
+            }
+            if (!config.contains("Necessities.firstTime")) {
                 config.set("Necessities.firstTime", "Welcome {NAME}!");
-            if (!config.contains("Necessities.firstItems"))
+            }
+            if (!config.contains("Necessities.firstItems")) {
                 config.set("Necessities.firstItems", Collections.singletonList(""));
-            if (!config.contains("Console.AliveStatus"))
+            }
+            if (!config.contains("Console.AliveStatus")) {
                 config.set("Console.AliveStatus", "Alive");
-            if (!config.contains("Necessities.WorldManager"))
+            }
+            if (!config.contains("Necessities.WorldManager")) {
                 config.set("Necessities.WorldManager", true);
-            if (!config.contains("Necessities.Creative"))
+            }
+            if (!config.contains("Necessities.Creative")) {
                 config.set("Necessities.Creative", false);
-            if (!config.contains("Necessities.Paintball"))
+            }
+            if (!config.contains("Necessities.Paintball")) {
                 config.set("Necessities.Paintball", false);
-            if (!config.contains("Necessities.Guilds"))
+            }
+            if (!config.contains("Necessities.Guilds")) {
                 config.set("Necessities.Guilds", true);
-            if (!config.contains("Necessities.Economy"))
+            }
+            if (!config.contains("Necessities.Economy")) {
                 config.set("Necessities.Economy", true);
-            if (!config.contains("Necessities.AI"))
+            }
+            if (!config.contains("Necessities.AI")) {
                 config.set("Necessities.AI", false);
-            if (!config.contains("Necessities.log"))
+            }
+            if (!config.contains("Necessities.log")) {
                 config.set("Necessities.log", false);
-            if (!config.contains("Necessities.customDeny"))
+            }
+            if (!config.contains("Necessities.customDeny")) {
                 config.set("Necessities.customDeny", false);
-            if (!config.contains("Necessities.DonationPass"))
+            }
+            if (!config.contains("Necessities.DonationPass")) {
                 config.set("Necessities.DonationPass", "password");
-            if (!config.contains("Necessities.DonationServer"))
+            }
+            if (!config.contains("Necessities.DonationServer")) {
                 config.set("Necessities.DonationServer", 8);
-            if (!config.contains("Necessities.SlackToken"))
+            }
+            if (!config.contains("Necessities.SlackToken")) {
                 config.set("Necessities.SlackToken", "token");
-            if (!config.contains("Necessities.WebHook"))
+            }
+            if (!config.contains("Necessities.WebHook")) {
                 config.set("Necessities.WebHook", "webHook");
-            if (!config.contains("Necessities.MaxSingleTypeEntities"))
+            }
+            if (!config.contains("Necessities.MaxSingleTypeEntities")) {
                 config.set("Necessities.MaxSingleTypeEntities", 100);
-            if (!config.contains("Announcements.frequency"))
+            }
+            if (!config.contains("Announcements.frequency")) {
                 config.set("Announcements.frequency", 5);
-            if (!config.contains("Economy.DBHost"))
+            }
+            if (!config.contains("Economy.DBHost")) {
                 config.set("Economy.DBHost", "127.0.0.1:3306");
-            if (!config.contains("Economy.DBName"))
+            }
+            if (!config.contains("Economy.DBName")) {
                 config.set("Economy.DBName", "minecraft");
-            if (!config.contains("Economy.DBUser"))
+            }
+            if (!config.contains("Economy.DBUser")) {
                 config.set("Economy.DBUser", "user");
-            if (!config.contains("Economy.DBPassword"))
+            }
+            if (!config.contains("Economy.DBPassword")) {
                 config.set("Economy.DBPassword", "password");
-            if (!config.contains("Economy.currencyType"))
+            }
+            if (!config.contains("Economy.currencyType")) {
                 config.set("Economy.currencyType", 0);
-            if (!config.contains("Economy.prefix"))
+            }
+            if (!config.contains("Economy.prefix")) {
                 config.set("Economy.prefix", "");
-            if (!config.contains("Economy.suffix"))
+            }
+            if (!config.contains("Economy.suffix")) {
                 config.set("Economy.suffix", "");
-            if (!config.contains("Economy.initialMoney"))
+            }
+            if (!config.contains("Economy.initialMoney")) {
                 config.set("Economy.initialMoney", 0.0);
+            }
             try {
                 config.save(Necessities.getInstance().getConfigFile());
             } catch (Exception ignored) {

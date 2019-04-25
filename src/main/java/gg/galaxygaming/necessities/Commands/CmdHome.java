@@ -6,13 +6,13 @@ import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.SafeLocation;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class CmdHome implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
@@ -26,8 +26,9 @@ public class CmdHome implements Cmd {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have any homes.");
                 return true;
             }
-            if (p.getBedSpawnLocation() != null)
+            if (p.getBedSpawnLocation() != null) {
                 homes += ", bed";
+            }
             if (args.length == 0) {
                 if (u.hasHome("home")) {
                     p.sendMessage(var.getMessages() + "Teleporting home...");
@@ -48,7 +49,8 @@ public class CmdHome implements Cmd {
                 if (uuid == null) {
                     uuid = Utils.getOfflineID(targetName);
                     if (uuid == null) {
-                        sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
+                        sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                              + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
                         return true;
                     }
                 }
@@ -64,19 +66,21 @@ public class CmdHome implements Cmd {
             }
             String name = args[0].replaceAll("&", "").replaceAll("\\.", "").replaceAll(":", "");
             if (!u.hasHome(name)) {
-                if (name.equalsIgnoreCase("bed"))
+                if (name.equalsIgnoreCase("bed")) {
                     if (p.getBedSpawnLocation() != null) {
                         u.teleport(safe.getSafe(p.getBedSpawnLocation()));
                         p.sendMessage(var.getMessages() + "Teleporting home...");
                         return true;
                     }
+                }
                 p.sendMessage(var.getMessages() + "Homes: " + ChatColor.WHITE + homes);
                 return true;
             }
             p.sendMessage(var.getMessages() + "Teleporting home...");
             u.teleport(safe.getSafe(u.getHome(name)));
-        } else
+        } else {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot goto any homes.");
+        }
         return true;
     }
 }

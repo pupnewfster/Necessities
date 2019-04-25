@@ -6,10 +6,12 @@ import gg.galaxygaming.necessities.Variables;
 import org.bukkit.command.CommandSender;
 
 public class CmdRemoveSubrank implements RankCmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length == 0) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you to enter a subrank to delete.");
+            sender.sendMessage(
+                  var.getEr() + "Error: " + var.getErMsg() + "Format requires you to enter a subrank to delete.");
             return true;
         }
         String subrank = args[0];

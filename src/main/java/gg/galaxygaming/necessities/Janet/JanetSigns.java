@@ -6,21 +6,27 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class JanetSigns {
+
     /**
      * Potentially censors the content on a sign.
+     *
      * @param s The sign to censor.
      * @param p The player who made the sign.
      */
     public void censorSign(Sign s, Player p) {
         String line0 = "", line1 = "", line2 = "", line3 = "";
-        if (s.getLine(0) != null)
+        if (s.getLine(0) != null) {
             line0 = s.getLine(0).trim();
-        if (s.getLine(1) != null)
+        }
+        if (s.getLine(1) != null) {
             line1 = s.getLine(1).trim();
-        if (s.getLine(2) != null)
+        }
+        if (s.getLine(2) != null) {
             line2 = s.getLine(2).trim();
-        if (s.getLine(3) != null)
+        }
+        if (s.getLine(3) != null) {
             line3 = s.getLine(3).trim();
+        }
         YamlConfiguration config = Necessities.getInstance().getConfig();
         Janet bot = Necessities.getBot();
         if (config.getBoolean("Necessities.language") && !p.hasPermission("Necessities.language")) {

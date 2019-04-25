@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class CmdRepair implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
@@ -40,8 +41,9 @@ public class CmdRepair implements Cmd {
                 }
                 player.sendMessage(var.getMessages() + "Repaired all items.");
             }
-        } else
+        } else {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You can do not have any items.");
+        }
         return true;
     }
 }

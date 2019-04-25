@@ -5,14 +5,14 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.Variables;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class CmdReply implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length == 0) {
@@ -34,15 +34,19 @@ public class CmdReply implements Cmd {
             }
             if (self.getLastC().equals("Console")) {
                 StringBuilder messageBuilder = new StringBuilder();
-                for (String arg : args)
+                for (String arg : args) {
                     messageBuilder.append(arg).append(' ');
+                }
                 String message = ChatColor.WHITE + messageBuilder.toString().trim();
-                if (p.hasPermission("Necessities.colorchat"))
-                    message = ChatColor.translateAlternateColorCodes('&', p.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", ""));
+                if (p.hasPermission("Necessities.colorchat")) {
+                    message = ChatColor.translateAlternateColorCodes('&',
+                          p.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", ""));
+                }
                 self.setLastC("Console");
                 console.setLastContact(self.getUUID());
                 p.sendMessage(var.getMessages() + "[me -> " + console.getName().replaceAll(":", "") + "] " + message);
-                Bukkit.getConsoleSender().sendMessage(var.getMessages() + "[" + p.getDisplayName() + var.getMessages() + " -> me] " + message);
+                Bukkit.getConsoleSender().sendMessage(
+                      var.getMessages() + "[" + p.getDisplayName() + var.getMessages() + " -> me] " + message);
                 return true;
             }
             User u = um.getUser(UUID.fromString(self.getLastC()));
@@ -52,19 +56,24 @@ public class CmdReply implements Cmd {
                 return true;
             }
             if (u.isIgnoring(p.getUniqueId())) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That user is ignoring you, so you cannot reply.");
+                sender.sendMessage(
+                      var.getEr() + "Error: " + var.getErMsg() + "That user is ignoring you, so you cannot reply.");
                 return true;
             }
             if (self.isIgnoring(u.getUUID())) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are ignoring that user, so cannot message them.");
+                sender.sendMessage(
+                      var.getEr() + "Error: " + var.getErMsg() + "You are ignoring that user, so cannot message them.");
                 return true;
             }
             StringBuilder messageBuilder = new StringBuilder();
-            for (String arg : args)
+            for (String arg : args) {
                 messageBuilder.append(arg).append(' ');
+            }
             String message = ChatColor.WHITE + messageBuilder.toString().trim();
-            if (p.hasPermission("Necessities.colorchat"))
-                message = ChatColor.translateAlternateColorCodes('&', p.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", ""));
+            if (p.hasPermission("Necessities.colorchat")) {
+                message = ChatColor.translateAlternateColorCodes('&',
+                      p.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", ""));
+            }
             u.setLastC(self.getUUID().toString());
             self.setLastC(u.getUUID().toString());
             p.sendMessage(var.getMessages() + "[me -> " + t.getDisplayName() + var.getMessages() + "] " + message);
@@ -77,9 +86,11 @@ public class CmdReply implements Cmd {
             User u = um.getUser(console.getLastContact());
             Player t = Bukkit.getPlayer(u.getUUID());
             StringBuilder messageBuilder = new StringBuilder();
-            for (String arg : args)
+            for (String arg : args) {
                 messageBuilder.append(arg).append(' ');
-            String message = ChatColor.translateAlternateColorCodes('&', ChatColor.WHITE + messageBuilder.toString().trim());
+            }
+            String message = ChatColor
+                  .translateAlternateColorCodes('&', ChatColor.WHITE + messageBuilder.toString().trim());
             u.setLastC("Console");
             console.setLastContact(u.getUUID());
             sender.sendMessage(var.getMessages() + "[me -> " + t.getDisplayName() + var.getMessages() + "] " + message);

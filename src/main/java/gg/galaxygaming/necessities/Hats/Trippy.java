@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 
 class Trippy extends Hat {
+
     Trippy(Location loc) {
         this.trueLoc = loc;
         int turn = 5;

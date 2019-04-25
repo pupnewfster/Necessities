@@ -1,15 +1,20 @@
 package gg.galaxygaming.necessities.RankManager;
 
 import gg.galaxygaming.necessities.Necessities;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.permissions.Permission;
 
-import java.io.File;
-import java.util.*;
-
 public class RankManager {
+
     private final File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml");
     private final File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
     private final HashMap<String, String> subranks = new HashMap<>();
@@ -21,12 +26,14 @@ public class RankManager {
      * Initializes the rank manager.
      */
     public void readRanks() {
-        YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks), configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
+        YamlConfiguration configRanks = YamlConfiguration
+              .loadConfiguration(configFileRanks), configSubranks = YamlConfiguration
+              .loadConfiguration(configFileSubranks);
         for (String rank : configRanks.getKeys(false)) {
             if (configRanks.contains(rank + ".previousRank")) {
-                if (names.contains(configRanks.getString(rank + ".previousRank")))
+                if (names.contains(configRanks.getString(rank + ".previousRank"))) {
                     names.add(names.indexOf(configRanks.getString(rank + ".previousRank")) + 1, rank);
-                else {
+                } else {
                     String previous = configRanks.getString(rank + ".previousRank");
                     while (configRanks.contains(previous + ".previousRank")) {
                         previous = configRanks.getString(previous + ".previousRank");
@@ -36,16 +43,21 @@ public class RankManager {
                         }
                     }
                 }
-            } else if (!names.contains(rank))
+            } else if (!names.contains(rank)) {
                 names.add(0, rank);
+            }
         }
         for (String name : names) {
             ranks.put(name, new Rank(name));
             order.add(ranks.get(name));
         }
-        for (String subrank : configSubranks.getKeys(true))
-            if (!subrank.equals("") && !configSubranks.getStringList(subrank).isEmpty())//If is an actual subrank not just base node in tree of a subrank
+        for (String subrank : configSubranks.getKeys(true)) {
+            if (!subrank.equals("") && !configSubranks.getStringList(subrank)
+                  .isEmpty())//If is an actual subrank not just base node in tree of a subrank
+            {
                 subranks.put(subrank.toLowerCase(), subrank);
+            }
+        }
         Necessities.getUM().readUsers();
         Bukkit.getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> {
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Retrieving all permissions.");
@@ -57,11 +69,14 @@ public class RankManager {
     private void updatePerms() {
         ArrayList<String> p = new ArrayList<>();
         for (Permission perm : Bukkit.getPluginManager().getPermissions()) {
-            if (perm.getName().equals("*"))
+            if (perm.getName().equals("*")) {
                 continue;
-            for (String t : perm.getChildren().keySet())
-                if (!p.contains(t))
+            }
+            for (String t : perm.getChildren().keySet()) {
+                if (!p.contains(t)) {
                     p.add(t);
+                }
+            }
             if (!p.contains(perm.getName())) {
                 perm.addParent("*", true);
                 p.add(perm.getName());
@@ -82,6 +97,7 @@ public class RankManager {
 
     /**
      * Checks if the given name is a valid subrank.
+     *
      * @param subrank The name to check.
      * @return True if the name is a valid subrank, false otherwise.
      */
@@ -91,6 +107,7 @@ public class RankManager {
 
     /**
      * Gets the proper name of the given subrank.
+     *
      * @param subrank The subrank to get the proper name of.
      * @return The proper name of the given subrank.
      */
@@ -100,6 +117,7 @@ public class RankManager {
 
     /**
      * Gets the list of ranks in their order of lowest to highest.
+     *
      * @return The list of ranks in their order of lowest to highest.
      */
     public ArrayList<Rank> getOrder() {
@@ -108,6 +126,7 @@ public class RankManager {
 
     /**
      * Gets the list of subranks.
+     *
      * @return The list of subranks.
      */
     public Collection<String> getSubranks() {
@@ -116,6 +135,7 @@ public class RankManager {
 
     /**
      * Gets the rank at the specified index in the order list.
+     *
      * @param index The index in the order list.
      * @return The rank at the specified index.
      */
@@ -125,6 +145,7 @@ public class RankManager {
 
     /**
      * Gets the rank based off of the given name.
+     *
      * @param name The name of the rank to get.
      * @return The rank based on the given rank name.
      */
@@ -134,7 +155,8 @@ public class RankManager {
 
     /**
      * Checks if the given rank has the specified rank.
-     * @param rank  The rank to check if it has the other rank.
+     *
+     * @param rank The rank to check if it has the other rank.
      * @param check The rank to check.
      * @return True if the given rank has the specified rank, false otherwise.
      */
@@ -144,21 +166,24 @@ public class RankManager {
 
     /**
      * Update the permissions of a given rank.
-     * @param r          The rank to update the permissions of.
+     *
+     * @param r The rank to update the permissions of.
      * @param permission The permission to add or remove.
-     * @param remove     True to remove the permission, false otherwise.
+     * @param remove True to remove the permission, false otherwise.
      */
     public void updateRankPerms(Rank r, String permission, boolean remove) {
-        if (permission.equals(""))
+        if (permission.equals("")) {
             return;
+        }
         UserManager um = Necessities.getUM();
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         List<String> perms = configRanks.getStringList(r.getName() + ".permissions");
         perms.remove("");
         if (remove) {
             perms.remove(permission);
-            if (perms.isEmpty())
+            if (perms.isEmpty()) {
                 perms.add("");
+            }
             configRanks.set(r.getName() + ".permissions", perms);
             r.removePerm(permission);
             um.delRankPerm(r, permission);
@@ -176,13 +201,15 @@ public class RankManager {
 
     /**
      * Update the permissions of a given subrank.
-     * @param subrank    The subrank to update the permissions of.
+     *
+     * @param subrank The subrank to update the permissions of.
      * @param permission The permission to add or remove.
-     * @param remove     True to remove the permission, false otherwise.
+     * @param remove True to remove the permission, false otherwise.
      */
     public void updateSubPerms(String subrank, String permission, boolean remove) {
-        if (permission.equals(""))
+        if (permission.equals("")) {
             return;
+        }
         YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         UserManager um = Necessities.getUM();
@@ -190,8 +217,9 @@ public class RankManager {
         perms.remove("");
         if (remove) {
             perms.remove(permission);
-            if (perms.isEmpty())
+            if (perms.isEmpty()) {
                 perms.add("");
+            }
             configSubranks.set(subrank, perms);
         } else {
             perms.add(permission);
@@ -201,31 +229,37 @@ public class RankManager {
             configSubranks.save(configFileSubranks);
         } catch (Exception ignored) {
         }
-        for (Rank r : order)
-            if (configRanks.contains(r.getName()) && configRanks.getStringList(r.getName() + ".subranks").contains(subrank)) {
+        for (Rank r : order) {
+            if (configRanks.contains(r.getName()) && configRanks.getStringList(r.getName() + ".subranks")
+                  .contains(subrank)) {
                 r.refreshPerms();
                 um.refreshRankPerm(r);
             }
+        }
     }
 
     /**
      * Update the subranks of a given rank.
-     * @param r      The rank to update the subranks of.
-     * @param name   The name of the subrank to add or remove.
+     *
+     * @param r The rank to update the subranks of.
+     * @param name The name of the subrank to add or remove.
      * @param remove True to remove the subrank, false otherwise.
      */
     public void updateRankSubrank(Rank r, String name, boolean remove) {
-        if (name.equals(""))
+        if (name.equals("")) {
             return;
+        }
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         List<String> subranks = configRanks.getStringList(r.getName() + ".subranks");
         subranks.remove("");
-        if (remove)
+        if (remove) {
             subranks.remove(name);
-        else
+        } else {
             subranks.add(name);
-        if (subranks.isEmpty())
+        }
+        if (subranks.isEmpty()) {
             subranks.add("");
+        }
         configRanks.set(r.getName() + ".subranks", subranks);
         try {
             configRanks.save(configFileRanks);
@@ -237,21 +271,23 @@ public class RankManager {
 
     /**
      * Adds a rank with the specified name with the given previous and next ranks.
-     * @param name     The name of the rank to create.
+     *
+     * @param name The name of the rank to create.
      * @param previous The rank that goes before this new rank.
-     * @param next     The rank that goes after this new rank.
+     * @param next The rank that goes after this new rank.
      */
     public void addRank(String name, Rank previous, Rank next) {
-        if (name.equals(""))
+        if (name.equals("")) {
             return;
+        }
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         configRanks.set(name, Collections.singletonList(""));
         configRanks.set(name + ".permissions", Collections.singletonList(""));
         configRanks.set(name + ".subranks", Collections.singletonList(""));
         configRanks.set(name + ".rankTitle", '[' + name + ']');
-        if (previous != null)
+        if (previous != null) {
             configRanks.set(name + ".previousRank", previous.getName());
-        else {
+        } else {
             configRanks.set(name + ".maxHomes", 1);
             configRanks.set(name + ".teleportDelay", 3);
         }
@@ -261,61 +297,70 @@ public class RankManager {
         }
         if (previous == null) {
             ranks.put(name, new Rank(name));
-            if (next != null)
+            if (next != null) {
                 next.setPrevious(ranks.get(name));
+            }
             order.add(0, ranks.get(name));
         } else {
             ranks.put(name, new Rank(name));
             previous.setNext(ranks.get(name));
-            if (next != null)
+            if (next != null) {
                 next.setPrevious(ranks.get(name));
+            }
             order.add(order.indexOf(previous) + 1, ranks.get(name));
         }
     }
 
     /**
      * Removes the specified rank.
+     *
      * @param rank The rank to remove.
      */
     public void removeRank(Rank rank) {
         UserManager um = Necessities.getUM();
         Rank previous = rank.getPrevious();
         Rank next = rank.getNext();
-        for (User u : um.getUsers().values())
+        for (User u : um.getUsers().values()) {
             if (u.getRank().equals(rank)) {
-                if (next != null)
+                if (next != null) {
                     u.setRank(next);
-                else if (previous != null)
+                } else if (previous != null) {
                     u.setRank(previous);
+                }
             }
+        }
         order.remove(rank);
         ranks.remove(rank.getName());
         if (previous != null && next != null) {
             next.setPrevious(previous);
             previous.setNext(next);
-        } else if (previous == null && next != null)
+        } else if (previous == null && next != null) {
             next.setPrevious(null);
-        else if (previous != null)
+        } else if (previous != null) {
             previous.setNext(null);
+        }
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         configRanks.set(rank.getName(), null);
         try {
             configRanks.save(configFileRanks);
         } catch (Exception ignored) {
         }
-        if (next != null)
+        if (next != null) {
             um.refreshRankPerm(next);
-        else if (previous != null)
+        } else if (previous != null) {
             um.refreshRankPerm(previous);
+        }
     }
 
     /**
      * Adds a subrank with the given name.
+     *
      * @param name The name of the subrank to add.
      */
     public void addSubrank(String name) {
-        if (name.equals(""))
+        if (name.equals("")) {
             return;
+        }
         YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
         configSubranks.set(name, Collections.singletonList(""));
         subranks.put(name.toLowerCase(), name);
@@ -327,11 +372,13 @@ public class RankManager {
 
     /**
      * Removes the subrank with the specified name.
+     *
      * @param name The name of the subrank to remove.
      */
     public void removeSubrank(String name) {
-        if (name.equals(""))
+        if (name.equals("")) {
             return;
+        }
         UserManager um = Necessities.getUM();
         um.getUsers().values().forEach(u -> um.updateUserSubrank(u.getUUID(), name, true));
         order.forEach(r -> updateRankSubrank(r, name, true));
@@ -348,45 +395,69 @@ public class RankManager {
      * Sets the default subranks if they do not currently exist.
      */
     public void setSubranks() {
-        if (!configFileSubranks.exists())
+        if (!configFileSubranks.exists()) {
             try {
                 configFileSubranks.createNewFile();
                 YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
-                configSubranks.set("Necessities.Guest", Arrays.asList("bukkit.broadcast.user", "bukkit.command.plugins", "bukkit.command.version"));
+                configSubranks.set("Necessities.Guest",
+                      Arrays.asList("bukkit.broadcast.user", "bukkit.command.plugins", "bukkit.command.version"));
                 configSubranks.set("Necessities.Novice", Arrays.asList("Necessities.afk", "Necessities.me"));
-                configSubranks.set("Necessities.Survivalist", Arrays.asList("Necessities.boots", "Necessities.chest", "Necessities.pants", "Necessities.hat"));
-                configSubranks.set("Necessities.Expert", Arrays.asList("Necessities.rename", "Necessities.colorchat", "Necessities.title", "Necessities.bracket"));
-                configSubranks.set("Necessities.Veteran", Arrays.asList("Necessities.nick", "Necessities.loginmessage", "Necessities.logoutmessage"));
+                configSubranks.set("Necessities.Survivalist",
+                      Arrays.asList("Necessities.boots", "Necessities.chest", "Necessities.pants", "Necessities.hat"));
+                configSubranks.set("Necessities.Expert",
+                      Arrays.asList("Necessities.rename", "Necessities.colorchat", "Necessities.title",
+                            "Necessities.bracket"));
+                configSubranks.set("Necessities.Veteran",
+                      Arrays.asList("Necessities.nick", "Necessities.loginmessage", "Necessities.logoutmessage"));
                 configSubranks.set("Necessities.Master", Collections.singletonList("Necessities.warn"));
-                configSubranks.set("Necessities.Moderator", Arrays.asList("bukkit.command.ban", "bukkit.command.ban.player", "bukkit.command.banlist",
-                        "bukkit.command.whitelist.list", "bukkit.command.ban.list", "Necessities.table", "Necessities.spamchat", "Necessities.spamcommands",
-                        "bukkit.command.kick", "bukkit.command.unban", "bukkit.command.unban.player", "Necessities.economy.setSign", "Necessities.spy",
-                        "Necessities.tpdim", "Necessities.hide", "Necessities.loginmessage", "Necessities.logoutmessage", "Necessities.opBroadcast",
-                        "Necessities.seehidden", "Necessities.weather", "Necessities.time", "Necessities.repair", "Necessities.ext", "Necessities.enderchest",
-                        "Necessities.invsee", "Necessities.top", "Necessities.jail", "Necessities.mute", "Necessities.homeothers", "Necessities.unignoreable",
-                        "Necessities.ban", "Necessities.unban", "Necessities.jump", "Necessities.tp", "Necessities.tppos", "Necessities.tphere",
-                        "Necessities.keepxp", "Necessities.fly", "Necessities.enderchestOthers"));
-                configSubranks.set("Necessities.Operator", Arrays.asList("Necessities.bracket", "Necessities.bracketOthers", "Necessities.titleOthers",
-                        "Necessities.nickOthers", "Necessities.heal", "Necessities.feed", "Necessities.killall", "bukkit.command.clear", "Necessities.janetai",
-                        "Necessities.caps", "Necessities.language", "bukkit.command.ban.ip", "bukkit.command.unban.ip", "Necessities.god", "Necessities.more",
-                        "Necessities.antiKick", "Necessities.speed", "Necessities.spawnmob", "Necessities.tpall", "Necessities.setjail", "Necessities.unjailable",
-                        "Necessities.exp", "Necessities.skull", "Necessities.spawner", "Necessities.unbanip", "Necessities.ignoreGameMode", "Necessities.give",
-                        "Necessities.item", "Necessities.clear", "Necessities.banip", "Necessities.guilds.flag", "Necessities.guilds.admin",
-                        "Necessities.keepitems", "Necessities.nopvpLoss"));
-                configSubranks.set("Necessities.Manager", Arrays.asList("*", "-Necessities.rankmanager.setranksame", "minecraft.command.*", "bukkit.broadcast.*",
-                        "-minecraft.command.deop", "bukkit.command.whitelist.*", "bukkit.command.gamerule", "-minecraft.command.op", "-bukkit.command.op"));
-                configSubranks.set("Necessities.Admin", Arrays.asList("*", "minecraft.command.gamerule", "bukkit.command.gamerule", "bukkit.command.whitelist.*",
-                        "bukkit.broadcast.*"));
+                configSubranks.set("Necessities.Moderator",
+                      Arrays.asList("bukkit.command.ban", "bukkit.command.ban.player", "bukkit.command.banlist",
+                            "bukkit.command.whitelist.list", "bukkit.command.ban.list", "Necessities.table",
+                            "Necessities.spamchat", "Necessities.spamcommands",
+                            "bukkit.command.kick", "bukkit.command.unban", "bukkit.command.unban.player",
+                            "Necessities.economy.setSign", "Necessities.spy",
+                            "Necessities.tpdim", "Necessities.hide", "Necessities.loginmessage",
+                            "Necessities.logoutmessage", "Necessities.opBroadcast",
+                            "Necessities.seehidden", "Necessities.weather", "Necessities.time", "Necessities.repair",
+                            "Necessities.ext", "Necessities.enderchest",
+                            "Necessities.invsee", "Necessities.top", "Necessities.jail", "Necessities.mute",
+                            "Necessities.homeothers", "Necessities.unignoreable",
+                            "Necessities.ban", "Necessities.unban", "Necessities.jump", "Necessities.tp",
+                            "Necessities.tppos", "Necessities.tphere",
+                            "Necessities.keepxp", "Necessities.fly", "Necessities.enderchestOthers"));
+                configSubranks.set("Necessities.Operator",
+                      Arrays.asList("Necessities.bracket", "Necessities.bracketOthers", "Necessities.titleOthers",
+                            "Necessities.nickOthers", "Necessities.heal", "Necessities.feed", "Necessities.killall",
+                            "bukkit.command.clear", "Necessities.janetai",
+                            "Necessities.caps", "Necessities.language", "bukkit.command.ban.ip",
+                            "bukkit.command.unban.ip", "Necessities.god", "Necessities.more",
+                            "Necessities.antiKick", "Necessities.speed", "Necessities.spawnmob", "Necessities.tpall",
+                            "Necessities.setjail", "Necessities.unjailable",
+                            "Necessities.exp", "Necessities.skull", "Necessities.spawner", "Necessities.unbanip",
+                            "Necessities.ignoreGameMode", "Necessities.give",
+                            "Necessities.item", "Necessities.clear", "Necessities.banip", "Necessities.guilds.flag",
+                            "Necessities.guilds.admin",
+                            "Necessities.keepitems", "Necessities.nopvpLoss"));
+                configSubranks.set("Necessities.Manager",
+                      Arrays.asList("*", "-Necessities.rankmanager.setranksame", "minecraft.command.*",
+                            "bukkit.broadcast.*",
+                            "-minecraft.command.deop", "bukkit.command.whitelist.*", "bukkit.command.gamerule",
+                            "-minecraft.command.op", "-bukkit.command.op"));
+                configSubranks.set("Necessities.Admin",
+                      Arrays.asList("*", "minecraft.command.gamerule", "bukkit.command.gamerule",
+                            "bukkit.command.whitelist.*",
+                            "bukkit.broadcast.*"));
                 configSubranks.save(configFileSubranks);
             } catch (Exception ignored) {
             }
+        }
     }
 
     /**
      * Sets the default ranks if they do not currently exist.
      */
     public void setRanks() {
-        if (!configFileRanks.exists())
+        if (!configFileRanks.exists()) {
             try {
                 configFileRanks.createNewFile();
                 YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
@@ -430,5 +501,6 @@ public class RankManager {
                 configRanks.save(configFileRanks);
             } catch (Exception ignored) {
             }
+        }
     }
 }

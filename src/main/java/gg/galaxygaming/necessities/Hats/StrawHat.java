@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 
 class StrawHat extends Hat {
+
     StrawHat(Location loc) {
         this.trueLoc = loc;
         int turn = 5, turnV = 5;
@@ -24,7 +25,8 @@ class StrawHat extends Hat {
         for (int i = 0; i < 360 / turnV; i++) {
             this.armorStands.get(360 / turn + i).setHelmet(new ItemStack(Material.HAY_BLOCK, 1));
             this.armorStands.get(360 / turn + i).setSmall(true);
-            this.armorStands.get(360 / turn + i).setHeadPose(new EulerAngle(Math.toRadians(45), Math.toRadians(i * turnV), 0));
+            this.armorStands.get(360 / turn + i)
+                  .setHeadPose(new EulerAngle(Math.toRadians(45), Math.toRadians(i * turnV), 0));
         }
     }
 }

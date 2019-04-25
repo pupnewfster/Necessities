@@ -4,17 +4,18 @@ import gg.galaxygaming.necessities.Material.Material;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class CmdGive implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length < 2) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You need to enter an item and a player to give that item to.");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "You need to enter an item and a player to give that item to.");
             return true;
         }
         UUID uuid = Utils.getID(args[0]);
@@ -30,7 +31,9 @@ public class CmdGive implements Cmd {
         }
         if (args.length == 2) {
             t.getInventory().addItem(mat.toItemStack(64));
-            sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + "64 " + mat.getFriendlyName(64) + " to " + t.getDisplayName() + var.getMessages() + '.');
+            sender.sendMessage(
+                  var.getMessages() + "Giving " + var.getObj() + "64 " + mat.getFriendlyName(64) + " to " + t
+                        .getDisplayName() + var.getMessages() + '.');
             return true;
         }
         if (!Utils.legalInt(args[2])) {
@@ -39,7 +42,9 @@ public class CmdGive implements Cmd {
         }
         int amount = Integer.parseInt(args[2]);
         t.getInventory().addItem(mat.toItemStack(amount));
-        sender.sendMessage(var.getMessages() + "Giving " + var.getObj() + amount + ' ' + mat.getFriendlyName(amount) + " to " + t.getDisplayName() + var.getMessages() + '.');
+        sender.sendMessage(
+              var.getMessages() + "Giving " + var.getObj() + amount + ' ' + mat.getFriendlyName(amount) + " to " + t
+                    .getDisplayName() + var.getMessages() + '.');
         return true;
     }
 }

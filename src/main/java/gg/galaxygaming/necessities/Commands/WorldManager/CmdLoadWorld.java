@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
 public class CmdLoadWorld implements WorldCmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length == 0) {
@@ -25,10 +26,12 @@ public class CmdLoadWorld implements WorldCmd {
         }
         wm.loadWorld(args[0]);
         World w = Bukkit.getWorld(args[0]);
-        if (w == null)
+        if (w == null) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "There was and error loading the world.");
-        else
-            sender.sendMessage(var.getMessages() + "Loaded world " + var.getObj() + w.getName() + var.getMessages() + '.');
+        } else {
+            sender.sendMessage(
+                  var.getMessages() + "Loaded world " + var.getObj() + w.getName() + var.getMessages() + '.');
+        }
         return true;
     }
 }

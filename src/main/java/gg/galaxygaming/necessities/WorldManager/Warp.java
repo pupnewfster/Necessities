@@ -1,12 +1,12 @@
 package gg.galaxygaming.necessities.WorldManager;
 
+import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-
 public class Warp {
+
     private final String name;
     private Location loc;
 
@@ -14,14 +14,19 @@ public class Warp {
         File configFileWarps = new File("plugins/Necessities/WorldManager", "warps.yml");
         YamlConfiguration configWarps = YamlConfiguration.loadConfiguration(configFileWarps);
         this.name = name;
-        if (configWarps.contains(this.name))
-            this.loc = new Location(Bukkit.getWorld(configWarps.getString(this.name + ".world")), Double.parseDouble(configWarps.getString(this.name + ".x")),
-                    Double.parseDouble(configWarps.getString(this.name + ".y")), Double.parseDouble(configWarps.getString(this.name + ".z")),
-                    Float.parseFloat(configWarps.getString(this.name + ".yaw")), Float.parseFloat(configWarps.getString(this.name + ".pitch")));
+        if (configWarps.contains(this.name)) {
+            this.loc = new Location(Bukkit.getWorld(configWarps.getString(this.name + ".world")),
+                  Double.parseDouble(configWarps.getString(this.name + ".x")),
+                  Double.parseDouble(configWarps.getString(this.name + ".y")),
+                  Double.parseDouble(configWarps.getString(this.name + ".z")),
+                  Float.parseFloat(configWarps.getString(this.name + ".yaw")),
+                  Float.parseFloat(configWarps.getString(this.name + ".pitch")));
+        }
     }
 
     /**
      * Gets the name of the warp.
+     *
      * @return The name of the warp.
      */
     public String getName() {
@@ -30,6 +35,7 @@ public class Warp {
 
     /**
      * Retrieves if this warp has a destination.
+     *
      * @return True if there is a destination to the portal, false otherwise.
      */
     public boolean hasDestination() {
@@ -38,6 +44,7 @@ public class Warp {
 
     /**
      * Retrieves the location of the warp.
+     *
      * @return The location of the warp.
      */
     public Location getDestination() {

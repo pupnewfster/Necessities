@@ -6,6 +6,7 @@ import gg.galaxygaming.necessities.WorldManager.PortalManager;
 import org.bukkit.command.CommandSender;
 
 public class CmdRemovePortal implements WorldCmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length == 0) {
@@ -18,7 +19,8 @@ public class CmdRemovePortal implements WorldCmd {
             return true;
         }
         pm.remove(args[0]);
-        sender.sendMessage(var.getMessages() + "Removed portal named " + var.getObj() + args[0] + var.getMessages() + '.');
+        sender.sendMessage(
+              var.getMessages() + "Removed portal named " + var.getObj() + args[0] + var.getMessages() + '.');
         return true;
     }
 }

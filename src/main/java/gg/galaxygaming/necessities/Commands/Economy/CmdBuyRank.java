@@ -13,10 +13,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CmdBuyRank implements EconomyCmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length != 1) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid rank to buy. View the buyable ranks with /rankprices");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "You must enter a valid rank to buy. View the buyable ranks with /rankprices");
             return true;
         }
         if (sender instanceof Player) {
@@ -37,7 +39,8 @@ public class CmdBuyRank implements EconomyCmd {
             RankManager rm = Necessities.getRM();
             String curRank = um.getUser(player.getUniqueId()).getRank().getName();
             if (rm.getRank(rankName).getNext().equals(rm.getRank(curRank))) {
-                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You may not skip ranks or buy ranks you have already gotten.");
+                player.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                      + "You may not skip ranks or buy ranks you have already gotten.");
                 return true;
             }
             eco.removeMoney(player.getUniqueId(), cost);
@@ -45,9 +48,12 @@ public class CmdBuyRank implements EconomyCmd {
             String cOld = u.getRank().getColor();
             um.updateUserRank(u, rm.getRank(Utils.capFirst(rankName)));
             String c = u.getRank().getColor();
-            Bukkit.broadcastMessage(var.getMessages() + cOld + player.getName() + var.getMessages() + " bought the rank " + c + rankName.toLowerCase());
-        } else
+            Bukkit.broadcastMessage(
+                  var.getMessages() + cOld + player.getName() + var.getMessages() + " bought the rank " + c + rankName
+                        .toLowerCase());
+        } else {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console may not buy ranks.");
+        }
         return true;
     }
 }

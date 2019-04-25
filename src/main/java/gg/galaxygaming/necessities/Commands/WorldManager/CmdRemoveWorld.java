@@ -6,15 +6,18 @@ import gg.galaxygaming.necessities.WorldManager.WorldManager;
 import org.bukkit.command.CommandSender;
 
 public class CmdRemoveWorld implements WorldCmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length == 0) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a world name to remove from the files.");
+            sender.sendMessage(
+                  var.getEr() + "Error: " + var.getErMsg() + "You must enter a world name to remove from the files.");
             return true;
         }
         WorldManager wm = Necessities.getWM();
         if (wm.worldExists(args[0])) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That world is loaded before you remove a world from the configs unload it.");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "That world is loaded before you remove a world from the configs unload it.");
             return true;
         }
         if (!wm.worldUnloaded(args[0])) {
@@ -22,7 +25,8 @@ public class CmdRemoveWorld implements WorldCmd {
             return true;
         }
         wm.removeWorld(args[0]);
-        sender.sendMessage(var.getMessages() + "Removed " + var.getObj() + args[0] + var.getMessages() + " from the files.");
+        sender.sendMessage(
+              var.getMessages() + "Removed " + var.getObj() + args[0] + var.getMessages() + " from the files.");
         return true;
     }
 }

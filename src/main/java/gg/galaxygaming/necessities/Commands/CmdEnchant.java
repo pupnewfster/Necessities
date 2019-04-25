@@ -3,6 +3,8 @@ package gg.galaxygaming.necessities.Commands;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -12,15 +14,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CmdEnchant implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             if (args.length == 0) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter an enchantment and a level to enchant it with.");
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                      + "Format requires you enter an enchantment and a level to enchant it with.");
                 return true;
             }
             Player player = (Player) sender;
@@ -38,11 +39,14 @@ public class CmdEnchant implements Cmd {
                 int level = ench.getMaxLevel();
                 if (ench.canEnchantItem(hand)) {
                     hand.addEnchantment(ench, level);
-                    player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getKey()) + var.getMessages() + " at level " + var.getObj() + Integer.toString(level) +
-                            var.getMessages() + '.');
+                    player.sendMessage(
+                          var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getKey()) + var
+                                .getMessages() + " at level " + var.getObj() + Integer.toString(level) +
+                                var.getMessages() + '.');
                     return true;
                 }
-                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "This item can not support given enchantment.");
+                player.sendMessage(
+                      var.getEr() + "Error: " + var.getErMsg() + "This item can not support given enchantment.");
                 return true;
             }
             if (args.length == 2) {
@@ -57,84 +61,111 @@ public class CmdEnchant implements Cmd {
                 int level = -1;
                 if (!args[1].equalsIgnoreCase("max")) {
                     if (!Utils.legalInt(args[1])) {
-                        sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid enchantment level.");
+                        sender.sendMessage(
+                              var.getEr() + "Error: " + var.getErMsg() + "You must enter a valid enchantment level.");
                         return true;
                     }
                     level = Integer.parseInt(args[1]);
                 }
-                if (!args[0].equalsIgnoreCase("all") && ench != null && level > ench.getMaxLevel() && !player.hasPermission("Necessities.unsafeEnchant"))
+                if (!args[0].equalsIgnoreCase("all") && ench != null && level > ench.getMaxLevel() && !player
+                      .hasPermission("Necessities.unsafeEnchant")) {
                     level = ench.getMaxLevel();
-                if (player.hasPermission("Necessities.unsafeEnchant") && level > 127)
+                }
+                if (player.hasPermission("Necessities.unsafeEnchant") && level > 127) {
                     level = 127;
-                else if (!player.hasPermission("Necessities.unsafeEnchant") && ench != null && level > ench.getMaxLevel())
+                } else if (!player.hasPermission("Necessities.unsafeEnchant") && ench != null && level > ench
+                      .getMaxLevel()) {
                     level = ench.getMaxLevel();
+                }
                 if (args[0].equalsIgnoreCase("all")) {
                     if (level == -1) {
                         player.sendMessage(var.getMessages() + "Added all enchantments at max level.");
                         enchantAll(level, player, player.hasPermission("Necessities.unsafeEnchant"), true);
                     } else {
                         enchantAll(level, player, player.hasPermission("Necessities.unsafeEnchant"), false);
-                        player.sendMessage(var.getMessages() + "Added all enchantments at level " + var.getObj() + Integer.toString(level) + var.getMessages() + '.');
+                        player.sendMessage(
+                              var.getMessages() + "Added all enchantments at level " + var.getObj() + Integer
+                                    .toString(level) + var.getMessages() + '.');
                     }
                     return true;
-                } else if (ench != null && (ench.canEnchantItem(hand) || player.hasPermission("Necessities.unsafeEnchant"))) {
+                } else if (ench != null && (ench.canEnchantItem(hand) || player
+                      .hasPermission("Necessities.unsafeEnchant"))) {
                     if (level == -1) {
                         hand.addUnsafeEnchantment(ench, ench.getMaxLevel());
-                        player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getKey()) + var.getMessages() + " at max level.");
+                        player.sendMessage(
+                              var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getKey())
+                                    + var.getMessages() + " at max level.");
                     } else {
                         if (level == 0) {
                             hand.removeEnchantment(ench);
-                            player.sendMessage(var.getMessages() + "Removed enchantment " + var.getObj() + trueName(ench.getKey()) + var.getMessages() + '.');
+                            player.sendMessage(
+                                  var.getMessages() + "Removed enchantment " + var.getObj() + trueName(ench.getKey())
+                                        + var.getMessages() + '.');
                         } else {
                             hand.addUnsafeEnchantment(ench, level);
-                            player.sendMessage(var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getKey()) + var.getMessages() + " at level " + var.getObj() + Integer.toString(level) +
-                                    var.getMessages() + '.');
+                            player.sendMessage(
+                                  var.getMessages() + "Added the enchantment " + var.getObj() + trueName(ench.getKey())
+                                        + var.getMessages() + " at level " + var.getObj() + Integer.toString(level) +
+                                        var.getMessages() + '.');
                         }
                     }
                     return true;
                 }
-                player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "This item can not support given enchantment.");
+                player.sendMessage(
+                      var.getEr() + "Error: " + var.getErMsg() + "This item can not support given enchantment.");
             }
-        } else
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not a player so you do not have an items to enchant.");
+        } else {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "You are not a player so you do not have an items to enchant.");
+        }
         return true;
     }
 
     private void enchantAll(int level, Player player, boolean override, boolean max) {
         ItemStack hand = player.getInventory().getItemInMainHand();
-        for (Enchantment e : Enchantment.values())
+        for (Enchantment e : Enchantment.values()) {
             if (e.canEnchantItem(hand)) {
-                if (override && !max)
+                if (override && !max) {
                     hand.addUnsafeEnchantment(e, level);
-                else
+                } else {
                     hand.addEnchantment(e, e.getMaxLevel());
+                }
             }
+        }
     }
 
     public List<String> tabComplete(CommandSender sender, String[] args) {
         List<String> complete = new ArrayList<>();
         String search = "";
-        if (args.length > 0)
+        if (args.length > 0) {
             search = args[args.length - 1];
+        }
         search = search.toUpperCase();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (args.length == 1) {
-                if ("ALL".startsWith(search))
+                if ("ALL".startsWith(search)) {
                     complete.add("ALL");
+                }
                 for (Enchantment e : Enchantment.values()) {
                     String key = e.getKey().toString();
-                    if (e.canEnchantItem(p.getInventory().getItemInMainHand()) && key.startsWith(search))
+                    if (e.canEnchantItem(p.getInventory().getItemInMainHand()) && key.startsWith(search)) {
                         complete.add(key);
+                    }
                 }
             } else {
-                if ("MAX".startsWith(search))
+                if ("MAX".startsWith(search)) {
                     complete.add("MAX");
-                for (Enchantment e : Enchantment.values())
-                    if (e.canEnchantItem(p.getInventory().getItemInMainHand()) && e.equals(Enchantment.getByKey(enchantFinder(args[0]))) &&
-                            Integer.toString(e.getMaxLevel()).startsWith(search))
-                        for (int i = 0; i < e.getMaxLevel(); i++)
+                }
+                for (Enchantment e : Enchantment.values()) {
+                    if (e.canEnchantItem(p.getInventory().getItemInMainHand()) && e
+                          .equals(Enchantment.getByKey(enchantFinder(args[0]))) &&
+                          Integer.toString(e.getMaxLevel()).startsWith(search)) {
+                        for (int i = 0; i < e.getMaxLevel(); i++) {
                             complete.add(Integer.toString(i + 1));
+                        }
+                    }
+                }
             }
         }
         return complete;

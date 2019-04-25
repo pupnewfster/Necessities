@@ -9,10 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CmdTppos implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length < 3) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter an x coordinate, a y coordinate, and a z coordinate to teleport to.");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "Format requires you enter an x coordinate, a y coordinate, and a z coordinate to teleport to.");
             return true;
         }
         if (sender instanceof Player) {
@@ -47,8 +49,10 @@ public class CmdTppos implements Cmd {
             }
             p.teleport(loc);
             p.sendMessage(var.getMessages() + "Teleporting...");
-        } else
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be a player to teleport to a location.");
+        } else {
+            sender.sendMessage(
+                  var.getEr() + "Error: " + var.getErMsg() + "You must be a player to teleport to a location.");
+        }
         return true;
     }
 

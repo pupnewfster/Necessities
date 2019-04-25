@@ -5,6 +5,7 @@ import gg.galaxygaming.necessities.Variables;
 import org.bukkit.command.CommandSender;
 
 public class CmdReloadAnnouncer implements Cmd {
+
     @Override
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();

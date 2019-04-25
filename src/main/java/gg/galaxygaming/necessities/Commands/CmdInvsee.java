@@ -3,19 +3,20 @@ package gg.galaxygaming.necessities.Commands;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.HashMap;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 public class CmdInvsee implements Cmd {
+
     private final HashMap<PlayerInventory, Player> openInvs = new HashMap<>();
 
     /**
      * Get player who owns the inventory.
+     *
      * @param inv The inventory to get the owner of.
      * @return The player who owns the given inventory.
      */
@@ -25,6 +26,7 @@ public class CmdInvsee implements Cmd {
 
     /**
      * Removes the specified inventory as being tracked.
+     *
      * @param inv The inventory to close.
      */
     public void closeInv(PlayerInventory inv) {
@@ -46,15 +48,17 @@ public class CmdInvsee implements Cmd {
             }
             Player target = Bukkit.getPlayer(uuid);
             if (target.equals(p)) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Must enter a player other than yourself.");
+                sender.sendMessage(
+                      var.getEr() + "Error: " + var.getErMsg() + "Must enter a player other than yourself.");
                 return true;
             }
             PlayerInventory inv = target.getInventory();
             openInvs.put(inv, target);
             p.sendMessage(var.getObj() + Utils.ownerShip(target.getName()) + var.getMessages() + " inventory opened.");
             p.openInventory(inv);
-        } else
+        } else {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have an inventory.");
+        }
         return true;
     }
 }

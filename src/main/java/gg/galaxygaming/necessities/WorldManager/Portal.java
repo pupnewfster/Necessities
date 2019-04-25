@@ -1,14 +1,14 @@
 package gg.galaxygaming.necessities.WorldManager;
 
 import gg.galaxygaming.necessities.Necessities;
+import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-
 class Portal {
+
     private double x1, y1, z1, x2, y2, z2;
     private boolean validPortal;
     private Warp destination;
@@ -21,29 +21,37 @@ class Portal {
         YamlConfiguration configPM = YamlConfiguration.loadConfiguration(configFilePM);
         WarpManager warps = Necessities.getWarps();
         this.name = portalName;
-        if (configPM.contains(this.name + ".world"))
+        if (configPM.contains(this.name + ".world")) {
             this.from = Bukkit.getWorld(configPM.getString(this.name + ".world"));
+        }
         if (configPM.contains(this.name + ".destination")) {
             String dest = configPM.getString(this.name + ".destination");
-            if (dest.startsWith("-"))
+            if (dest.startsWith("-")) {
                 this.destination = warps.getWarp(dest.replaceFirst("-", ""));
-            else if (dest.startsWith("~"))
+            } else if (dest.startsWith("~")) {
                 this.server = dest.replaceFirst("~", "");
-            else
+            } else {
                 this.to = Bukkit.getWorld(dest);
+            }
         }
-        if (configPM.contains(this.name + ".location.x1"))
+        if (configPM.contains(this.name + ".location.x1")) {
             this.x1 = configPM.getDouble(this.name + ".location.x1");
-        if (configPM.contains(this.name + ".location.y1"))
+        }
+        if (configPM.contains(this.name + ".location.y1")) {
             this.y1 = configPM.getDouble(this.name + ".location.y1");
-        if (configPM.contains(this.name + ".location.z1"))
+        }
+        if (configPM.contains(this.name + ".location.z1")) {
             this.z1 = configPM.getDouble(this.name + ".location.z1");
-        if (configPM.contains(this.name + ".location.x2"))
+        }
+        if (configPM.contains(this.name + ".location.x2")) {
             this.x2 = configPM.getDouble(this.name + ".location.x2");
-        if (configPM.contains(this.name + ".location.y2"))
+        }
+        if (configPM.contains(this.name + ".location.y2")) {
             this.y2 = configPM.getDouble(this.name + ".location.y2");
-        if (configPM.contains(this.name + ".location.z2"))
+        }
+        if (configPM.contains(this.name + ".location.z2")) {
             this.z2 = configPM.getDouble(this.name + ".location.z2");
+        }
         if (this.from != null && (this.to != null || this.destination != null || this.server != null)) {
             this.validPortal = true;
             fixCoordinates();
@@ -99,8 +107,10 @@ class Portal {
     }
 
     boolean isPortal(Location l) {
-        return !(this.to == null && !isWarp() && !isCrossServer() || this.from == null) && this.validPortal && this.from.equals(l.getWorld()) && (isWarp() || isCrossServer() ||
-                Necessities.getWM().worldExists(this.to.getName())) && this.x1 <= l.getBlockX() && l.getBlockX() <= this.x2 && this.y1 <= l.getBlockY() && l.getBlockY() <= this.y2 &&
-                this.z1 <= l.getBlockZ() && l.getBlockZ() <= this.z2;
+        return !(this.to == null && !isWarp() && !isCrossServer() || this.from == null) && this.validPortal && this.from
+              .equals(l.getWorld()) && (isWarp() || isCrossServer() ||
+              Necessities.getWM().worldExists(this.to.getName())) && this.x1 <= l.getBlockX()
+              && l.getBlockX() <= this.x2 && this.y1 <= l.getBlockY() && l.getBlockY() <= this.y2 &&
+              this.z1 <= l.getBlockZ() && l.getBlockZ() <= this.z2;
     }
 }

@@ -8,10 +8,12 @@ import gg.galaxygaming.necessities.Variables;
 import org.bukkit.command.CommandSender;
 
 public class CmdAddSubrank implements RankCmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length != 2) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires a rank and a subrank to add to that rank.");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "Format requires a rank and a subrank to add to that rank.");
             return true;
         }
         RankManager rm = Necessities.getRM();
@@ -27,7 +29,9 @@ public class CmdAddSubrank implements RankCmd {
         }
         subrank = rm.getSub(subrank);
         rm.updateRankSubrank(r, subrank, false);
-        sender.sendMessage(var.getMessages() + "Added " + var.getObj() + subrank + var.getMessages() + " to " + var.getObj() + Utils.ownerShip(r.getName()) + var.getMessages() + " subranks.");
+        sender.sendMessage(
+              var.getMessages() + "Added " + var.getObj() + subrank + var.getMessages() + " to " + var.getObj() + Utils
+                    .ownerShip(r.getName()) + var.getMessages() + " subranks.");
         return true;
     }
 }

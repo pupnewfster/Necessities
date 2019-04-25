@@ -8,21 +8,25 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CmdNeutral implements GuildCmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.neutral")) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You have not have permission to use /guild neutral.");
+                sender.sendMessage(
+                      var.getEr() + "Error: " + var.getErMsg() + "You have not have permission to use /guild neutral.");
                 return true;
             }
             if (args.length == 0) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Must enter a name for the guild you wish to become neutral with.");
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                      + "Must enter a name for the guild you wish to become neutral with.");
                 return true;
             }
             Guild g = Necessities.getGM().getGuildVerbose(args[0]);
             if (g == null) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That guild does not exists, or no guild owner found with that name.");
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                      + "That guild does not exists, or no guild owner found with that name.");
                 return true;
             }
             User u = Necessities.getUM().getUser(p.getUniqueId());
@@ -31,7 +35,8 @@ public class CmdNeutral implements GuildCmd {
                 return true;
             }
             if (g.equals(u.getGuild()) || u.getGuild().isNeutral(g)) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are already neutral with that guild.");
+                sender.sendMessage(
+                      var.getEr() + "Error: " + var.getErMsg() + "You are already neutral with that guild.");
                 return true;
             }
             if (g.isInvitedAlly(u.getGuild()) || u.getGuild().isInvitedAlly(g)) {
@@ -47,16 +52,20 @@ public class CmdNeutral implements GuildCmd {
                     return true;
                 }
                 u.getGuild().addNeutralInvite(g);
-                g.sendMods(var.getMessages() + "You have been invited to be neutral with " + var.getObj() + u.getGuild().getName());
-                sender.sendMessage(var.getMessages() + "Successfully sent neutral request to " + var.getObj() + g.getName());
+                g.sendMods(var.getMessages() + "You have been invited to be neutral with " + var.getObj() + u.getGuild()
+                      .getName());
+                sender.sendMessage(
+                      var.getMessages() + "Successfully sent neutral request to " + var.getObj() + g.getName());
                 return true;
             }
             g.setNeutral(u.getGuild());
             u.getGuild().setNeutral(g);
             g.sendMods(var.getMessages() + "You are now neutral with " + var.getObj() + u.getGuild().getName());
             u.getGuild().sendMods(var.getMessages() + "You are now neutral with " + var.getObj() + g.getName());
-        } else
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be in a guild to be able to become neutral.");
+        } else {
+            sender.sendMessage(
+                  var.getEr() + "Error: " + var.getErMsg() + "You must be in a guild to be able to become neutral.");
+        }
         return true;
     }
 }

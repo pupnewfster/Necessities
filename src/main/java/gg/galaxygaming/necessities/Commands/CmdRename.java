@@ -10,10 +10,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class CmdRename implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length == 0) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a name to rename your item to.");
+            sender.sendMessage(
+                  var.getEr() + "Error: " + var.getErMsg() + "You must enter a name to rename your item to.");
             return true;
         }
         if (sender instanceof Player) {
@@ -25,19 +27,24 @@ public class CmdRename implements Cmd {
             }
             ItemMeta handMeta = hand.getItemMeta();
             StringBuilder nameBuilder = new StringBuilder();
-            for (String arg : args)
+            for (String arg : args) {
                 nameBuilder.append(arg).append(' ');
+            }
             String name = ChatColor.translateAlternateColorCodes('&', nameBuilder.toString()).trim();
             if (ChatColor.stripColor(name).trim().equals("")) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a name to rename your item to.");
+                sender.sendMessage(
+                      var.getEr() + "Error: " + var.getErMsg() + "You must enter a name to rename your item to.");
                 return true;
             }
             handMeta.setDisplayName(name);
             hand.setItemMeta(handMeta);
-            player.sendMessage(var.getMessages() + "Successfully renamed your " + var.getObj() + gg.galaxygaming.necessities.Material.Material.fromBukkit(hand.getType()).getFriendlyName() +
-                    var.getMessages() + " to " + var.getObj() + name);
-        } else
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You can not rename your items because you do not have any.");
+            player.sendMessage(var.getMessages() + "Successfully renamed your " + var.getObj()
+                  + gg.galaxygaming.necessities.Material.Material.fromBukkit(hand.getType()).getFriendlyName() +
+                  var.getMessages() + " to " + var.getObj() + name);
+        } else {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "You can not rename your items because you do not have any.");
+        }
         return true;
     }
 }

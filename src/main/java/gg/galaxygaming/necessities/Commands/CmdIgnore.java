@@ -5,13 +5,13 @@ import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class CmdIgnore implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
@@ -39,13 +39,18 @@ public class CmdIgnore implements Cmd {
             Player t = Bukkit.getPlayer(uuid);
             if (self.isIgnoring(uuid)) {
                 self.unignore(uuid);
-                sender.sendMessage(var.getMessages() + "No longer ignoring " + var.getObj() + t.getDisplayName() + var.getMessages() + '.');
+                sender.sendMessage(
+                      var.getMessages() + "No longer ignoring " + var.getObj() + t.getDisplayName() + var.getMessages()
+                            + '.');
             } else {
                 self.ignore(uuid);
-                sender.sendMessage(var.getMessages() + "Ignoring " + var.getObj() + t.getDisplayName() + var.getMessages() + '.');
+                sender.sendMessage(
+                      var.getMessages() + "Ignoring " + var.getObj() + t.getDisplayName() + var.getMessages() + '.');
             }
-        } else
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You cannot ignore anyone if you feel strongly about it try muting them.");
+        } else {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "You cannot ignore anyone if you feel strongly about it try muting them.");
+        }
         return true;
     }
 

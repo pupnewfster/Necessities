@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 
 public class BoxTopHat extends Hat {
+
     private final double dist = 0.22;
 
     BoxTopHat(Location loc) {
@@ -35,7 +36,9 @@ public class BoxTopHat extends Hat {
         this.armorStands.get(5).setSmall(true);
         final float yaw = this.trueLoc.getYaw();
         try {
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Necessities.getInstance(), () -> move(0, 0, 0, yaw, 0), 1);//Wait a tick and reposition orientation
+            Bukkit.getServer().getScheduler()
+                  .scheduleSyncDelayedTask(Necessities.getInstance(), () -> move(0, 0, 0, yaw, 0),
+                        1);//Wait a tick and reposition orientation
         } catch (Exception ignored) {
         }
     }

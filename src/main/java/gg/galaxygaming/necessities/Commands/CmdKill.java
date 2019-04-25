@@ -3,14 +3,14 @@ package gg.galaxygaming.necessities.Commands;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class CmdKill implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length == 0) {
@@ -25,12 +25,15 @@ public class CmdKill implements Cmd {
         Player target = Bukkit.getServer().getPlayer(uuid);
         target.setHealth(0);
         StringBuilder reasonBuilder = new StringBuilder();
-        for (int i = 1; i < args.length; i++)
+        for (int i = 1; i < args.length; i++) {
             reasonBuilder.append(args[i]).append(' ');
+        }
         String reason = ChatColor.translateAlternateColorCodes('&', reasonBuilder.toString().trim());
-        if (reason.equals(""))
+        if (reason.equals("")) {
             reason = "no reason.";
-        Bukkit.broadcastMessage(var.getMessages() + target.getDisplayName() + var.getMessages() + " was killed for " + reason);
+        }
+        Bukkit.broadcastMessage(
+              var.getMessages() + target.getDisplayName() + var.getMessages() + " was killed for " + reason);
         return true;
     }
 }

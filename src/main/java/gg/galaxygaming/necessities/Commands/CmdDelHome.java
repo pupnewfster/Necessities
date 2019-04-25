@@ -5,14 +5,14 @@ import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class CmdDelHome implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
@@ -25,23 +25,29 @@ public class CmdDelHome implements Cmd {
                     String[] info = args[0].replaceAll("&", "").replaceAll("\\.", "").split(":");
                     String targetName = info[0];
                     UUID uuid = Utils.getID(targetName);
-                    if (uuid == null)
-                        uuid = Utils.getOfflineID(targetName);
                     if (uuid == null) {
-                        sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
+                        uuid = Utils.getOfflineID(targetName);
+                    }
+                    if (uuid == null) {
+                        sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                              + "That player has not joined the server. If the player is offline, please use the full and most recent name.");
                         return true;
                     }
                     User us = um.getUser(uuid);
                     if (info.length == 1 || !us.hasHome(info[1])) {
-                        p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "They do not have a home under that name.");
+                        p.sendMessage(
+                              var.getEr() + "Error: " + var.getErMsg() + "They do not have a home under that name.");
                         return true;
                     }
                     if (Necessities.getRM().hasRank(us.getRank(), u.getRank())) {
-                        p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You can not delete same rank or higher homes.");
+                        p.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                              + "You can not delete same rank or higher homes.");
                         return true;
                     }
                     us.delHome(info[1]);
-                    p.sendMessage(var.getMessages() + "Home " + var.getObj() + info[1] + var.getMessages() + " has been removed from " + var.getObj() + us.getName() + var.getMessages() + " list of homes.");
+                    p.sendMessage(var.getMessages() + "Home " + var.getObj() + info[1] + var.getMessages()
+                          + " has been removed from " + var.getObj() + us.getName() + var.getMessages()
+                          + " list of homes.");
                     return true;
                 }
                 name = args[0].replaceAll("&", "").replaceAll("\\.", "").replaceAll(":", "");
@@ -52,21 +58,25 @@ public class CmdDelHome implements Cmd {
             }
             u.delHome(name);
             p.sendMessage(var.getMessages() + "Home " + var.getObj() + name + var.getMessages() + " has been removed.");
-        } else
+        } else {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot delete any homes.");
+        }
         return true;
     }
 
     public List<String> tabComplete(CommandSender sender, String[] args) {
         List<String> complete = new ArrayList<>();
         String search = "";
-        if (args.length == 1)
+        if (args.length == 1) {
             search = args[0];
+        }
         if (sender instanceof Player) {
             User u = Necessities.getUM().getUser(((Player) sender).getUniqueId());
-            for (String home : u.getHomes().split(", "))
-                if (home.startsWith(search))
+            for (String home : u.getHomes().split(", ")) {
+                if (home.startsWith(search)) {
                     complete.add(home);
+                }
+            }
         }
         return complete;
     }

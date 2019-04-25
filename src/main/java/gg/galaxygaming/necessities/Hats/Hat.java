@@ -1,14 +1,14 @@
 package gg.galaxygaming.necessities.Hats;
 
+import java.util.ArrayList;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
-import java.util.ArrayList;
-
 public abstract class Hat {
+
     final ArrayList<ArmorStand> armorStands = new ArrayList<>();
     Location trueLoc;
     private HatType type;
@@ -16,33 +16,36 @@ public abstract class Hat {
 
     /**
      * Gets a new instance of a hat at the specified location based on the given type.
-     * @param type     The type of the hat to create.
+     *
+     * @param type The type of the hat to create.
      * @param location The location to create the hat at.
      * @return A new instance of a hate of the specified type at the given location.
      */
     public static Hat fromType(HatType type, Location location) {
         Hat h = null;
         location = location.clone().add(0, 0.5, 0);
-        if (type.equals(HatType.BoxTopHat))
+        if (type.equals(HatType.BoxTopHat)) {
             h = new BoxTopHat(location);
-        else if (type.equals(HatType.TopHat))
+        } else if (type.equals(HatType.TopHat)) {
             h = new TopHat(location);
-        else if (type.equals(HatType.StrawHat))
+        } else if (type.equals(HatType.StrawHat)) {
             h = new StrawHat(location);
-        else if (type.equals(HatType.Fedora))
+        } else if (type.equals(HatType.Fedora)) {
             h = new Fedora(location);
-        else if (type.equals(HatType.Pot))
+        } else if (type.equals(HatType.Pot)) {
             h = new Pot(location);
-        else if (type.equals(HatType.RimmedHat))
+        } else if (type.equals(HatType.RimmedHat)) {
             h = new RimmedHat(location);
-        else if (type.equals(HatType.Trippy))
+        } else if (type.equals(HatType.Trippy)) {
             h = new Trippy(location);
-        else if (type.equals(HatType.SunHat))
+        } else if (type.equals(HatType.SunHat)) {
             h = new SunHat(location);
-        else if (type.equals(HatType.Design))
+        } else if (type.equals(HatType.Design)) {
             h = new Design(location);
-        if (h != null)
+        }
+        if (h != null) {
             h.setType(type);
+        }
         return h;
     }
 
@@ -56,7 +59,8 @@ public abstract class Hat {
     void spawn(int num, Location loc) {
         World w = loc.getWorld();
         for (int i = 0; i < num; i++) {
-            ArmorStand a = (ArmorStand) w.spawnEntity(new Location(w, loc.getX(), loc.getY(), loc.getZ()), EntityType.ARMOR_STAND);
+            ArmorStand a = (ArmorStand) w
+                  .spawnEntity(new Location(w, loc.getX(), loc.getY(), loc.getZ()), EntityType.ARMOR_STAND);
             a.setVisible(false);
             a.setGravity(false);
             a.setMarker(true);
@@ -67,7 +71,9 @@ public abstract class Hat {
     void spawnYaw(int num, Location loc) {
         World w = loc.getWorld();
         for (int i = 0; i < num; i++) {
-            ArmorStand a = (ArmorStand) w.spawnEntity(new Location(w, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), 0), EntityType.ARMOR_STAND);
+            ArmorStand a = (ArmorStand) w
+                  .spawnEntity(new Location(w, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), 0),
+                        EntityType.ARMOR_STAND);
             a.setVisible(false);
             a.setGravity(false);
             a.setMarker(true);
@@ -77,10 +83,11 @@ public abstract class Hat {
 
     /**
      * Moves the hat a specified amount.
-     * @param x     The amount in the x direction to move the hat.
-     * @param y     The amount in the y direction to move the hat.
-     * @param z     The amount in the z direction to move the hat.
-     * @param yaw   The yaw to set the hat's direction to.
+     *
+     * @param x The amount in the x direction to move the hat.
+     * @param y The amount in the y direction to move the hat.
+     * @param z The amount in the z direction to move the hat.
+     * @param yaw The yaw to set the hat's direction to.
      * @param pitch The pitch to set the hat's direction to.
      */
     public void move(double x, double y, double z, float yaw, float pitch) {
@@ -109,6 +116,7 @@ public abstract class Hat {
 
     /**
      * Retrieves the type of the hat.
+     *
      * @return The type of the current hat.
      */
     public HatType getType() {

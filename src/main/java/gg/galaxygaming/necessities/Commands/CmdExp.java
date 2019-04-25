@@ -3,21 +3,23 @@ package gg.galaxygaming.necessities.Commands;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class CmdExp implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (args.length == 0) {
-                p.sendMessage(var.getObj() + p.getName() + var.getMessages() + " has " + var.getObj() + Utils.addCommas(p.getTotalExperience()) + var.getMessages() +
-                        " (level " + var.getObj() + p.getLevel() + var.getMessages() + ") and needs " + var.getObj() + p.getExpToLevel() + var.getMessages() +
-                        " more xp to level up.");
+                p.sendMessage(var.getObj() + p.getName() + var.getMessages() + " has " + var.getObj() + Utils
+                      .addCommas(p.getTotalExperience()) + var.getMessages() +
+                      " (level " + var.getObj() + p.getLevel() + var.getMessages() + ") and needs " + var.getObj() + p
+                      .getExpToLevel() + var.getMessages() +
+                      " more xp to level up.");
                 return true;
             }
         }
@@ -32,9 +34,11 @@ public class CmdExp implements Cmd {
                 return true;
             }
             Player p = Bukkit.getPlayer(uuid);
-            sender.sendMessage(var.getObj() + p.getName() + var.getMessages() + " has " + var.getObj() + Utils.addCommas(p.getTotalExperience()) + var.getMessages() +
-                    " (level " + var.getObj() + p.getLevel() + var.getMessages() + ") and needs " + var.getObj() + p.getExpToLevel() + var.getMessages() +
-                    " more xp to level up.");
+            sender.sendMessage(var.getObj() + p.getName() + var.getMessages() + " has " + var.getObj() + Utils
+                  .addCommas(p.getTotalExperience()) + var.getMessages() +
+                  " (level " + var.getObj() + p.getLevel() + var.getMessages() + ") and needs " + var.getObj() + p
+                  .getExpToLevel() + var.getMessages() +
+                  " more xp to level up.");
             return true;
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("show")) {
@@ -44,9 +48,11 @@ public class CmdExp implements Cmd {
                 return true;
             }
             Player p = Bukkit.getPlayer(uuid);
-            sender.sendMessage(var.getObj() + p.getName() + var.getMessages() + " has " + var.getObj() + Utils.addCommas(p.getTotalExperience()) + var.getMessages() +
-                    " (level " + var.getObj() + p.getLevel() + var.getMessages() + ") and needs " + var.getObj() + p.getExpToLevel() + var.getMessages() +
-                    " more xp to level up.");
+            sender.sendMessage(var.getObj() + p.getName() + var.getMessages() + " has " + var.getObj() + Utils
+                  .addCommas(p.getTotalExperience()) + var.getMessages() +
+                  " (level " + var.getObj() + p.getLevel() + var.getMessages() + ") and needs " + var.getObj() + p
+                  .getExpToLevel() + var.getMessages() +
+                  " more xp to level up.");
             return true;
         }
         if (args.length == 3) {
@@ -74,7 +80,9 @@ public class CmdExp implements Cmd {
                     Bukkit.getPlayer(uuid).giveExp(-Bukkit.getPlayer(uuid).getTotalExperience());
                     Bukkit.getPlayer(uuid).giveExp(Integer.parseInt(args[2]));
                 }
-                sender.sendMessage(var.getObj() + Bukkit.getPlayer(uuid).getName() + var.getMessages() + " now has " + var.getObj() + Bukkit.getPlayer(uuid).getTotalExperience() + var.getMessages() + " exp.");
+                sender.sendMessage(
+                      var.getObj() + Bukkit.getPlayer(uuid).getName() + var.getMessages() + " now has " + var.getObj()
+                            + Bukkit.getPlayer(uuid).getTotalExperience() + var.getMessages() + " exp.");
                 return true;
             }
             if (args[0].equalsIgnoreCase("give")) {
@@ -86,13 +94,16 @@ public class CmdExp implements Cmd {
                     }
                     Bukkit.getPlayer(uuid).giveExpLevels(Integer.parseInt(lvl));
                 } else {
-                    if (!Utils.legalInt(args[2]) || Bukkit.getPlayer(uuid).getTotalExperience() + Integer.parseInt(args[2]) < 0) {
+                    if (!Utils.legalInt(args[2])
+                          || Bukkit.getPlayer(uuid).getTotalExperience() + Integer.parseInt(args[2]) < 0) {
                         sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid amount of xp.");
                         return true;
                     }
                     Bukkit.getPlayer(uuid).giveExp(Integer.parseInt(args[2]));
                 }
-                sender.sendMessage(var.getObj() + Bukkit.getPlayer(uuid).getName() + var.getMessages() + " now has " + var.getObj() + Bukkit.getPlayer(uuid).getTotalExperience() + var.getMessages() + " exp.");
+                sender.sendMessage(
+                      var.getObj() + Bukkit.getPlayer(uuid).getName() + var.getMessages() + " now has " + var.getObj()
+                            + Bukkit.getPlayer(uuid).getTotalExperience() + var.getMessages() + " exp.");
             }
         }
         return true;

@@ -1,15 +1,15 @@
 package gg.galaxygaming.necessities.RankManager;
 
 import gg.galaxygaming.necessities.Necessities;
+import java.io.File;
+import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.permissions.Permission;
 
-import java.io.File;
-import java.util.ArrayList;
-
 public class Rank {
+
     private final File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml");
     private final File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
     private final ArrayList<String> permissions = new ArrayList<>();
@@ -21,26 +21,30 @@ public class Rank {
     Rank(String name) {
         this.name = name;
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
-        if (configRanks.contains(getName() + ".rankTitle"))
+        if (configRanks.contains(getName() + ".rankTitle")) {
             this.title = configRanks.getString(getName() + ".rankTitle");
+        }
         if (configRanks.contains(getName() + ".previousRank")) {
             RankManager rm = Necessities.getRM();
             this.previous = rm.getRank(configRanks.getString(getName() + ".previousRank"));
             this.previous.setNext(this);
         }
-        if (configRanks.contains(getName() + ".maxHomes"))
+        if (configRanks.contains(getName() + ".maxHomes")) {
             this.maxHomes = configRanks.getInt(getName() + ".maxHomes");
-        else if (this.previous != null)
+        } else if (this.previous != null) {
             this.maxHomes = this.previous.getMaxHomes();
-        if (configRanks.contains(getName() + ".teleportDelay"))
+        }
+        if (configRanks.contains(getName() + ".teleportDelay")) {
             this.tpdelay = configRanks.getInt(getName() + ".teleportDelay");
-        else if (this.previous != null)
+        } else if (this.previous != null) {
             this.tpdelay = this.previous.getTpDelay();
+        }
         setPerms();
     }
 
     /**
      * Gets the rank above this one.
+     *
      * @return The rank that is above this one.
      */
     public Rank getNext() {
@@ -49,6 +53,7 @@ public class Rank {
 
     /**
      * Sets the rank above this one.
+     *
      * @param r The rank to set as the next rank.
      */
     public void setNext(Rank r) {
@@ -60,21 +65,25 @@ public class Rank {
     }
 
     private void setPerms() {
-        if (this.previous != null)
+        if (this.previous != null) {
             this.permissions.addAll(this.previous.getNodes());
+        }
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
-        for (String subrank : configRanks.getStringList(getName() + ".subranks"))
-            if (!subrank.equals("") && configSubranks.contains(subrank))
+        for (String subrank : configRanks.getStringList(getName() + ".subranks")) {
+            if (!subrank.equals("") && configSubranks.contains(subrank)) {
                 this.permissions.addAll(configSubranks.getStringList(subrank));
+            }
+        }
         this.permissions.addAll(configRanks.getStringList(getName() + ".permissions"));
     }
 
     void refreshPerms() {
         this.permissions.clear();
         setPerms();
-        if (this.next != null)
+        if (this.next != null) {
             this.next.refreshPerms();
+        }
     }
 
     void addPerm(String permission) {
@@ -89,6 +98,7 @@ public class Rank {
 
     /**
      * Gets the maximum number of homes for this rank.
+     *
      * @return The maximum number of homes for this rank.
      */
     public int getMaxHomes() {
@@ -101,6 +111,7 @@ public class Rank {
 
     /**
      * Gets the name of this rank.
+     *
      * @return The name of this rank.
      */
     public String getName() {
@@ -109,6 +120,7 @@ public class Rank {
 
     /**
      * Gets the title for this rank.
+     *
      * @return The title for this rank.
      */
     public String getTitle() {
@@ -117,6 +129,7 @@ public class Rank {
 
     /**
      * Gets the rank below this one.
+     *
      * @return The rank that is below this one.
      */
     public Rank getPrevious() {
@@ -129,6 +142,7 @@ public class Rank {
 
     /**
      * Gets the color of this rank.
+     *
      * @return The color of this rank.
      */
     public String getColor() {
@@ -137,18 +151,23 @@ public class Rank {
 
     /**
      * Gets the list of commands that this rank has access to.
+     *
      * @return The list of commands that this rank has access to.
      */
     public String getCommands() {
         YamlConfiguration configRanks = YamlConfiguration.loadConfiguration(configFileRanks);
         YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
         StringBuilder commandsBuilder = new StringBuilder();
-        for (String subrank : configRanks.getStringList(getName() + ".subranks"))
-            if (!subrank.equals("") && configSubranks.contains(subrank))
-                for (String node : configSubranks.getStringList(subrank))
+        for (String subrank : configRanks.getStringList(getName() + ".subranks")) {
+            if (!subrank.equals("") && configSubranks.contains(subrank)) {
+                for (String node : configSubranks.getStringList(subrank)) {
                     commandsBuilder.append(cmdName(node)).append(", ");
-        for (String node : configRanks.getStringList(getName() + ".permissions"))
+                }
+            }
+        }
+        for (String node : configRanks.getStringList(getName() + ".permissions")) {
             commandsBuilder.append(cmdName(node)).append(", ");
+        }
         String commands = commandsBuilder.toString();
         return commands.equals("") ? "" : commands.trim().substring(0, commands.length() - 2);
     }

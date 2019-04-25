@@ -3,13 +3,13 @@ package gg.galaxygaming.necessities.Commands;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class CmdFeed implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
@@ -31,8 +31,9 @@ public class CmdFeed implements Cmd {
         }
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            if (!p.hasPermission("Necessities.feedOthers"))
+            if (!p.hasPermission("Necessities.feedOthers")) {
                 uuid = p.getUniqueId();
+            }
         }
         Player target = Bukkit.getPlayer(uuid);
         target.setFoodLevel(20);

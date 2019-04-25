@@ -2,13 +2,13 @@ package gg.galaxygaming.necessities.Economy;
 
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
+import java.util.List;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.OfflinePlayer;
 
-import java.util.List;
-
 public class VaultEconomy implements Economy {
+
     @Override
     public boolean isEnabled() {
         return true;
@@ -77,25 +77,29 @@ public class VaultEconomy implements Economy {
     @Override
     public EconomyResponse withdrawPlayer(String s, double v) {
         Necessities.getEconomy().removeMoney(Utils.getOfflineID(s), v);
-        return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
+        return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.SUCCESS,
+              "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
         Necessities.getEconomy().removeMoney(offlinePlayer.getUniqueId(), v);
-        return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
+        return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS,
+              "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse depositPlayer(String s, double v) {
         Necessities.getEconomy().addMoney(Utils.getOfflineID(s), v);
-        return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
+        return new EconomyResponse(v, getBalance(s), EconomyResponse.ResponseType.SUCCESS,
+              "no implemented response yet");//TODO: Maybe?
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
         Necessities.getEconomy().addMoney(offlinePlayer.getUniqueId(), v);
-        return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS, "no implemented response yet");//TODO: Maybe?
+        return new EconomyResponse(v, getBalance(offlinePlayer), EconomyResponse.ResponseType.SUCCESS,
+              "no implemented response yet");//TODO: Maybe?
     }
 
     @Override

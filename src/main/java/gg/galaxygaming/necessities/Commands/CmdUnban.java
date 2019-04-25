@@ -4,14 +4,14 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.UUID;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class CmdUnban implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length == 0) {
@@ -22,14 +22,16 @@ public class CmdUnban implements Cmd {
         if (uuid == null) {
             uuid = Utils.getOfflineID(args[0]);
             if (uuid == null || !Bukkit.getOfflinePlayer(uuid).hasPlayedBefore()) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That player does not exist or has not joined the server. If the player is offline, please use the full and most recent name.");
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                      + "That player does not exist or has not joined the server. If the player is offline, please use the full and most recent name.");
                 return true;
             }
         }
         User u = Necessities.getUM().getUser(uuid);
         String name = Necessities.getConsole().getName().replaceAll(":", "");
-        if (sender instanceof Player)
+        if (sender instanceof Player) {
             name = sender.getName();
+        }
         BanList bans = Bukkit.getBanList(BanList.Type.NAME);
         String theirName = u.getName();
         if (!bans.isBanned(theirName)) {

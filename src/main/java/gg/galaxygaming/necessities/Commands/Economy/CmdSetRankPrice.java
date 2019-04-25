@@ -8,10 +8,12 @@ import gg.galaxygaming.necessities.Variables;
 import org.bukkit.command.CommandSender;
 
 public class CmdSetRankPrice implements EconomyCmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length < 2) {
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Format requires you enter a rank and a price to sell that rank for.");
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "Format requires you enter a rank and a price to sell that rank for.");
             return true;
         }
         String rankName = Utils.capFirst(args[0]);
@@ -27,7 +29,9 @@ public class CmdSetRankPrice implements EconomyCmd {
         }
         String cost = Utils.roundTwoDecimals(Double.parseDouble(args[1]));
         rp.setPrice(rankName, cost);
-        sender.sendMessage(var.getMessages() + "Added " + var.getObj() + rankName + var.getMessages() + " at the price of " + var.getMoney() + Economy.format(Double.parseDouble(cost)));
+        sender.sendMessage(
+              var.getMessages() + "Added " + var.getObj() + rankName + var.getMessages() + " at the price of " + var
+                    .getMoney() + Economy.format(Double.parseDouble(cost)));
         return true;
     }
 

@@ -3,37 +3,40 @@ package gg.galaxygaming.necessities.Commands;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.Variables;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class CmdSlack implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         String message = "";
         if (args.length > 0) {
             StringBuilder messageBuilder = new StringBuilder();
-            for (String arg : args)
+            for (String arg : args) {
                 messageBuilder.append(arg).append(' ');
+            }
             message = messageBuilder.toString().trim();
         }
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             User u = Necessities.getUM().getUser(p.getUniqueId());
-            if (args.length > 0)
+            if (args.length > 0) {
                 sendSlack(p.getUniqueId(), message);
-            else {
-                p.sendMessage(var.getMessages() + "You are " + (!u.slackChat() ? "now" : "no longer") + " sending messages to slack.");
+            } else {
+                p.sendMessage(var.getMessages() + "You are " + (!u.slackChat() ? "now" : "no longer")
+                      + " sending messages to slack.");
                 u.toggleSlackChat();
             }
-        } else if (args.length == 0)
+        } else if (args.length == 0) {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot toggle slack chat.");
-        else
+        } else {
             consoleToSlack(message);
+        }
         return true;
     }
 
@@ -46,18 +49,22 @@ public class CmdSlack implements Cmd {
         send = send.replaceAll("\\{WORLD} ", "");
         send = send.replaceAll("\\{GUILD} ", "");
         send = send.replaceAll("\\{TITLE} ", "");
-        send = send.replaceAll("\\{RANK}", ChatColor.translateAlternateColorCodes('&', Necessities.getUM().getUser(uuid).getRank().getTitle()));
+        send = send.replaceAll("\\{RANK}",
+              ChatColor.translateAlternateColorCodes('&', Necessities.getUM().getUser(uuid).getRank().getTitle()));
         send = send.replaceAll("\\{NAME}", player.getDisplayName());
         send = send.replaceAll("\\{MESSAGE}", "");
-        if (player.hasPermission("Necessities.colorchat"))
-            message = ChatColor.translateAlternateColorCodes('&', player.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", ""));
+        if (player.hasPermission("Necessities.colorchat")) {
+            message = ChatColor.translateAlternateColorCodes('&',
+                  player.hasPermission("Necessities.magicchat") ? message : message.replaceAll("&k", ""));
+        }
         Bukkit.broadcast(send + message, "Necessities.slack");
         Necessities.getSlack().sendMessage(send.replaceFirst("To Slack - ", "") + message);
     }
 
     private void consoleToSlack(String message) {
         String cName = Necessities.getConsole().getName();
-        String send = Necessities.getVar().getMessages() + "To Slack - " + cName + ChatColor.WHITE + ' ' + ChatColor.translateAlternateColorCodes('&', message.trim());
+        String send = Necessities.getVar().getMessages() + "To Slack - " + cName + ChatColor.WHITE + ' ' + ChatColor
+              .translateAlternateColorCodes('&', message.trim());
         Bukkit.broadcast(send, "Necessities.slack");
         Necessities.getSlack().sendMessage(cName + ' ' + ChatColor.translateAlternateColorCodes('&', message.trim()));
     }

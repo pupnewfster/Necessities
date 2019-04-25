@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class CmdSpawn implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
@@ -26,9 +27,11 @@ public class CmdSpawn implements Cmd {
             float yaw = Float.parseFloat(config.getString("Spawn.yaw"));
             float pitch = Float.parseFloat(config.getString("Spawn.pitch"));
             p.sendMessage(var.getMessages() + "Teleporting to spawn.");
-            Necessities.getUM().getUser(p.getUniqueId()).teleport(Necessities.getSafeLocations().getSafe(new Location(world, x, y, z, yaw, pitch)));
-        } else
+            Necessities.getUM().getUser(p.getUniqueId())
+                  .teleport(Necessities.getSafeLocations().getSafe(new Location(world, x, y, z, yaw, pitch)));
+        } else {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console cannot go to the spawn.");
+        }
         return true;
     }
 }

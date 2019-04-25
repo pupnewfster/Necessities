@@ -2,15 +2,15 @@ package gg.galaxygaming.necessities.Commands;
 
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
+import java.util.ArrayList;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-
 public class CmdWrench implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
@@ -24,8 +24,10 @@ public class CmdWrench implements Cmd {
             stick.setItemMeta(wrench);
             player.getInventory().addItem(stick);
             player.sendMessage(var.getMessages() + "You now have a wrench.");
-        } else
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are not allowed wrenches they could be harmful to you.");
+        } else {
+            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                  + "You are not allowed wrenches they could be harmful to you.");
+        }
         return true;
     }
 

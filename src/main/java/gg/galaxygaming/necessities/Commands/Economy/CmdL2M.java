@@ -8,19 +8,22 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CmdL2M implements EconomyCmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (args.length == 0) {
-                p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must input a valid number of levels to convert.");
+                p.sendMessage(
+                      var.getEr() + "Error: " + var.getErMsg() + "You must input a valid number of levels to convert.");
                 return true;
             }
             int level;
             try {
                 level = Integer.parseInt(args[0]);
             } catch (Throwable t) {
-                p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must input a valid number of levels to convert.");
+                p.sendMessage(
+                      var.getEr() + "Error: " + var.getErMsg() + "You must input a valid number of levels to convert.");
                 return true;
             }
             if (level < 1) {
@@ -36,22 +39,26 @@ public class CmdL2M implements EconomyCmd {
             Necessities.getEconomy().addMoney(p.getUniqueId(), money);
             /*if (Necessities.isTracking())
                 OpenAnalyticsHook.trackLevelConvert(p, level);*/
-            p.sendMessage(ChatColor.GREEN.toString() + ChatColor.BOLD + '+' + ChatColor.RESET + " Converted " + ChatColor.BOLD + level + ChatColor.RESET + " levels to " + var.getMoney() + Economy.format(money) +
-                    ChatColor.RESET + '!');
-        } else
+            p.sendMessage(
+                  ChatColor.GREEN.toString() + ChatColor.BOLD + '+' + ChatColor.RESET + " Converted " + ChatColor.BOLD
+                        + level + ChatColor.RESET + " levels to " + var.getMoney() + Economy.format(money) +
+                        ChatColor.RESET + '!');
+        } else {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be logged in to use this command");
+        }
         return true;
     }
 
     private int levelToExp(int currentLevel, int destination) {
         int exp = 0;
         for (; currentLevel > destination; currentLevel--) {
-            if (currentLevel <= 16)
+            if (currentLevel <= 16) {
                 exp += 2 * currentLevel + 7;
-            else if (currentLevel <= 31)
+            } else if (currentLevel <= 31) {
                 exp += 5 * currentLevel - 38;
-            else
+            } else {
                 exp += 9 * currentLevel - 158;
+            }
         }
         return exp;
     }

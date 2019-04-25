@@ -2,14 +2,14 @@ package gg.galaxygaming.necessities.Guilds;
 
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.User;
+import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
-
 public class PowerManager {
+
     private final HashMap<Player, BukkitRunnable> players = new HashMap<>();
 
     /**
@@ -17,20 +17,23 @@ public class PowerManager {
      */
     public void initiate() {
         YamlConfiguration config = Necessities.getInstance().getConfig();
-        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds"))
+        if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
             Bukkit.getOnlinePlayers().forEach(this::addPlayer);
+        }
     }
 
     /**
      * Unloads all the players from the power manager.
      */
     public void unload() {
-        if (!players.isEmpty())
+        if (!players.isEmpty()) {
             Bukkit.getOnlinePlayers().forEach(this::removePlayer);
+        }
     }
 
     /**
      * Adds the specified player to the power manager.
+     *
      * @param p The player to add.
      */
     public void addPlayer(Player p) {
@@ -42,12 +45,14 @@ public class PowerManager {
                     u.addPower();
                 }
             });
-            players.get(p).runTaskTimerAsynchronously(Necessities.getInstance(), 20 * 60, 20 * 60);//60 seconds or one minute
+            players.get(p)
+                  .runTaskTimerAsynchronously(Necessities.getInstance(), 20 * 60, 20 * 60);//60 seconds or one minute
         }
     }
 
     /**
      * Removes the specified player from the power manager.
+     *
      * @param p The player to remove.
      */
     public void removePlayer(Player p) {

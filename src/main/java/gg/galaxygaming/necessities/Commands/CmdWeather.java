@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CmdWeather implements Cmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (args.length == 0) {
@@ -19,30 +20,41 @@ public class CmdWeather implements Cmd {
             Player p = (Player) sender;
             if (args.length > 1) {
                 dim = sender.getServer().getWorld(args[0]);
-                if (args[1].equalsIgnoreCase("storm") || args[1].equalsIgnoreCase("stormy") || args[1].equalsIgnoreCase("bad") || args[1].equalsIgnoreCase("rain"))
+                if (args[1].equalsIgnoreCase("storm") || args[1].equalsIgnoreCase("stormy") || args[1]
+                      .equalsIgnoreCase("bad") || args[1].equalsIgnoreCase("rain")) {
                     thundering = true;
-            } else if (args[0].equalsIgnoreCase("storm") || args[0].equalsIgnoreCase("stormy") || args[0].equalsIgnoreCase("bad") || args[0].equalsIgnoreCase("rain"))
+                }
+            } else if (args[0].equalsIgnoreCase("storm") || args[0].equalsIgnoreCase("stormy") || args[0]
+                  .equalsIgnoreCase("bad") || args[0].equalsIgnoreCase("rain")) {
                 thundering = true;
-            if (dim == null)
+            }
+            if (dim == null) {
                 dim = p.getWorld();
+            }
         } else {
             if (args.length == 1) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must enter a world name and weather.");
+                sender.sendMessage(
+                      var.getEr() + "Error: " + var.getErMsg() + "You must enter a world name and weather.");
                 return true;
             }
             dim = sender.getServer().getWorld(args[0]);
-            if (args[1].equalsIgnoreCase("storm") || args[1].equalsIgnoreCase("stormy") || args[1].equalsIgnoreCase("bad") || args[1].equalsIgnoreCase("rain"))
+            if (args[1].equalsIgnoreCase("storm") || args[1].equalsIgnoreCase("stormy") || args[1]
+                  .equalsIgnoreCase("bad") || args[1].equalsIgnoreCase("rain")) {
                 thundering = true;
+            }
             if (dim == null) {
                 sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Invalid world.");
                 return true;
             }
         }
-        if (!thundering)
+        if (!thundering) {
             dim.setWeatherDuration(1);
-        else
+        } else {
             dim.setThundering(true);
-        sender.sendMessage(var.getMessages() + "Set weather in " + var.getObj() + dim.getName() + var.getMessages() + " to " + (thundering ? "stormy" : "clear") + '.');
+        }
+        sender.sendMessage(
+              var.getMessages() + "Set weather in " + var.getObj() + dim.getName() + var.getMessages() + " to " + (
+                    thundering ? "stormy" : "clear") + '.');
         return true;
     }
 

@@ -1,16 +1,16 @@
 package gg.galaxygaming.necessities.WorldManager;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-
 public class WarpManager {
+
     private final File configFileWarps = new File("plugins/Necessities/WorldManager", "warps.yml");
     private final HashMap<String, String> lowerNames = new HashMap<>();
     private final HashMap<String, Warp> warps = new HashMap<>();
@@ -30,6 +30,7 @@ public class WarpManager {
 
     /**
      * Checks if a warp with the given name exists.
+     *
      * @param name The name to check.
      * @return True if the warp exists, false otherwise.
      */
@@ -39,6 +40,7 @@ public class WarpManager {
 
     /**
      * Retrieves the warp with the specified name.
+     *
      * @param name The name to search for.
      * @return The warp with the specified name.
      */
@@ -48,20 +50,23 @@ public class WarpManager {
 
     /**
      * Gets the list of warps.
+     *
      * @return The list of warps in string form separated by commas.
      */
     public String getWarps() {
         ArrayList<String> ws = new ArrayList<>(warps.keySet());
         Collections.sort(ws);
         StringBuilder warpsBuilder = new StringBuilder();
-        for (String w : ws)
+        for (String w : ws) {
             warpsBuilder.append(w).append(", ");
+        }
         String warps = warpsBuilder.toString();
         return warps.equals("") ? "" : warps.trim().substring(0, warps.length() - 2);
     }
 
     /**
      * Removes the warp with the specified name.
+     *
      * @param name The name of the warp to remove.
      */
     public void remove(String name) {
@@ -77,8 +82,9 @@ public class WarpManager {
 
     /**
      * Creates a warp with the specified name and location.
+     *
      * @param name The name of the warp to create.
-     * @param loc  The destination of the warp.
+     * @param loc The destination of the warp.
      */
     public void create(String name, Location loc) {
         YamlConfiguration configWarps = YamlConfiguration.loadConfiguration(configFileWarps);

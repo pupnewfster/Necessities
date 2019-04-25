@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 
 class Fedora extends Hat {
+
     Fedora(Location loc) {
         this.trueLoc = loc;
         int turn = 5, turnV = 5;
@@ -29,7 +30,8 @@ class Fedora extends Hat {
         for (int i = 0; i < 360 / turnV; i++) {
             this.armorStands.get(360 / turn + 360 / turnV + i).setHelmet(new ItemStack(Material.RED_CARPET, 1));
             this.armorStands.get(360 / turn + 360 / turnV + i).setSmall(true);
-            this.armorStands.get(360 / turn + 360 / turnV + i).setHeadPose(new EulerAngle(0, Math.toRadians(i * turnV), 0));
+            this.armorStands.get(360 / turn + 360 / turnV + i)
+                  .setHeadPose(new EulerAngle(0, Math.toRadians(i * turnV), 0));
         }
     }
 }

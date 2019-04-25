@@ -6,8 +6,10 @@ import java.io.FileWriter;
 import java.util.Calendar;
 
 public class JanetLog {
+
     /**
      * Logs a message to file.
+     *
      * @param message The message to log.
      */
     public void log(String message) {
@@ -25,8 +27,9 @@ public class JanetLog {
         String time = '(' + hour + ':' + minute + ':' + second + ')';
         String file = "plugins/Necessities/Logs/" + date + ".txt";
         File f = new File(file);
-        if (!f.exists())
+        if (!f.exists()) {
             fileCreate(file);
+        }
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
             bw.write(time + ' ' + message);
             bw.newLine();

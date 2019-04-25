@@ -4,8 +4,10 @@ import org.bukkit.ChatColor;
 
 @SuppressWarnings("SameReturnValue")
 public class Variables {
+
     /**
      * Gets the color for the wilderness.
+     *
      * @return The color for the wilderness.
      */
     public ChatColor getWild() {
@@ -14,6 +16,7 @@ public class Variables {
 
     /**
      * Gets the color for guild messages.
+     *
      * @return The color for guild messages.
      */
     public ChatColor getGuildMsgs() {
@@ -22,6 +25,7 @@ public class Variables {
 
     /**
      * Gets the color for allies.
+     *
      * @return The color for allies.
      */
     public ChatColor getAlly() {
@@ -30,6 +34,7 @@ public class Variables {
 
     /**
      * Gets the color for enemies.
+     *
      * @return The color for enemies.
      */
     public ChatColor getEnemy() {
@@ -38,6 +43,7 @@ public class Variables {
 
     /**
      * Gets the color for neutral guilds.
+     *
      * @return The color for neutral guilds.
      */
     public ChatColor getNeutral() {
@@ -46,6 +52,7 @@ public class Variables {
 
     /**
      * Gets the color for same guild.
+     *
      * @return The color for same guild.
      */
     public ChatColor getGuildCol() {
@@ -54,6 +61,7 @@ public class Variables {
 
     /**
      * Gets the color for /me messages.
+     *
      * @return The color for /me messages.
      */
     public ChatColor getMe() {
@@ -62,6 +70,7 @@ public class Variables {
 
     /**
      * Gets the color for objects.
+     *
      * @return The color for objects.
      */
     public ChatColor getObj() {
@@ -70,6 +79,7 @@ public class Variables {
 
     /**
      * Gets the color for the wilderness.
+     *
      * @return The color for the wilderness.
      */
     public ChatColor getPlugCol() {
@@ -78,6 +88,7 @@ public class Variables {
 
     /**
      * Gets the color for the catalog.
+     *
      * @return The color for the catalog.
      */
     public ChatColor getCatalog() {
@@ -86,6 +97,7 @@ public class Variables {
 
     /**
      * Gets the color for demotions.
+     *
      * @return The color for demotions.
      */
     public ChatColor getDemote() {
@@ -94,6 +106,7 @@ public class Variables {
 
     /**
      * Gets the color for promotions.
+     *
      * @return The color for promotions.
      */
     public ChatColor getPromote() {
@@ -102,6 +115,7 @@ public class Variables {
 
     /**
      * Gets the color for money.
+     *
      * @return The color for money.
      */
     public ChatColor getMoney() {
@@ -110,6 +124,7 @@ public class Variables {
 
     /**
      * Gets the color for messages.
+     *
      * @return The color for messages.
      */
     public ChatColor getMessages() {
@@ -118,6 +133,7 @@ public class Variables {
 
     /**
      * Gets the color for the error text.
+     *
      * @return The color for the error text.
      */
     public ChatColor getEr() {
@@ -126,6 +142,7 @@ public class Variables {
 
     /**
      * Gets the color for the error messages.
+     *
      * @return The color for the error messages.
      */
     public ChatColor getErMsg() {

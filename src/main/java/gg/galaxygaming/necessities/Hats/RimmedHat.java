@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 
 class RimmedHat extends Hat {
+
     RimmedHat(Location loc) {
         this.trueLoc = loc;
         int turn = 5;

@@ -2,33 +2,35 @@ package gg.galaxygaming.necessities.Commands;
 
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 public class CmdCommandSpy implements Cmd {
+
     private final ArrayList<UUID> spying = new ArrayList<>();
     private final File configFileSpying = new File("plugins/Necessities", "spying.yml");
 
     /**
      * Broadcasts the given command to the players spying on commands.
-     * @param sender  The sender of the command.
+     *
+     * @param sender The sender of the command.
      * @param command The command to send.
      */
     public void broadcast(String sender, String command) {
         ArrayList<UUID> temp = new ArrayList<>();
         this.spying.stream().filter(uuid -> Bukkit.getPlayer(uuid) != null).forEach(uuid -> {
-            if (Bukkit.getPlayer(uuid).hasPermission("Necessities.spy"))
+            if (Bukkit.getPlayer(uuid).hasPermission("Necessities.spy")) {
                 Bukkit.getPlayer(uuid).sendMessage(ChatColor.AQUA + sender + ": " + command);
-            else
+            } else {
                 temp.add(uuid);
+            }
         });
         this.spying.removeAll(temp);
     }
@@ -37,13 +39,16 @@ public class CmdCommandSpy implements Cmd {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            p.sendMessage(var.getMessages() + (this.spying.contains(p.getUniqueId()) ? "No longer" : "You are now") + " spying on commands.");
-            if (this.spying.contains(p.getUniqueId()))
+            p.sendMessage(var.getMessages() + (this.spying.contains(p.getUniqueId()) ? "No longer" : "You are now")
+                  + " spying on commands.");
+            if (this.spying.contains(p.getUniqueId())) {
                 this.spying.remove(p.getUniqueId());
-            else
+            } else {
                 this.spying.add(p.getUniqueId());
-        } else
+            }
+        } else {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "The console can already see all commands.");
+        }
         return true;
     }
 

@@ -8,21 +8,25 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CmdEnemy implements GuildCmd {
+
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (!p.hasPermission("Necessities.guilds.enemy")) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You have not have permission to use /guild neutral.");
+                sender.sendMessage(
+                      var.getEr() + "Error: " + var.getErMsg() + "You have not have permission to use /guild neutral.");
                 return true;
             }
             if (args.length == 0) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "Must enter a name for the guild you wish to become enemies with.");
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                      + "Must enter a name for the guild you wish to become enemies with.");
                 return true;
             }
             Guild g = Necessities.getGM().getGuildVerbose(args[0]);
             if (g == null) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "That guild does not exists, or no guild owner found with that name.");
+                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg()
+                      + "That guild does not exists, or no guild owner found with that name.");
                 return true;
             }
             User u = Necessities.getUM().getUser(p.getUniqueId());
@@ -31,15 +35,18 @@ public class CmdEnemy implements GuildCmd {
                 return true;
             }
             if (g.equals(u.getGuild()) || u.getGuild().isEnemy(g)) {
-                sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are already enemies with that guild.");
+                sender.sendMessage(
+                      var.getEr() + "Error: " + var.getErMsg() + "You are already enemies with that guild.");
                 return true;
             }
             g.addEnemy(u.getGuild());
             u.getGuild().addEnemy(g);
             g.sendMods(var.getMessages() + "You are now enemies with " + var.getObj() + u.getGuild().getName());
             u.getGuild().sendMods(var.getMessages() + "You are now enemies with " + var.getObj() + g.getName());
-        } else
-            sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You must be in a guild to be able to become enemies.");
+        } else {
+            sender.sendMessage(
+                  var.getEr() + "Error: " + var.getErMsg() + "You must be in a guild to be able to become enemies.");
+        }
         return true;
     }
 }
