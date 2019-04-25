@@ -23,14 +23,22 @@ import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.WorldManager.PortalManager;
 import gg.galaxygaming.necessities.WorldManager.WarpManager;
 import gg.galaxygaming.necessities.WorldManager.WorldManager;
-import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_14_R1.DimensionManager;
+import net.minecraft.server.v1_14_R1.EntityPlayer;
+import net.minecraft.server.v1_14_R1.IChatBaseComponent;
+import net.minecraft.server.v1_14_R1.MinecraftServer;
+import net.minecraft.server.v1_14_R1.PacketPlayOutPlayerInfo;
+import net.minecraft.server.v1_14_R1.PacketPlayOutPlayerInfo.EnumPlayerInfoAction;
+import net.minecraft.server.v1_14_R1.PacketPlayOutPlayerListHeaderFooter;
+import net.minecraft.server.v1_14_R1.PlayerInteractManager;
+import net.minecraft.server.v1_14_R1.WorldServer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_13_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -119,7 +127,7 @@ public class Necessities extends JavaPlugin {
         PlayerInteractManager manager = new PlayerInteractManager(world);
         EntityPlayer player = new EntityPlayer(server, world, janetProfile, manager);
         player.listName = formatMessage(ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + ' ') + "Janet");
-        this.janetInfo = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, player);
+        this.janetInfo = new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, player);
     }
 
     /*private boolean hookGoogle() {
@@ -150,7 +158,7 @@ public class Necessities extends JavaPlugin {
      * @param p The player to remove from the tab list.
      */
     public void removePlayer(Player p) {
-        PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer) p).getHandle());
+        PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer) p).getHandle());
         for (Player x : Bukkit.getOnlinePlayers())
             if (!x.canSee(p) && !x.equals(p))
                 ((CraftPlayer) x).getHandle().playerConnection.sendPacket(info);
@@ -164,7 +172,7 @@ public class Necessities extends JavaPlugin {
         EntityPlayer ep = ((CraftPlayer) p).getHandle();
         //User u = um.getUser(p.getUniqueId());
         //ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
-        PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ep);
+        PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, ep);
         for (Player x : Bukkit.getOnlinePlayers())
             if (!x.hasPermission("Necessities.seehidden") && x.canSee(p) && !x.equals(p))
                 ((CraftPlayer) x).getHandle().playerConnection.sendPacket(info);
@@ -178,7 +186,7 @@ public class Necessities extends JavaPlugin {
         User u = um.getUser(p.getUniqueId());
         /*EntityPlayer ep = ((CraftPlayer) p).getHandle();
         ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
-        PacketPlayOutPlayerInfo tabList = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, ep);
+        PacketPlayOutPlayerInfo tabList = new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, ep);
         Bukkit.getOnlinePlayers().forEach(x -> ((CraftPlayer) x).getHandle().playerConnection.sendPacket(tabList));*/
         p.setPlayerListName(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
     }
@@ -195,7 +203,7 @@ public class Necessities extends JavaPlugin {
             //ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
             players.add(ep);
         }
-        ((CraftPlayer) x).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, players));
+        ((CraftPlayer) x).getHandle().playerConnection.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, players));
     }
 
     void addJanet(Player p) {

@@ -5,11 +5,11 @@ import gg.galaxygaming.necessities.Hats.HatType;
 import gg.galaxygaming.necessities.Material.Material;
 import gg.galaxygaming.necessities.Material.MaterialHelper;
 import gg.galaxygaming.necessities.RankManager.RankManager;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.Collections;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 
 class Initialization {
     void initiateFiles() {

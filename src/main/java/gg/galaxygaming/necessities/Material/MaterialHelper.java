@@ -1,8 +1,8 @@
 package gg.galaxygaming.necessities.Material;
 
-import net.minecraft.server.v1_13_R2.Item;
+import net.minecraft.server.v1_14_R1.Item;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 
 import java.lang.reflect.Field;
 
