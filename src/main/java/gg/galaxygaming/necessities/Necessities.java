@@ -195,7 +195,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import net.minecraft.server.v1_14_R1.DimensionManager;
 import net.minecraft.server.v1_14_R1.EntityPlayer;
-import net.minecraft.server.v1_14_R1.IChatBaseComponent;
 import net.minecraft.server.v1_14_R1.MinecraftServer;
 import net.minecraft.server.v1_14_R1.PacketPlayOutPlayerInfo;
 import net.minecraft.server.v1_14_R1.PacketPlayOutPlayerInfo.EnumPlayerInfoAction;
@@ -290,7 +289,7 @@ public class Necessities extends JavaPlugin {
         WorldServer world = server.getWorldServer(DimensionManager.OVERWORLD);
         PlayerInteractManager manager = new PlayerInteractManager(world);
         EntityPlayer player = new EntityPlayer(server, world, janetProfile, manager);
-        player.listName = formatMessage(
+        player.listName = Utils.formatMessage(
               ChatColor.translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + ' ')
                     + "Janet");
         this.janetInfo = new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, player);
@@ -316,9 +315,6 @@ public class Necessities extends JavaPlugin {
     private static OpenAnalyticsTracker getTracker() {
         return getInstance().googleAnalyticsTracker;
     }*/
-    private IChatBaseComponent formatMessage(String message) {
-        return IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
-    }
 
     /**
      * Removes a player from the tab list.
@@ -330,7 +326,7 @@ public class Necessities extends JavaPlugin {
               ((CraftPlayer) p).getHandle());
         for (Player x : Bukkit.getOnlinePlayers()) {
             if (!x.canSee(p) && !x.equals(p)) {
-                ((CraftPlayer) x).getHandle().playerConnection.sendPacket(info);
+                Utils.getConnection(x).sendPacket(info);
             }
         }
     }
@@ -347,7 +343,7 @@ public class Necessities extends JavaPlugin {
         PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, ep);
         for (Player x : Bukkit.getOnlinePlayers()) {
             if (!x.hasPermission("Necessities.seehidden") && x.canSee(p) && !x.equals(p)) {
-                ((CraftPlayer) x).getHandle().playerConnection.sendPacket(info);
+                Utils.getConnection(x).sendPacket(info);
             }
         }
     }
@@ -362,7 +358,7 @@ public class Necessities extends JavaPlugin {
         /*EntityPlayer ep = ((CraftPlayer) p).getHandle();
         ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
         PacketPlayOutPlayerInfo tabList = new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, ep);
-        Bukkit.getOnlinePlayers().forEach(x -> ((CraftPlayer) x).getHandle().playerConnection.sendPacket(tabList));*/
+        Bukkit.getOnlinePlayers().forEach(x -> Utils.getConnection(x).sendPacket(tabList));*/
         p.setPlayerListName(u.getRank() == null ? ""
               : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
     }
@@ -380,16 +376,11 @@ public class Necessities extends JavaPlugin {
             //ep.listName = formatMessage(u.getRank() == null ? "" : ChatColor.translateAlternateColorCodes('&', u.getRank().getTitle() + ' ') + p.getDisplayName());
             players.add(ep);
         }
-        ((CraftPlayer) x).getHandle().playerConnection
-              .sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, players));
+        Utils.getConnection(x).sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, players));
     }
 
     void addJanet(Player p) {
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(this.janetInfo);
-    }
-
-    void addHeader(Player p) {
-        p.setPlayerListHeaderFooter(ChatColor.AQUA + "Galaxy Gaming", ChatColor.GREEN + "https://galaxygaming.gg");
+        Utils.getConnection(p).sendPacket(this.janetInfo);
     }
 
     private Property getSkin() {

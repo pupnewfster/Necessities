@@ -257,7 +257,7 @@ class Listeners implements Listener {
         u.setLastAction(System.currentTimeMillis());
         if (hide.isHidden(e.getPlayer())) {
             Bukkit.broadcast(var.getMessages() + "To Ops -" + e.getJoinMessage(), "Necessities.opBroadcast");
-            e.setJoinMessage(null);
+            e.setJoinMessage("");
             hide.hidePlayer(e.getPlayer());
         }
         YamlConfiguration config = Necessities.getInstance().getConfig();
@@ -273,7 +273,7 @@ class Listeners implements Listener {
                 p.setFlying(true);
                 p.sendMessage(var.getMessages() + "Fly enabled.");
             }
-            Necessities.getInstance().addHeader(p);
+            p.setPlayerListHeaderFooter(ChatColor.AQUA + "Galaxy Gaming", ChatColor.GREEN + "https://galaxygaming.gg");
             Necessities.getInstance().addJanet(p);
             Necessities.getInstance().updateAll(p);
             u.updateListName();
@@ -310,7 +310,7 @@ class Listeners implements Listener {
         CmdHide hide = Necessities.getHide();
         if (hide.isHidden(e.getPlayer())) {
             Bukkit.broadcast(var.getMessages() + "To Ops -" + e.getQuitMessage(), "Necessities.opBroadcast");
-            e.setQuitMessage(null);
+            e.setQuitMessage("");
         }
         Necessities.getEconomy().unloadAccount(uuid);
         if (u.isAfk()) {

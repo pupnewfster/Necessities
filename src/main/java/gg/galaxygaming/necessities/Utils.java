@@ -11,8 +11,10 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.UUID;
 import net.minecraft.server.v1_14_R1.IChatBaseComponent;
+import net.minecraft.server.v1_14_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_14_R1.MinecraftServer;
 import net.minecraft.server.v1_14_R1.PacketPlayOutTitle;
+import net.minecraft.server.v1_14_R1.PlayerConnection;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -275,8 +277,8 @@ public class Utils {
         try {
             UUID uuid = UUID.fromString(message);
             OfflinePlayer p = Bukkit.getOfflinePlayer(uuid);
-            if (p.hasPlayedBefore()) //If we have a player data for that uuid get their name  sort of as a cache
-            {
+            if (p.hasPlayedBefore()) {
+                //If we have a player data for that uuid get their name  sort of as a cache
                 return p.getName();
             }
         } catch (Exception ignored) {
@@ -299,15 +301,32 @@ public class Utils {
     }
 
     /**
+     * Helpful wrapper for getting a player's connection object.
+     * @param p The player.
+     * @return The player's connection.
+     */
+    public static PlayerConnection getConnection(Player p) {
+        return ((CraftPlayer) p).getHandle().playerConnection;
+    }
+
+    /**
+     * Converts a message to a formatted IChatBaseComponent
+     * @param message The message to format.
+     * @return The formatted message.
+     */
+    public static IChatBaseComponent formatMessage(String message) {
+        return ChatSerializer.a("{\"text\": \"" + message + "\"}");
+    }
+
+    /**
      * Sends a message to a player's action bar.
      *
      * @param player The player to send the message to.
      * @param message The message to send.
      */
     public static void sendActionBarMessage(Player player, String message) {
-        IChatBaseComponent infoJSON = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
-        ((CraftPlayer) player).getHandle().playerConnection
-              .sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.ACTIONBAR, infoJSON, 0, 60, 0));
+        getConnection(player).sendPacket(
+              new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.ACTIONBAR, formatMessage(message), 0, 60, 0));
         //TODO: Paper (Replaces above NMS version)
         //player.sendActionBar(message);
     }
