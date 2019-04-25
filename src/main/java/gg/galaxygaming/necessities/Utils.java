@@ -221,9 +221,9 @@ public class Utils {
         }
         JsonObject jo = (JsonObject) ((JsonArray) Jsoner.deserialize(response.toString(), new JsonObject())
               .get("properties")).get(0);
-        ProfileProperty property;
-        skins.put(uuid, property = new ProfileProperty("textures", jo.getString(Jsoner.mintJsonKey("value", null)),
-              jo.getString(Jsoner.mintJsonKey("signature", null))));
+        ProfileProperty property = new ProfileProperty("textures", jo.getString(Jsoner.mintJsonKey("value", null)),
+              jo.getString(Jsoner.mintJsonKey("signature", null)));
+        skins.put(uuid, property);
         return property;
     }
 

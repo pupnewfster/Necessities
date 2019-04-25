@@ -17,12 +17,14 @@ public class CmdKillall implements Cmd {
           EntityType.PIG_ZOMBIE, EntityType.SILVERFISH, EntityType.SKELETON, EntityType.SLIME, EntityType.SPIDER,
           EntityType.WITCH, EntityType.WITHER, EntityType.ZOMBIE, EntityType.GUARDIAN, EntityType.ENDERMITE,
           EntityType.SHULKER, EntityType.SHULKER_BULLET, EntityType.HUSK, EntityType.STRAY, EntityType.VINDICATOR,
-          EntityType.EVOKER, EntityType.VEX, EntityType.PHANTOM, EntityType.DROWNED);
+          EntityType.EVOKER, EntityType.VEX, EntityType.PHANTOM, EntityType.DROWNED, EntityType.PILLAGER,
+          EntityType.RAVAGER);
     private final Set<EntityType> passive = EnumSet.of(EntityType.CHICKEN, EntityType.COW, EntityType.HORSE,
           EntityType.IRON_GOLEM, EntityType.MUSHROOM_COW, EntityType.OCELOT, EntityType.PIG, EntityType.SHEEP,
           EntityType.SNOWMAN, EntityType.SQUID, EntityType.VILLAGER, EntityType.WOLF, EntityType.RABBIT,
           EntityType.POLAR_BEAR, EntityType.LLAMA, EntityType.DOLPHIN, EntityType.TROPICAL_FISH, EntityType.PUFFERFISH,
-          EntityType.COD, EntityType.SALMON, EntityType.TURTLE);
+          EntityType.COD, EntityType.SALMON, EntityType.TURTLE, EntityType.CAT, EntityType.FOX, EntityType.PANDA,
+          EntityType.TRADER_LLAMA, EntityType.WANDERING_TRADER);
     private final Set<EntityType> misc = EnumSet.of(EntityType.DROPPED_ITEM, EntityType.BOAT, EntityType.ENDER_CRYSTAL,
           EntityType.EXPERIENCE_ORB, EntityType.MINECART);
 
@@ -267,6 +269,28 @@ public class CmdKillall implements Cmd {
         }
         if (name.equals("drowned")) {
             return EntityType.DROWNED;
+        }
+
+        if (name.equals("cat")) {
+            return EntityType.CAT;
+        }
+        if (name.equals("fox") || name.equals("foxes")) {
+            return EntityType.FOX;
+        }
+        if (name.equals("panda")) {
+            return EntityType.PANDA;
+        }
+        if (name.equals("pillager")) {
+            return EntityType.PILLAGER;
+        }
+        if (name.equals("ravager")) {
+            return EntityType.RAVAGER;
+        }
+        if (name.equals("traderllama")) {
+            return EntityType.TRADER_LLAMA;
+        }
+        if (name.equals("trader") || name.equals("wanderingtrader")) {
+            return EntityType.WANDERING_TRADER;
         }
         return null;
     }

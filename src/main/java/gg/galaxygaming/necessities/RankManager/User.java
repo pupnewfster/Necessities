@@ -1,13 +1,11 @@
 package gg.galaxygaming.necessities.RankManager;
 
-import com.destroystokyo.paper.profile.ProfileProperty;
 import com.google.common.io.Files;
 import gg.galaxygaming.necessities.Commands.CmdHide;
 import gg.galaxygaming.necessities.Guilds.Guild;
 import gg.galaxygaming.necessities.Hats.Hat;
 import gg.galaxygaming.necessities.Hats.HatType;
 import gg.galaxygaming.necessities.Necessities;
-import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
 import java.io.File;
 import java.io.IOException;
@@ -365,8 +363,8 @@ public class User {
         getPlayer().sendMessage(Necessities.getVar().getMessages() + "Teleportation successful.");
     }
 
-    public void setSkin(
-          UUID uuid) {//TODO make this refresh their skin. Currently changes their gameprofile to have correct skin... but doesn't refresh the player
+    public void setSkin(UUID uuid) {
+        //TODO make this refresh their skin. Currently changes their gameprofile to have correct skin... but doesn't refresh the player
         if (bukkitPlayer == null) {
             return;
         }
@@ -390,10 +388,10 @@ public class User {
             e.printStackTrace();
         }*/
         //TODO: Try below method in more detail
-        ProfileProperty textures = Utils.getPlayerSkin(uuid);
+        /*ProfileProperty textures = Utils.getPlayerSkin(uuid);
         if (textures != null) {
             bukkitPlayer.getPlayerProfile().setProperty(textures);
-        }
+        }*/
     }
 
     /**
