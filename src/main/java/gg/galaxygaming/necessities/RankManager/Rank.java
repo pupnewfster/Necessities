@@ -3,6 +3,7 @@ package gg.galaxygaming.necessities.RankManager;
 import gg.galaxygaming.necessities.Necessities;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,7 +13,7 @@ public class Rank {
 
     private final File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml");
     private final File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
-    private final ArrayList<String> permissions = new ArrayList<>();
+    private final List<String> permissions = new ArrayList<>();
     private final String name;
     private String title = "";
     private int maxHomes = 1, tpdelay;
@@ -105,7 +106,7 @@ public class Rank {
         return this.maxHomes;
     }
 
-    ArrayList<String> getNodes() {
+    List<String> getNodes() {
         return this.permissions;
     }
 

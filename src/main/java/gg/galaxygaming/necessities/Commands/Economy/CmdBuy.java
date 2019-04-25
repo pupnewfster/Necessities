@@ -6,7 +6,7 @@ import gg.galaxygaming.necessities.Material.Material;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
-import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -65,7 +65,7 @@ public class CmdBuy implements EconomyCmd {
                           var.getEr() + "Error: " + var.getErMsg() + "You don't have enough money to buy that item.");
                     return true;
                 }
-                HashMap<Integer, ItemStack> noFit = inventory.addItem(mat.toItemStack(amount));
+                Map<Integer, ItemStack> noFit = inventory.addItem(mat.toItemStack(amount));
                 if (!noFit.isEmpty()) {
                     amount = amount - noFit.get(0).getAmount();
                     cost = pr.getPrice("buy", mat.getName(), amount);

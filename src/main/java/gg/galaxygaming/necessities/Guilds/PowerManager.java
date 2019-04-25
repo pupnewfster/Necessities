@@ -3,6 +3,7 @@ package gg.galaxygaming.necessities.Guilds;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.User;
 import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -10,7 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class PowerManager {
 
-    private final HashMap<Player, BukkitRunnable> players = new HashMap<>();
+    private final Map<Player, BukkitRunnable> players = new HashMap<>();
 
     /**
      * Initiates the power manager and add all online players to it.

@@ -4,6 +4,7 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,7 +16,7 @@ import org.bukkit.plugin.Plugin;
 public class CmdHelp implements Cmd {
 
     public boolean commandUse(CommandSender sender, String[] args) {
-        ArrayList<String> helpList = new ArrayList<>();
+        List<String> helpList = new ArrayList<>();
         int page = 0;
         String search = "";
         if (args.length == 1) {
@@ -38,7 +39,7 @@ public class CmdHelp implements Cmd {
             page = 1;
         }
         int time = 0;
-        ArrayList<String> plugins = new ArrayList<>(), commands = new ArrayList<>();
+        List<String> plugins = new ArrayList<>(), commands = new ArrayList<>();
         boolean isConsole = !(sender instanceof Player);
         for (Plugin p : Bukkit.getPluginManager().getPlugins()) {
             if (search.equals("") || p.getName().equalsIgnoreCase(search)) {
@@ -142,7 +143,7 @@ public class CmdHelp implements Cmd {
         return true;
     }
 
-    private String getHelp(int page, int time, ArrayList<String> helpList) {
+    private String getHelp(int page, int time, List<String> helpList) {
         page *= 10;
         if (helpList.size() < time + page + 1 || time == 10) {
             return null;

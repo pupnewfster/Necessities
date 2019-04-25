@@ -3,13 +3,14 @@ package gg.galaxygaming.necessities.Janet;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.RankManager;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 public class JanetWarn {
 
-    private final HashMap<UUID, Integer> warnCount = new HashMap<>();
+    private final Map<UUID, Integer> warnCount = new HashMap<>();
     private String JanetName = "";
     private int warns;
 

@@ -5,6 +5,7 @@ import gg.galaxygaming.necessities.RankManager.RankManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -16,7 +17,7 @@ import org.bukkit.entity.Player;
  */
 //@Deprecated
 public class JanetAI {//TODO: Move to JanetNet and add understanding logic
-    private static final ArrayList<String> heyMessages = new ArrayList<>();
+    private static final List<String> heyMessages = new ArrayList<>();
     private static final String[] janetNamed = {"Yes?", "What is it?", "What?", "What do you want?",
           "What do you need?", "I'm busy, what is it you want?",
           "Tell me what you want so I can go back to sleep.", "I'm busy, please leave a message.", "I was pinged.",

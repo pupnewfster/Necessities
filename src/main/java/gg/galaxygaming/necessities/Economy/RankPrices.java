@@ -4,6 +4,7 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.Rank;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,7 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class RankPrices {
 
     private final File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
-    private final HashMap<String, Double> rankPrices = new HashMap<>();
+    private final Map<String, Double> rankPrices = new HashMap<>();
 
     /**
      * Initialize and load the rank prices.

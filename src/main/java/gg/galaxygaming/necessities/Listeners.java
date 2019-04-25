@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
@@ -485,7 +486,7 @@ class Listeners implements Listener {
                             }
                         }
                     }
-                    ArrayList<String> lore = new ArrayList<>();
+                    List<String> lore = new ArrayList<>();
                     for (String l : splitSpace[4].split(",")) {
                         if (!l.equals("n")) {
                             int lStart = l.indexOf('[');
@@ -717,13 +718,13 @@ class Listeners implements Listener {
                                 inv.clear();
                             } else if (type.equals(Material.SPAWNER)) {
                                 CreatureSpawner cs = (CreatureSpawner) state;
-                                ArrayList<String> lore = new ArrayList<>();
+                                List<String> lore = new ArrayList<>();
                                 lore.add(cs.getSpawnedType().toString());
                                 meta.setLore(lore);
                                 contents.setItemMeta(meta);
                             } else if (type.equals(Material.SIGN) || type.equals(Material.WALL_SIGN)) {
                                 Sign s = (Sign) state;
-                                ArrayList<String> lore = new ArrayList<>();
+                                List<String> lore = new ArrayList<>();
                                 lore.add(s.getLine(0));
                                 lore.add(s.getLine(1));
                                 lore.add(s.getLine(2));
@@ -778,8 +779,8 @@ class Listeners implements Listener {
         }
     }
 
-    private ArrayList<String> getLore(Inventory inv) {
-        HashMap<String, String> condensedLore = new HashMap<>();
+    private List<String> getLore(Inventory inv) {
+        Map<String, String> condensedLore = new HashMap<>();
         for (int i = 0; i < inv.getSize(); i++) {//loc amount type damage enchants meta name
             ItemStack item = inv.getItem(i);
             if (item != null && !item.getType().equals(Material.AIR)) {
@@ -1076,7 +1077,7 @@ class Listeners implements Listener {
             player.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You are muted.");
         } else {
             if (!e.getRecipients().isEmpty()) {
-                ArrayList<Player> toRem = new ArrayList<>();
+                List<Player> toRem = new ArrayList<>();
                 for (Player recip : e.getRecipients()) {
                     if (um.getUser(recip.getUniqueId()).isIgnoring(player.getUniqueId()) || isOp && !recip
                           .hasPermission("Necessities.opBroadcast") || u.slackChat() &&
@@ -1260,7 +1261,7 @@ class Listeners implements Listener {
     public void onExplosion(EntityExplodeEvent e) {
         YamlConfiguration config = Necessities.getInstance().getConfig();
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
-            ArrayList<Integer> indexes = new ArrayList<>();
+            List<Integer> indexes = new ArrayList<>();
             GuildManager gm = Necessities.getGM();
             for (int i = 0; i < e.blockList().size(); i++) {
                 Guild g = gm.chunkOwner(e.blockList().get(i).getChunk());

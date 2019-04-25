@@ -8,13 +8,14 @@ import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
 import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class CmdList implements GuildCmd {
 
     public boolean commandUse(CommandSender sender, String[] args) {
-        ArrayList<String> guildList = new ArrayList<>();
+        List<String> guildList = new ArrayList<>();
         Variables var = Necessities.getVar();
         UserManager um = Necessities.getUM();
         GuildManager gm = Necessities.getGM();
@@ -83,7 +84,7 @@ public class CmdList implements GuildCmd {
         return true;
     }
 
-    private String getLine(int page, int time, ArrayList<String> guildList) {
+    private String getLine(int page, int time, List<String> guildList) {
         page *= 10;
         if (guildList.size() < time + page + 1 || time == 10) {
             return null;

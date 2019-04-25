@@ -17,7 +17,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class GuildManager {
 
-    private final HashMap<String, Guild> guilds = new HashMap<>();
+    private final Map<String, Guild> guilds = new HashMap<>();
     private final File configFileProtected = new File("plugins/Necessities/Guilds", "Protected.yml");
     private final File configFileGuilds = new File("plugins/Necessities/Guilds", "guilds.yml");
 

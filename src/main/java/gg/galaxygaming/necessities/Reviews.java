@@ -2,6 +2,7 @@ package gg.galaxygaming.necessities;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -9,7 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class Reviews {
 
     private final File configFileReviews = new File("plugins/Necessities/Creative", "reviews.yml");
-    private final HashMap<String, String> reviews = new HashMap<>();
+    private final Map<String, String> reviews = new HashMap<>();
 
     void init() {
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Retrieving stored review requests.");

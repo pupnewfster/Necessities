@@ -1,11 +1,12 @@
 package gg.galaxygaming.necessities;
 
 import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.entity.Player;
 
 class AntiCombatLog {
 
-    private final HashMap<Player, Long> inCombat = new HashMap<>();
+    private final Map<Player, Long> inCombat = new HashMap<>();
 
     void addToCombat(Player p, Player other) {
         if (p.hasPermission("Necessities.canCombatLog") || other.hasPermission("Necessities.canCombatLog")) {

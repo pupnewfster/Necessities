@@ -2,11 +2,13 @@ package gg.galaxygaming.necessities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class Teleports {
 
-    private final HashMap<UUID, ArrayList<String>> teleportRequests = new HashMap<>();
+    private final Map<UUID, List<String>> teleportRequests = new HashMap<>();
 
     void removeRequests(UUID uuid) {
         teleportRequests.remove(uuid);

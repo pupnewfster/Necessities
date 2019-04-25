@@ -7,6 +7,7 @@ import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.Variables;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
@@ -17,7 +18,7 @@ import org.bukkit.entity.Player;
 
 public class CmdHide implements Cmd {
 
-    private final ArrayList<UUID> hidden = new ArrayList<>();
+    private final List<UUID> hidden = new ArrayList<>();
     private final File configFileHiding = new File("plugins/Necessities", "hiding.yml");
     private final File configFileLogOut = new File("plugins/Necessities", "logoutmessages.yml");
     private final File configFileLogIn = new File("plugins/Necessities", "loginmessages.yml");

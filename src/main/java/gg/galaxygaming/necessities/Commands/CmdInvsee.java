@@ -4,6 +4,7 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -12,7 +13,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class CmdInvsee implements Cmd {
 
-    private final HashMap<PlayerInventory, Player> openInvs = new HashMap<>();
+    private final Map<PlayerInventory, Player> openInvs = new HashMap<>();
 
     /**
      * Get player who owns the inventory.

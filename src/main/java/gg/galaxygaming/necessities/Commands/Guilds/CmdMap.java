@@ -7,6 +7,7 @@ import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.Variables;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -27,8 +28,8 @@ public class CmdMap implements GuildCmd {
             GuildManager gm = Necessities.getGM();
             Chunk c = p.getLocation().getChunk();
             String up = up(p.getLocation().getYaw());
-            ArrayList<Chunk> chunks = new ArrayList<>();
-            HashMap<Guild, String> symbols = new HashMap<>();
+            List<Chunk> chunks = new ArrayList<>();
+            Map<Guild, String> symbols = new HashMap<>();
             for (int z = -4; z < 5; z++) {
                 for (int x = -19; x < 20; x++) {
                     int cX = c.getX();

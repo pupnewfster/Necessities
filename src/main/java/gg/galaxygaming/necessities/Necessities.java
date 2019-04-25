@@ -372,7 +372,7 @@ public class Necessities extends JavaPlugin {
      * @param x The player to refresh their tab list.
      */
     public void updateAll(Player x) {//TODO: Is this even needed
-        ArrayList<EntityPlayer> players = new ArrayList<>();
+        List<EntityPlayer> players = new ArrayList<>();
         for (Player p : Bukkit.getOnlinePlayers()) {
             EntityPlayer ep = ((CraftPlayer) p).getHandle();
             //User u = um.getUser(p.getUniqueId());

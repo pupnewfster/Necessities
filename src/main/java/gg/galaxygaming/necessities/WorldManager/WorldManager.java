@@ -3,6 +3,7 @@ package gg.galaxygaming.necessities.WorldManager;
 import gg.galaxygaming.necessities.Necessities;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
@@ -16,7 +17,7 @@ import org.bukkit.entity.Player;
 
 public class WorldManager {
 
-    private final HashMap<String, String> invSys = new HashMap<>();
+    private final Map<String, String> invSys = new HashMap<>();
     private final File configFileWM = new File("plugins/Necessities/WorldManager", "worlds.yml");
 
     /**

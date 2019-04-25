@@ -29,7 +29,7 @@ public class CmdCraft implements Cmd {
                 p.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "There are no recipes to craft that item.");
                 return true;
             }
-            HashMap<ItemStack, Integer> items = new HashMap<>();
+            Map<ItemStack, Integer> items = new HashMap<>();
             Recipe r = Bukkit.getRecipesFor(mat.toItemStack(1)).get(0);
             if (r instanceof ShapedRecipe) {
                 ShapedRecipe s = (ShapedRecipe) r;

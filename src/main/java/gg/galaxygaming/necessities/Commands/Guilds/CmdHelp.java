@@ -4,6 +4,7 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
 import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,7 +33,7 @@ public class CmdHelp implements GuildCmd {
         }
         int time = 0;
         int rounder = 0;
-        ArrayList<String> helpList = new ArrayList<>();
+        List<String> helpList = new ArrayList<>();
         setHelp(helpList, sender);
         if (helpList.size() % 10 != 0) {
             rounder = 1;
@@ -60,7 +61,7 @@ public class CmdHelp implements GuildCmd {
         return true;
     }
 
-    private String getLine(int page, int time, ArrayList<String> helpList) {
+    private String getLine(int page, int time, List<String> helpList) {
         page *= 10;
         if (helpList.size() < time + page + 1 || time == 10) {
             return null;
@@ -68,7 +69,7 @@ public class CmdHelp implements GuildCmd {
         return helpList.get(page + time);
     }
 
-    private void setHelp(ArrayList<String> helpList, CommandSender sender) {
+    private void setHelp(List<String> helpList, CommandSender sender) {
         Variables var = Necessities.getVar();
         if (sender instanceof Player) {
             Player p = (Player) sender;

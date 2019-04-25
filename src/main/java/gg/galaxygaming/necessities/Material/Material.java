@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -1384,8 +1385,8 @@ public enum Material {//http://minecraft.gamepedia.com/Id
     RECORD_WAIT("RECORD_WAIT", org.bukkit.Material.MUSIC_DISC_WAIT, "C418 - WAIT",
           Arrays.asList("WAIT", "MUSIC_DISC_WAIT", "MUSIC_WAIT", "C418_WAIT", "RECORD_12"));
 
-    private static final HashMap<String, Material> nameMap = new HashMap<>();
-    private static final HashMap<String, String> aliasMap = new HashMap<>();
+    private static final Map<String, Material> nameMap = new HashMap<>();
+    private static final Map<String, String> aliasMap = new HashMap<>();
     private final String name;
     private final String plural;
     private final String friendlyName;

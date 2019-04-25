@@ -2,6 +2,7 @@ package gg.galaxygaming.necessities.Hats;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 public enum HatType {
     Design("DESIGN"),
@@ -14,7 +15,7 @@ public enum HatType {
     Trippy("TRIPPY"),
     Pot("POT");
 
-    private static final HashMap<String, HatType> nameMap = new HashMap<>();
+    private static final Map<String, HatType> nameMap = new HashMap<>();
     private final String name;
 
     HatType(String name) {

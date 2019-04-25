@@ -2,8 +2,8 @@ package gg.galaxygaming.necessities.Commands;
 
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
-import java.util.Arrays;
-import java.util.List;
+import java.util.EnumSet;
+import java.util.Set;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -12,25 +12,19 @@ import org.bukkit.entity.Player;
 
 public class CmdKillall implements Cmd {
 
-    private final List<EntityType> hostile = Arrays
-          .asList(EntityType.BLAZE, EntityType.CAVE_SPIDER, EntityType.CREEPER, EntityType.ENDER_DRAGON,
-                EntityType.ENDERMAN,
-                EntityType.GHAST, EntityType.GIANT, EntityType.MAGMA_CUBE, EntityType.PIG_ZOMBIE, EntityType.SILVERFISH,
-                EntityType.SKELETON, EntityType.SLIME, EntityType.SPIDER,
-                EntityType.WITCH, EntityType.WITHER, EntityType.ZOMBIE, EntityType.GUARDIAN, EntityType.ENDERMITE,
-                EntityType.SHULKER, EntityType.SHULKER_BULLET, EntityType.HUSK,
-                EntityType.STRAY, EntityType.VINDICATOR, EntityType.EVOKER, EntityType.VEX, EntityType.PHANTOM,
-                EntityType.DROWNED);
-    private final List<EntityType> passive = Arrays
-          .asList(EntityType.CHICKEN, EntityType.COW, EntityType.HORSE, EntityType.IRON_GOLEM, EntityType.MUSHROOM_COW,
-                EntityType.OCELOT,
-                EntityType.PIG, EntityType.SHEEP, EntityType.SNOWMAN, EntityType.SQUID, EntityType.VILLAGER,
-                EntityType.WOLF, EntityType.RABBIT, EntityType.POLAR_BEAR, EntityType.LLAMA,
-                EntityType.DOLPHIN, EntityType.TROPICAL_FISH, EntityType.PUFFERFISH, EntityType.COD, EntityType.SALMON,
-                EntityType.TURTLE);
-    private final List<EntityType> misc = Arrays
-          .asList(EntityType.DROPPED_ITEM, EntityType.BOAT, EntityType.ENDER_CRYSTAL, EntityType.EXPERIENCE_ORB,
-                EntityType.MINECART);
+    private final Set<EntityType> hostile = EnumSet.of(EntityType.BLAZE, EntityType.CAVE_SPIDER, EntityType.CREEPER,
+          EntityType.ENDER_DRAGON, EntityType.ENDERMAN, EntityType.GHAST, EntityType.GIANT, EntityType.MAGMA_CUBE,
+          EntityType.PIG_ZOMBIE, EntityType.SILVERFISH, EntityType.SKELETON, EntityType.SLIME, EntityType.SPIDER,
+          EntityType.WITCH, EntityType.WITHER, EntityType.ZOMBIE, EntityType.GUARDIAN, EntityType.ENDERMITE,
+          EntityType.SHULKER, EntityType.SHULKER_BULLET, EntityType.HUSK, EntityType.STRAY, EntityType.VINDICATOR,
+          EntityType.EVOKER, EntityType.VEX, EntityType.PHANTOM, EntityType.DROWNED);
+    private final Set<EntityType> passive = EnumSet.of(EntityType.CHICKEN, EntityType.COW, EntityType.HORSE,
+          EntityType.IRON_GOLEM, EntityType.MUSHROOM_COW, EntityType.OCELOT, EntityType.PIG, EntityType.SHEEP,
+          EntityType.SNOWMAN, EntityType.SQUID, EntityType.VILLAGER, EntityType.WOLF, EntityType.RABBIT,
+          EntityType.POLAR_BEAR, EntityType.LLAMA, EntityType.DOLPHIN, EntityType.TROPICAL_FISH, EntityType.PUFFERFISH,
+          EntityType.COD, EntityType.SALMON, EntityType.TURTLE);
+    private final Set<EntityType> misc = EnumSet.of(EntityType.DROPPED_ITEM, EntityType.BOAT, EntityType.ENDER_CRYSTAL,
+          EntityType.EXPERIENCE_ORB, EntityType.MINECART);
 
     public boolean commandUse(CommandSender sender, String[] args) {
         Variables var = Necessities.getVar();

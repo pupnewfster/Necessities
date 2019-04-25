@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -17,7 +18,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Economy {//TODO add OpenAnalytics
-    private final HashMap<UUID, Double> loadedBals = new HashMap<>();
+    private final Map<UUID, Double> loadedBals = new HashMap<>();
     private Properties properties;
     private String dbURL;
     private int type;

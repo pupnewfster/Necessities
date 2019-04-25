@@ -14,8 +14,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class PortalManager {//TODO: add a method to update the things when a world is unloaded or loaded
-    private final HashMap<String, Portal> portals = new HashMap<>();
-    private final HashMap<String, String> lowerNames = new HashMap<>();
+    private final Map<String, Portal> portals = new HashMap<>();
+    private final Map<String, String> lowerNames = new HashMap<>();
     private final File configFilePM = new File("plugins/Necessities/WorldManager", "portals.yml");
 
     /**

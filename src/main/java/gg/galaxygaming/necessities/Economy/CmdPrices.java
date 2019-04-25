@@ -6,6 +6,7 @@ import gg.galaxygaming.necessities.RankManager.RankManager;
 import gg.galaxygaming.necessities.Utils;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,7 +14,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class CmdPrices {
 
     private final File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
-    private ArrayList<String> co = new ArrayList<>();
+    private List<String> co = new ArrayList<>();
 
     /**
      * Checks if the specified rank can buy the specified command.
@@ -74,7 +75,7 @@ public class CmdPrices {
                 this.co.add(key.replaceFirst("commands.", "") + ' ' + configPrices.getString(key));
             }
         }
-        ArrayList<String> temp = new ArrayList<>();
+        List<String> temp = new ArrayList<>();
         for (Rank r : Necessities.getRM().getOrder()) {
             for (String cmd : this.co) {
                 if (r.getName().toUpperCase().equals(cmd.split(" ")[1])) {

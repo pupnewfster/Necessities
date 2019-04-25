@@ -1,6 +1,7 @@
 package gg.galaxygaming.necessities.Hats;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
@@ -9,7 +10,7 @@ import org.bukkit.entity.EntityType;
 
 public abstract class Hat {
 
-    final ArrayList<ArmorStand> armorStands = new ArrayList<>();
+    final List<ArmorStand> armorStands = new ArrayList<>();
     Location trueLoc;
     private HatType type;
     //private double x1, y1, z1 = 1, pitch, yaw;

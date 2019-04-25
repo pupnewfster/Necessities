@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -42,8 +43,8 @@ import org.bukkit.entity.Player;
 import org.json.simple.parser.JSONParser;
 
 public class JanetSlack {//TODO: Even though this is not currently being used it probably should be updated with the latest Slack API I made for Janet.
-    private final HashMap<String, SlackUser> userMap = new HashMap<>();
-    private final HashMap<Integer, ArrayList<String>> helpLists = new HashMap<>();
+    private final Map<String, SlackUser> userMap = new HashMap<>();
+    private final Map<Integer, List<String>> helpLists = new HashMap<>();
     private boolean isConnected;
     private String token;
     private URL hookURL;
@@ -296,7 +297,7 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
         return time.length() == 1 ? '0' + time : time;
     }
 
-    private String getLine(int page, int time, ArrayList<String> helpList) {
+    private String getLine(int page, int time, List<String> helpList) {
         page *= 10;
         if (helpList.size() < time + page + 1 || time == 10) {
             return null;
@@ -369,7 +370,7 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
                 }
                 int time = 0;
                 int rounder = 0;
-                ArrayList<String> helpList = helpLists.get(info.getRank());
+                List<String> helpList = helpLists.get(info.getRank());
                 if (helpList.size() % 10 != 0) {
                     rounder = 1;
                 }
@@ -494,7 +495,7 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
             } else if (message.startsWith("!who") || message.startsWith("!players")) {
                 RankManager rm = Necessities.getRM();
                 int numbOnline = Bukkit.getOnlinePlayers().size() + 1;
-                HashMap<Rank, String> online = new HashMap<>();
+                Map<Rank, String> online = new HashMap<>();
                 if (!rm.getOrder().isEmpty()) {
                     online.put(rm.getRank(rm.getOrder().size() - 1),
                           rm.getRank(rm.getOrder().size() - 1).getColor() + "Janet, ");
@@ -623,7 +624,7 @@ public class JanetSlack {//TODO: Even though this is not currently being used it
                       () -> Necessities.getWarns().warn(target.getUniqueId(), reason, name));
                 m += target.getName() + " was warned by " + name + " for " + reason + ".\n";
             } else if (message.startsWith("!worlds")) {
-                ArrayList<String> worlds = Bukkit.getWorlds().stream().map(World::getName)
+                List<String> worlds = Bukkit.getWorlds().stream().map(World::getName)
                       .collect(Collectors.toCollection(ArrayList::new));
                 StringBuilder levelsBuilder = new StringBuilder();
                 for (int i = 0; i < worlds.size() - 1; i++) {

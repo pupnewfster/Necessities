@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,13 +34,13 @@ public class User {
     private final File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
     private final File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
     private boolean teleporting, jailed, opChat, afk, istpaing, god, muted, autoClaiming, guildChat, slackChat, frozen;
-    private final ArrayList<String> permissions = new ArrayList<>();
-    private final ArrayList<String> subranks = new ArrayList<>();
+    private final List<String> permissions = new ArrayList<>();
+    private final List<String> subranks = new ArrayList<>();
     private long lastAction, lastAFK, lastRequest, login;
     private int pastTotal, lastActionTask, afkTask;
-    private final HashMap<String, Location> homes = new HashMap<>();
+    private final Map<String, Location> homes = new HashMap<>();
     private String appended = "", nick, lastContact, prefix = "";
-    private final ArrayList<UUID> ignored = new ArrayList<>();
+    private final List<UUID> ignored = new ArrayList<>();
     private Location lastPos, right, left;
     private PermissionAttachment attachment;
     private Player bukkitPlayer;
@@ -953,7 +954,7 @@ public class User {
             return "";
         }
         String homeslist;
-        ArrayList<String> sortHomes = new ArrayList<>(this.homes.keySet());
+        List<String> sortHomes = new ArrayList<>(this.homes.keySet());
         Collections.sort(sortHomes);
         StringBuilder homeslistBuilder = new StringBuilder();
         for (String name : sortHomes) {

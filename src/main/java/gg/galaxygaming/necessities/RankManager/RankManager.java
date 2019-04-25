@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,10 +18,10 @@ public class RankManager {
 
     private final File configFileRanks = new File("plugins/Necessities/RankManager", "ranks.yml");
     private final File configFileSubranks = new File("plugins/Necessities/RankManager", "subranks.yml");
-    private final HashMap<String, String> subranks = new HashMap<>();
-    private final HashMap<String, Rank> ranks = new HashMap<>();
-    private final ArrayList<String> names = new ArrayList<>();
-    private final ArrayList<Rank> order = new ArrayList<>();
+    private final Map<String, String> subranks = new HashMap<>();
+    private final Map<String, Rank> ranks = new HashMap<>();
+    private final List<String> names = new ArrayList<>();
+    private final List<Rank> order = new ArrayList<>();
 
     /**
      * Initializes the rank manager.
@@ -67,7 +68,7 @@ public class RankManager {
     }
 
     private void updatePerms() {
-        ArrayList<String> p = new ArrayList<>();
+        List<String> p = new ArrayList<>();
         for (Permission perm : Bukkit.getPluginManager().getPermissions()) {
             if (perm.getName().equals("*")) {
                 continue;
@@ -120,7 +121,7 @@ public class RankManager {
      *
      * @return The list of ranks in their order of lowest to highest.
      */
-    public ArrayList<Rank> getOrder() {
+    public List<Rank> getOrder() {
         return order;
     }
 

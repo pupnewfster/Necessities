@@ -4,6 +4,7 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
@@ -14,7 +15,7 @@ import org.bukkit.entity.Player;
 
 public class CmdCommandSpy implements Cmd {
 
-    private final ArrayList<UUID> spying = new ArrayList<>();
+    private final List<UUID> spying = new ArrayList<>();
     private final File configFileSpying = new File("plugins/Necessities", "spying.yml");
 
     /**
@@ -24,7 +25,7 @@ public class CmdCommandSpy implements Cmd {
      * @param command The command to send.
      */
     public void broadcast(String sender, String command) {
-        ArrayList<UUID> temp = new ArrayList<>();
+        List<UUID> temp = new ArrayList<>();
         this.spying.stream().filter(uuid -> Bukkit.getPlayer(uuid) != null).forEach(uuid -> {
             if (Bukkit.getPlayer(uuid).hasPermission("Necessities.spy")) {
                 Bukkit.getPlayer(uuid).sendMessage(ChatColor.AQUA + sender + ": " + command);

@@ -8,6 +8,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -17,11 +19,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class Janet {//TODO: Make the logic run async for performance reasons
-    private final ArrayList<String> badwords = new ArrayList<>();
-    private final ArrayList<String> goodwords = new ArrayList<>();
-    private final ArrayList<String> ips = new ArrayList<>();
-    private final HashMap<UUID, Long[]> lastChat = new HashMap<>();
-    private final HashMap<UUID, Long[]> lastCmd = new HashMap<>();
+    private final List<String> badwords = new ArrayList<>();
+    private final List<String> goodwords = new ArrayList<>();
+    private final List<String> ips = new ArrayList<>();
+    private final Map<UUID, Long[]> lastChat = new HashMap<>();
+    private final Map<UUID, Long[]> lastCmd = new HashMap<>();
 
     /**
      * Initiates Janet.
@@ -147,9 +149,9 @@ public class Janet {//TODO: Make the logic run async for performance reasons
 
     String internalLang(String message) {
         String[] orig = message.replaceAll("[^a-zA-Z ]", "").toUpperCase().split(" ");
-        ArrayList<String> bad = new ArrayList<>();
+        List<String> bad = new ArrayList<>();
         for (String badWord : badwords) {
-            ArrayList<String> s = removeSpaces(orig, badWord);
+            List<String> s = removeSpaces(orig, badWord);
             bad.addAll(s.stream().filter(w -> w.contains(badWord) && check(w, badWord) && !isGood(w))
                   .collect(Collectors.toList()));
             for (String o : orig) {
@@ -190,11 +192,11 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         return goodwords.stream().anyMatch(msg::startsWith);
     }
 
-    private String addSpaces(ArrayList<String> bad, String orig) {
+    private String addSpaces(List<String> bad, String orig) {
         String censored;
         String temp = orig.toUpperCase().replaceAll("[^a-zA-Z]", "");
         String t = removeConsec(temp);
-        HashMap<Integer, Character> stars = new HashMap<>();
+        Map<Integer, Character> stars = new HashMap<>();
         String s = t;
         for (String b : bad) {
             temp = temp.replaceAll(b, stars(b));
@@ -230,8 +232,8 @@ public class Janet {//TODO: Make the logic run async for performance reasons
         return censored.equals("") ? orig : censored;
     }
 
-    private ArrayList<String> removeSpaces(String[] msgs, String word) {
-        ArrayList<String> messages = new ArrayList<>();
+    private List<String> removeSpaces(String[] msgs, String word) {
+        List<String> messages = new ArrayList<>();
         String temp = "";
         String t1 = "";
         for (int i = 0; i < msgs.length; i++) {

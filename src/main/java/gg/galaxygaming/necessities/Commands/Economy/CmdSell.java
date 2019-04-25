@@ -7,6 +7,7 @@ import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -108,7 +109,7 @@ public class CmdSell implements EconomyCmd {
 
     private double sell(PlayerInventory inv, int cAmount, Material type, UUID uuid, double baseCost) {
         double totalCost = 0.0;
-        ArrayList<ItemStack> foundItems = new ArrayList<>();
+        List<ItemStack> foundItems = new ArrayList<>();
         for (ItemStack s : inv.getContents()) {
             if (s == null) {
                 continue;

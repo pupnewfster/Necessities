@@ -5,6 +5,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,10 +14,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class Prices {
 
     private final File configFilePrices = new File("plugins/Necessities/Economy", "prices.yml");
-    private final HashMap<String, Double> sellPrices = new HashMap<>();
-    private final HashMap<String, Double> buyPrices = new HashMap<>();
-    private final HashMap<String, Boolean> price = new HashMap<>();
-    private final ArrayList<String> priceOrder = new ArrayList<>();
+    private final Map<String, Double> sellPrices = new HashMap<>();
+    private final Map<String, Double> buyPrices = new HashMap<>();
+    private final Map<String, Boolean> price = new HashMap<>();
+    private final List<String> priceOrder = new ArrayList<>();
     //TODO should price be replaced with just checking sellPrices and buyPrices instead of duplicating the data. Probably
 
     /**

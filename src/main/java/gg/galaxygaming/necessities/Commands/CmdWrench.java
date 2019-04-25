@@ -3,6 +3,7 @@ package gg.galaxygaming.necessities.Commands;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
 import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ public class CmdWrench implements Cmd {
             ItemStack stick = new ItemStack(Material.STICK, 1);
             ItemMeta wrench = stick.getItemMeta();
             wrench.setDisplayName("Wrench");
-            ArrayList<String> lore = new ArrayList<>();
+            List<String> lore = new ArrayList<>();
             lore.add("Wrench");
             wrench.setLore(lore);
             stick.setItemMeta(wrench);

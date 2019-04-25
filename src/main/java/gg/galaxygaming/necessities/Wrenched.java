@@ -2,13 +2,14 @@ package gg.galaxygaming.necessities;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 class Wrenched {
 
-    private final ArrayList<String> locations = new ArrayList<>();
+    private final List<String> locations = new ArrayList<>();
     private final File configFileWrench = new File("plugins/Necessities", "wrenched.yml");
 
     /**

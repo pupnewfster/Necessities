@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 public class UserManager {
 
     private final File configFileUsers = new File("plugins/Necessities/RankManager", "users.yml");
-    private final HashMap<UUID, User> players = new HashMap<>();
+    private final Map<UUID, User> players = new HashMap<>();
 
     void readUsers() {
         Bukkit.getOnlinePlayers().forEach(this::parseUser);
@@ -40,7 +40,7 @@ public class UserManager {
      *
      * @return The uuid to user mapping.
      */
-    public HashMap<UUID, User> getUsers() {
+    public Map<UUID, User> getUsers() {
         return players;
     }
 

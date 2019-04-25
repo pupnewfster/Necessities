@@ -3,6 +3,7 @@ package gg.galaxygaming.necessities.Commands;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
 import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +22,7 @@ public class CmdBazooka implements Cmd {
                 return true;
             }
             ItemMeta handMeta = hand.getItemMeta();
-            ArrayList<String> lore = new ArrayList<>();
+            List<String> lore = new ArrayList<>();
             if (handMeta.hasLore()) {
                 lore = (ArrayList<String>) handMeta.getLore();
             }

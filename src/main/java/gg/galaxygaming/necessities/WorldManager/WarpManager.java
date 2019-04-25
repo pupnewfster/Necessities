@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -12,8 +14,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class WarpManager {
 
     private final File configFileWarps = new File("plugins/Necessities/WorldManager", "warps.yml");
-    private final HashMap<String, String> lowerNames = new HashMap<>();
-    private final HashMap<String, Warp> warps = new HashMap<>();
+    private final Map<String, String> lowerNames = new HashMap<>();
+    private final Map<String, Warp> warps = new HashMap<>();
 
     /**
      * Initializes the warp manager.
@@ -54,7 +56,7 @@ public class WarpManager {
      * @return The list of warps in string form separated by commas.
      */
     public String getWarps() {
-        ArrayList<String> ws = new ArrayList<>(warps.keySet());
+        List<String> ws = new ArrayList<>(warps.keySet());
         Collections.sort(ws);
         StringBuilder warpsBuilder = new StringBuilder();
         for (String w : ws) {

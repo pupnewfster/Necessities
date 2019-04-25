@@ -19,14 +19,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class Guild {
 
     private final File configFileGuild;
-    private final ArrayList<String> allies = new ArrayList<>();
-    private final ArrayList<String> enemies = new ArrayList<>();
-    private final ArrayList<String> mods = new ArrayList<>();
-    private final ArrayList<String> members = new ArrayList<>();
-    private final ArrayList<String> claims = new ArrayList<>();
-    private final ArrayList<Guild> allyInvites = new ArrayList<>();
-    private final ArrayList<Guild> neutralInvites = new ArrayList<>();
-    private final ArrayList<UUID> invited = new ArrayList<>();
+    private final List<String> allies = new ArrayList<>();
+    private final List<String> enemies = new ArrayList<>();
+    private final List<String> mods = new ArrayList<>();
+    private final List<String> members = new ArrayList<>();
+    private final List<String> claims = new ArrayList<>();
+    private final List<Guild> allyInvites = new ArrayList<>();
+    private final List<Guild> neutralInvites = new ArrayList<>();
+    private final List<UUID> invited = new ArrayList<>();
     private boolean pvp = true, permanent, explosions = true, interact, hostileSpawn = true;
     private String description = "", leader, name;
     private int totalMembers;
@@ -558,7 +558,7 @@ public class Guild {
      *
      * @return The list of allies.
      */
-    public ArrayList<String> getAllies() {
+    public List<String> getAllies() {
         return this.allies;
     }
 
@@ -567,7 +567,7 @@ public class Guild {
      *
      * @return The list of enemies.
      */
-    public ArrayList<String> getEnemies() {
+    public List<String> getEnemies() {
         return this.enemies;
     }
 

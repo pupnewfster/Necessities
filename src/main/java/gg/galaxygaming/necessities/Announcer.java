@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,7 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Announcer {
 
     private BukkitRunnable announcerTask;
-    private final ArrayList<String> messages = new ArrayList<>();
+    private final List<String> messages = new ArrayList<>();
     private final Random r = new Random();
 
     void init() {

@@ -7,6 +7,7 @@ import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.Variables;
 import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -20,7 +21,7 @@ public class CmdWho implements Cmd {
         UserManager um = Necessities.getUM();
         CmdHide hide = Necessities.getHide();
         if (sender instanceof Player && !sender.hasPermission("Necessities.seehidden")) {
-            HashMap<Rank, String> online = new HashMap<>();
+            Map<Rank, String> online = new HashMap<>();
             int numbOnline = 1;
             if (!rm.getOrder().isEmpty()) {
                 online.put(rm.getRank(rm.getOrder().size() - 1),
@@ -59,7 +60,7 @@ public class CmdWho implements Cmd {
               var.getMessages() + "There " + amount(numbOnline) + ' ' + var.getObj() + numbOnline + var.getMessages()
                     + " out of a maximum " +
                     var.getObj() + Bukkit.getMaxPlayers() + var.getMessages() + " players online.");
-        HashMap<Rank, String> online = new HashMap<>();
+        Map<Rank, String> online = new HashMap<>();
         if (!rm.getOrder().isEmpty()) {
             online.put(rm.getRank(rm.getOrder().size() - 1),
                   rm.getRank(rm.getOrder().size() - 1).getColor() + "Janet, ");
