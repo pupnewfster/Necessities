@@ -80,7 +80,7 @@ public class CmdBracketColor implements Cmd {
                     }
                 }
             }
-        } else {
+        } else if (args.length == 2) {
             search = search.replaceAll("_", "").toLowerCase();
             if (search.equals("") || search.equals("0") || search.equals("black")) {
                 complete.add("0");

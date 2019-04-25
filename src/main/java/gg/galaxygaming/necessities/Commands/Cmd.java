@@ -1,5 +1,6 @@
 package gg.galaxygaming.necessities.Commands;
 
+import java.util.Collections;
 import java.util.List;
 import org.bukkit.command.CommandSender;
 
@@ -31,6 +32,6 @@ public interface Cmd {
      * @return The list of possible tab completions.
      */
     default List<String> tabComplete(CommandSender sender, String[] args) {
-        return null;
+        return Collections.emptyList();
     }
 }

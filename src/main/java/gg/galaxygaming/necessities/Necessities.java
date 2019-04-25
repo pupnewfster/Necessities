@@ -414,14 +414,7 @@ public class Necessities extends JavaPlugin {
     public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String alias,
           @Nonnull String[] args) {
         Cmd c = getCmd(cmd.getName());
-        if (c == null) {
-            return null;
-        }
-        List<String> tab = c.tabComplete(sender, args);
-        /*if (tab == null || tab.isEmpty()) {
-            return null;
-        }*/
-        return tab;
+        return c == null ? null : c.tabComplete(sender, args);
     }
 
     private boolean isEqual(String command, String toCheck) {
