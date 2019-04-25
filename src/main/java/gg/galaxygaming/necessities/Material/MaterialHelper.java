@@ -35,6 +35,21 @@ public class MaterialHelper {
     }
 
     /**
+     * Checks if a given material is a sign.
+     *
+     * @param type The material to check.
+     * @return True if type is a sign, false otherwise.
+     */
+    public static boolean isSign(Material type) {
+        return type.equals(Material.ACACIA_SIGN) || type.equals(Material.ACACIA_WALL_SIGN) ||
+              type.equals(Material.BIRCH_SIGN) || type.equals(Material.BIRCH_WALL_SIGN) ||
+              type.equals(Material.DARK_OAK_SIGN) || type.equals(Material.DARK_OAK_WALL_SIGN) ||
+              type.equals(Material.JUNGLE_SIGN) || type.equals(Material.JUNGLE_WALL_SIGN) ||
+              type.equals(Material.OAK_SIGN) || type.equals(Material.OAK_WALL_SIGN) ||
+              type.equals(Material.SPRUCE_SIGN) || type.equals(Material.SPRUCE_WALL_SIGN);
+    }
+
+    /**
      * Checks if a given material is a fence gate.
      *
      * @param type The material to check.

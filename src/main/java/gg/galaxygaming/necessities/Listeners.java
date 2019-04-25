@@ -532,7 +532,7 @@ class Listeners implements Listener {
             CreatureSpawner spawner = (CreatureSpawner) b.getState();
             spawner.setSpawnedType(EntityType.valueOf(meta.getLore().get(0)));
             spawner.update();
-        } else if ((type.equals(Material.SIGN) || type.equals(Material.WALL_SIGN)) && meta.hasLore()) {
+        } else if (MaterialHelper.isSign(type) && meta.hasLore()) {
             Sign s = (Sign) b.getState();
             s.setLine(0, meta.getLore().get(0));
             s.setLine(1, meta.getLore().get(1));
@@ -688,20 +688,29 @@ class Listeners implements Listener {
                         state.setBlockData(powerable);
                         e.setCancelled(true);
                         state.update();
-                    } else if (type.equals(Material.FURNACE) || type.equals(Material.HOPPER) || type
-                          .equals(Material.DISPENSER) || type.equals(Material.CHEST) ||
-                          type.equals(Material.ENDER_CHEST) || type.equals(Material.DROPPER) || type
-                          .equals(Material.PISTON) ||
-                          type.equals(Material.STICKY_PISTON) || type.equals(Material.TRAPPED_CHEST) || type
-                          .equals(Material.BREWING_STAND) ||
-                          type.equals(Material.SPAWNER) || type.equals(Material.SIGN) || type
-                          .equals(Material.WALL_SIGN)) {
+                    } else if (type.equals(Material.FURNACE) || type.equals(Material.HOPPER) ||
+                          type.equals(Material.DISPENSER) || type.equals(Material.CHEST) ||
+                          type.equals(Material.ENDER_CHEST) || type.equals(Material.DROPPER) ||
+                          type.equals(Material.PISTON) || type.equals(Material.STICKY_PISTON) ||
+                          type.equals(Material.TRAPPED_CHEST) || type.equals(Material.BREWING_STAND) ||
+                          type.equals(Material.SPAWNER) || MaterialHelper.isSign(type)) {
                         if (e.getPlayer().isSneaking()) {
                             ItemStack contents = new ItemStack(type, 1);
                             if (type.equals(Material.BREWING_STAND)) {
                                 contents = new ItemStack(Material.BREWING_STAND, 1);
-                            } else if (type.equals(Material.SIGN) || type.equals(Material.WALL_SIGN)) {
-                                contents = new ItemStack(Material.SIGN, 1);
+                            } else if (type.equals(Material.ACACIA_SIGN) || type.equals(Material.ACACIA_WALL_SIGN)) {
+                                contents = new ItemStack(Material.ACACIA_SIGN, 1);
+                            } else if (type.equals(Material.BIRCH_SIGN) || type.equals(Material.BIRCH_WALL_SIGN)) {
+                                contents = new ItemStack(Material.BIRCH_SIGN, 1);
+                            } else if (type.equals(Material.DARK_OAK_SIGN) || type
+                                  .equals(Material.DARK_OAK_WALL_SIGN)) {
+                                contents = new ItemStack(Material.DARK_OAK_SIGN, 1);
+                            } else if (type.equals(Material.JUNGLE_SIGN) || type.equals(Material.JUNGLE_WALL_SIGN)) {
+                                contents = new ItemStack(Material.JUNGLE_SIGN, 1);
+                            } else if (type.equals(Material.OAK_SIGN) || type.equals(Material.OAK_WALL_SIGN)) {
+                                contents = new ItemStack(Material.OAK_SIGN, 1);
+                            } else if (type.equals(Material.SPRUCE_SIGN) || type.equals(Material.SPRUCE_WALL_SIGN)) {
+                                contents = new ItemStack(Material.SPRUCE_SIGN, 1);
                             }
                             ItemMeta meta = contents.getItemMeta();
                             Inventory inv = null;
@@ -722,7 +731,7 @@ class Listeners implements Listener {
                                 lore.add(cs.getSpawnedType().toString());
                                 meta.setLore(lore);
                                 contents.setItemMeta(meta);
-                            } else if (type.equals(Material.SIGN) || type.equals(Material.WALL_SIGN)) {
+                            } else if (MaterialHelper.isSign(type)) {
                                 Sign s = (Sign) state;
                                 List<String> lore = new ArrayList<>();
                                 lore.add(s.getLine(0));
