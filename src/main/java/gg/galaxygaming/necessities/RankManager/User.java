@@ -1326,7 +1326,7 @@ public class User {
         return times == 1 ? "" : "s";
     }
 
-    private String getPath(String sub) {
+    private String getPath(String path) {
         return UserManager.getPath(getUUID(), path);
     }
 }
