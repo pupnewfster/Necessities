@@ -58,50 +58,50 @@ public class User {
         this.right = p.getLocation();
         this.left = p.getLocation();
         this.userUUID = this.bukkitPlayer.getUniqueId();
-        if (configUsers.contains(getUUID().toString() + ".rank")) {
-            this.rank = rm.getRank(configUsers.getString(getUUID().toString() + ".rank"));
+        if (configUsers.contains(getPath("rank"))) {
+            this.rank = rm.getRank(configUsers.getString(getPath("rank")));
         }
-        if (configUsers.contains(getUUID().toString() + ".nick")) {
+        if (configUsers.contains(getPath("nick"))) {
             this.nick = ChatColor
-                  .translateAlternateColorCodes('&', configUsers.getString(getUUID().toString() + ".nick"));
+                  .translateAlternateColorCodes('&', configUsers.getString(getPath("nick")));
         }
         if (this.nick != null && !this.nick.startsWith("~")) {
             this.nick = '~' + this.nick;
         }
-        if (configUsers.contains(getUUID().toString() + ".jailed")) {
-            this.jailed = configUsers.getBoolean(getUUID().toString() + ".jailed");
+        if (configUsers.contains(getPath("jailed"))) {
+            this.jailed = configUsers.getBoolean(getPath("jailed"));
         }
-        if (configUsers.contains(getUUID().toString() + ".afk")) {
-            this.afk = configUsers.getBoolean(getUUID().toString() + ".afk");
+        if (configUsers.contains(getPath("afk"))) {
+            this.afk = configUsers.getBoolean(getPath("afk"));
         }
-        if (configUsers.contains(getUUID().toString() + ".muted")) {
-            this.muted = configUsers.getBoolean(getUUID().toString() + ".muted");
+        if (configUsers.contains(getPath("muted"))) {
+            this.muted = configUsers.getBoolean(getPath("muted"));
         }
-        if (configUsers.contains(getUUID().toString() + ".frozen")) {
-            this.frozen = configUsers.getBoolean(getUUID().toString() + ".frozen");
+        if (configUsers.contains(getPath("frozen"))) {
+            this.frozen = configUsers.getBoolean(getPath("frozen"));
         }
-        if (configUsers.contains(getUUID().toString() + ".power")) {
-            this.power = configUsers.getDouble(getUUID().toString() + ".power");
+        if (configUsers.contains(getPath("power"))) {
+            this.power = configUsers.getDouble(getPath("power"));
         }
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && configUsers
-              .contains(getUUID().toString() + ".guild")) {
-            this.guild = Necessities.getGM().getGuild(configUsers.getString(getUUID().toString() + ".guild"));
+              .contains(getPath("guild"))) {
+            this.guild = Necessities.getGM().getGuild(configUsers.getString(getPath("guild")));
         }
-        if (configUsers.contains(getUUID().toString() + ".timePlayed")) {
-            this.pastTotal = configUsers.getInt(getUUID().toString() + ".timePlayed");
+        if (configUsers.contains(getPath("timePlayed"))) {
+            this.pastTotal = configUsers.getInt(getPath("timePlayed"));
         }
-        if (configUsers.contains(getUUID().toString() + ".hat")) {
-            this.hat = Hat.fromType(HatType.fromString(configUsers.getString(getUUID().toString() + ".hat")),
+        if (configUsers.contains(getPath("hat"))) {
+            this.hat = Hat.fromType(HatType.fromString(configUsers.getString(getPath("hat"))),
                   this.bukkitPlayer.getLocation());
         }
-        if (configUsers.contains(getUUID().toString() + ".location")) {
+        if (configUsers.contains(getPath("location"))) {
             this.lastPos = new Location(
-                  Bukkit.getWorld(configUsers.getString(getUUID().toString() + ".location.world")),
-                  Double.parseDouble(configUsers.getString(getUUID().toString() + ".location.x")),
-                  Double.parseDouble(configUsers.getString(getUUID().toString() + ".location.y")),
-                  Double.parseDouble(configUsers.getString(getUUID().toString() + ".location.z")),
-                  Float.parseFloat(configUsers.getString(getUUID().toString() + ".location.yaw")),
-                  Float.parseFloat(configUsers.getString(getUUID().toString() + ".location.pitch")));
+                  Bukkit.getWorld(configUsers.getString(getPath("location.world"))),
+                  Double.parseDouble(configUsers.getString(getPath("location.x"))),
+                  Double.parseDouble(configUsers.getString(getPath("location.y"))),
+                  Double.parseDouble(configUsers.getString(getPath("location.z"))),
+                  Float.parseFloat(configUsers.getString(getPath("location.yaw"))),
+                  Float.parseFloat(configUsers.getString(getPath("location.pitch"))));
         }
         this.login = System.currentTimeMillis();
         readHomes();
@@ -120,35 +120,35 @@ public class User {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         YamlConfiguration config = Necessities.getInstance().getConfig();
         RankManager rm = Necessities.getRM();
-        if (configUsers.contains(getUUID().toString() + ".rank")) {
-            this.rank = rm.getRank(configUsers.getString(getUUID().toString() + ".rank"));
+        if (configUsers.contains(getPath("rank"))) {
+            this.rank = rm.getRank(configUsers.getString(getPath("rank")));
         }
-        for (String subrank : configUsers.getStringList(uuid + ".subranks")) {
+        for (String subrank : configUsers.getStringList(getPath("subranks"))) {
             if (!subrank.equals("")) {
                 this.subranks.add(subrank);
             }
         }
-        for (String node : configUsers.getStringList(uuid + ".permissions")) {
+        for (String node : configUsers.getStringList(getPath("permissions"))) {
             if (!node.equals("")) {
                 this.permissions.add(node);
             }
         }
-        if (configUsers.contains(getUUID().toString() + ".nick")) {
+        if (configUsers.contains(getPath("nick"))) {
             this.nick = ChatColor
-                  .translateAlternateColorCodes('&', configUsers.getString(getUUID().toString() + ".nick"));
+                  .translateAlternateColorCodes('&', configUsers.getString(getPath("nick")));
         }
         if (this.nick != null && !this.nick.startsWith("~")) {
             this.nick = '~' + this.nick;
         }
-        if (configUsers.contains(getUUID().toString() + ".power")) {
-            this.power = configUsers.getDouble(getUUID().toString() + ".power");
+        if (configUsers.contains(getPath("power"))) {
+            this.power = configUsers.getDouble(getPath("power"));
         }
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && configUsers
-              .contains(getUUID().toString() + ".guild")) {
-            this.guild = Necessities.getGM().getGuild(configUsers.getString(getUUID().toString() + ".guild"));
+              .contains(getPath("guild"))) {
+            this.guild = Necessities.getGM().getGuild(configUsers.getString(getPath("guild")));
         }
-        if (configUsers.contains(getUUID().toString() + ".timePlayed")) {
-            this.pastTotal = configUsers.getInt(getUUID().toString() + ".timePlayed");
+        if (configUsers.contains(getPath("timePlayed"))) {
+            this.pastTotal = configUsers.getInt(getPath("timePlayed"));
         }
         readHomes();
         readIgnored();
@@ -157,7 +157,7 @@ public class User {
     void updateTimePlayed() {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         if (this.login != 0) {
-            configUsers.set(getUUID().toString() + ".timePlayed",
+            configUsers.set(getPath("timePlayed"),
                   (int) (this.pastTotal + (System.currentTimeMillis() - this.login) / 1000));
             try {
                 configUsers.save(configFileUsers);
@@ -185,14 +185,14 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        if (configUsers.contains(getUUID().toString() + ".ignored")) {
-            for (String name : configUsers.getStringList(getUUID().toString() + ".ignored")) {
+        if (configUsers.contains(getPath("ignored"))) {
+            for (String name : configUsers.getStringList(getPath("ignored"))) {
                 if (!name.equals("")) {
                     this.ignored.add(UUID.fromString(name));
                 }
             }
         } else {
-            configUsers.set(getUUID().toString() + ".ignored", Collections.singletonList(""));
+            configUsers.set(getPath("ignored"), Collections.singletonList(""));
             try {
                 configUsers.save(configFileUsers);
             } catch (Exception ignored) {
@@ -222,10 +222,10 @@ public class User {
             if (!configUsers.contains(getUUID().toString())) {
                 return;
             }
-            List<String> ign = configUsers.getStringList(uuid.toString() + ".ignored");
+            List<String> ign = configUsers.getStringList(getPath("ignored"));
             ign.remove("");
             ign.add(uuid.toString());
-            configUsers.set(uuid.toString() + ".ignored", ign);
+            configUsers.set(getPath("ignored"), ign);
             try {
                 configUsers.save(configFileUsers);
             } catch (Exception ignored) {
@@ -245,12 +245,12 @@ public class User {
             if (!configUsers.contains(getUUID().toString())) {
                 return;
             }
-            List<String> ign = configUsers.getStringList(uuid.toString() + ".ignored");
+            List<String> ign = configUsers.getStringList(getPath("ignored"));
             ign.remove(uuid.toString());
             if (ign.isEmpty()) {
                 ign.add("");
             }
-            configUsers.set(uuid.toString() + ".ignored", ign);
+            configUsers.set(getPath("ignored"), ign);
             try {
                 configUsers.save(configFileUsers);
             } catch (Exception ignored) {
@@ -267,7 +267,7 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        configUsers.set(getUUID().toString() + ".guild", null);
+        configUsers.set(getPath("guild"), null);
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -303,7 +303,7 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        configUsers.set(getUUID().toString() + ".guild", g.getName());
+        configUsers.set(getPath("guild"), g.getName());
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -492,7 +492,7 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        configUsers.set(getUUID().toString() + ".rank", r.getName());
+        configUsers.set(getPath("rank"), r.getName());
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -521,7 +521,7 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        configUsers.set(getUUID().toString() + ".nick", message);
+        configUsers.set(getPath("nick"), message);
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -548,12 +548,12 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        configUsers.set(getUUID().toString() + ".location.world", l.getWorld().getName());
-        configUsers.set(getUUID().toString() + ".location.x", l.getX());
-        configUsers.set(getUUID().toString() + ".location.y", l.getY());
-        configUsers.set(getUUID().toString() + ".location.z", l.getZ());
-        configUsers.set(getUUID().toString() + ".location.yaw", l.getYaw());
-        configUsers.set(getUUID().toString() + ".location.pitch", l.getPitch());
+        configUsers.set(getPath("location.world"), l.getWorld().getName());
+        configUsers.set(getPath("location.x"), l.getX());
+        configUsers.set(getPath("location.y"), l.getY());
+        configUsers.set(getPath("location.z"), l.getZ());
+        configUsers.set(getPath("location.yaw"), l.getYaw());
+        configUsers.set(getPath("location.pitch"), l.getPitch());
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -594,7 +594,7 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        configUsers.set(getUUID().toString() + ".hat", this.hat == null ? null : this.hat.getType().getName());
+        configUsers.set(getPath("hat"), this.hat == null ? null : this.hat.getType().getName());
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -621,7 +621,7 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        configUsers.set(getUUID().toString() + ".jailed", jail);
+        configUsers.set(getPath("jailed"), jail);
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -660,7 +660,7 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        configUsers.set(getUUID().toString() + ".muted", this.muted);
+        configUsers.set(getPath("muted"), this.muted);
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -687,7 +687,7 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        configUsers.set(getUUID().toString() + ".frozen", this.frozen);
+        configUsers.set(getPath("frozen"), this.frozen);
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -746,7 +746,7 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        configUsers.set(getUUID().toString() + ".afk", isAfk);
+        configUsers.set(getPath("afk"), isAfk);
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -799,13 +799,13 @@ public class User {
         YamlConfiguration configSubranks = YamlConfiguration.loadConfiguration(configFileSubranks);
         this.attachment = this.bukkitPlayer.addAttachment(Necessities.getInstance());
         this.rank.getNodes().forEach(this::setPerm);
-        for (String subrank : configUsers.getStringList(getUUID().toString() + ".subranks")) {
+        for (String subrank : configUsers.getStringList(getPath("subranks"))) {
             if (!subrank.equals("") && configSubranks.contains(subrank)) {
                 this.subranks.add(subrank);
                 configSubranks.getStringList(subrank).forEach(this::setPerm);
             }
         }
-        for (String node : configUsers.getStringList(getUUID().toString() + ".permissions")) {
+        for (String node : configUsers.getStringList(getPath("permissions"))) {
             if (!node.equals("")) {
                 this.permissions.add(node);
             }
@@ -836,16 +836,16 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        if (configUsers.contains(getUUID().toString() + ".homeslist")) {
-            for (String home : configUsers.getStringList(getUUID().toString() + ".homeslist")) {
+        if (configUsers.contains(getPath("homeslist"))) {
+            for (String home : configUsers.getStringList(getPath("homeslist"))) {
                 if (!home.equals("")) {
                     this.homes.put(home, new Location(
-                          Bukkit.getWorld(configUsers.getString(getUUID().toString() + ".homes." + home + ".world")),
-                          Double.parseDouble(configUsers.getString(getUUID().toString() + ".homes." + home + ".x")),
-                          Double.parseDouble(configUsers.getString(getUUID().toString() + ".homes." + home + ".y")),
-                          Double.parseDouble(configUsers.getString(getUUID().toString() + ".homes." + home + ".z")),
-                          Float.parseFloat(configUsers.getString(getUUID().toString() + ".homes." + home + ".yaw")),
-                          Float.parseFloat(configUsers.getString(getUUID().toString() + ".homes." + home + ".pitch"))));
+                          Bukkit.getWorld(configUsers.getString(getPath("homes." + home + ".world"))),
+                          Double.parseDouble(configUsers.getString(getPath("homes." + home + ".x"))),
+                          Double.parseDouble(configUsers.getString(getPath("homes." + home + ".y"))),
+                          Double.parseDouble(configUsers.getString(getPath("homes." + home + ".z"))),
+                          Float.parseFloat(configUsers.getString(getPath("homes." + home + ".yaw"))),
+                          Float.parseFloat(configUsers.getString(getPath("homes." + home + ".pitch")))));
                 }
             }
         }
@@ -863,22 +863,22 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        List<String> homelist = configUsers.getStringList(getUUID().toString() + ".homeslist");
+        List<String> homelist = configUsers.getStringList(getPath("homeslist"));
         if (homelist.isEmpty()) {
-            configUsers.set(getUUID().toString() + ".homeslist", Collections.singletonList(name));
+            configUsers.set(getPath("homeslist"), Collections.singletonList(name));
         } else {
             homelist.remove("");
             if (!homelist.contains(name)) {
                 homelist.add(name);
             }
-            configUsers.set(getUUID().toString() + ".homeslist", homelist);
+            configUsers.set(getPath("homeslist"), homelist);
         }
-        configUsers.set(getUUID().toString() + ".homes." + name + ".world", l.getWorld().getName());
-        configUsers.set(getUUID().toString() + ".homes." + name + ".x", Double.toString(l.getX()));
-        configUsers.set(getUUID().toString() + ".homes." + name + ".y", Double.toString(l.getY()));
-        configUsers.set(getUUID().toString() + ".homes." + name + ".z", Double.toString(l.getZ()));
-        configUsers.set(getUUID().toString() + ".homes." + name + ".yaw", Float.toString(l.getYaw()));
-        configUsers.set(getUUID().toString() + ".homes." + name + ".pitch", Float.toString(l.getPitch()));
+        configUsers.set(getPath("homes." + name + ".world"), l.getWorld().getName());
+        configUsers.set(getPath("homes." + name + ".x"), Double.toString(l.getX()));
+        configUsers.set(getPath("homes." + name + ".y"), Double.toString(l.getY()));
+        configUsers.set(getPath("homes." + name + ".z"), Double.toString(l.getZ()));
+        configUsers.set(getPath("homes." + name + ".yaw"), Float.toString(l.getYaw()));
+        configUsers.set(getPath("homes." + name + ".pitch"), Float.toString(l.getPitch()));
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -897,13 +897,13 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        List<String> homelist = configUsers.getStringList(getUUID().toString() + ".homeslist");
+        List<String> homelist = configUsers.getStringList(getPath("homeslist"));
         homelist.remove(name);
         if (homelist.isEmpty()) {
             homelist.add("");
         }
-        configUsers.set(getUUID().toString() + ".homeslist", homelist);
-        configUsers.set(getUUID().toString() + ".homes." + name, null);
+        configUsers.set(getPath("homeslist"), homelist);
+        configUsers.set(getPath("homes." + name), null);
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -1150,7 +1150,7 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        configUsers.set(getUUID().toString() + ".power", this.power);
+        configUsers.set(getPath("power"), this.power);
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -1176,7 +1176,7 @@ public class User {
         if (!configUsers.contains(getUUID().toString())) {
             return;
         }
-        configUsers.set(getUUID().toString() + ".power", this.power);
+        configUsers.set(getPath("power"), this.power);
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -1199,9 +1199,8 @@ public class User {
         while (itr.hasNext()) {
             Block block = itr.next();
             Material type = block.getType();
-            if (!type.equals(Material.AIR) && !type.equals(
-                  Material.CAVE_AIR)) //Do however stop at VOID_AIR because no blocks will be past that point anyways
-            {
+            if (!type.equals(Material.AIR) && !type.equals(Material.CAVE_AIR)) {
+                //Do however stop at VOID_AIR because no blocks will be past that point anyways
                 return block.getLocation();
             }
         }
@@ -1325,5 +1324,9 @@ public class User {
 
     private String plural(int times) {
         return times == 1 ? "" : "s";
+    }
+
+    private String getPath(String sub) {
+        return UserManager.getPath(getUUID(), path);
     }
 }

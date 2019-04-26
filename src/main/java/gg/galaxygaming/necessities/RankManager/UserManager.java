@@ -113,24 +113,25 @@ public class UserManager {
     public void addUser(Player player) {
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
         RankManager rm = Necessities.getRM();
-        if (configUsers.contains(player.getUniqueId().toString())) {
-            if (!configUsers.contains(player.getUniqueId().toString() + ".rank")) {
-                configUsers.set(player.getUniqueId().toString() + ".rank", rm.getRank(0).getName());
+        UUID uuid = player.getUniqueId();
+        if (configUsers.contains(uuid.toString())) {
+            if (!configUsers.contains(getPath(uuid, "rank"))) {
+                configUsers.set(getPath(uuid, "rank"), rm.getRank(0).getName());
             }
-            if (!configUsers.contains(player.getUniqueId().toString() + ".permissions")) {
-                configUsers.set(player.getUniqueId().toString() + ".permissions", Collections.singletonList(""));
+            if (!configUsers.contains(getPath(uuid, "permissions"))) {
+                configUsers.set(getPath(uuid, "permissions"), Collections.singletonList(""));
             }
-            if (!configUsers.contains(player.getUniqueId().toString() + ".subranks")) {
-                configUsers.set(player.getUniqueId().toString() + ".subranks", Collections.singletonList(""));
+            if (!configUsers.contains(getPath(uuid, "subranks"))) {
+                configUsers.set(getPath(uuid, "subranks"), Collections.singletonList(""));
             }
-            if (!configUsers.contains(player.getUniqueId().toString() + ".power")) {
-                configUsers.set(player.getUniqueId().toString() + ".power", 0);
+            if (!configUsers.contains(getPath(uuid, "power"))) {
+                configUsers.set(getPath(uuid, "power"), 0);
             }
         } else {
-            configUsers.set(player.getUniqueId().toString() + ".rank", rm.getRank(0).getName());
-            configUsers.set(player.getUniqueId().toString() + ".permissions", Collections.singletonList(""));
-            configUsers.set(player.getUniqueId().toString() + ".subranks", Collections.singletonList(""));
-            configUsers.set(player.getUniqueId().toString() + ".power", 0);
+            configUsers.set(getPath(uuid, "rank"), rm.getRank(0).getName());
+            configUsers.set(getPath(uuid, "permissions"), Collections.singletonList(""));
+            configUsers.set(getPath(uuid, "subranks"), Collections.singletonList(""));
+            configUsers.set(getPath(uuid, "power"), 0);
         }
         try {
             configUsers.save(configFileUsers);
@@ -149,7 +150,7 @@ public class UserManager {
             return;
         }
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
-        configUsers.set(u.getUUID().toString() + ".rank", r.getName());
+        configUsers.set(getPath(u.getUUID(), "rank"), r.getName());
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -169,20 +170,20 @@ public class UserManager {
             return;
         }
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
-        List<String> perms = configUsers.getStringList(uuid.toString() + ".permissions");
+        List<String> perms = configUsers.getStringList(getPath(uuid, "permissions"));
         perms.remove("");
         if (remove) {
             perms.remove(permission);
             if (perms.isEmpty()) {
                 perms.add("");
             }
-            configUsers.set(uuid.toString() + ".permissions", perms);
+            configUsers.set(getPath(uuid, "permissions"), perms);
             if (players.containsKey(uuid)) {
                 getUser(uuid).removePerm(permission);
             }
         } else {
             perms.add(permission);
-            configUsers.set(uuid.toString() + ".permissions", perms);
+            configUsers.set(getPath(uuid, "permissions"), perms);
             if (players.containsKey(uuid)) {
                 getUser(uuid).addPerm(permission);
             }
@@ -205,7 +206,7 @@ public class UserManager {
             return;
         }
         YamlConfiguration configUsers = YamlConfiguration.loadConfiguration(configFileUsers);
-        List<String> subranks = configUsers.getStringList(uuid.toString() + ".subranks");
+        List<String> subranks = configUsers.getStringList(getPath(uuid, "subranks"));
         subranks.remove("");
         if (remove) {
             subranks.remove(name);
@@ -215,7 +216,7 @@ public class UserManager {
         if (subranks.isEmpty()) {
             subranks.add("");
         }
-        configUsers.set(uuid.toString() + ".subranks", subranks);
+        configUsers.set(getPath(uuid, "subranks"), subranks);
         try {
             configUsers.save(configFileUsers);
         } catch (Exception ignored) {
@@ -223,5 +224,9 @@ public class UserManager {
         if (players.containsKey(uuid)) {
             getUser(uuid).refreshPerms();
         }
+    }
+
+    public static String getPath(UUID uuid, String path) {
+        return uuid.toString() + "." + path;
     }
 }
