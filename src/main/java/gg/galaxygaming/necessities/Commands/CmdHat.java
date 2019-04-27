@@ -5,6 +5,7 @@ import gg.galaxygaming.necessities.Hats.HatType;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.RankManager.User;
 import gg.galaxygaming.necessities.Variables;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.command.CommandSender;
@@ -64,7 +65,16 @@ public class CmdHat implements Cmd {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        //TODO: TabComplete
-        return Collections.emptyList();
+        if (args.length != 1 || !(sender instanceof Player)) {
+            return Collections.emptyList();
+        }
+        List<String> complete = new ArrayList<>();
+        String search = args[0];
+        for (String h : HatType.getTypes()) {
+            if (h.toLowerCase().startsWith(search)) {
+                complete.add(h.toLowerCase());
+            }
+        }
+        return complete;
     }
 }

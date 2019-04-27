@@ -62,7 +62,12 @@ public class CmdTp implements Cmd {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        //TODO: TabComplete
+        if (args.length == 1) {
+            return Utils.getPlayerComplete(sender, args[0]);
+        }
+        if (args.length == 2) {
+            return Utils.getPlayerComplete(sender, args[1]);
+        }
         return Collections.emptyList();
     }
 }

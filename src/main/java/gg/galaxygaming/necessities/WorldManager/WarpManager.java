@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -64,6 +65,13 @@ public class WarpManager {
         }
         String warps = warpsBuilder.toString();
         return warps.equals("") ? "" : warps.trim().substring(0, warps.length() - 2);
+    }
+
+    /**
+     * @return All warp names.
+     */
+    public Set<String> getAllWarps() {
+        return warps.keySet();
     }
 
     /**

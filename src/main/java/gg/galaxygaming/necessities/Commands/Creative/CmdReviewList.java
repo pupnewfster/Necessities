@@ -4,6 +4,7 @@ import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Reviews;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.ChatColor;
@@ -48,7 +49,16 @@ public class CmdReviewList implements CreativeCmd {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        //TODO: TabComplete
-        return Collections.emptyList();
+        if (args.length != 1) {
+            return Collections.emptyList();
+        }
+        Reviews rev = Necessities.getRev();
+        int totalPages = rev.reviewPages();
+        if (totalPages == 0) {
+            return Collections.emptyList();
+        }
+        List<String> complete = new ArrayList<>();
+        //TODO: TabComplete of the possible page numbers
+        return complete;
     }
 }

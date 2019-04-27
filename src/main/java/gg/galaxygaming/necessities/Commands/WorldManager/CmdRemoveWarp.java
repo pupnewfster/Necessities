@@ -3,9 +3,11 @@ package gg.galaxygaming.necessities.Commands.WorldManager;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Variables;
 import gg.galaxygaming.necessities.WorldManager.WarpManager;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class CmdRemoveWarp implements WorldCmd {
 
@@ -29,7 +31,17 @@ public class CmdRemoveWarp implements WorldCmd {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        //TODO: TabComplete
-        return Collections.emptyList();
+        if (args.length != 1 || !(sender instanceof Player)) {
+            return Collections.emptyList();
+        }
+        List<String> complete = new ArrayList<>();
+        String search = args[0];
+        WarpManager warps = Necessities.getWarps();
+        for (String warp : warps.getAllWarps()) {
+            if (warp.startsWith(search)) {
+                complete.add(warp);
+            }
+        }
+        return complete;
     }
 }

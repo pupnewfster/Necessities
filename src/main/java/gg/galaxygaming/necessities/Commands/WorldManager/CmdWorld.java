@@ -3,6 +3,7 @@ package gg.galaxygaming.necessities.Commands.WorldManager;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -88,7 +89,18 @@ public class CmdWorld implements WorldCmd {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        //TODO: TabComplete
-        return Collections.emptyList();
+        if (args.length != 1 || !(sender instanceof Player)) {
+            return Collections.emptyList();
+        }
+        List<World> worlds = sender.getServer().getWorlds();
+        List<String> complete = new ArrayList<>();
+        String search = args[0];
+        for (World world : worlds) {
+            String name = world.getName();
+            if (name.startsWith(search)) {
+                complete.add(name);
+            }
+        }
+        return complete;
     }
 }
