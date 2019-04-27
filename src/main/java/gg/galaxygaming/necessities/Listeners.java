@@ -1156,11 +1156,11 @@ class Listeners implements Listener {
         Player player = e.getEntity().getPlayer();
         if (player != null) {
             Necessities.getBot().logDeath(player.getUniqueId(), e.getDeathMessage());
-            e.setKeepLevel(player.hasPermission("Necessities.keepxp"));
+            /*e.setKeepLevel(player.hasPermission("Necessities.keepxp"));
             e.setKeepInventory(player.hasPermission("Necessities.keepitems"));
             if (player.hasPermission("Necessities.keepxp")) {
                 e.setDroppedExp(0);
-            }
+            }*/
             User u = Necessities.getUM().getUser(player.getUniqueId());
             u.setLastPos(player.getLocation());
             if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds") && !player

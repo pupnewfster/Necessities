@@ -58,6 +58,10 @@ public class CmdInvsee implements Cmd {
             PlayerInventory inv = target.getInventory();
             openInvs.put(inv, target);
             p.sendMessage(var.getObj() + Utils.ownerShip(target.getName()) + var.getMessages() + " inventory opened.");
+            //TODO: Add support for viewing the armor (will have to create sync system)
+            /*Inventory inventory = Bukkit.createInventory(target, 45, Utils.ownerShip(target.getName()) + " inventory");
+            inventory.setContents(inv.getContents());
+            p.openInventory(inventory);*/
             p.openInventory(inv);
         } else {
             sender.sendMessage(var.getEr() + "Error: " + var.getErMsg() + "You do not have an inventory.");
