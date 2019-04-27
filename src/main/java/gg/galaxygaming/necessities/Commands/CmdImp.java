@@ -3,6 +3,8 @@ package gg.galaxygaming.necessities.Commands;
 import gg.galaxygaming.necessities.Necessities;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -45,5 +47,13 @@ public class CmdImp implements Cmd {
 
     public boolean isPaintballEnabled() {
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        if (args.length != 1) {
+            return Collections.emptyList();
+        }
+        return Utils.getPlayerComplete(sender, args[0]);
     }
 }

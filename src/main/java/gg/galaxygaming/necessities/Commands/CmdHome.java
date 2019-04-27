@@ -6,7 +6,7 @@ import gg.galaxygaming.necessities.RankManager.UserManager;
 import gg.galaxygaming.necessities.SafeLocation;
 import gg.galaxygaming.necessities.Utils;
 import gg.galaxygaming.necessities.Variables;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.ChatColor;
@@ -88,7 +88,16 @@ public class CmdHome implements Cmd {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        //TODO: TabComplete
-        return Collections.emptyList();
+        List<String> complete = new ArrayList<>();
+        if (args.length == 1 && sender instanceof Player) {
+            String search = args[0];
+            User u = Necessities.getUM().getUser(((Player) sender).getUniqueId());
+            for (String home : u.getHomes().split(", ")) {
+                if (home.startsWith(search)) {
+                    complete.add(home);
+                }
+            }
+        }
+        return complete;
     }
 }

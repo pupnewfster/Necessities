@@ -50,7 +50,9 @@ public class CmdExt implements Cmd {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        //TODO: TabComplete
-        return Collections.emptyList();
+        if (args.length != 1) {
+            return Collections.emptyList();
+        }
+        return Utils.getPlayerComplete(sender, args[0], p -> p.getFireTicks() > 0);
     }
 }

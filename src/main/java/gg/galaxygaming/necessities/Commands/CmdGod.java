@@ -7,6 +7,7 @@ import gg.galaxygaming.necessities.Variables;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import net.minecraft.server.v1_14_R1.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -68,7 +69,9 @@ public class CmdGod implements Cmd {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        //TODO: TabComplete
-        return Collections.emptyList();
+        if (args.length != 1 || (sender instanceof EntityPlayer && !sender.hasPermission("Necessities.godOthers"))) {
+            return Collections.emptyList();
+        }
+        return Utils.getPlayerComplete(sender, args[0]);
     }
 }

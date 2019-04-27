@@ -9,7 +9,10 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 import net.minecraft.server.v1_14_R1.IChatBaseComponent;
 import net.minecraft.server.v1_14_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_14_R1.MinecraftServer;
@@ -19,6 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Creeper;
@@ -424,6 +428,34 @@ public class Utils {
         }
     }
     //TODO: Paper (End Delete)
+
+    /**
+     * Tab completes a players name based on if the sender can see them.
+     * @param sender The sender doing the tab completion
+     * @param search Their name starts with this
+     * @return A list of player names or empty if none start with the given string
+     */
+    public static List<String> getPlayerComplete(CommandSender sender, String search) {
+        return getPlayerComplete(sender, search, player -> true);
+    }
+
+    public static List<String> getPlayerComplete(CommandSender sender, String search, Function<Player, Boolean> extraChecks) {
+        List<String> complete = new ArrayList<>();
+        if (sender instanceof Player) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getName().startsWith(search) && ((Player) sender).canSee(p) && extraChecks.apply(p)) {
+                    complete.add(p.getName());
+                }
+            }
+        } else {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getName().startsWith(search) && extraChecks.apply(p)) {
+                    complete.add(p.getName());
+                }
+            }
+        }
+        return complete;
+    }
 
     //TODO: Create a method to add items to a player inventory or just drop on ground if full
 }
