@@ -50,8 +50,6 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.Openable;
 import org.bukkit.block.data.Powerable;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -127,16 +125,18 @@ class Listeners implements Listener {
     private final File configFileLogIn = new File("plugins/Necessities", "loginmessages.yml");
     private final File configFileTitles = new File("plugins/Necessities", "titles.yml");
     private static String JanetName = "";
-    private static BossBar welcomeBar;
+    private static BossBar welcomeBar = null;
 
     Listeners() {
         RankManager rm = Necessities.getRM();
         JanetName = (!rm.getOrder().isEmpty() ? ChatColor
               .translateAlternateColorCodes('&', rm.getRank(rm.getOrder().size() - 1).getTitle() + ' ') : "") + "Janet"
               + ChatColor.DARK_RED + ": " + ChatColor.WHITE;
-        welcomeBar = Bukkit
+        //TODO: Config for disabling the welcome bar at the top as well as config for what it says
+        // Also add a config for what the tablist header and footre say
+        /*welcomeBar = Bukkit
               .createBossBar(ChatColor.GOLD + "Welcome to " + ChatColor.AQUA + "Galaxy Gaming", BarColor.GREEN,
-                    BarStyle.SOLID);
+                    BarStyle.SOLID);*/
     }
 
     private String corTime(String time) {
@@ -300,7 +300,9 @@ class Listeners implements Listener {
                 }
             }
         });
-        welcomeBar.addPlayer(p);
+        if (welcomeBar != null) {
+            welcomeBar.addPlayer(p);
+        }
     }
 
     @EventHandler
@@ -337,7 +339,9 @@ class Listeners implements Listener {
         if (config.contains("Necessities.Guilds") && config.getBoolean("Necessities.Guilds")) {
             Necessities.getPower().removePlayer(e.getPlayer());
         }
-        welcomeBar.removePlayer(e.getPlayer());
+        if (welcomeBar != null) {
+            welcomeBar.removePlayer(e.getPlayer());
+        }
     }
 
     @EventHandler
@@ -1146,7 +1150,7 @@ class Listeners implements Listener {
                     Necessities.getAI().parseMessage(uuid, message, JanetAI.Source.Server, false, null);
                 }
             };
-            aiTask.runTaskLaterAsynchronously(Necessities.getInstance(), 1);
+            aiTask.runTaskLater(Necessities.getInstance(), 1);
         }
     }
 
@@ -1558,6 +1562,9 @@ class Listeners implements Listener {
             }
             Variables var = Necessities.getVar();
             double percentSleeping = ((double) sleeping) / toInform.size();
+            Bukkit.broadcastMessage(var.getObj() + p.getDisplayName() + var.getMessages() + " is now sleeping. (" +
+                  var.getObj() + sleeping + var.getMessages() + " of " + var.getObj() + toInform.size() +
+                  var.getMessages() + ").");
             if (percentSleeping >= minPercent) {
                 //Set to next morning
                 Boolean doDaylightCycle = world.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE);
@@ -1577,10 +1584,6 @@ class Listeners implements Listener {
                 }
                 //Send message
                 Bukkit.broadcastMessage(var.getMessages() + "Wakey, wakey, rise and shine... Good Morning everyone!");
-            } else {
-                Bukkit.broadcastMessage(var.getObj() + p.getDisplayName() + var.getMessages() + " is now sleeping. (" +
-                      var.getObj() + sleeping + var.getMessages() + " of " + var.getObj() + toInform.size() +
-                      var.getMessages() + ").");
             }
         }
     }
