@@ -29,6 +29,7 @@ import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.spigotmc.RestartCommand;
 
 public class Utils {
 
@@ -359,8 +360,7 @@ public class Utils {
      * Restart the server
      */
     public static void restartServer() {
-        //TODO: Paper
-        //Bukkit.spigot().restart();
+        RestartCommand.restart();
     }
 
     private static String format(double tps) {
