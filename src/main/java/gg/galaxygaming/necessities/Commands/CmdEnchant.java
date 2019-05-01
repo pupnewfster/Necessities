@@ -238,6 +238,12 @@ public class CmdEnchant implements Cmd {
                 return Enchantment.LOYALTY.getKey();
             case "RIPTIDE":
                 return Enchantment.RIPTIDE.getKey();
+            case "MULTISHOT":
+                return Enchantment.MULTISHOT.getKey();
+            case "QUICKCHARGE":
+                return Enchantment.QUICK_CHARGE.getKey();
+            case "PIERCING":
+                return Enchantment.PIERCING.getKey();
             default:
                 String[] pieces = enchant.toLowerCase().split(":");
                 if (pieces.length == 0) {
@@ -319,6 +325,12 @@ public class CmdEnchant implements Cmd {
             return "loyalty";
         } else if (Enchantment.RIPTIDE.getKey().equals(key)) {
             return "riptide";
+        } else if (Enchantment.MULTISHOT.getKey().equals(key)) {
+            return "multishot";
+        } else if (Enchantment.QUICK_CHARGE.getKey().equals(key)) {
+            return "quick charge";
+        } else if (Enchantment.PIERCING.getKey().equals(key)) {
+            return "piercing";
         }
         return key.toString().toLowerCase();
     }
