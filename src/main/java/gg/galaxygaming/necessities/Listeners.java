@@ -1150,7 +1150,7 @@ class Listeners implements Listener {
                     Necessities.getAI().parseMessage(uuid, message, JanetAI.Source.Server, false, null);
                 }
             };
-            aiTask.runTaskLater(Necessities.getInstance(), 1);
+            aiTask.runTaskLaterAsynchronously(Necessities.getInstance(), 1);
         }
     }
 
